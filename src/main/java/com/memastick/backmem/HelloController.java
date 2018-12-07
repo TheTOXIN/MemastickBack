@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     @GetMapping("hello")
-    private String hello() {
+    public String hello() {
         return "Hello, i'm MEMASTICK server!!!";
     }
 
