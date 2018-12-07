@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -31,6 +33,14 @@ public class InviteService {
         invite.setCreate(create);
 
         inviteRepository.save(invite);
+    }
+
+    public List<Invite> readAll() {
+        return inviteRepository.findAll();
+    }
+
+    public Optional<Invite> findByCode(String code) {
+        return inviteRepository.findByCode(code);
     }
 
 }

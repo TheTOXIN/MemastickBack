@@ -1,15 +1,16 @@
 package com.memastick.backmem.invite.controller;
 
 import com.memastick.backmem.invite.api.InviteAPI;
+import com.memastick.backmem.invite.entity.Invite;
 import com.memastick.backmem.invite.service.InviteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
-@RestController("invite")
+@RestController
 public class InviteController {
 
     private final InviteService inviteService;
@@ -19,10 +20,20 @@ public class InviteController {
         this.inviteService = inviteService;
     }
 
-    @PostMapping("register")
+    @PostMapping("invite/registration")
     public ResponseEntity register(@RequestBody InviteAPI request) {
         inviteService.register(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("invites")
+    public ResponseEntity<List<Invite>> readAll() {
+        return ResponseEntity.ok(inviteService.readAll());
+    }
+
+    @GetMapping("invite/code/{code}")
+    public ResponseEntity<Invite> readByCode(@PathVariable("code") String code) {
+        return ResponseEntity.of(inviteService.findByCode(code));
     }
 
 }
