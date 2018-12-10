@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 
 
@@ -22,6 +19,7 @@ public class Invite {
     @GeneratedValue
     private Long id;
 
+    @Column(unique = true)
     private String email;
 
     private String code;
