@@ -1,6 +1,5 @@
 package com.memastick.backmem.invite.api;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,6 @@ public class InviteAPI {
     @NotNull
     private String email;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "Z")
     private ZoneOffset zone;
 
 }

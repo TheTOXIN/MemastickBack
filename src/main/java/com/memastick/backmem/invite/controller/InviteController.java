@@ -31,7 +31,7 @@ public class InviteController {
         return ResponseEntity.ok(inviteService.readAll());
     }
 
-    @GetMapping("invite/code/{code}")
+    @GetMapping("invite/{code}")
     public ResponseEntity<Invite> readByCode(@PathVariable("code") String code) {
         return ResponseEntity.of(inviteService.findByCode(code));
     }
