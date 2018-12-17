@@ -9,23 +9,24 @@ import java.time.LocalDateTime;
 
 
 @Data
-@Table
 @Entity
+@Table(name = "invites")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Invite {
 
     @Id
     @GeneratedValue
+    @Column(nullable = false)
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private String code;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime date;
 
 }
