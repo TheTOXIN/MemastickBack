@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.ZoneOffset;
 
 
 @Data
@@ -16,8 +16,7 @@ public class InviteAPI {
 
     @Email
     @NotNull
+    @NotEmpty
     private String email;
-
-    private ZoneOffset zone;
 
 }

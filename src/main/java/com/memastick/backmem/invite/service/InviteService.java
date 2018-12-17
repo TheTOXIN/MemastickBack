@@ -6,6 +6,7 @@ import com.memastick.backmem.invite.repository.InviteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class InviteService {
     private Invite generateInvite(InviteAPI request) {
         Invite invite = new Invite();
 
-        ZonedDateTime create = ZonedDateTime.now(request.getZone());
+        LocalDateTime create = LocalDateTime.now();
         String code = UUID.randomUUID().toString().substring(0, CODE_SIZE);
 
         invite.setEmail(request.getEmail());

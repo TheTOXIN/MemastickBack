@@ -9,4 +9,5 @@ public class MemastickBackApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MemastickBackApplication.class, args);
 	}
+
 }

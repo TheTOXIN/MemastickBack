@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -24,6 +24,6 @@ public class Invite {
 
     private String code;
 
-    private ZonedDateTime create;
+    private LocalDateTime create;
 
 }
