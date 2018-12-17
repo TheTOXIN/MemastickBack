@@ -3,6 +3,7 @@ package com.memastick.backmem.invite.dto;
 import com.memastick.backmem.invite.constant.EmailCode;
 import lombok.Getter;
 
+
 @Getter
 public class EmailStatus {
 

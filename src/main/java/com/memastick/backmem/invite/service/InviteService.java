@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -48,7 +47,7 @@ public class InviteService {
 
         invite.setEmail(request.getEmail());
         invite.setCode(code);
-        invite.setCreate(create);
+        invite.setDate(create);
 
         inviteRepository.save(invite);
 

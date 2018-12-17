@@ -8,8 +8,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
 
 @Component
 public class EmailSender {
@@ -26,14 +26,14 @@ public class EmailSender {
     }
 
     public EmailStatus sendPlainText(String to, String subject, String text) {
-        return sendM(to, subject, text, false);
+        return sendMessage(to, subject, text, false);
     }
 
     public EmailStatus sendHtml(String to, String subject, String htmlBody) {
-        return sendM(to, subject, htmlBody, true);
+        return sendMessage(to, subject, htmlBody, true);
     }
 
-    private EmailStatus sendM(String to, String subject, String text, Boolean isHtml) {
+    private EmailStatus sendMessage(String to, String subject, String text, Boolean isHtml) {
         try {
             MimeMessage mail = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mail, true);
@@ -47,8 +47,8 @@ public class EmailSender {
             LOGGER.info("Send email '{}' to: {}", subject, to);
 
             return new EmailStatus(to, subject, text).success();
-        } catch (MessagingException e) {
-            LOGGER.error(String.format("Problem with sending email to: {}, error message: {}", to, e.getMessage()));
+        } catch (Exception e) {
+            LOGGER.info(String.format("Problem with sending email to: {}, error message: {}", to, e.getMessage()));
 
             return new EmailStatus(to, subject, text).error(e.getMessage());
         }

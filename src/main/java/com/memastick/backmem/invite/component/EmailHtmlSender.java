@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+
 @Component
 public class EmailHtmlSender {
 

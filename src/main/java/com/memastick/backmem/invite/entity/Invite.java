@@ -22,8 +22,10 @@ public class Invite {
     @Column(unique = true)
     private String email;
 
+    @Column
     private String code;
 
-    private LocalDateTime create;
+    @Column
+    private LocalDateTime date;
 
 }
