@@ -1,6 +1,6 @@
-package com.memastick.backmem.invite.dto;
+package com.memastick.backmem.sender.dto;
 
-import com.memastick.backmem.invite.constant.EmailCode;
+import com.memastick.backmem.sender.constant.EmailCode;
 import lombok.Getter;
 
 

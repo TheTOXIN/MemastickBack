@@ -1,6 +1,6 @@
-package com.memastick.backmem.invite.component;
+package com.memastick.backmem.sender.component;
 
-import com.memastick.backmem.invite.dto.EmailStatus;
+import com.memastick.backmem.sender.dto.EmailStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;

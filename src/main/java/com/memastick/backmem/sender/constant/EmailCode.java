@@ -1,4 +1,4 @@
-package com.memastick.backmem.invite.constant;
+package com.memastick.backmem.sender.constant;
 
 
 public enum EmailCode {

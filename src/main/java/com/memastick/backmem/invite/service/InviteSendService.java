@@ -1,7 +1,7 @@
 package com.memastick.backmem.invite.service;
 
-import com.memastick.backmem.invite.component.EmailHtmlSender;
-import com.memastick.backmem.invite.dto.EmailStatus;
+import com.memastick.backmem.sender.component.EmailHtmlSender;
+import com.memastick.backmem.sender.dto.EmailStatus;
 import com.memastick.backmem.invite.entity.Invite;
 import com.memastick.backmem.invite.repository.InviteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
