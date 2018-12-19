@@ -3,6 +3,7 @@ package com.memastick.backmem.invite.service;
 import com.memastick.backmem.invite.api.InviteAPI;
 import com.memastick.backmem.invite.entity.Invite;
 import com.memastick.backmem.invite.repository.InviteRepository;
+import com.memastick.backmem.sender.dto.EmailStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,9 @@ public class InviteService {
         if (byEmail.isPresent()) {
             inviteSendService.send(byEmail.get());
         } else {
-            inviteSendService.send(generateInvite(request));
+            Invite invite = generateInvite(request);
+            EmailStatus send = inviteSendService.send(invite);
+            if (send.isError()) inviteRepository.delete(invite);
         }
     }
 
