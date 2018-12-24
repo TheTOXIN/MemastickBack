@@ -3,7 +3,10 @@ package com.memastick.backmem.invite.service;
 import com.memastick.backmem.invite.api.InviteAPI;
 import com.memastick.backmem.invite.entity.Invite;
 import com.memastick.backmem.invite.repository.InviteRepository;
+import com.memastick.backmem.sender.component.EmailSender;
 import com.memastick.backmem.sender.dto.EmailStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import java.util.UUID;
 
 @Service
 public class InviteService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(InviteService.class);
 
     private final static int CODE_SIZE = 8;
 
@@ -49,10 +54,13 @@ public class InviteService {
         String code = UUID.randomUUID().toString().substring(0, CODE_SIZE);
 
         invite.setEmail(request.getEmail());
+        invite.setNick(request.getNick());
         invite.setCode(code);
         invite.setDate(create);
 
         inviteRepository.save(invite);
+
+        LOGGER.info("Generate NEW invite - " + invite.toString());
 
         return invite;
     }

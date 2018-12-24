@@ -24,6 +24,9 @@ public class Invite {
     private String email;
 
     @Column(nullable = false)
+    private String nick;
+
+    @Column(nullable = false)
     private String code;
 
     @Column(nullable = false)
