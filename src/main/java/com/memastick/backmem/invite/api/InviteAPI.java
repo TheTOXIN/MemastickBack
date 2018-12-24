@@ -15,14 +15,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class InviteAPI {
 
-    @Email
-    @NotNull
-    @NotEmpty
     private String email;
-
-    @NotNull
-    @NotEmpty
-    @Size(min = 4, max = 24)
     private String nick;
 
 }
