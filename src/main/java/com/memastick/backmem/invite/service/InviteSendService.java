@@ -38,6 +38,7 @@ public class InviteSendService {
         Context context = new Context();
 
         context.setVariable("code", invite.getCode());
+        context.setVariable("nick", invite.getNick());
 
         return context;
     }
