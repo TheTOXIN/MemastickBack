@@ -10,7 +10,7 @@
 <div style="color: white;
             text-align: center;
             background-image: linear-gradient(#5f57ea, #9647db);">
-    <img style="width: 30%; height: 30%"
+    <img style="width: 50%; height: 50%"
          src="https://raw.githubusercontent.com/TheTOXIN/MemastickDesign/master/images/mem-logo.png">
     <p style="font-size: 30px; color: #2b2b2b" th:text="${nick}">nick</p>
     <div style="font-size: 32px;
@@ -20,7 +20,9 @@
             margin-right: 15px;
             padding: 30px;
             background: #2b2b2b;
-            box-shadow: 0 0 100px 5px rgba(255,255,255,0.75);">
+           -webkit-box-shadow: 0 0 100px 5px rgba(255,255,255,1);
+           -moz-box-shadow: 0 0 100px 5px rgba(255,255,255,1);
+           box-shadow: 0 0 100px 5px rgba(255,255,255,1);">
         <p style="border: 10px">ТВОЙ ИНВАЙТ КОД</p>
         <p style="color: darkorange;" th:text="${code}">code</p>
     </div>
@@ -29,7 +31,7 @@
         <p>Когда мемастик будет готов мы тебе обязательно сообщим.</p>
     </div>
     <div style="font-size: 14px;">
-        <img style="width: 20%; height: 20%"
+        <img style="width: 30%; height: 30%"
              src="https://raw.githubusercontent.com/TheTOXIN/MemastickDesign/master/images/super_evolution.png">
         <p>Спасибо за участие!</p>
         <span>© 2018 Copyright by Memastick Powered by Toxin</span>
