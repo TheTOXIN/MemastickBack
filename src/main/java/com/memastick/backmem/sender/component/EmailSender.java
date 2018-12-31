@@ -1,13 +1,18 @@
 package com.memastick.backmem.sender.component;
 
+import com.memastick.backmem.sender.dto.EmailDTO;
 import com.memastick.backmem.sender.dto.EmailStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 
@@ -25,33 +30,36 @@ public class EmailSender {
         this.javaMailSender = javaMailSender;
     }
 
-    public EmailStatus sendPlainText(String to, String subject, String text) {
-        return sendMessage(to, subject, text, false);
+    public EmailStatus sendPlainText(EmailDTO email) {
+        return sendMessage(email, false);
     }
 
-    public EmailStatus sendHtml(String to, String subject, String htmlBody) {
-        return sendMessage(to, subject, htmlBody, true);
+    public EmailStatus sendHtml(EmailDTO email) {
+        return sendMessage(email, true);
     }
 
-    private EmailStatus sendMessage(String to, String subject, String text, Boolean isHtml) {
+    private EmailStatus sendMessage(EmailDTO email, Boolean isHtml) {
+        MimeMessagePreparator mail = prepareMail(email, isHtml);
+
         try {
-            MimeMessage mail = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mail, true);
-
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(text, isHtml);
-
             javaMailSender.send(mail);
-
-            LOGGER.info("Send email '{}' to: {}", subject, to);
-
-            return new EmailStatus(to, subject, text).success();
-        } catch (Exception e) {
-            LOGGER.info(String.format("Problem with sending email to: {}, error message: {}", to, e.getMessage()));
-
-            return new EmailStatus(to, subject, text).error(e.getMessage());
+            LOGGER.info("SUCCESS: send email - " + email.toString());
+            return new EmailStatus(email).success();
+        } catch (MailException e) {
+            e.printStackTrace();
+            LOGGER.info("ERROR: send email - " + email.toString());
+            return new EmailStatus(email).error(e.getMessage());
         }
+    }
+
+    private MimeMessagePreparator prepareMail(EmailDTO email, Boolean isHtml) {
+        return mimeMessage -> {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
+            messageHelper.setFrom(email.getFrom());
+            messageHelper.setTo(email.getTo());
+            messageHelper.setSubject(email.getSubject());
+            messageHelper.setText(email.getContent(), isHtml);
+        };
     }
 
 }

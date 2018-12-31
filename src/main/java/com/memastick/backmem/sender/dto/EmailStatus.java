@@ -7,17 +7,12 @@ import lombok.Getter;
 @Getter
 public class EmailStatus {
 
-    private final String to;
-    private final String subject;
-    private final String body;
-
+    private EmailDTO email;
     private EmailCode status;
     private String errorMessage;
 
-    public EmailStatus(String to, String subject, String body) {
-        this.to = to;
-        this.subject = subject;
-        this.body = body;
+    public EmailStatus(EmailDTO email) {
+        this.email = email;
     }
 
     public EmailStatus success() {

@@ -1,5 +1,6 @@
 package com.memastick.backmem.sender.component;
 
+import com.memastick.backmem.sender.dto.EmailDTO;
 import com.memastick.backmem.sender.dto.EmailStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,9 +23,17 @@ public class EmailHtmlSender {
         this.templateEngine = templateEngine;
     }
 
-    public EmailStatus send(String to, String subject, String templateName, Context context) {
+    public EmailStatus send(
+        String from,
+        String to,
+        String subject,
+        String templateName,
+        Context context
+    ) {
         String body = templateEngine.process(templateName, context);
-        return emailSender.sendPlainText(to, subject, body);
+        return emailSender.sendHtml(
+            new EmailDTO(from, to, subject, body)
+        );
     }
 
 }

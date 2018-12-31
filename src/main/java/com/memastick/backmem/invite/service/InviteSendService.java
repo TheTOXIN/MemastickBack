@@ -4,6 +4,7 @@ import com.memastick.backmem.sender.component.EmailHtmlSender;
 import com.memastick.backmem.sender.dto.EmailStatus;
 import com.memastick.backmem.invite.entity.Invite;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
@@ -16,6 +17,9 @@ public class InviteSendService {
 
     private final EmailHtmlSender emailHtmlSender;
 
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
     @Autowired
     public InviteSendService(
         EmailHtmlSender emailHtmlSender
@@ -27,6 +31,7 @@ public class InviteSendService {
         Context context = makeContext(invite);
 
         return emailHtmlSender.send(
+            fromEmail,
             invite.getEmail(),
             SUBJECT_TITLE,
             PATH_TEMPLATE,
