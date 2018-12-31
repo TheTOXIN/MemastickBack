@@ -5,53 +5,29 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <style>
-        .main {
-            color: white;
+</head>
+<body>
+<div style="color: white;
             text-align: center;
-            background-image: linear-gradient(#5f57ea, #9647db);
-        }
-
-        .content {
-            margin: 30px;
-            font-size: 16px;
-        }
-
-        .header {
-            font-size: 32px;
+            background-image: linear-gradient(#5f57ea, #9647db);">
+    <img style="width: 30%; height: 30%"
+         src="https://raw.githubusercontent.com/TheTOXIN/MemastickDesign/master/images/mem-logo.png">
+    <h1 th:text="${nick}">nick</h1>
+    <div style="font-size: 32px;
             border-radius: 3px;
             border: 2px solid white;
             margin-left: 30%;
-            margin-right: 30%;
-        }
-
-        .footer {
-            font-size: 14px;
-        }
-
-        #code {
-            color: darkorange;
-        }
-
-        img {
-            width: 30%;
-            height: 30%;
-        }
-    </style>
-</head>
-<body>
-<div class="main">
-    <img src="https://raw.githubusercontent.com/TheTOXIN/MemastickDesign/master/images/mem-logo.png">
-    <h1 th:text="${nick}">nick</h1>
-    <div class="header">
+            margin-right: 30%;">
         <span>ТВОЙ ИНВАЙТ КОД</span>
-        <h2 id="code" th:text="${code}">code</h2>
+        <h2 style="color: darkorange;" th:text="${code}">code</h2>
     </div>
-    <div class="content">
+    <div style="margin: 30px;
+            font-size: 16px;">
         <p>Когда мемастик будет готов мы тебе обязательно сообщим.</p>
     </div>
-    <div class="footer">
-        <img src="https://raw.githubusercontent.com/TheTOXIN/MemastickDesign/master/images/super_evolution.png">
+    <div style="font-size: 14px;">
+        <img style="width: 20%; height: 20%"
+             src="https://raw.githubusercontent.com/TheTOXIN/MemastickDesign/master/images/super_evolution.png">
         <p>Спасибо за участие!</p>
         <span>© 2018 Copyright by Memastick Powered by Toxin</span>
     </div>
