@@ -1,4 +1,4 @@
-package com.memastick.backmem.user.entity;
+package com.memastick.backmem.person.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.memastick.backmem.security.constant.RoleType;

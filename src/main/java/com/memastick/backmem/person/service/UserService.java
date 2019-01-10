@@ -1,12 +1,13 @@
-package com.memastick.backmem.user.service;
+package com.memastick.backmem.person.service;
 
 import com.memastick.backmem.security.constant.RoleType;
-import com.memastick.backmem.user.entity.User;
-import com.memastick.backmem.user.repository.UserRepository;
+import com.memastick.backmem.person.entity.User;
+import com.memastick.backmem.person.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
 
 @Service
 public class UserService {

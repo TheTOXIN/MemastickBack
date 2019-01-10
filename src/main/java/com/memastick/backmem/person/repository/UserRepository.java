@@ -1,7 +1,7 @@
-package com.memastick.backmem.user.repository;
+package com.memastick.backmem.person.repository;
 
 import com.memastick.backmem.security.constant.RoleType;
-import com.memastick.backmem.user.entity.User;
+import com.memastick.backmem.person.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

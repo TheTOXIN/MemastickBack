@@ -1,6 +1,6 @@
 package com.memastick.backmem.security.model;
 
-import com.memastick.backmem.user.entity.User;
+import com.memastick.backmem.person.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
