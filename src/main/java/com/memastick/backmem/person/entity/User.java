@@ -1,36 +1,39 @@
 package com.memastick.backmem.person.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.memastick.backmem.base.entity.AbstractEntity;
 import com.memastick.backmem.security.constant.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 
-@Data
 @Entity
 @Table(name = "users")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@EqualsAndHashCode(callSuper = true)
+public class User extends AbstractEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(nullable = false)
-    private UUID id;
+    @Column(nullable = false, unique = true)
+    private String login;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @JsonIgnore
     @Column(nullable = false)
-    private String hash;
+    private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RoleType role;
+
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private Memetick memetick;
 
 }
 

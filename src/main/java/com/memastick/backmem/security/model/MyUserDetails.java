@@ -14,7 +14,7 @@ public class MyUserDetails extends User implements UserDetails {
     public MyUserDetails(User user) {
         super.setId(user.getId());
         super.setEmail(user.getEmail());
-        super.setHash(user.getHash());
+        super.setPassword(user.getPassword());
         super.setRole(user.getRole());
     }
 
@@ -33,7 +33,7 @@ public class MyUserDetails extends User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return super.getHash();
+        return super.getPassword();
     }
 
     @Override
