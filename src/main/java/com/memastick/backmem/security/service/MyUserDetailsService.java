@@ -3,6 +3,8 @@ package com.memastick.backmem.security.service;
 import com.memastick.backmem.security.model.MyUserDetails;
 import com.memastick.backmem.person.entity.User;
 import com.memastick.backmem.person.repository.UserRepository;
+
+import com.memastick.backmem.validation.util.ValidationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -24,12 +25,19 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<User> byEmail = userRepository.findByEmail(username);
+        Optional<User> userOptional;
 
-        if (byEmail.isPresent())
-            return new MyUserDetails(byEmail.get());
-        else
-            throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
+        if (ValidationUtils.isEmail(username)) {
+            userOptional = userRepository.findByEmail(username);
+        } else {
+            userOptional = userRepository.findByLogin(username);
+        }
+
+        if (userOptional.isPresent()) {
+            return new MyUserDetails(userOptional.get());
+        } else {
+            throw new UsernameNotFoundException(String.format("User by %s - does not exist!", username));
+        }
     }
 
 }
