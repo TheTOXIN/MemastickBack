@@ -17,6 +17,7 @@ public class MyUserDetails extends User implements UserDetails {
         super.setLogin(user.getLogin());
         super.setPassword(user.getPassword());
         super.setRole(user.getRole());
+        super.setMemetick(user.getMemetick());
     }
 
     @Override
