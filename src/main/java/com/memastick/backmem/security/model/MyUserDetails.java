@@ -14,6 +14,7 @@ public class MyUserDetails extends User implements UserDetails {
     public MyUserDetails(User user) {
         super.setId(user.getId());
         super.setEmail(user.getEmail());
+        super.setLogin(user.getLogin());
         super.setPassword(user.getPassword());
         super.setRole(user.getRole());
     }
@@ -28,7 +29,7 @@ public class MyUserDetails extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return super.getEmail();
+        return super.getLogin();
     }
 
     @Override
