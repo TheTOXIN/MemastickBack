@@ -1,8 +1,9 @@
-package com.memastick.backmem.code.service;
+package com.memastick.backmem.security.service;
 
-import com.memastick.backmem.code.api.InviteCodeAPI;
-import com.memastick.backmem.code.entity.InviteCode;
-import com.memastick.backmem.code.repository.InviteCodeRepository;
+import com.memastick.backmem.sender.service.SenderInviteCodeService;
+import com.memastick.backmem.security.api.InviteCodeAPI;
+import com.memastick.backmem.security.entity.InviteCode;
+import com.memastick.backmem.security.repository.InviteCodeRepository;
 import com.memastick.backmem.errors.exception.EntityNotFound;
 import com.memastick.backmem.sender.dto.EmailStatus;
 import org.slf4j.Logger;
@@ -23,15 +24,15 @@ public class InviteCodeService {
     private final static int CODE_SIZE = 8;
 
     private final InviteCodeRepository inviteCodeRepository;
-    private final InviteCodeSendService inviteCodeSendService;
+    private final SenderInviteCodeService senderInviteCodeService;
 
     @Autowired
     public InviteCodeService(
-            InviteCodeRepository inviteCodeRepository,
-            InviteCodeSendService inviteCodeSendService
+        InviteCodeRepository inviteCodeRepository,
+        SenderInviteCodeService senderInviteCodeService
     ) {
         this.inviteCodeRepository = inviteCodeRepository;
-        this.inviteCodeSendService = inviteCodeSendService;
+        this.senderInviteCodeService = senderInviteCodeService;
     }
 
     public void register(InviteCodeAPI request) {
@@ -43,7 +44,7 @@ public class InviteCodeService {
 
     public EmailStatus send(String code) {
         InviteCode inviteCode = findByCode(code);
-        EmailStatus emailStatus = inviteCodeSendService.send(inviteCode);
+        EmailStatus emailStatus = senderInviteCodeService.send(inviteCode);
 
         if (emailStatus.isSuccess()) {
             inviteCode.setSend(true);

@@ -1,9 +1,9 @@
-package com.memastick.backmem.code.controller;
+package com.memastick.backmem.security.controller;
 
-import com.memastick.backmem.code.api.InviteCodeAPI;
-import com.memastick.backmem.code.entity.InviteCode;
-import com.memastick.backmem.code.repository.InviteCodeRepository;
-import com.memastick.backmem.code.service.InviteCodeService;
+import com.memastick.backmem.security.api.InviteCodeAPI;
+import com.memastick.backmem.security.entity.InviteCode;
+import com.memastick.backmem.security.repository.InviteCodeRepository;
+import com.memastick.backmem.security.service.InviteCodeService;
 import com.memastick.backmem.sender.dto.EmailStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

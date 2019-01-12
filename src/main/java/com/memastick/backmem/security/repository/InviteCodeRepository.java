@@ -1,6 +1,6 @@
-package com.memastick.backmem.code.repository;
+package com.memastick.backmem.security.repository;
 
-import com.memastick.backmem.code.entity.InviteCode;
+import com.memastick.backmem.security.entity.InviteCode;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

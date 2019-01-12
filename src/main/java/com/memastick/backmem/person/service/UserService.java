@@ -1,6 +1,6 @@
 package com.memastick.backmem.person.service;
 
-import com.memastick.backmem.code.entity.InviteCode;
+import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.person.entity.Memetick;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.RoleType;

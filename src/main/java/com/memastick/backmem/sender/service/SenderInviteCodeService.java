@@ -1,8 +1,8 @@
-package com.memastick.backmem.code.service;
+package com.memastick.backmem.sender.service;
 
 import com.memastick.backmem.sender.component.EmailHtmlSender;
 import com.memastick.backmem.sender.dto.EmailStatus;
-import com.memastick.backmem.code.entity.InviteCode;
+import com.memastick.backmem.security.entity.InviteCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import org.thymeleaf.context.Context;
 
 
 @Service
-public class InviteCodeSendService {
+public class SenderInviteCodeService {
 
     private final static String PATH_TEMPLATE = "invite-code";
     private final static String SUBJECT_TITLE = "MEMASTICK INVITE CODE";
@@ -21,7 +21,7 @@ public class InviteCodeSendService {
     private String fromEmail;
 
     @Autowired
-    public InviteCodeSendService(
+    public SenderInviteCodeService(
         EmailHtmlSender emailHtmlSender
     ) {
         this.emailHtmlSender = emailHtmlSender;

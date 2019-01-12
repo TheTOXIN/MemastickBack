@@ -1,4 +1,4 @@
-package com.memastick.backmem.code.entity;
+package com.memastick.backmem.security.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
 import lombok.AllArgsConstructor;

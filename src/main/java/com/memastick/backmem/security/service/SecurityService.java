@@ -1,7 +1,6 @@
 package com.memastick.backmem.security.service;
 
-import com.memastick.backmem.code.entity.InviteCode;
-import com.memastick.backmem.code.service.InviteCodeService;
+import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.person.entity.User;
 import com.memastick.backmem.person.repository.UserRepository;
