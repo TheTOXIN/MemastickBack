@@ -24,6 +24,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
             .antMatchers("/hello").anonymous()
             .antMatchers("/invite/registration").anonymous()
+            .antMatchers("/oauth/registration").anonymous()
             .antMatchers("/**").permitAll()
             .antMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
             .antMatchers("/invite/**").hasAnyAuthority(RoleType.ADMIN.name(), RoleType.USER.name())

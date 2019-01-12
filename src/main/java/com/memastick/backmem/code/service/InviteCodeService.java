@@ -81,4 +81,10 @@ public class InviteCodeService {
         return byCode.get();
     }
 
+    public boolean validInvite(String email, String invite) {
+        Optional<InviteCode> byEmail = inviteCodeRepository.findByEmail(email);
+        if (byEmail.isEmpty()) return false;
+        InviteCode inviteCode = byEmail.get();
+        return inviteCode.getCode().equals(invite);
+    }
 }

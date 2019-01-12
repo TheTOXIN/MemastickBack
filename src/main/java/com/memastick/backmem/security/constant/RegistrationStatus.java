@@ -4,9 +4,12 @@ public enum  RegistrationStatus {
 
     SUCCESSFUL,
     ERROR,
-    PASSWORD,
-    REPEAT,
-    LOGIN,
-    EMAIL
+    PASSWORD_WEAK,
+    PASSWORD_REPEAT,
+    LOGIN_EXIST,
+    EMAIL_EXIST,
+    LOGIN_INVALID,
+    EMAIL_INVALID,
+    INVITE
 
 }

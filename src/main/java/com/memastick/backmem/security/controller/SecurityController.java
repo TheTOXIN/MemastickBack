@@ -5,9 +5,12 @@ import com.memastick.backmem.security.constant.RegistrationStatus;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("oauth")
 public class SecurityController {
 
     private final SecurityService securityService;
@@ -20,7 +23,7 @@ public class SecurityController {
     }
 
     @PostMapping("registration")
-    public RegistrationStatus registration(RegistrationAPI request) {
+    public RegistrationStatus registration(@RequestBody RegistrationAPI request) {
         return securityService.registration(request);
     }
 
