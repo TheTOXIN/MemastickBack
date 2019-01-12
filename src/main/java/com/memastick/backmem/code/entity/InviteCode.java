@@ -1,7 +1,9 @@
-package com.memastick.backmem.invite.entity;
+package com.memastick.backmem.code.entity;
 
+import com.memastick.backmem.base.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,15 +15,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "invites")
+@Table(name = "invite_codes")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Invite {
-
-    @Id
-    @GeneratedValue
-    @Column(nullable = false)
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class InviteCode extends AbstractEntity {
 
     @Email
     @NotEmpty
@@ -38,5 +36,11 @@ public class Invite {
 
     @Column(nullable = false)
     private LocalDateTime date;
+
+    @Column(nullable = false)
+    private boolean isSend = false;
+
+    @Column(nullable = false)
+    private boolean isTake = false;
 
 }

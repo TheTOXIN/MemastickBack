@@ -1,4 +1,4 @@
-package com.memastick.backmem.invite.api;
+package com.memastick.backmem.code.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class InviteAPI {
+public class InviteCodeAPI {
 
     private String email;
     private String nick;
