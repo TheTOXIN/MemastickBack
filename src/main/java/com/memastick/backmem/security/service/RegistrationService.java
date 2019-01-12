@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class SecurityService {
+public class RegistrationService {
 
     private final UserRepository userRepository;
     private final UserService userService;
     private final InviteCodeService inviteCodeService;
 
     @Autowired
-    public SecurityService(
+    public RegistrationService(
         UserRepository userRepository,
         InviteCodeService inviteCodeService,
         UserService userService
