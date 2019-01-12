@@ -4,7 +4,7 @@ import com.memastick.backmem.sender.service.SenderInviteCodeService;
 import com.memastick.backmem.security.api.InviteCodeAPI;
 import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.security.repository.InviteCodeRepository;
-import com.memastick.backmem.errors.exception.EntityNotFound;
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.sender.dto.EmailStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +78,7 @@ public class InviteCodeService {
 
     public InviteCode findByCode(String code) {
         Optional<InviteCode> byCode = inviteCodeRepository.findByCode(code);
-        if (byCode.isEmpty()) throw new EntityNotFound(InviteCode.class);
+        if (byCode.isEmpty()) throw new EntityNotFoundException(InviteCode.class);
         return byCode.get();
     }
 

@@ -1,5 +1,6 @@
 package com.memastick.backmem.person.service;
 
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.person.entity.Memetick;
 import com.memastick.backmem.security.api.RegistrationAPI;
@@ -51,4 +52,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public void updatePassword(String login, String password) {
+        Optional<User> byLogin = userRepository.findByLogin(login);
+        if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class);
+        User user = byLogin.get();
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
 }

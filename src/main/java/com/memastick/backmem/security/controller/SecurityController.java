@@ -1,7 +1,7 @@
 package com.memastick.backmem.security.controller;
 
 import com.memastick.backmem.security.api.RegistrationAPI;
-import com.memastick.backmem.security.constant.RegistrationStatus;
+import com.memastick.backmem.security.constant.SecurityStatus;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +23,7 @@ public class SecurityController {
     }
 
     @PostMapping("registration")
-    public RegistrationStatus registration(@RequestBody RegistrationAPI request) {
+    public SecurityStatus registration(@RequestBody RegistrationAPI request) {
         return securityService.registration(request);
     }
 

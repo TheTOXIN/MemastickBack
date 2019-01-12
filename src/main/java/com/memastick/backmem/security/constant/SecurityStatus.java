@@ -1,6 +1,6 @@
 package com.memastick.backmem.security.constant;
 
-public enum  RegistrationStatus {
+public enum SecurityStatus {
 
     SUCCESSFUL,
     ERROR,

@@ -6,7 +6,7 @@ import com.memastick.backmem.person.entity.User;
 import com.memastick.backmem.person.repository.UserRepository;
 import com.memastick.backmem.person.service.UserService;
 import com.memastick.backmem.security.api.RegistrationAPI;
-import com.memastick.backmem.security.constant.RegistrationStatus;
+import com.memastick.backmem.security.constant.SecurityStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,34 +29,34 @@ public class SecurityService {
         this.userService = userService;
     }
 
-    public RegistrationStatus registration(RegistrationAPI request) {
-        RegistrationStatus status = validate(request);
+    public SecurityStatus registration(RegistrationAPI request) {
+        SecurityStatus status = validateRegistration(request);
 
-        if (!status.equals(RegistrationStatus.SUCCESSFUL)) return status;
+        if (!status.equals(SecurityStatus.SUCCESSFUL)) return status;
 
         InviteCode inviteCode = inviteCodeService.findByCode(request.getInvite());
         User user = userService.generateUser(request, inviteCode);
 
-        if (userRepository.findById(user.getId()).isEmpty()) return RegistrationStatus.ERROR;
+        if (userRepository.findById(user.getId()).isEmpty()) return SecurityStatus.ERROR;
 
         inviteCodeService.take(request.getInvite());
 
         return status;
     }
 
-    private RegistrationStatus validate(RegistrationAPI request) {
-        if (userRepository.findByLogin(request.getLogin()).isPresent()) return RegistrationStatus.LOGIN_EXIST;
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) return RegistrationStatus.EMAIL_EXIST;
+    private SecurityStatus validateRegistration(RegistrationAPI request) {
+        if (userRepository.findByLogin(request.getLogin()).isPresent()) return SecurityStatus.LOGIN_EXIST;
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) return SecurityStatus.EMAIL_EXIST;
 
-        if (!ValidationUtil.validLogin(request.getLogin())) return RegistrationStatus.LOGIN_INVALID;
-        if (!ValidationUtil.isEmail(request.getEmail())) return RegistrationStatus.EMAIL_INVALID;
+        if (!ValidationUtil.validLogin(request.getLogin())) return SecurityStatus.LOGIN_INVALID;
+        if (!ValidationUtil.isEmail(request.getEmail())) return SecurityStatus.EMAIL_INVALID;
 
-        if (!ValidationUtil.checkPassword(request.getPassword())) return RegistrationStatus.PASSWORD_WEAK;
-        if (!request.getPassword().equals(request.getPasswordRepeat())) return RegistrationStatus.PASSWORD_REPEAT;
+        if (!ValidationUtil.checkPassword(request.getPassword())) return SecurityStatus.PASSWORD_WEAK;
+        if (!request.getPassword().equals(request.getPasswordRepeat())) return SecurityStatus.PASSWORD_REPEAT;
 
-        if (!inviteCodeService.validInvite(request.getEmail(), request.getInvite())) return RegistrationStatus.INVITE;
+        if (!inviteCodeService.validInvite(request.getEmail(), request.getInvite())) return SecurityStatus.INVITE;
 
-        return RegistrationStatus.SUCCESSFUL;
+        return SecurityStatus.SUCCESSFUL;
     }
 
 }
