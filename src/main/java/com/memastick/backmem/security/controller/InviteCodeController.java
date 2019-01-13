@@ -43,15 +43,15 @@ public class InviteCodeController {
         return ResponseEntity.of(inviteCodeRepository.findByCode(code));
     }
 
-    @PatchMapping("invite/send/{code}")
-    public ResponseEntity send(@PathVariable("code") String code) {
+    @PatchMapping("invite/send")
+    public ResponseEntity send(@RequestBody String code) {
         EmailStatus status = inviteCodeService.send(code);
         if (status.isSuccess()) return ResponseEntity.ok().build();
         else return ResponseEntity.unprocessableEntity().build();
     }
 
-    @PatchMapping("invite/take/{code}")
-    public ResponseEntity take(@PathVariable("code") String code) {
+    @PatchMapping("invite/take")
+    public ResponseEntity take(@RequestBody String code) {
         inviteCodeService.take(code);
         return ResponseEntity.ok().build();
     }
