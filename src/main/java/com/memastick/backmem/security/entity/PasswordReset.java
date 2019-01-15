@@ -23,7 +23,7 @@ public class PasswordReset extends AbstractEntity {
     @Column(nullable = false, unique = true)
     private String login;
 
-    @Column(nullable = false)
+    @Column
     private String code;
 
     @Column(nullable = false)

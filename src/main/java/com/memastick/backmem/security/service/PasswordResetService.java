@@ -48,19 +48,17 @@ public class PasswordResetService {
         User user = byEmail.get();
 
         Optional<PasswordReset> byLogin = passwordResetRepository.findByLogin(user.getLogin());
+        PasswordReset passwordReset;
 
         if (byLogin.isPresent()) {
-            PasswordReset passwordReset = byLogin.get();
-
+            passwordReset = byLogin.get();
             checkTimeReset(passwordReset, ErrorCode.TIME_IN);
             updateCode(passwordReset);
-
-            return senderPasswordResetService.send(passwordReset, email);
         } else {
-            PasswordReset passwordReset = generateReset(user);
-
-            return senderPasswordResetService.send(passwordReset, email);
+            passwordReset = generateReset(user);
         }
+
+        return senderPasswordResetService.send(passwordReset, email);
     }
 
     public SecurityStatus take(PasswordResetTakeAPI request) {
@@ -74,6 +72,7 @@ public class PasswordResetService {
         if (!request.getPassword().equals(request.getPasswordRepeat())) return SecurityStatus.PASSWORD_REPEAT;
 
         userService.updatePassword(passwordReset.getLogin(), request.getPassword());
+        wipeCode(passwordReset);
 
         return SecurityStatus.SUCCESSFUL;
     }
@@ -99,6 +98,11 @@ public class PasswordResetService {
 
     private void updateCode(PasswordReset passwordReset) {
         passwordReset.setCode(makeResetCode());
+        passwordResetRepository.save(passwordReset);
+    }
+
+    private void wipeCode(PasswordReset passwordReset) {
+        passwordReset.setCode("");
         passwordResetRepository.save(passwordReset);
     }
 
