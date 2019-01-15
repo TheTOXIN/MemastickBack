@@ -44,7 +44,7 @@ public class PasswordResetService {
 
     public EmailStatus send(String email) {
         Optional<User> byEmail = userRepository.findByEmail(email);
-        if (byEmail.isEmpty()) throw new EntityNotFoundException(User.class);
+        if (byEmail.isEmpty()) throw new EntityNotFoundException(User.class, "email");
         User user = byEmail.get();
 
         Optional<PasswordReset> byLogin = passwordResetRepository.findByLogin(user.getLogin());
