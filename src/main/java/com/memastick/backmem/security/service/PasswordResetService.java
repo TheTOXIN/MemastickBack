@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Service
 public class PasswordResetService {
 
@@ -82,7 +83,7 @@ public class PasswordResetService {
 
         passwordReset.setLogin(user.getLogin());
         passwordReset.setCode(makeResetCode());
-        passwordReset.setTime(LocalDateTime.now().plusDays(1));
+        passwordReset.setTime(makeTimeCode());
 
         return passwordResetRepository.save(passwordReset);
     }
@@ -98,6 +99,7 @@ public class PasswordResetService {
 
     private void updateCode(PasswordReset passwordReset) {
         passwordReset.setCode(makeResetCode());
+        passwordReset.setTime(makeTimeCode());
         passwordResetRepository.save(passwordReset);
     }
 
@@ -108,6 +110,10 @@ public class PasswordResetService {
 
     private String makeResetCode(){
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    private LocalDateTime makeTimeCode() {
+        return LocalDateTime.now().plusDays(1);
     }
 
 }
