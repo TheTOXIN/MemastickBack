@@ -26,12 +26,14 @@ public class PasswordResetController {
     public ResponseEntity passwordReset(@RequestBody PasswordResetSendAPI request) {
         EmailStatus status = passwordResetService.send(request.getEmail());
         if (status.isSuccess()) return ResponseEntity.ok().build();
-        else return ResponseEntity.unprocessableEntity().build();
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @PatchMapping("take")
-    public SecurityStatus passwordReset(@RequestBody PasswordResetTakeAPI request) {
-        return passwordResetService.take(request);
+    public ResponseEntity<SecurityStatus> passwordReset(@RequestBody PasswordResetTakeAPI request) {
+        SecurityStatus status = passwordResetService.take(request);
+        if (status.equals(SecurityStatus.SUCCESSFUL)) return ResponseEntity.ok(status);
+        return ResponseEntity.unprocessableEntity().body(status);
     }
 
 }
