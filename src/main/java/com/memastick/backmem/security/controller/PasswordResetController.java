@@ -1,5 +1,6 @@
 package com.memastick.backmem.security.controller;
 
+import com.memastick.backmem.security.api.PasswordResetSendAPI;
 import com.memastick.backmem.security.api.PasswordResetTakeAPI;
 import com.memastick.backmem.security.constant.SecurityStatus;
 import com.memastick.backmem.security.service.PasswordResetService;
@@ -22,8 +23,8 @@ public class PasswordResetController {
     }
 
     @PatchMapping("send")
-    public ResponseEntity passwordReset(@RequestBody String email) {
-        EmailStatus status = passwordResetService.send(email);
+    public ResponseEntity passwordReset(@RequestBody PasswordResetSendAPI request) {
+        EmailStatus status = passwordResetService.send(request.getEmail());
         if (status.isSuccess()) return ResponseEntity.ok().build();
         else return ResponseEntity.unprocessableEntity().build();
     }
