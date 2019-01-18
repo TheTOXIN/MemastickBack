@@ -78,7 +78,7 @@ public class InviteCodeService {
 
     public InviteCode findByCode(String code) {
         Optional<InviteCode> byCode = inviteCodeRepository.findByCode(code);
-        if (byCode.isEmpty()) throw new EntityNotFoundException(InviteCode.class);
+        if (byCode.isEmpty()) throw new EntityNotFoundException(InviteCode.class, "code");
         return byCode.get();
     }
 

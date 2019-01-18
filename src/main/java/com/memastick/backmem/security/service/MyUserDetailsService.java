@@ -24,7 +24,13 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<User> userOptional = userRepository.findByLogin(username);
+        Optional<User> userOptional;
+
+        if (username.contains("@")) {
+            userOptional = userRepository.findByEmail(username);
+        } else {
+            userOptional = userRepository.findByLogin(username);
+        }
 
         if (userOptional.isPresent()) {
             return new MyUserDetails(userOptional.get());

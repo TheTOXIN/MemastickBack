@@ -54,7 +54,7 @@ public class UserService {
 
     public void updatePassword(String login, String password) {
         Optional<User> byLogin = userRepository.findByLogin(login);
-        if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class);
+        if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
         User user = byLogin.get();
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);

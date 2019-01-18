@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Service
 public class PasswordResetService {
 
@@ -44,23 +45,21 @@ public class PasswordResetService {
 
     public EmailStatus send(String email) {
         Optional<User> byEmail = userRepository.findByEmail(email);
-        if (byEmail.isEmpty()) throw new EntityNotFoundException(User.class);
+        if (byEmail.isEmpty()) throw new EntityNotFoundException(User.class, "email");
         User user = byEmail.get();
 
         Optional<PasswordReset> byLogin = passwordResetRepository.findByLogin(user.getLogin());
+        PasswordReset passwordReset;
 
         if (byLogin.isPresent()) {
-            PasswordReset passwordReset = byLogin.get();
-
+            passwordReset = byLogin.get();
             checkTimeReset(passwordReset, ErrorCode.TIME_IN);
             updateCode(passwordReset);
-
-            return senderPasswordResetService.send(passwordReset, email);
         } else {
-            PasswordReset passwordReset = generateReset(user);
-
-            return senderPasswordResetService.send(passwordReset, email);
+            passwordReset = generateReset(user);
         }
+
+        return senderPasswordResetService.send(passwordReset, email);
     }
 
     public SecurityStatus take(PasswordResetTakeAPI request) {
@@ -74,6 +73,7 @@ public class PasswordResetService {
         if (!request.getPassword().equals(request.getPasswordRepeat())) return SecurityStatus.PASSWORD_REPEAT;
 
         userService.updatePassword(passwordReset.getLogin(), request.getPassword());
+        wipeCode(passwordReset);
 
         return SecurityStatus.SUCCESSFUL;
     }
@@ -83,7 +83,7 @@ public class PasswordResetService {
 
         passwordReset.setLogin(user.getLogin());
         passwordReset.setCode(makeResetCode());
-        passwordReset.setTime(LocalDateTime.now().plusDays(1));
+        passwordReset.setTime(makeTimeCode());
 
         return passwordResetRepository.save(passwordReset);
     }
@@ -99,11 +99,21 @@ public class PasswordResetService {
 
     private void updateCode(PasswordReset passwordReset) {
         passwordReset.setCode(makeResetCode());
+        passwordReset.setTime(makeTimeCode());
+        passwordResetRepository.save(passwordReset);
+    }
+
+    private void wipeCode(PasswordReset passwordReset) {
+        passwordReset.setCode("");
         passwordResetRepository.save(passwordReset);
     }
 
     private String makeResetCode(){
         return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    private LocalDateTime makeTimeCode() {
+        return LocalDateTime.now().plusDays(1);
     }
 
 }
