@@ -1,5 +1,8 @@
 package com.memastick.backmem.security.service;
 
+import com.memastick.backmem.errors.consts.ErrorCode;
+import com.memastick.backmem.errors.exception.ValidationException;
+import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.sender.service.SenderInviteCodeService;
 import com.memastick.backmem.security.api.InviteCodeAPI;
 import com.memastick.backmem.security.entity.InviteCode;
@@ -65,6 +68,8 @@ public class InviteCodeService {
 
         LocalDateTime create = LocalDateTime.now();
         String code = UUID.randomUUID().toString().substring(0, CODE_SIZE);
+
+        if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
 
         inviteCode.setEmail(request.getEmail());
         inviteCode.setNick(request.getNick());

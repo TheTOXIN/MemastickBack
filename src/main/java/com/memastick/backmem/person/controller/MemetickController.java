@@ -1,5 +1,6 @@
 package com.memastick.backmem.person.controller;
 
+import com.memastick.backmem.person.api.ChangeNickAPI;
 import com.memastick.backmem.person.api.MemetickAPI;
 import com.memastick.backmem.person.service.MemetickAvatarService;
 import com.memastick.backmem.person.service.MemetickService;
@@ -30,39 +31,39 @@ public class MemetickController {
         this.memetickAvatarService = memetickAvatarService;
     }
 
-    @GetMapping("me")
+    @GetMapping("/me")
     public MemetickAPI me() {
         return memetickService.me();
     }
 
+    @GetMapping("/stats/{memetickId}")
+    public void myStats() {
+
+    }
+
+    @GetMapping("/home")
+    public void home() {
+
+    }
+
     @GetMapping(
-        value = "avatar/download/{id}",
+        value = "/avatar/download/{memetickId}",
         produces = MediaType.IMAGE_PNG_VALUE
     )
-    public byte[] downloadAvatar(
-        @PathVariable("id") UUID memetickId
-    ) {
+    public byte[] downloadAvatar(@PathVariable("memetickId") UUID memetickId) {
         return memetickAvatarService.download(memetickId);
     }
 
-    @PostMapping("avatar/upload/{memetickId}")
-    @PreAuthorize("@abac.hasPermissionById(#memetickId)")
-    public ResponseEntity<Void> uploadAvatar(
-        @RequestParam("file") MultipartFile photo,
-        @P("memetickId") @PathVariable("memetickId") UUID memetickId
-    ) throws IOException {
-        memetickAvatarService.upload(memetickId, photo);
+    @PostMapping("/avatar/upload")
+    public ResponseEntity uploadAvatar(@RequestParam("file") MultipartFile photo) throws IOException {
+        memetickAvatarService.upload(photo);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public void changeNick() {
-
-    }
-
-    @GetMapping
-    public void myStats() {
-
+    @PostMapping("/nick/change")
+    public ResponseEntity changeNick(@RequestBody ChangeNickAPI request) {
+        memetickService.changeNick(request);
+        return ResponseEntity.ok().build();
     }
 
 }
