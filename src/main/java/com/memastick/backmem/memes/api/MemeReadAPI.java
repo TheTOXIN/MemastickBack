@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemeLikeAPI {
+public class MemeReadAPI {
 
-    private int likes;
-    private int chromosomes;
-
-    private boolean myLike;
-    private int myChromosomes;
+    private UUID id;
+    private UUID fireId;
+    private UUID memetickId;
 
 }

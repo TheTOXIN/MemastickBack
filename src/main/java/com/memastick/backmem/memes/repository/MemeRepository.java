@@ -12,8 +12,6 @@ import java.util.UUID;
 @Repository
 public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
 
-    Meme findByFireId(UUID fireId);
-
     List<Meme> findAllByMemetick(Memetick memetick, Pageable pageable);
 
 }

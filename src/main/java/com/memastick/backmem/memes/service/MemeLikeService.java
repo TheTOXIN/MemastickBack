@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.service;
 
-import com.memastick.backmem.memes.api.MemeLikeAPI;
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.memes.api.MemeLikeStateAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -35,16 +37,16 @@ public class MemeLikeService {
     }
 
     @Transactional
-    public MemeLikeAPI readByFireId(UUID fireId) {
+    public MemeLikeStateAPI readStateById(UUID id) {
         Memetick memetick = securityService.getCurrentUser().getMemetick();
-        Meme meme = memeRepository.findByFireId(fireId);
+        Meme meme = findById(id);
 
         MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
 
         long countLikes = memeLikeRepository.countByMemeAndLikeTrue(meme);
         long countChromosomes = memeLikeRepository.sumChromosomeByMeme(meme);
 
-        return new MemeLikeAPI(
+        return new MemeLikeStateAPI(
             (int) countLikes,
             (int) countChromosomes,
             memeLike != null && memeLike.isLike(),
@@ -52,16 +54,16 @@ public class MemeLikeService {
         );
     }
 
-    public void likeTrigger(UUID fireId) {
-        MemeLike memeLike = findByFireIdForCurrentUser(fireId);
+    public void likeTrigger(UUID id) {
+        MemeLike memeLike = findByIdForCurrentUser(id);
 
         memeLike.setLike(!memeLike.isLike());
 
         memeLikeRepository.save(memeLike);
     }
 
-    public void chromosomeTrigger(UUID fireId, int count) {
-        MemeLike memeLike = findByFireIdForCurrentUser(fireId);
+    public void chromosomeTrigger(UUID id, int count) {
+        MemeLike memeLike = findByIdForCurrentUser(id);
 
         if (count > MAX_CHROMOSOME || memeLike.getChromosome() == MAX_CHROMOSOME) return;
 
@@ -70,9 +72,9 @@ public class MemeLikeService {
         memeLikeRepository.save(memeLike);
     }
 
-    private MemeLike findByFireIdForCurrentUser(UUID fireId) {
+    private MemeLike findByIdForCurrentUser(UUID id) {
         Memetick memetick = securityService.getCurrentUser().getMemetick();
-        Meme meme = memeRepository.findByFireId(fireId);
+        Meme meme = findById(id);
 
         MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
 
@@ -88,5 +90,11 @@ public class MemeLikeService {
         memeLike.setMemetick(memetick);
 
         return memeLikeRepository.save(memeLike);
+    }
+
+    private Meme findById(UUID id) {
+        Optional<Meme> byId = memeRepository.findById(id);
+        if (byId.isEmpty()) throw new EntityNotFoundException(Meme.class, "id");
+        return byId.get();
     }
 }

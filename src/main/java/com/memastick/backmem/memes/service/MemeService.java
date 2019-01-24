@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.memes.api.MemeCreateAPI;
+import com.memastick.backmem.memes.api.MemeReadAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.person.entity.Memetick;
@@ -46,10 +47,18 @@ public class MemeService {
         );
     }
 
-    public List<UUID> readAll(Pageable pageable) {
+    public List<MemeReadAPI> readAll(Pageable pageable) {
         return memeRepository.findAll(pageable)
             .stream()
-            .map(Meme::getFireId)
+            .map(MemeService::mapToReadAPI)
             .collect(Collectors.toList());
+    }
+
+    private static MemeReadAPI mapToReadAPI(Meme meme) {
+        return new MemeReadAPI(
+            meme.getId(),
+            meme.getFireId(),
+            meme.getMemetick().getId()
+        );
     }
 }

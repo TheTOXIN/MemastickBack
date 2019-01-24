@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.controller;
 
 import com.memastick.backmem.memes.api.MemeCreateAPI;
+import com.memastick.backmem.memes.api.MemeReadAPI;
 import com.memastick.backmem.memes.service.MemeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("memes")
@@ -25,7 +25,7 @@ public class MemeController {
     }
 
     @GetMapping("/read")
-    public List<UUID> readAll(Pageable pageable) {
+    public List<MemeReadAPI> readAll(Pageable pageable) {
         return memeService.readAll(pageable);
     }
 

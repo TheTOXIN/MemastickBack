@@ -1,6 +1,6 @@
 package com.memastick.backmem.memes.controller;
 
-import com.memastick.backmem.memes.api.MemeLikeAPI;
+import com.memastick.backmem.memes.api.MemeLikeStateAPI;
 import com.memastick.backmem.memes.service.MemeLikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,23 +21,23 @@ public class MemeLikeController {
         this.memeLikeService = memeLikeService;
     }
 
-    @GetMapping("read/{fireId}")
-    public MemeLikeAPI read(@PathVariable("fireId") UUID fireId) {
-        return memeLikeService.readByFireId(fireId);
+    @GetMapping("read/{id}")
+    public MemeLikeStateAPI read(@PathVariable("id") UUID id) {
+        return memeLikeService.readStateById(id);
     }
 
-    @PatchMapping("trigger/{fireId}")
-    public ResponseEntity trigger(@PathVariable("fireId") UUID fireId) {
-        memeLikeService.likeTrigger(fireId);
+    @PatchMapping("trigger/{id}")
+    public ResponseEntity trigger(@PathVariable("id") UUID id) {
+        memeLikeService.likeTrigger(id);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("chromosome/{fireId}/{count}")
+    @PatchMapping("chromosome/{id}/{count}")
     public ResponseEntity chromosome(
-        @PathVariable("fireId") UUID fireId,
+        @PathVariable("id") UUID id,
         @PathVariable("count") int count
     ) {
-        memeLikeService.chromosomeTrigger(fireId, count);
+        memeLikeService.chromosomeTrigger(id, count);
         return ResponseEntity.ok().build();
     }
 
