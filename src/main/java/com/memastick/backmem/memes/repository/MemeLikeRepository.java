@@ -4,6 +4,8 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.person.entity.Memetick;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
@@ -13,12 +15,15 @@ public interface MemeLikeRepository extends JpaRepository<MemeLike, UUID> {
 
     MemeLike findByMemeAndMemetick(Meme meme, Memetick memetick);
 
-    long countByMemeAndLikeTrue(Meme meme);
+    long countByMemeIdAndIsLikeTrue(UUID memeId);
 
-    long sumChromosomeByMeme(Meme meme);
-
+    @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml")
     long sumChromosome();
 
-    long sumChromosomeByMemetickId(UUID memetickId);
+    @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml WHERE ml.memetick.id = :memetickId")
+    long sumChromosomeByMemetickId(@Param("memetickId") UUID memetickId);
+
+    @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml WHERE ml.meme.id = :memeId")
+    long sumChromosomeByMemeId(@Param("meme") UUID memeId);
 
 }

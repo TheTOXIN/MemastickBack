@@ -29,7 +29,7 @@ public class StatisticsService {
 
     public StatisticsAPI byMemetick(UUID memetickId) {
         return new StatisticsAPI(
-            memetickRepository.sumDnaByMemetickId(memetickId),
+            memetickRepository.sumDnaById(memetickId),
             memeRepository.countByMemetickId(memetickId),
             memeLikeRepository.sumChromosomeByMemetickId(memetickId)
         );

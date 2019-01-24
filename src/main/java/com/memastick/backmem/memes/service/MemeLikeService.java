@@ -38,19 +38,16 @@ public class MemeLikeService {
 
     @Transactional
     public MemeLikeStateAPI readStateById(UUID id) {
-        Memetick memetick = securityService.getCurrentUser().getMemetick();
-        Meme meme = findById(id);
+        MemeLike memeLike = findByIdForCurrentUser(id);
 
-        MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
-
-        long countLikes = memeLikeRepository.countByMemeAndLikeTrue(meme);
-        long countChromosomes = memeLikeRepository.sumChromosomeByMeme(meme);
+        long countLikes = memeLikeRepository.countByMemeIdAndIsLikeTrue(id);
+        long countChromosomes = memeLikeRepository.sumChromosomeByMemeId(id);
 
         return new MemeLikeStateAPI(
             (int) countLikes,
             (int) countChromosomes,
-            memeLike != null && memeLike.isLike(),
-            memeLike != null ? memeLike.getChromosome() : 0
+            memeLike.isLike(),
+            memeLike.getChromosome()
         );
     }
 
