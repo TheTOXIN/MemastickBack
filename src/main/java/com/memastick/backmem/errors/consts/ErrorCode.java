@@ -7,7 +7,8 @@ public enum  ErrorCode {
 
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND),
     TIME_IN(HttpStatus.GATEWAY_TIMEOUT),
-    TIME_OUT(HttpStatus.GATEWAY_TIMEOUT);
+    TIME_OUT(HttpStatus.GATEWAY_TIMEOUT),
+    IMAGE_FORMAT(HttpStatus.NO_CONTENT);
 
     @Getter
     private HttpStatus status;

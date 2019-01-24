@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 
@@ -21,5 +22,12 @@ public class Memetick extends AbstractEntity {
 
     @Column(nullable = false)
     private String nick;
+
+    @Column
+    private long dna = 0L;
+
+    @Lob
+    @Column
+    private byte[] avatar;
 
 }
