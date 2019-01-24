@@ -36,16 +36,6 @@ public class MemetickController {
         return memetickService.me();
     }
 
-    @GetMapping("/stats/{memetickId}")
-    public void myStats() {
-
-    }
-
-    @GetMapping("/home")
-    public void home() {
-
-    }
-
     @GetMapping(
         value = "/avatar/download/{memetickId}",
         produces = MediaType.IMAGE_PNG_VALUE
@@ -60,7 +50,7 @@ public class MemetickController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/nick/change")
+    @PutMapping("/nick/change")
     public ResponseEntity changeNick(@RequestBody ChangeNickAPI request) {
         memetickService.changeNick(request);
         return ResponseEntity.ok().build();

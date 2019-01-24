@@ -34,11 +34,7 @@ public class MemetickService {
     }
 
     public MemetickAPI me() {
-        MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder
-            .getContext()
-            .getAuthentication()
-            .getPrincipal();
-
+        MyUserDetails userDetails = securityService.getCurrentUser();
         Memetick memetick = userDetails.getMemetick();
 
         return new MemetickAPI(
