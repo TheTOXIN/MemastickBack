@@ -9,4 +9,8 @@ import java.util.UUID;
 @Repository
 public interface MemetickRepository extends CrudRepository<Memetick, UUID> {
 
+    long sumDna();
+
+    long sumDnaByMemetickId(UUID memetickId);
+
 }

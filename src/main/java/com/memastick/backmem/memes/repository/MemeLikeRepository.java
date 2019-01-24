@@ -17,4 +17,8 @@ public interface MemeLikeRepository extends JpaRepository<MemeLike, UUID> {
 
     long sumChromosomeByMeme(Meme meme);
 
+    long sumChromosome();
+
+    long sumChromosomeByMemetickId(UUID memetickId);
+
 }

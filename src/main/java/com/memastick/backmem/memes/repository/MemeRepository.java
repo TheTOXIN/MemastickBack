@@ -14,4 +14,8 @@ public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
 
     List<Meme> findAllByMemetick(Memetick memetick, Pageable pageable);
 
+    long sumDna();
+
+    long countByMemetickId(UUID memetickId);
+
 }
