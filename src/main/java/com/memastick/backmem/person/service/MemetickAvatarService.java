@@ -43,8 +43,8 @@ public class MemetickAvatarService {
     }
 
     @Transactional
-    public byte[] download(UUID memetickId) {
-        return memetickService.findById(memetickId).getAvatar();
+    public byte[] download(UUID id) {
+        return memetickService.findById(id).getAvatar();
     }
 
     @Transactional

@@ -5,13 +5,12 @@ import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.person.api.ChangeNickAPI;
-import com.memastick.backmem.person.api.MemetickAPI;
+import com.memastick.backmem.person.api.MemetickInfoAPI;
 import com.memastick.backmem.person.entity.Memetick;
 import com.memastick.backmem.person.repository.MemetickRepository;
 import com.memastick.backmem.security.model.MyUserDetails;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,11 +32,10 @@ public class MemetickService {
         this.securityService = securityService;
     }
 
-    public MemetickAPI me() {
-        MyUserDetails userDetails = securityService.getCurrentUser();
-        Memetick memetick = userDetails.getMemetick();
+    public MemetickInfoAPI meInfo() {
+        Memetick memetick  = securityService.getCurrentUser().getMemetick();
 
-        return new MemetickAPI(
+        return new MemetickInfoAPI(
             memetick.getId(),
             memetick.getNick()
         );

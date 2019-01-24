@@ -1,14 +1,12 @@
 package com.memastick.backmem.person.controller;
 
 import com.memastick.backmem.person.api.ChangeNickAPI;
-import com.memastick.backmem.person.api.MemetickAPI;
+import com.memastick.backmem.person.api.MemetickInfoAPI;
 import com.memastick.backmem.person.service.MemetickAvatarService;
 import com.memastick.backmem.person.service.MemetickService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,16 +30,16 @@ public class MemetickController {
     }
 
     @GetMapping("/me")
-    public MemetickAPI me() {
-        return memetickService.me();
+    public MemetickInfoAPI meInfo() {
+        return memetickService.meInfo();
     }
 
     @GetMapping(
-        value = "/avatar/download/{memetickId}",
+        value = "/avatar/download/{id}",
         produces = MediaType.IMAGE_PNG_VALUE
     )
-    public byte[] downloadAvatar(@PathVariable("memetickId") UUID memetickId) {
-        return memetickAvatarService.download(memetickId);
+    public byte[] downloadAvatar(@PathVariable("id") UUID id) {
+        return memetickAvatarService.download(id);
     }
 
     @PostMapping("/avatar/upload")
