@@ -2,6 +2,7 @@ package com.memastick.backmem.person.service;
 
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.errors.exception.SettingException;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.person.api.ChangeNickAPI;
@@ -14,6 +15,7 @@ import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,7 +64,13 @@ public class MemetickService {
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
 
         Memetick memetick = securityService.getCurrentUser().getMemetick();
+
+        if (memetick.getNickChanged().plusWeeks(1).isAfter(ZonedDateTime.now()))
+            throw new SettingException(ErrorCode.EXPIRE_NICK);
+
         memetick.setNick(request.getNick());
+        memetick.setNickChanged(ZonedDateTime.now());
+
         memetickRepository.save(memetick);
     }
 

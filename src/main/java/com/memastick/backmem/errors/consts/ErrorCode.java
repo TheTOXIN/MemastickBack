@@ -9,7 +9,9 @@ public enum  ErrorCode {
     TIME_IN(HttpStatus.GATEWAY_TIMEOUT),
     TIME_OUT(HttpStatus.GATEWAY_TIMEOUT),
     IMAGE_FORMAT(HttpStatus.NO_CONTENT),
-    INVALID_NICK(HttpStatus.UNPROCESSABLE_ENTITY);
+    INVALID_NICK(HttpStatus.UNPROCESSABLE_ENTITY),
+    EXPIRE_NICK(HttpStatus.GATEWAY_TIMEOUT),
+    LESS_TOKEN(HttpStatus.IM_USED);
 
     @Getter
     private HttpStatus status;

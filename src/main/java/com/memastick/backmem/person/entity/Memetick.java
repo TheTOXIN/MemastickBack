@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.Table;
+import java.time.ZonedDateTime;
 
 
 @Entity
@@ -23,11 +24,17 @@ public class Memetick extends AbstractEntity {
     @Column(nullable = false)
     private String nick;
 
-    @Column
+    @Column(nullable = false)
     private long dna = 0L;
 
     @Lob
     @Column
     private byte[] avatar;
+
+    @Column(nullable = false)
+    private ZonedDateTime nickChanged;
+
+    @Column(nullable = false)
+    private ZonedDateTime memeCreated;
 
 }
