@@ -1,12 +1,14 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeLikeStateAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.person.entity.Memetick;
+import com.memastick.backmem.person.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class MemeLikeService {
 
     private static final int MAX_CHROMOSOME = 30;
 
+    private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
@@ -29,11 +32,13 @@ public class MemeLikeService {
     public MemeLikeService(
         MemeLikeRepository memeLikeRepository,
         SecurityService securityService,
-        MemeRepository memeRepository
+        MemeRepository memeRepository,
+        MemetickService memetickService
     ) {
         this.memeLikeRepository = memeLikeRepository;
         this.securityService = securityService;
         this.memeRepository = memeRepository;
+        this.memetickService = memetickService;
     }
 
     @Transactional
@@ -57,6 +62,12 @@ public class MemeLikeService {
         memeLike.setLike(!memeLike.isLike());
 
         memeLikeRepository.save(memeLike);
+
+        int randDna = MathUtil.rand(10, 100);
+        memetickService.addDna(
+            memeLike.getMeme().getMemetick(),
+            memeLike.isLike() ? randDna : randDna * -1
+        );
     }
 
     public void chromosomeTrigger(UUID id, int count) {
@@ -64,9 +75,12 @@ public class MemeLikeService {
 
         if (count > MAX_CHROMOSOME || memeLike.getChromosome() == MAX_CHROMOSOME) return;
 
-        memeLike.setChromosome(Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME));
+        int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
+        memeLike.setChromosome(chromosome);
 
         memeLikeRepository.save(memeLike);
+
+        memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));
     }
 
     private MemeLike findByIdForCurrentUser(UUID id) {

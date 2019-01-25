@@ -1,12 +1,14 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.MemeTokenExcpetion;
+import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemeReadAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.person.entity.Memetick;
 import com.memastick.backmem.person.repository.MemetickRepository;
+import com.memastick.backmem.person.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -24,16 +26,19 @@ public class MemeService {
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
     private final MemetickRepository memetickRepository;
+    private final MemetickService memetickService;
 
     @Autowired
     public MemeService(
         SecurityService securityService,
         MemeRepository memeRepository,
-        MemetickRepository memetickRepository
+        MemetickRepository memetickRepository,
+        MemetickService memetickService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickRepository = memetickRepository;
+        this.memetickService = memetickService;
     }
 
     public void create(MemeCreateAPI request) {
@@ -47,6 +52,8 @@ public class MemeService {
 
         memetick.setMemeCreated(ZonedDateTime.now());
         memetickRepository.save(memetick);
+
+        memetickService.addDna(memetick, MathUtil.rand(500, 1000));
     }
 
     public Meme makeMeme(UUID fireId, Memetick memetick) {

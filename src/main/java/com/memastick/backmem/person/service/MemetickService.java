@@ -60,6 +60,11 @@ public class MemetickService {
         );
     }
 
+    public void addDna(Memetick memetick, int dna) {
+        memetick.setDna(memetick.getDna() + dna);
+        memetickRepository.save(memetick);
+    }
+
     public void changeNick(ChangeNickAPI request) {
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
 
