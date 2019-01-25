@@ -27,6 +27,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .antMatchers("/registration").anonymous()
             .antMatchers("/password-reset/send").anonymous()
             .antMatchers("/password-reset/take").anonymous()
+            .antMatchers("/memetick-avatars/download/**").anonymous()
             .antMatchers("/**").permitAll()
             .antMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
             .antMatchers("/invite/**").hasAnyAuthority(RoleType.ADMIN.name(), RoleType.USER.name())

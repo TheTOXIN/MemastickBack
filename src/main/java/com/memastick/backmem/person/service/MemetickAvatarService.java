@@ -4,7 +4,8 @@ import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ImageUtil;
 import com.memastick.backmem.person.entity.Memetick;
-import com.memastick.backmem.person.repository.MemetickRepository;
+import com.memastick.backmem.person.entity.MemetickAvatar;
+import com.memastick.backmem.person.repository.MemetickAvatarRepository;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,24 +38,22 @@ public class MemetickAvatarService {
         "image/png"
     ));
 
-    private final MemetickRepository memetickRepository;
-    private final MemetickService memetickService;
     private final SecurityService securityService;
+    private final MemetickAvatarRepository memetickAvatarRepository;
 
     @Autowired
     public MemetickAvatarService(
-        MemetickRepository memetickRepository,
-        MemetickService memetickService,
-        SecurityService securityService
+        SecurityService securityService,
+        MemetickAvatarRepository memetickAvatarRepository
     ) {
-        this.memetickRepository = memetickRepository;
-        this.memetickService = memetickService;
+
         this.securityService = securityService;
+        this.memetickAvatarRepository = memetickAvatarRepository;
     }
 
     @Transactional
     public byte[] download(UUID id) {
-        return memetickService.findById(id).getAvatar();
+        return memetickAvatarRepository.findByMemetickId(id).getAvatar();
     }
 
     @Transactional
@@ -66,8 +65,11 @@ public class MemetickAvatarService {
         byte[] photoBytes = optimizeImage(bufferedImage);
 
         Memetick memetick = securityService.getCurrentMemetick();
-        memetick.setAvatar(photoBytes);
-        memetickRepository.save(memetick);
+        MemetickAvatar memetickAvatar = memetickAvatarRepository.findByMemetickId(memetick.getId());
+
+        memetickAvatar.setAvatar(photoBytes);
+
+        memetickAvatarRepository.save(memetickAvatar);
     }
 
     private void validateImage(MultipartFile image) {

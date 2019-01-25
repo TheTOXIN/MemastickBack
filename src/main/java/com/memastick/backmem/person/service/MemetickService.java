@@ -74,7 +74,6 @@ public class MemetickService {
         memetick.setNickChanged(ZonedDateTime.now());
 
         memetickRepository.save(memetick);
-        //securityService.updateMemetickCurrentUser(memetick);
     }
 
     public Memetick findById(UUID id) {

@@ -2,7 +2,9 @@ package com.memastick.backmem.person.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.person.entity.Memetick;
+import com.memastick.backmem.person.entity.MemetickAvatar;
 import com.memastick.backmem.person.entity.User;
+import com.memastick.backmem.person.repository.MemetickAvatarRepository;
 import com.memastick.backmem.person.repository.MemetickRepository;
 import com.memastick.backmem.person.repository.UserRepository;
 import com.memastick.backmem.security.api.RegistrationAPI;
@@ -22,16 +24,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemetickRepository memetickRepository;
+    private final MemetickAvatarRepository memetickAvatarRepository;
 
     @Autowired
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
-        MemetickRepository memetickRepository
+        MemetickRepository memetickRepository,
+        MemetickAvatarRepository memetickAvatarRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.memetickRepository = memetickRepository;
+        this.memetickAvatarRepository = memetickAvatarRepository;
     }
 
     public User findAdmin() {
@@ -41,7 +46,6 @@ public class UserService {
 
     public User generateUser(RegistrationAPI request, InviteCode inviteCode) {
         User user = new User();
-
         user.setEmail(request.getEmail());
         user.setLogin(request.getLogin());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -50,6 +54,10 @@ public class UserService {
         Memetick memetick = new Memetick();
         memetick.setNick(inviteCode.getNick());
         memetickRepository.save(memetick);
+
+        MemetickAvatar avatar = new MemetickAvatar();
+        avatar.setMemetick(memetick);
+        memetickAvatarRepository.save(avatar);
 
         user.setMemetick(memetick);
 
