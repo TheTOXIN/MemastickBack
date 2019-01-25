@@ -30,24 +30,24 @@ public class MemetickController {
         this.memetickAvatarService = memetickAvatarService;
     }
 
-    @GetMapping("/me")
+    @GetMapping("view/me")
     public MemetickViewAPI meView() {
         return memetickService.viewByMe();
     }
 
-    @GetMapping("/login/{login}")
-    public MemetickViewAPI loginView(@PathVariable("login") String login) {
-        return memetickService.viewByLogin(login);
+    @GetMapping("view/{id}")
+    public MemetickViewAPI loginView(@PathVariable("id") UUID id) {
+        return memetickService.viewById(id);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("preview/{id}")
     public MemetickPreviewAPI preview(@PathVariable("id") UUID id) {
         return memetickService.previewById(id);
     }
 
     @GetMapping(
         value = "/avatar/download/{id}",
-        produces = MediaType.IMAGE_PNG_VALUE
+        produces = MediaType.IMAGE_JPEG_VALUE
     )
     public byte[] downloadAvatar(@PathVariable("id") UUID id) {
         return memetickAvatarService.download(id);

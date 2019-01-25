@@ -1,12 +1,13 @@
 package com.memastick.backmem.person.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
-import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.person.entity.Memetick;
+import com.memastick.backmem.person.entity.User;
+import com.memastick.backmem.person.repository.MemetickRepository;
+import com.memastick.backmem.person.repository.UserRepository;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.RoleType;
-import com.memastick.backmem.person.entity.User;
-import com.memastick.backmem.person.repository.UserRepository;
+import com.memastick.backmem.security.entity.InviteCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,27 +21,22 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final MemetickService memetickService;
+    private final MemetickRepository memetickRepository;
 
     @Autowired
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
-        MemetickService memetickService
+        MemetickRepository memetickRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.memetickService = memetickService;
+        this.memetickRepository = memetickRepository;
     }
 
     public User findAdmin() {
         Optional<User> byRole = userRepository.findByRole(RoleType.ADMIN);
         return byRole.orElse(null);
-    }
-
-    public Memetick findMemetick(String login) {
-        User user = findByLogin(login);
-        return user.getMemetick();
     }
 
     public User generateUser(RegistrationAPI request, InviteCode inviteCode) {
@@ -51,7 +47,9 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(RoleType.USER);
 
-        Memetick memetick = memetickService.generateMemetick(inviteCode.getNick());
+        Memetick memetick = new Memetick();
+        memetick.setNick(inviteCode.getNick());
+        memetickRepository.save(memetick);
 
         user.setMemetick(memetick);
 
@@ -75,4 +73,5 @@ public class UserService {
         if (byMemetickId.isEmpty()) throw new EntityNotFoundException(User.class, "memetick");
         return byMemetickId.get().getLogin();
     }
+
 }

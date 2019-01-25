@@ -42,7 +42,7 @@ public class MemeService {
     }
 
     public void create(MemeCreateAPI request) {
-        Memetick memetick = securityService.getCurrentUser().getMemetick();
+        Memetick memetick = securityService.getCurrentMemetick();
 
         if (memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now()))
             throw new MemeTokenExcpetion();

@@ -9,7 +9,6 @@ import com.memastick.backmem.person.api.ChangeNickAPI;
 import com.memastick.backmem.person.api.MemetickPreviewAPI;
 import com.memastick.backmem.person.api.MemetickViewAPI;
 import com.memastick.backmem.person.entity.Memetick;
-import com.memastick.backmem.person.entity.User;
 import com.memastick.backmem.person.repository.MemetickRepository;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,22 +38,20 @@ public class MemetickService {
     }
 
     public MemetickViewAPI viewByMe() {
-        return mapToView(
-            securityService.getCurrentUser().getMemetick()
-        );
+        return mapToView(securityService.getCurrentMemetick());
     }
 
-    public MemetickViewAPI viewByLogin(String login) {
-        return mapToView(
-            userService.findMemetick(login)
-        );
+    public MemetickViewAPI viewById(UUID id) {
+        return mapToView(findById(id));
     }
 
     public MemetickPreviewAPI previewById(UUID id) {
         Memetick memetick = findById(id);
+        String login = userService.readLoginByMemetickId(id);
 
         return new MemetickPreviewAPI(
             memetick.getId(),
+            login,
             memetick.getNick(),
             memetick.getDna()
         );
@@ -68,7 +65,7 @@ public class MemetickService {
     public void changeNick(ChangeNickAPI request) {
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
 
-        Memetick memetick = securityService.getCurrentUser().getMemetick();
+        Memetick memetick = securityService.getCurrentMemetick();
 
         if (memetick.getNickChanged().plusWeeks(1).isAfter(ZonedDateTime.now()))
             throw new SettingException(ErrorCode.EXPIRE_NICK);
@@ -77,14 +74,7 @@ public class MemetickService {
         memetick.setNickChanged(ZonedDateTime.now());
 
         memetickRepository.save(memetick);
-    }
-
-    public Memetick generateMemetick(String nick) {
-        Memetick memetick = new Memetick();
-
-        memetick.setNick(nick);
-
-        return memetickRepository.save(memetick);
+        //securityService.updateMemetickCurrentUser(memetick);
     }
 
     public Memetick findById(UUID id) {
@@ -99,4 +89,5 @@ public class MemetickService {
             memetick.getNick()
         );
     }
+
 }

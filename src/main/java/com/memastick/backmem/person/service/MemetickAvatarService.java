@@ -15,6 +15,9 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -26,7 +29,13 @@ public class MemetickAvatarService {
 
     private final static int PHOTO_SIZE_PIX = 128;
 
-    private final static String FORMAT = "png";
+    private final static String FORMAT = "jpg";
+
+    private final Set<String> validContent = new HashSet<>(Arrays.asList(
+        "image/jpg",
+        "image/jpeg",
+        "image/png"
+    ));
 
     private final MemetickRepository memetickRepository;
     private final MemetickService memetickService;
@@ -56,7 +65,7 @@ public class MemetickAvatarService {
 
         byte[] photoBytes = optimizeImage(bufferedImage);
 
-        Memetick memetick = securityService.getCurrentUser().getMemetick();
+        Memetick memetick = securityService.getCurrentMemetick();
         memetick.setAvatar(photoBytes);
         memetickRepository.save(memetick);
     }
@@ -68,10 +77,10 @@ public class MemetickAvatarService {
                 "Image == NULL"
             );
         }
-        if (!image.getContentType().split("/")[0].equals(FORMAT)) {
+        if (!validContent.contains(image.getContentType())) {
             throw new ValidationException(
                 ErrorCode.IMAGE_FORMAT,
-                "Only PNG format"
+                "Only PNG || JPG format"
             );
         }
 

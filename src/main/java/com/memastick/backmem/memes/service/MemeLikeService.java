@@ -84,7 +84,7 @@ public class MemeLikeService {
     }
 
     private MemeLike findByIdForCurrentUser(UUID id) {
-        Memetick memetick = securityService.getCurrentUser().getMemetick();
+        Memetick memetick = securityService.getCurrentMemetick();
         Meme meme = findById(id);
 
         MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
