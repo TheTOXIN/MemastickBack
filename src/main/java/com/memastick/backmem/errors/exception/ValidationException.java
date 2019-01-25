@@ -9,4 +9,8 @@ public class ValidationException extends AbstractException {
         super(code);
     }
 
+    public ValidationException(ErrorCode code, String message) {
+        super(code, message);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.memastick.backmem.person.service;
 
-import com.memastick.backmem.errors.exception.MemetickAvatarException;
+import com.memastick.backmem.errors.consts.ErrorCode;
+import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ImageUtil;
 import com.memastick.backmem.person.entity.Memetick;
 import com.memastick.backmem.person.repository.MemetickRepository;
@@ -62,18 +63,21 @@ public class MemetickAvatarService {
 
     private void validateImage(MultipartFile image) {
         if (image == null || image.getContentType() == null) {
-            throw new MemetickAvatarException(
+            throw new ValidationException(
+                ErrorCode.IMAGE_FORMAT,
                 "Image == NULL"
             );
         }
         if (!image.getContentType().split("/")[0].equals(FORMAT)) {
-            throw new MemetickAvatarException(
+            throw new ValidationException(
+                ErrorCode.IMAGE_FORMAT,
                 "Only PNG format"
             );
         }
 
         if (image.getSize() <= MIN_SIZE_BYTE || image.getSize() >= MAX_SIZE_BYTE) {
-            throw new MemetickAvatarException(
+            throw new ValidationException(
+                ErrorCode.IMAGE_FORMAT,
                 "Size: max = 1mb, min = 1kb"
             );
         }
