@@ -9,9 +9,10 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemetickInfoAPI {
+public class MemetickPreviewAPI {
 
     private UUID id;
     private String nick;
+    private long dna;
 
 }

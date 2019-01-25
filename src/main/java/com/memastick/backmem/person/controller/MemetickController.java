@@ -1,7 +1,8 @@
 package com.memastick.backmem.person.controller;
 
 import com.memastick.backmem.person.api.ChangeNickAPI;
-import com.memastick.backmem.person.api.MemetickInfoAPI;
+import com.memastick.backmem.person.api.MemetickPreviewAPI;
+import com.memastick.backmem.person.api.MemetickViewAPI;
 import com.memastick.backmem.person.service.MemetickAvatarService;
 import com.memastick.backmem.person.service.MemetickService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("memetick")
+@RequestMapping("memeticks")
 public class MemetickController {
 
     private final MemetickService memetickService;
@@ -30,8 +31,18 @@ public class MemetickController {
     }
 
     @GetMapping("/me")
-    public MemetickInfoAPI meInfo() {
-        return memetickService.meInfo();
+    public MemetickViewAPI meView() {
+        return memetickService.viewByMe();
+    }
+
+    @GetMapping("/login/{login}")
+    public MemetickViewAPI loginView(@PathVariable("login") String login) {
+        return memetickService.viewByLogin(login);
+    }
+
+    @GetMapping("/{id}")
+    public MemetickPreviewAPI preview(@PathVariable("id") UUID id) {
+        return memetickService.previewById(id);
     }
 
     @GetMapping(

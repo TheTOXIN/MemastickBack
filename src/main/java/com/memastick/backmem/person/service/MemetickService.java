@@ -5,10 +5,11 @@ import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.person.api.ChangeNickAPI;
-import com.memastick.backmem.person.api.MemetickInfoAPI;
+import com.memastick.backmem.person.api.MemetickPreviewAPI;
+import com.memastick.backmem.person.api.MemetickViewAPI;
 import com.memastick.backmem.person.entity.Memetick;
+import com.memastick.backmem.person.entity.User;
 import com.memastick.backmem.person.repository.MemetickRepository;
-import com.memastick.backmem.security.model.MyUserDetails;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,22 +23,38 @@ public class MemetickService {
 
     private final MemetickRepository memetickRepository;
     private final SecurityService securityService;
+    private final UserService userService;
 
     @Autowired
     public MemetickService(
         MemetickRepository memetickRepository,
-        SecurityService securityService
+        SecurityService securityService,
+        UserService userService
     ) {
         this.memetickRepository = memetickRepository;
         this.securityService = securityService;
+        this.userService = userService;
     }
 
-    public MemetickInfoAPI meInfo() {
-        Memetick memetick  = securityService.getCurrentUser().getMemetick();
+    public MemetickViewAPI viewByMe() {
+        return mapToView(
+            securityService.getCurrentUser().getMemetick()
+        );
+    }
 
-        return new MemetickInfoAPI(
+    public MemetickViewAPI viewByLogin(String login) {
+        return mapToView(
+            userService.findMemetick(login)
+        );
+    }
+
+    public MemetickPreviewAPI previewById(UUID id) {
+        Memetick memetick = findById(id);
+
+        return new MemetickPreviewAPI(
             memetick.getId(),
-            memetick.getNick()
+            memetick.getNick(),
+            memetick.getDna()
         );
     }
 
@@ -61,5 +78,12 @@ public class MemetickService {
         Optional<Memetick> byId = memetickRepository.findById(id);
         if (byId.isEmpty()) throw new EntityNotFoundException(Memetick.class, "id");
         return byId.get();
+    }
+
+    private MemetickViewAPI mapToView(Memetick memetick) {
+        return new MemetickViewAPI(
+            memetick.getId(),
+            memetick.getNick()
+        );
     }
 }

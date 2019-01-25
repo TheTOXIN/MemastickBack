@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -37,6 +38,11 @@ public class UserService {
         return byRole.orElse(null);
     }
 
+    public Memetick findMemetick(String login) {
+        User user = findByLogin(login);
+        return user.getMemetick();
+    }
+
     public User generateUser(RegistrationAPI request, InviteCode inviteCode) {
         User user = new User();
 
@@ -53,10 +59,20 @@ public class UserService {
     }
 
     public void updatePassword(String login, String password) {
-        Optional<User> byLogin = userRepository.findByLogin(login);
-        if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
-        User user = byLogin.get();
+        User user = findByLogin(login);
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+    }
+
+    public User findByLogin(String login) {
+        Optional<User> byLogin = userRepository.findByLogin(login);
+        if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
+        return byLogin.get();
+    }
+
+    public String readLoginByMemetickId(UUID memetickId) {
+        Optional<User> byMemetickId = userRepository.findByMemetickId(memetickId);
+        if (byMemetickId.isEmpty()) throw new EntityNotFoundException(User.class, "memetick");
+        return byMemetickId.get().getLogin();
     }
 }
