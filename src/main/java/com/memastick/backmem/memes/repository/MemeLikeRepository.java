@@ -8,12 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface MemeLikeRepository extends JpaRepository<MemeLike, UUID> {
 
-    MemeLike findByMemeAndMemetick(Meme meme, Memetick memetick);
+    Optional<MemeLike> findByMemeAndMemetick(Meme meme, Memetick memetick);
 
     long countByMemeIdAndIsLikeTrue(UUID memeId);
 

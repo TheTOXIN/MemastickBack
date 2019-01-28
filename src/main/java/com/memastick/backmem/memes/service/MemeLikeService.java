@@ -73,7 +73,7 @@ public class MemeLikeService {
     public void chromosomeTrigger(UUID id, int count) {
         MemeLike memeLike = findByIdForCurrentUser(id);
 
-        if (count > MAX_CHROMOSOME || memeLike.getChromosome() == MAX_CHROMOSOME) return;
+        if (memeLike.getChromosome() == MAX_CHROMOSOME) return;
 
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
         memeLike.setChromosome(chromosome);
@@ -87,11 +87,11 @@ public class MemeLikeService {
         Memetick memetick = securityService.getCurrentMemetick();
         Meme meme = findById(id);
 
-        MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
+        Optional<MemeLike> byMemeAndMemetick = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
 
-        if (memeLike == null) memeLike = generateMemeLike(meme, memetick);
+        if (byMemeAndMemetick.isEmpty()) return generateMemeLike(meme, memetick);
 
-        return memeLike;
+        return byMemeAndMemetick.get();
     }
 
     private MemeLike generateMemeLike(Meme meme, Memetick memetick) {

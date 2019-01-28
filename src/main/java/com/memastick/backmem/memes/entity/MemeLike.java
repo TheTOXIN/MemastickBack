@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Max;
 
 @Entity
 @Table(
@@ -33,7 +33,7 @@ public class MemeLike extends AbstractEntity {
     private boolean isLike = false;
 
     @Column
-    @Size(max = 30)
+    @Max(value = 30)
     private int chromosome = 0;
 
 }
