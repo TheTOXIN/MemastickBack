@@ -30,8 +30,6 @@ public class MemetickAvatarService {
 
     private final static int PHOTO_SIZE_PIX = 128;
 
-    private final static String FORMAT = "jpg";
-
     private final Set<String> validContent = new HashSet<>(Arrays.asList(
         "image/jpg",
         "image/jpeg",
@@ -53,16 +51,20 @@ public class MemetickAvatarService {
 
     @Transactional
     public byte[] download(UUID id) {
-        return memetickAvatarRepository.findByMemetickId(id).getAvatar();
+        MemetickAvatar memetickAvatar = memetickAvatarRepository.findByMemetickId(id);
+        return memetickAvatar.getAvatar();
     }
 
     @Transactional
     public void upload(MultipartFile image) throws IOException {
         validateImage(image);
 
+        String format = "jpg";
+        if (image.getContentType().equals("image/png")) format = "png";
+
         BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
 
-        byte[] photoBytes = optimizeImage(bufferedImage);
+        byte[] photoBytes = optimizeImage(bufferedImage, format);
 
         Memetick memetick = securityService.getCurrentMemetick();
         MemetickAvatar memetickAvatar = memetickAvatarRepository.findByMemetickId(memetick.getId());
@@ -94,12 +96,12 @@ public class MemetickAvatarService {
         }
     }
 
-    private byte[] optimizeImage(BufferedImage image) throws IOException {
+    private byte[] optimizeImage(BufferedImage image, String format) throws IOException {
         image = ImageUtil.cropImage(image);
         image = ImageUtil.resizeImage(image, PHOTO_SIZE_PIX);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(image, FORMAT, baos);
+        ImageIO.write(image, format, baos);
 
         return baos.toByteArray();
     }

@@ -21,23 +21,23 @@ public class MemeLikeController {
         this.memeLikeService = memeLikeService;
     }
 
-    @GetMapping("read/{id}")
-    public MemeLikeStateAPI read(@PathVariable("id") UUID id) {
-        return memeLikeService.readStateById(id);
+    @GetMapping("read/{memId}")
+    public MemeLikeStateAPI read(@PathVariable("memId") UUID memId) {
+        return memeLikeService.readStateById(memId);
     }
 
-    @PatchMapping("trigger/{id}")
-    public ResponseEntity trigger(@PathVariable("id") UUID id) {
-        memeLikeService.likeTrigger(id);
+    @PatchMapping("trigger/{memId}")
+    public ResponseEntity trigger(@PathVariable("memId") UUID memId) {
+        memeLikeService.likeTrigger(memId);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("chromosome/{id}/{count}")
+    @PatchMapping("chromosome/{memId}/{count}")
     public ResponseEntity chromosome(
-        @PathVariable("id") UUID id,
+        @PathVariable("memId") UUID memId,
         @PathVariable("count") int count
     ) {
-        memeLikeService.chromosomeTrigger(id, count);
+        memeLikeService.chromosomeTrigger(memId, count);
         return ResponseEntity.ok().build();
     }
 
