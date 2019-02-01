@@ -51,8 +51,8 @@ public class MemetickService {
 
         return new MemetickPreviewAPI(
             memetick.getId(),
-            login,
             memetick.getNick(),
+            login,
             memetick.getDna()
         );
     }
