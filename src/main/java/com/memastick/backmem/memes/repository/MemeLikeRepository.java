@@ -25,6 +25,6 @@ public interface MemeLikeRepository extends JpaRepository<MemeLike, UUID> {
     long sumChromosomeByMemetickId(@Param("memetickId") UUID memetickId);
 
     @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml WHERE ml.meme.id = :memeId")
-    long sumChromosomeByMemeId(@Param("meme") UUID memeId);
+    long sumChromosomeByMemeId(@Param("memeId") UUID memeId);
 
 }
