@@ -27,18 +27,21 @@ public class MemeLikeService {
     private final MemeLikeRepository memeLikeRepository;
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
+    private final MemeService memeService;
 
     @Autowired
     public MemeLikeService(
         MemeLikeRepository memeLikeRepository,
         SecurityService securityService,
         MemeRepository memeRepository,
-        MemetickService memetickService
+        MemetickService memetickService,
+        MemeService memeService
     ) {
         this.memeLikeRepository = memeLikeRepository;
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickService = memetickService;
+        this.memeService = memeService;
     }
 
     @Transactional
@@ -85,7 +88,7 @@ public class MemeLikeService {
 
     private MemeLike findByIdForCurrentUser(UUID id) {
         Memetick memetick = securityService.getCurrentMemetick();
-        Meme meme = findById(id);
+        Meme meme = memeService.findById(id);
 
         Optional<MemeLike> byMemeAndMemetick = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
 
@@ -101,11 +104,5 @@ public class MemeLikeService {
         memeLike.setMemetick(memetick);
 
         return memeLikeRepository.save(memeLike);
-    }
-
-    private Meme findById(UUID id) {
-        Optional<Meme> byId = memeRepository.findById(id);
-        if (byId.isEmpty()) throw new EntityNotFoundException(Meme.class, "id");
-        return byId.get();
     }
 }

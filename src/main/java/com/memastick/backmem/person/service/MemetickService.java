@@ -47,13 +47,10 @@ public class MemetickService {
 
     public MemetickPreviewAPI previewById(UUID id) {
         Memetick memetick = findById(id);
-        String login = userService.readLoginByMemetickId(id);
 
         return new MemetickPreviewAPI(
             memetick.getId(),
-            memetick.getNick(),
-            login,
-            memetick.getDna()
+            memetick.getNick()
         );
     }
 

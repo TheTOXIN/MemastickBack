@@ -13,7 +13,5 @@ public class MemetickPreviewAPI {
 
     private UUID id;
     private String nick;
-    private String login;
-    private long dna;
 
 }

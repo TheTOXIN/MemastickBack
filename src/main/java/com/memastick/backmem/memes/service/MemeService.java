@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.MemeTokenExcpetion;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -69,6 +71,12 @@ public class MemeService {
             .stream()
             .map(MemeService::mapToReadAPI)
             .collect(Collectors.toList());
+    }
+
+    public Meme findById(UUID id) {
+        Optional<Meme> byId = memeRepository.findById(id);
+        if (byId.isEmpty()) throw new EntityNotFoundException(Meme.class, "id");
+        return byId.get();
     }
 
     private static MemeReadAPI mapToReadAPI(Meme meme) {
