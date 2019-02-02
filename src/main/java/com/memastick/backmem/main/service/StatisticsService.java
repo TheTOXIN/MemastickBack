@@ -29,18 +29,18 @@ public class StatisticsService {
 
     public StatisticsAPI byMemetick(UUID memetickId) {
         return new StatisticsAPI(
-            memetickRepository.sumDnaById(memetickId),
-            memeRepository.countByMemetickId(memetickId),
-            memeLikeRepository.sumChromosomeByMemetickId(memetickId)
+            memetickRepository.sumDnaById(memetickId).orElse(0L),
+            memeRepository.countByMemetickId(memetickId).orElse(0L),
+            memeLikeRepository.sumChromosomeByMemetickId(memetickId).orElse(0L)
         );
     }
 
 
     public StatisticsAPI global() {
         return new StatisticsAPI(
-            memetickRepository.sumDna(),
+            memetickRepository.sumDna().orElse(0L),
             memeRepository.count(),
-            memeLikeRepository.sumChromosome()
+            memeLikeRepository.sumChromosome().orElse(0L)
         );
     }
 

@@ -48,8 +48,8 @@ public class MemeLikeService {
     public MemeLikeStateAPI readStateById(UUID id) {
         MemeLike memeLike = findByIdForCurrentUser(id);
 
-        long countLikes = memeLikeRepository.countByMemeIdAndIsLikeTrue(id);
-        long countChromosomes = memeLikeRepository.sumChromosomeByMemeId(id);
+        long countLikes = memeLikeRepository.countByMemeIdAndIsLikeTrue(id).orElse(0L);
+        long countChromosomes = memeLikeRepository.sumChromosomeByMemeId(id).orElse(0L);
 
         return new MemeLikeStateAPI(
             (int) countLikes,

@@ -16,15 +16,15 @@ public interface MemeLikeRepository extends JpaRepository<MemeLike, UUID> {
 
     Optional<MemeLike> findByMemeAndMemetick(Meme meme, Memetick memetick);
 
-    long countByMemeIdAndIsLikeTrue(UUID memeId);
+    Optional<Long> countByMemeIdAndIsLikeTrue(UUID memeId);
 
     @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml")
-    long sumChromosome();
+    Optional<Long> sumChromosome();
 
     @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml WHERE ml.memetick.id = :memetickId")
-    long sumChromosomeByMemetickId(@Param("memetickId") UUID memetickId);
+    Optional<Long> sumChromosomeByMemetickId(@Param("memetickId") UUID memetickId);
 
     @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml WHERE ml.meme.id = :memeId")
-    long sumChromosomeByMemeId(@Param("memeId") UUID memeId);
+    Optional<Long> sumChromosomeByMemeId(@Param("memeId") UUID memeId);
 
 }

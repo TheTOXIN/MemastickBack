@@ -6,15 +6,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface MemetickRepository extends JpaRepository<Memetick, UUID> {
 
     @Query("SELECT SUM(m.dna) FROM Memetick m")
-    long sumDna();
+    Optional<Long> sumDna();
 
     @Query("SELECT SUM(m.dna) FROM Memetick m WHERE m.id = :id")
-    long sumDnaById(@Param("id") UUID id);
+    Optional<Long> sumDnaById(@Param("id") UUID id);
 
 }
