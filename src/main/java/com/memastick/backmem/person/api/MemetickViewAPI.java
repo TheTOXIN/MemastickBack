@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemetickAPI {
+public class MemetickViewAPI {
 
     private UUID id;
     private String nick;

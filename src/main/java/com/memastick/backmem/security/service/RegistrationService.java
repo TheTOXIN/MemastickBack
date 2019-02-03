@@ -48,8 +48,8 @@ public class RegistrationService {
         if (userRepository.findByLogin(request.getLogin()).isPresent()) return SecurityStatus.LOGIN_EXIST;
         if (userRepository.findByEmail(request.getEmail()).isPresent()) return SecurityStatus.EMAIL_EXIST;
 
-        if (!ValidationUtil.validLogin(request.getLogin())) return SecurityStatus.LOGIN_INVALID;
-        if (!ValidationUtil.isEmail(request.getEmail())) return SecurityStatus.EMAIL_INVALID;
+        if (!ValidationUtil.checkLogin(request.getLogin())) return SecurityStatus.LOGIN_INVALID;
+        if (!ValidationUtil.checkEmail(request.getEmail())) return SecurityStatus.EMAIL_INVALID;
 
         if (!ValidationUtil.checkPassword(request.getPassword())) return SecurityStatus.PASSWORD_WEAK;
         if (!request.getPassword().equals(request.getPasswordRepeat())) return SecurityStatus.PASSWORD_REPEAT;
