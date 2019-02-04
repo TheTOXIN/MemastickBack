@@ -108,8 +108,8 @@ public class PasswordResetService {
         passwordResetRepository.save(passwordReset);
     }
 
-    private String makeResetCode(){
-        return UUID.randomUUID().toString().replaceAll("-", "");
+    private String makeResetCode() {
+        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, 10);
     }
 
     private LocalDateTime makeTimeCode() {
