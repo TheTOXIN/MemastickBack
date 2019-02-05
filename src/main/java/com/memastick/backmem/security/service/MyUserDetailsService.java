@@ -1,16 +1,17 @@
 package com.memastick.backmem.security.service;
 
-import com.memastick.backmem.security.model.MyUserDetails;
 import com.memastick.backmem.person.entity.User;
 import com.memastick.backmem.person.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
+
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -33,10 +34,18 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         if (userOptional.isPresent()) {
-            return new MyUserDetails(userOptional.get());
+            return makeUserDetails(userOptional.get());
         } else {
             throw new UsernameNotFoundException(String.format("User %s - does not exist!", username));
         }
+    }
+
+    private UserDetails makeUserDetails(User user) {
+        return new org.springframework.security.core.userdetails.User(
+            user.getLogin(),
+            user.getPassword(),
+            Collections.singletonList((new SimpleGrantedAuthority(user.getRole().name())))
+        );
     }
 
 }

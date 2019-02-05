@@ -13,7 +13,7 @@ import org.thymeleaf.context.Context;
 public class SenderPasswordResetService {
 
     private final static String PATH_TEMPLATE = "password-reset";
-    private final static String SUBJECT_TITLE = "MEMASTICK PASSWORD RESET";
+    private final static String SUBJECT_TITLE = "МЕМАСТИК ВОССТАНОВЛЕНИЕ ПАРОЛЯ";
 
     private final EmailHtmlSender emailHtmlSender;
 

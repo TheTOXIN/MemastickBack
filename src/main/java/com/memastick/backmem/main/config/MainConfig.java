@@ -1,5 +1,6 @@
 package com.memastick.backmem.main.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,14 +9,25 @@ import org.springframework.core.Ordered;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.sql.DataSource;
+
 
 @Configuration
 public class MainConfig {
+
+    private final DataSource dataSource;
+
+    @Autowired
+    public MainConfig(
+        DataSource dataSource
+    ) {
+        this.dataSource = dataSource;
+    }
 
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
@@ -48,9 +60,9 @@ public class MainConfig {
     }
 
     @Bean
-    @Primary
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        return new JdbcTokenStore(dataSource);
+
     }
 
     @Bean

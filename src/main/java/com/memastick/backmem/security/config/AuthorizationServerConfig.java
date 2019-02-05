@@ -25,8 +25,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private static final String SCOPE_WRITE = "write";
     private static final String SCOPE_TRUST = "trust";
 
-    private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 60 * 60;
-    private static final int REFRESH_TOKEN_VALIDITY_SECONDS = ACCESS_TOKEN_VALIDITY_SECONDS * 24 * 7;
+    private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 86400;
+    private static final int REFRESH_TOKEN_VALIDITY_SECONDS = ACCESS_TOKEN_VALIDITY_SECONDS * 5;
 
     private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
