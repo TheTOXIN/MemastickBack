@@ -11,7 +11,6 @@ import com.memastick.backmem.person.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -43,12 +42,11 @@ public class MemeLikeService {
         this.memeService = memeService;
     }
 
-    @Transactional
-    public MemeLikeStateDTO readStateById(UUID id) {
-        MemeLike memeLike = findByIdForCurrentUser(id);
+    public MemeLikeStateDTO readStateByMeme(Meme meme) {
+        MemeLike memeLike = findByMemeForCurrentUser(meme);
 
-        long countLikes = memeLikeRepository.countByMemeIdAndIsLikeTrue(id).orElse(0L);
-        long countChromosomes = memeLikeRepository.sumChromosomeByMemeId(id).orElse(0L);
+        long countLikes = memeLikeRepository.countByMemeIdAndIsLikeTrue(meme.getId()).orElse(0L);
+        long countChromosomes = memeLikeRepository.sumChromosomeByMemeId(meme.getId()).orElse(0L);
 
         return new MemeLikeStateDTO(
             (int) countLikes,
@@ -59,7 +57,8 @@ public class MemeLikeService {
     }
 
     public void likeTrigger(UUID id) {
-        MemeLike memeLike = findByIdForCurrentUser(id);
+        Meme meme = memeService.findById(id);
+        MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         memeLike.setLike(!memeLike.isLike());
 
@@ -73,7 +72,8 @@ public class MemeLikeService {
     }
 
     public void chromosomeTrigger(UUID id, int count) {
-        MemeLike memeLike = findByIdForCurrentUser(id);
+        Meme meme = memeService.findById(id);
+        MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         if (memeLike.getChromosome() == MAX_CHROMOSOME) return;
 
@@ -85,12 +85,10 @@ public class MemeLikeService {
         memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));
     }
 
-    private MemeLike findByIdForCurrentUser(UUID id) {
+    private MemeLike findByMemeForCurrentUser(Meme meme) {
         Memetick memetick = securityService.getCurrentMemetick();
-        Meme meme = memeService.findById(id);
 
         Optional<MemeLike> byMemeAndMemetick = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
-
         if (byMemeAndMemetick.isEmpty()) return generateMemeLike(meme, memetick);
 
         return byMemeAndMemetick.get();
