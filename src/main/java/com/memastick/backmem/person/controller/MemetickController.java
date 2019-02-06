@@ -1,8 +1,7 @@
 package com.memastick.backmem.person.controller;
 
 import com.memastick.backmem.person.api.ChangeNickAPI;
-import com.memastick.backmem.person.api.MemetickPreviewAPI;
-import com.memastick.backmem.person.api.MemetickViewAPI;
+import com.memastick.backmem.person.api.MemetickAPI;
 import com.memastick.backmem.person.service.MemetickService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +23,13 @@ public class MemetickController {
     }
 
     @GetMapping("view/me")
-    public MemetickViewAPI meView() {
+    public MemetickAPI viewMe() {
         return memetickService.viewByMe();
     }
 
     @GetMapping("view/{id}")
-    public MemetickViewAPI loginView(@PathVariable("id") UUID id) {
+    public MemetickAPI view(@PathVariable("id") UUID id) {
         return memetickService.viewById(id);
-    }
-
-    @GetMapping("preview/{id}")
-    public MemetickPreviewAPI preview(@PathVariable("id") UUID id) {
-        return memetickService.previewById(id);
     }
 
     @PutMapping("/nick/change")

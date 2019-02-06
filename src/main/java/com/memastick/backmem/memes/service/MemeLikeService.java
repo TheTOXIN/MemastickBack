@@ -1,8 +1,7 @@
 package com.memastick.backmem.memes.service;
 
-import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.main.util.MathUtil;
-import com.memastick.backmem.memes.api.MemeLikeStateAPI;
+import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
@@ -45,13 +44,13 @@ public class MemeLikeService {
     }
 
     @Transactional
-    public MemeLikeStateAPI readStateById(UUID id) {
+    public MemeLikeStateDTO readStateById(UUID id) {
         MemeLike memeLike = findByIdForCurrentUser(id);
 
         long countLikes = memeLikeRepository.countByMemeIdAndIsLikeTrue(id).orElse(0L);
         long countChromosomes = memeLikeRepository.sumChromosomeByMemeId(id).orElse(0L);
 
-        return new MemeLikeStateAPI(
+        return new MemeLikeStateDTO(
             (int) countLikes,
             (int) countChromosomes,
             memeLike.isLike(),
