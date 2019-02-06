@@ -6,8 +6,8 @@ import com.memastick.backmem.errors.exception.SettingException;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.person.api.ChangeNickAPI;
-import com.memastick.backmem.person.api.MemetickPreviewAPI;
-import com.memastick.backmem.person.api.MemetickViewAPI;
+import com.memastick.backmem.person.api.MemetickAPI;
+import com.memastick.backmem.person.dto.MemetickPreviewDTO;
 import com.memastick.backmem.person.entity.Memetick;
 import com.memastick.backmem.person.repository.MemetickRepository;
 import com.memastick.backmem.security.service.SecurityService;
@@ -37,18 +37,18 @@ public class MemetickService {
         this.userService = userService;
     }
 
-    public MemetickViewAPI viewByMe() {
+    public MemetickAPI viewByMe() {
         return mapToView(securityService.getCurrentMemetick());
     }
 
-    public MemetickViewAPI viewById(UUID id) {
+    public MemetickAPI viewById(UUID id) {
         return mapToView(findById(id));
     }
 
-    public MemetickPreviewAPI previewById(UUID id) {
+    public MemetickPreviewDTO previewById(UUID id) {
         Memetick memetick = findById(id);
 
-        return new MemetickPreviewAPI(
+        return new MemetickPreviewDTO(
             memetick.getId(),
             memetick.getNick()
         );
@@ -79,8 +79,8 @@ public class MemetickService {
         return byId.get();
     }
 
-    private MemetickViewAPI mapToView(Memetick memetick) {
-        return new MemetickViewAPI(
+    private MemetickAPI mapToView(Memetick memetick) {
+        return new MemetickAPI(
             memetick.getId(),
             memetick.getNick()
         );

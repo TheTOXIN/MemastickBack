@@ -1,9 +1,8 @@
 package com.memastick.backmem.memes.controller;
 
 import com.memastick.backmem.memes.api.MemeCreateAPI;
-import com.memastick.backmem.memes.api.MemeReadAPI;
+import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.service.MemeService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +23,9 @@ public class MemeController {
         this.memeService = memeService;
     }
 
-    @GetMapping("/read")
-    public List<MemeReadAPI> readAll(Pageable pageable) {
-        return memeService.readAll(pageable);
+    @GetMapping("/pages/read")
+    public List<MemePageAPI> readPages(Pageable pageable) {
+        return memeService.readPages(pageable);
     }
 
     @PostMapping("/create")

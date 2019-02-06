@@ -1,4 +1,4 @@
-package com.memastick.backmem.memes.api;
+package com.memastick.backmem.memes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemeLikeStateAPI {
+public class MemeLikeStateDTO {
 
     private int likes;
     private int chromosomes;

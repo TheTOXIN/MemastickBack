@@ -1,10 +1,12 @@
 package com.memastick.backmem.memes.controller;
 
-import com.memastick.backmem.memes.api.MemeLikeStateAPI;
 import com.memastick.backmem.memes.service.MemeLikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -19,11 +21,6 @@ public class MemeLikeController {
         MemeLikeService memeLikeService
     ) {
         this.memeLikeService = memeLikeService;
-    }
-
-    @GetMapping("read/{memId}")
-    public MemeLikeStateAPI read(@PathVariable("memId") UUID memId) {
-        return memeLikeService.readStateById(memId);
     }
 
     @PatchMapping("trigger/{memId}")

@@ -4,16 +4,20 @@ import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.MemeTokenExcpetion;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
-import com.memastick.backmem.memes.api.MemeReadAPI;
+import com.memastick.backmem.memes.api.MemePageAPI;
+import com.memastick.backmem.memes.dto.MemeDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.person.dto.MemetickPreviewDTO;
 import com.memastick.backmem.person.entity.Memetick;
 import com.memastick.backmem.person.repository.MemetickRepository;
 import com.memastick.backmem.person.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -29,18 +33,21 @@ public class MemeService {
     private final MemeRepository memeRepository;
     private final MemetickRepository memetickRepository;
     private final MemetickService memetickService;
+    private final MemeLikeService memeLikeService;
 
     @Autowired
     public MemeService(
         SecurityService securityService,
         MemeRepository memeRepository,
         MemetickRepository memetickRepository,
-        MemetickService memetickService
+        MemetickService memetickService,
+        @Lazy MemeLikeService memeLikeService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickRepository = memetickRepository;
         this.memetickService = memetickService;
+        this.memeLikeService = memeLikeService;
     }
 
     public void create(MemeCreateAPI request) {
@@ -66,10 +73,11 @@ public class MemeService {
         );
     }
 
-    public List<MemeReadAPI> readAll(Pageable pageable) {
+    @Transactional
+    public List<MemePageAPI> readPages(Pageable pageable) {
         return memeRepository.findAll(pageable)
             .stream()
-            .map(MemeService::mapToReadAPI)
+            .map(this::mapToPage)
             .collect(Collectors.toList());
     }
 
@@ -79,11 +87,11 @@ public class MemeService {
         return byId.get();
     }
 
-    private static MemeReadAPI mapToReadAPI(Meme meme) {
-        return new MemeReadAPI(
-            meme.getId(),
-            meme.getFireId(),
-            meme.getMemetick().getId()
+    private MemePageAPI mapToPage(Meme meme) {
+        return new MemePageAPI(
+            new MemeDTO(meme.getId(), meme.getFireId().toString()),
+            memeLikeService.readStateByMeme(meme),
+            new MemetickPreviewDTO(meme.getMemetick().getId(), meme.getMemetick().getNick())
         );
     }
 }
