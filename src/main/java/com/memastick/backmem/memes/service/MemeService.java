@@ -53,7 +53,7 @@ public class MemeService {
     public void create(MemeCreateAPI request) {
         Memetick memetick = securityService.getCurrentMemetick();
 
-        if (!canCreate(memetick)) throw new MemeTokenExcpetion();
+        checkCreate(memetick);
 
         Meme meme = makeMeme(request, memetick);
         memeRepository.save(meme);
@@ -95,12 +95,14 @@ public class MemeService {
         );
     }
 
-    public boolean meCanCreate() {
+    public void meCheckCreate() {
         Memetick memetick = securityService.getCurrentMemetick();
-        return canCreate(memetick);
+        checkCreate(memetick);
     }
 
-    private boolean canCreate(Memetick memetick) {
-        return !memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now());
+    private void checkCreate(Memetick memetick) {
+        if (memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now())) {
+            throw new MemeTokenExcpetion();
+        }
     }
 }

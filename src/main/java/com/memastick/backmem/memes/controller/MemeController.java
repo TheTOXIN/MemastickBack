@@ -34,9 +34,10 @@ public class MemeController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/create/possible")
-    public ResponseEntity<Boolean> mePossible() {
-        return ResponseEntity.ok(memeService.meCanCreate());
+    @GetMapping("/create/check")
+    public ResponseEntity checkCreate() {
+        memeService.meCheckCreate();
+        return ResponseEntity.ok().build();
     }
 
 }
