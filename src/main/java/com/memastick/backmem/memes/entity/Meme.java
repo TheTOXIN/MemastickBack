@@ -22,6 +22,9 @@ public class Meme extends AbstractEntity {
     @Column(nullable = false, unique = true)
     private UUID fireId;
 
+    @Column(length = 512)//TODO add null & unique in 0.2
+    private String url;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private Memetick memetick;

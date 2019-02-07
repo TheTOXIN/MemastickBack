@@ -53,10 +53,9 @@ public class MemeService {
     public void create(MemeCreateAPI request) {
         Memetick memetick = securityService.getCurrentMemetick();
 
-        if (memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now()))
-            throw new MemeTokenExcpetion();
+        checkCreate(memetick);
 
-        Meme meme = makeMeme(request.getFireId(), memetick);
+        Meme meme = makeMeme(request, memetick);
         memeRepository.save(meme);
 
         memetick.setMemeCreated(ZonedDateTime.now());
@@ -65,9 +64,10 @@ public class MemeService {
         memetickService.addDna(memetick, MathUtil.rand(500, 1000));
     }
 
-    public Meme makeMeme(UUID fireId, Memetick memetick) {
+    public Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
         return new Meme(
-            fireId,
+            request.getFireId(),
+            request.getUrl(),
             memetick,
             ZonedDateTime.now()
         );
@@ -89,9 +89,20 @@ public class MemeService {
 
     private MemePageAPI mapToPage(Meme meme) {
         return new MemePageAPI(
-            new MemeDTO(meme.getId(), meme.getFireId().toString()),
+            new MemeDTO(meme.getId(), meme.getUrl()),
             memeLikeService.readStateByMeme(meme),
             new MemetickPreviewDTO(meme.getMemetick().getId(), meme.getMemetick().getNick())
         );
+    }
+
+    public void meCheckCreate() {
+        Memetick memetick = securityService.getCurrentMemetick();
+        checkCreate(memetick);
+    }
+
+    private void checkCreate(Memetick memetick) {
+        if (memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now())) {
+            throw new MemeTokenExcpetion();
+        }
     }
 }
