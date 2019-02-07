@@ -11,6 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MemeCreateAPI {
 
+    private String url;
     private UUID fireId;
 
 }
