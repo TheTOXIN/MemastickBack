@@ -53,8 +53,7 @@ public class MemeService {
     public void create(MemeCreateAPI request) {
         Memetick memetick = securityService.getCurrentMemetick();
 
-        if (memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now()))
-            throw new MemeTokenExcpetion();
+        if (!canCreate(memetick)) throw new MemeTokenExcpetion();
 
         Meme meme = makeMeme(request, memetick);
         memeRepository.save(meme);
@@ -94,5 +93,14 @@ public class MemeService {
             memeLikeService.readStateByMeme(meme),
             new MemetickPreviewDTO(meme.getMemetick().getId(), meme.getMemetick().getNick())
         );
+    }
+
+    public boolean meCanCreate() {
+        Memetick memetick = securityService.getCurrentMemetick();
+        return canCreate(memetick);
+    }
+
+    private boolean canCreate(Memetick memetick) {
+        return !memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now());
     }
 }
