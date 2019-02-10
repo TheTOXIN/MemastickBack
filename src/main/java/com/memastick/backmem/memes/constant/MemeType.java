@@ -4,6 +4,6 @@ public enum MemeType {
 
     EVOLVE,
     INDIVID,
-    DEAD
+    DEATH
 
 }
