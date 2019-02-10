@@ -2,9 +2,11 @@ package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.MemeTokenExcpetion;
+import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
+import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.dto.MemeDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
@@ -34,6 +36,7 @@ public class MemeService {
     private final MemetickRepository memetickRepository;
     private final MemetickService memetickService;
     private final MemeLikeService memeLikeService;
+    private final EvolveService evolveService;
 
     @Autowired
     public MemeService(
@@ -41,13 +44,15 @@ public class MemeService {
         MemeRepository memeRepository,
         MemetickRepository memetickRepository,
         MemetickService memetickService,
-        @Lazy MemeLikeService memeLikeService
+        @Lazy MemeLikeService memeLikeService,
+        EvolveService evolveService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickRepository = memetickRepository;
         this.memetickService = memetickService;
         this.memeLikeService = memeLikeService;
+        this.evolveService = evolveService;
     }
 
     public void create(MemeCreateAPI request) {
@@ -61,6 +66,8 @@ public class MemeService {
         memetick.setMemeCreated(ZonedDateTime.now());
         memetickRepository.save(memetick);
 
+        evolveService.startEvolve(meme);
+
         memetickService.addDna(memetick, MathUtil.rand(500, 1000));
     }
 
@@ -69,7 +76,8 @@ public class MemeService {
             request.getFireId(),
             request.getUrl(),
             memetick,
-            ZonedDateTime.now()
+            ZonedDateTime.now(),
+            MemeType.EVOLVE
         );
     }
 
