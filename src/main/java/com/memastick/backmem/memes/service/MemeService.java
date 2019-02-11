@@ -68,7 +68,7 @@ public class MemeService {
 
         evolveService.startEvolve(meme);
 
-        memetickService.addDna(memetick, MathUtil.rand(500, 1000));
+        memetickService.addDna(memetick, MathUtil.rand(0, 100));
     }
 
     public Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
@@ -77,7 +77,8 @@ public class MemeService {
             request.getUrl(),
             memetick,
             ZonedDateTime.now(),
-            MemeType.EVOLVE
+            MemeType.EVOLVE,
+            0
         );
     }
 

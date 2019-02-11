@@ -1,17 +1,11 @@
 package com.memastick.backmem.evolution.constant;
 
-public enum  EvolveStep {
+public enum EvolveStep {
 
-    NONE(0),
-    BIRTH(1),
-    SYNTHS(2),
-    MUTATE(3),
-    GENERATE(4),
-    SURVIVAL(5);
+    BIRTH,
+//    SYNTHS,
+//    MUTATE,
+//    GENERATE,
+    SURVIVAL
 
-    private int step;
-
-    EvolveStep(int step) {
-        this.step = step;
-    }
 }

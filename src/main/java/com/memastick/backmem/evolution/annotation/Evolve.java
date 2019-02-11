@@ -13,6 +13,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Evolve {
 
-    EvolveStep step() default EvolveStep.NONE;
+    EvolveStep step();
 
 }

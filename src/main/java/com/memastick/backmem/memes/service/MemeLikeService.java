@@ -64,7 +64,7 @@ public class MemeLikeService {
 
         memeLikeRepository.save(memeLike);
 
-        int randDna = MathUtil.rand(10, 100);
+        int randDna = MathUtil.rand(0, 100);
         memetickService.addDna(
             memeLike.getMeme().getMemetick(),
             memeLike.isLike() ? randDna : randDna * -1
@@ -73,13 +73,18 @@ public class MemeLikeService {
 
     public void chromosomeTrigger(UUID id, int count) {
         Meme meme = memeService.findById(id);
+        chromosomeTrigger(meme, count);
+    }
+
+    public void chromosomeTrigger(Meme meme, int count) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         if (memeLike.getChromosome() == MAX_CHROMOSOME) return;
-
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
-        memeLike.setChromosome(chromosome);
 
+        memeLike.setChromosome(chromosome);
+        meme.setChromosomes(meme.getChromosomes() + chromosome);
+        //TODO check save chromosome
         memeLikeRepository.save(memeLike);
 
         memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));

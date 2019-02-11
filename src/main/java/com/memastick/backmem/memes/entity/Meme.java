@@ -1,8 +1,6 @@
 package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
-import com.memastick.backmem.evolution.constant.EvolveStep;
-import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.person.entity.Memetick;
 import lombok.AllArgsConstructor;
@@ -38,5 +36,8 @@ public class Meme extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 32)
     private MemeType type;
+
+    @Column(nullable = false)
+    private int chromosomes = 0;
 
 }

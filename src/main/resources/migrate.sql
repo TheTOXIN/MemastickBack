@@ -53,5 +53,10 @@ ALTER TABLE memes ADD COLUMN type varchar(32);
 UPDATE memes SET type = 'INDIVID';
 ALTER TABLE memes ALTER COLUMN type SET NOT NULL;
 
+ALTER TABLE memes ADD COLUMN chromosomes INTEGER;
+UPDATE memes SET chromosomes = 0;
+ALTER TABLE memes ALTER COLUMN chromosomes SET NOT NULL;
+
 --AFTER
-INSERT INTO evolve_memes SELECT uuid_generate_v4(), null, 0, 100, id FROM memes;
+--RUN MIGRATE CHROMOSOME
+INSERT INTO evolve_memes SELECT uuid_generate_v4(), 100, 0, null, id FROM memes;

@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 
 @Entity
 @Table(name = "evolve_memes")
@@ -22,15 +23,16 @@ public class EvolveMeme extends AbstractEntity {
     @JoinColumn(nullable = false)
     private Meme meme;
 
+    @Column
     @Enumerated(EnumType.ORDINAL)
-    @Column(nullable = false)
     private EvolveStep step;
 
+    @Max(value = 100)
     @Column(nullable = false)
     private long population;
 
     @Column
-    private int chanceSurvive;
+    private float chanceSurvive;
 
     public EvolveMeme(Meme meme, EvolveStep step, long population) {
         this.meme = meme;

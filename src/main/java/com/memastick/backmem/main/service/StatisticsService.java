@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-
+//TODO учитывать особи
 @Service
 public class StatisticsService {
 
@@ -35,7 +35,6 @@ public class StatisticsService {
         );
     }
 
-
     public StatisticsAPI global() {
         return new StatisticsAPI(
             memetickRepository.sumDna().orElse(0L),
@@ -43,5 +42,4 @@ public class StatisticsService {
             memeLikeRepository.sumChromosome().orElse(0L)
         );
     }
-
 }
