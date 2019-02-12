@@ -13,28 +13,28 @@ public class MigrateService {
 
     private final MemeRepository memeRepository;
     private final MemeLikeRepository memeLikeRepository;
-
-    @Autowired
-    private MemetickRepository memetickRepository;
-
-    @Autowired
-    private MemetickInventoryService memetickInventoryService;
+    private final MemetickRepository memetickRepository;
+    private final MemetickInventoryService inventoryService;
 
     @Autowired
     public MigrateService(
         MemeRepository memeRepository,
-        MemeLikeRepository memeLikeRepository
+        MemeLikeRepository memeLikeRepository,
+        MemetickRepository memetickRepository, MemetickInventoryService inventoryService
     ) {
         this.memeRepository = memeRepository;
         this.memeLikeRepository = memeLikeRepository;
+        this.memetickRepository = memetickRepository;
+        this.inventoryService = inventoryService;
     }
 
     public void migrate() {
-        memetickRepository.findAll().forEach(memetickInventoryService::generateInventory);
-//        memeRepository.findAll().forEach(meme -> {
-//            Long sum = memeLikeRepository.sumChromosomeByMemeId(meme.getId()).orElse(0L);
-//            meme.setChromosomes((int)((long)sum));
-//            memeRepository.save(meme);
-//        });
+        memeRepository.findAll().forEach(meme -> {
+            Long sum = memeLikeRepository.sumChromosomeByMemeId(meme.getId()).orElse(0L);
+            meme.setChromosomes((int)((long)sum));
+            memeRepository.save(meme);
+        });
+
+        memetickRepository.findAll().forEach(inventoryService::generateInventory);
     }
 }

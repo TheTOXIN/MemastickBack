@@ -1,7 +1,7 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
-import com.memastick.backmem.errors.exception.MemeTokenExcpetion;
+import com.memastick.backmem.errors.exception.TokenWalletException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
@@ -111,7 +111,7 @@ public class MemeService {
 
     private void checkCreate(Memetick memetick) {
         if (memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now())) {
-            throw new MemeTokenExcpetion();
+            throw new TokenWalletException();
         }
     }
 }

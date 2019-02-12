@@ -3,9 +3,9 @@ package com.memastick.backmem.errors.exception;
 import com.memastick.backmem.base.entity.AbstractException;
 import com.memastick.backmem.errors.consts.ErrorCode;
 
-public class MemeTokenExcpetion extends AbstractException {
+public class TokenWalletException extends AbstractException {
 
-    public MemeTokenExcpetion() {
+    public TokenWalletException() {
         super(ErrorCode.LESS_TOKEN);
     }
 
