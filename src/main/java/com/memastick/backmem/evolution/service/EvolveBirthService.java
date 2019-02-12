@@ -9,7 +9,6 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeLikeService;
 import com.memastick.backmem.person.service.MemetickService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 @Evolve(step = EvolveStep.BIRTH)
 public class EvolveBirthService implements Evolution {
@@ -27,7 +26,6 @@ public class EvolveBirthService implements Evolution {
     }
 
     @Override
-    @Transactional
     public void evolution(EvolveMeme evolveMeme) {
         Meme meme = evolveMeme.getMeme();
 

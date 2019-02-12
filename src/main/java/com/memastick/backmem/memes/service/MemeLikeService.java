@@ -5,7 +5,6 @@ import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
-import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.person.entity.Memetick;
 import com.memastick.backmem.person.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
@@ -24,20 +23,17 @@ public class MemeLikeService {
     private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;
     private final SecurityService securityService;
-    private final MemeRepository memeRepository;
     private final MemeService memeService;
 
     @Autowired
     public MemeLikeService(
         MemeLikeRepository memeLikeRepository,
         SecurityService securityService,
-        MemeRepository memeRepository,
         MemetickService memetickService,
         MemeService memeService
     ) {
         this.memeLikeRepository = memeLikeRepository;
         this.securityService = securityService;
-        this.memeRepository = memeRepository;
         this.memetickService = memetickService;
         this.memeService = memeService;
     }
@@ -79,14 +75,15 @@ public class MemeLikeService {
     public void chromosomeTrigger(Meme meme, int count) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
-        if (memeLike.getChromosome() == MAX_CHROMOSOME) return;
+        if (memeLike.getChromosome() >= MAX_CHROMOSOME) return;
+
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
+        int allChromosome = meme.getChromosomes() + (chromosome - memeLike.getChromosome());
 
         memeLike.setChromosome(chromosome);
-        meme.setChromosomes(meme.getChromosomes() + chromosome);
-        //TODO check save chromosome
-        memeLikeRepository.save(memeLike);
+        meme.setChromosomes(allChromosome);
 
+        memeLikeRepository.save(memeLike);
         memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));
     }
 
