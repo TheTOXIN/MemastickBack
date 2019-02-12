@@ -15,14 +15,17 @@ public class EvolveBirthService implements Evolution {
 
     private final MemeLikeService memeLikeService;
     private final MemetickService memetickService;
+    private final EvolveService evolveService;
 
     @Autowired
     public EvolveBirthService(
         MemeLikeService memeLikeService,
-        MemetickService memetickService
+        MemetickService memetickService,
+        EvolveService evolveService
     ) {
         this.memeLikeService = memeLikeService;
         this.memetickService = memetickService;
+        this.evolveService = evolveService;
     }
 
     @Override
@@ -32,6 +35,9 @@ public class EvolveBirthService implements Evolution {
         memetickService.addDna(meme.getMemetick(), MathUtil.rand(0, 100));
         memeLikeService.chromosomeTrigger(meme, MathUtil.rand(0, 100));
 
+        float chance = evolveService.computeChance(evolveMeme);
+
+        evolveMeme.setChanceSurvive(chance);
         evolveMeme.setStep(EvolveStep.SURVIVAL);
     }
 }
