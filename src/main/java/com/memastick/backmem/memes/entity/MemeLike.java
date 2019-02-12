@@ -33,7 +33,7 @@ public class MemeLike extends AbstractEntity {
     private boolean isLike = false;
 
     @Column
-    @Max(value = 30)
+    @Max(30)
     private int chromosome = 0;
 
 }

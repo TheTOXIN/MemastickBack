@@ -7,11 +7,9 @@ import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
-import com.memastick.backmem.memetick.dto.MemetickPreviewDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.service.SecurityService;
-import com.memastick.backmem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,17 +23,14 @@ public class MemetickService {
 
     private final MemetickRepository memetickRepository;
     private final SecurityService securityService;
-    private final UserService userService;
 
     @Autowired
     public MemetickService(
         MemetickRepository memetickRepository,
-        SecurityService securityService,
-        UserService userService
+        SecurityService securityService
     ) {
         this.memetickRepository = memetickRepository;
         this.securityService = securityService;
-        this.userService = userService;
     }
 
     public MemetickAPI viewByMe() {
@@ -44,15 +39,6 @@ public class MemetickService {
 
     public MemetickAPI viewById(UUID id) {
         return mapToView(findById(id));
-    }
-
-    public MemetickPreviewDTO previewById(UUID id) {
-        Memetick memetick = findById(id);
-
-        return new MemetickPreviewDTO(
-            memetick.getId(),
-            memetick.getNick()
-        );
     }
 
     public void addDna(Memetick memetick, int dna) {

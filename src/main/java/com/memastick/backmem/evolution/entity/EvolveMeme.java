@@ -27,7 +27,7 @@ public class EvolveMeme extends AbstractEntity {
     @Enumerated(EnumType.ORDINAL)
     private EvolveStep step;
 
-    @Max(value = 100)
+    @Max(100)
     @Column(nullable = false)
     private long population;
 

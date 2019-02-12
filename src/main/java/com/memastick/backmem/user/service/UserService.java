@@ -5,6 +5,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickAvatar;
 import com.memastick.backmem.memetick.repository.MemetickAvatarRepository;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
+import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.security.entity.InviteCode;
@@ -15,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Service
@@ -25,18 +25,21 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MemetickRepository memetickRepository;
     private final MemetickAvatarRepository memetickAvatarRepository;
+    private final MemetickInventoryService inventoryService;
 
     @Autowired
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         MemetickRepository memetickRepository,
-        MemetickAvatarRepository memetickAvatarRepository
+        MemetickAvatarRepository memetickAvatarRepository,
+        MemetickInventoryService inventoryService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.memetickRepository = memetickRepository;
         this.memetickAvatarRepository = memetickAvatarRepository;
+        this.inventoryService = inventoryService;
     }
 
     public User findAdmin() {
@@ -61,6 +64,8 @@ public class UserService {
 
         user.setMemetick(memetick);
 
+        inventoryService.generateInventory(memetick);
+
         return userRepository.save(user);
     }
 
@@ -74,12 +79,6 @@ public class UserService {
         Optional<User> byLogin = userRepository.findByLogin(login);
         if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
         return byLogin.get();
-    }
-
-    public String readLoginByMemetickId(UUID memetickId) {
-        Optional<User> byMemetickId = userRepository.findByMemetickId(memetickId);
-        if (byMemetickId.isEmpty()) throw new EntityNotFoundException(User.class, "memetick");
-        return byMemetickId.get().getLogin();
     }
 
 }
