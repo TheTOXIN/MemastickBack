@@ -2,7 +2,7 @@ package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.MemeTokenExcpetion;
-import com.memastick.backmem.evolution.service.EvolveService;
+import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
@@ -36,7 +36,7 @@ public class MemeService {
     private final MemetickRepository memetickRepository;
     private final MemetickService memetickService;
     private final MemeLikeService memeLikeService;
-    private final EvolveService evolveService;
+    private final EvolveMemeService evolveMemeService;
 
     @Autowired
     public MemeService(
@@ -45,14 +45,14 @@ public class MemeService {
         MemetickRepository memetickRepository,
         MemetickService memetickService,
         @Lazy MemeLikeService memeLikeService,
-        EvolveService evolveService
+        EvolveMemeService evolveMemeService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickRepository = memetickRepository;
         this.memetickService = memetickService;
         this.memeLikeService = memeLikeService;
-        this.evolveService = evolveService;
+        this.evolveMemeService = evolveMemeService;
     }
 
     public void create(MemeCreateAPI request) {
@@ -66,7 +66,7 @@ public class MemeService {
         memetick.setMemeCreated(ZonedDateTime.now());
         memetickRepository.save(memetick);
 
-        evolveService.startEvolve(meme);
+        evolveMemeService.startEvolve(meme);
 
         memetickService.addDna(memetick, MathUtil.rand(0, 100));
     }

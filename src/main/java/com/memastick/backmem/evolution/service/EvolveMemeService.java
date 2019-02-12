@@ -15,13 +15,13 @@ import java.time.ZoneOffset;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
-public class EvolveService {
+public class EvolveMemeService {
 
     private final MemeRepository memeRepository;
     private final EvolveMemeRepository evolveMemeRepository;
 
     @Autowired
-    public EvolveService(
+    public EvolveMemeService(
         EvolveMemeRepository evolveMemeRepository,
         MemeRepository memeRepository
     ) {
@@ -44,6 +44,15 @@ public class EvolveService {
         float onePercent = (max - min) / 100;
 
         return evolveMeme.getChanceSurvive() * onePercent;
+    }
+
+    public void nextStep(EvolveMeme evolveMeme) {
+        if (evolveMeme.getStep() == null) return;
+
+        EvolveStep nowStep = evolveMeme.getStep();
+        EvolveStep nextStep = EvolveStep.find(nowStep.getStep() + 1);
+
+        evolveMeme.setStep(nextStep);
     }
 
     public long evolveDay() {

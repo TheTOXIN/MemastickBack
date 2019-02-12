@@ -39,7 +39,6 @@ public class EvolveSurvivalService implements Evolution {
         }
 
         memetickService.addDna(meme.getMemetick(), dnaBonus);
-        evolveMeme.setStep(null);
     }
 
 }

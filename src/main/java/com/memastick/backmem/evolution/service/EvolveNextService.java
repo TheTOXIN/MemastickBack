@@ -16,21 +16,27 @@ public class EvolveNextService {
 
     private final EvolveHandler evolveHandler;
     private final EvolveMemeRepository evolveMemeRepository;
+    private final EvolveMemeService evolveMemeService;
 
     @Autowired
     public EvolveNextService(
         EvolveHandler evolveHandler,
-        EvolveMemeRepository evolveMemeRepository
+        EvolveMemeRepository evolveMemeRepository,
+        EvolveMemeService evolveMemeService
     ) {
         this.evolveHandler = evolveHandler;
         this.evolveMemeRepository = evolveMemeRepository;
+        this.evolveMemeService = evolveMemeService;
     }
 
     @Scheduled(cron = "0 0 0 * * *", zone = "UTC")
     public void next() {
         Arrays.stream(EvolveStep.values()).forEach(step -> {
             List<EvolveMeme> evolveMemes = evolveMemeRepository.findByStep(step);
+
             evolveMemes.forEach(evolveHandler.pullEvolve(step)::evolution);
+            evolveMemes.forEach(evolveMemeService::nextStep);
+
             evolveMemeRepository.saveAll(evolveMemes);
         });
     }
