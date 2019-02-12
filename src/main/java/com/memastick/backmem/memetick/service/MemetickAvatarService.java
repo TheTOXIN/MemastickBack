@@ -1,11 +1,11 @@
-package com.memastick.backmem.person.service;
+package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ImageUtil;
-import com.memastick.backmem.person.entity.Memetick;
-import com.memastick.backmem.person.entity.MemetickAvatar;
-import com.memastick.backmem.person.repository.MemetickAvatarRepository;
+import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.entity.MemetickAvatar;
+import com.memastick.backmem.memetick.repository.MemetickAvatarRepository;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

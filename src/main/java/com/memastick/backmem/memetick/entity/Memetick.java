@@ -1,4 +1,4 @@
-package com.memastick.backmem.person.entity;
+package com.memastick.backmem.memetick.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
 import com.memastick.backmem.main.constant.TimeConstant;

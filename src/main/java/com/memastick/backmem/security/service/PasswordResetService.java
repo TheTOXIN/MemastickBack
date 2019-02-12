@@ -5,15 +5,15 @@ import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.TimeInException;
 import com.memastick.backmem.errors.exception.TimeOutException;
 import com.memastick.backmem.main.util.ValidationUtil;
-import com.memastick.backmem.person.entity.User;
-import com.memastick.backmem.person.repository.UserRepository;
-import com.memastick.backmem.person.service.UserService;
 import com.memastick.backmem.security.api.PasswordResetTakeAPI;
 import com.memastick.backmem.security.constant.SecurityStatus;
 import com.memastick.backmem.security.entity.PasswordReset;
 import com.memastick.backmem.security.repository.PasswordResetRepository;
 import com.memastick.backmem.sender.dto.EmailStatus;
 import com.memastick.backmem.sender.service.SenderPasswordResetService;
+import com.memastick.backmem.user.entity.User;
+import com.memastick.backmem.user.repository.UserRepository;
+import com.memastick.backmem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -7,7 +7,7 @@ import com.memastick.backmem.evolution.interfaces.Evolution;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeLikeService;
-import com.memastick.backmem.person.service.MemetickService;
+import com.memastick.backmem.memetick.service.MemetickService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Evolve(step = EvolveStep.BIRTH)

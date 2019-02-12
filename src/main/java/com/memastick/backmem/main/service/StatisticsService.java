@@ -4,7 +4,7 @@ import com.memastick.backmem.main.api.StatisticsAPI;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
 import com.memastick.backmem.memes.repository.MemeRepository;
-import com.memastick.backmem.person.repository.MemetickRepository;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

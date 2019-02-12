@@ -1,8 +1,8 @@
-package com.memastick.backmem.person.controller;
+package com.memastick.backmem.memetick.controller;
 
-import com.memastick.backmem.person.api.ChangeNickAPI;
-import com.memastick.backmem.person.api.MemetickAPI;
-import com.memastick.backmem.person.service.MemetickService;
+import com.memastick.backmem.memetick.api.ChangeNickAPI;
+import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.service.MemetickService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,7 +1,7 @@
 package com.memastick.backmem.security.service;
 
-import com.memastick.backmem.person.entity.Memetick;
-import com.memastick.backmem.person.service.UserService;
+import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,8 +11,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecurityService {
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public SecurityService(
+        UserService userService
+    ) {
+        this.userService = userService;
+    }
 
     public UserDetails getCurrentUser() {
         return (UserDetails) SecurityContextHolder

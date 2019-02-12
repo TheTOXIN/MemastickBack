@@ -1,4 +1,4 @@
-package com.memastick.backmem.person.api;
+package com.memastick.backmem.memetick.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package com.memastick.backmem.person.repository;
+package com.memastick.backmem.memetick.repository;
 
-import com.memastick.backmem.person.entity.Memetick;
+import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

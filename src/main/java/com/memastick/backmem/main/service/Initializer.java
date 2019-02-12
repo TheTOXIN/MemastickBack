@@ -1,12 +1,12 @@
 package com.memastick.backmem.main.service;
 
 
-import com.memastick.backmem.person.entity.Memetick;
-import com.memastick.backmem.person.repository.MemetickRepository;
+import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.constant.RoleType;
-import com.memastick.backmem.person.entity.User;
-import com.memastick.backmem.person.repository.UserRepository;
-import com.memastick.backmem.person.service.UserService;
+import com.memastick.backmem.user.entity.User;
+import com.memastick.backmem.user.repository.UserRepository;
+import com.memastick.backmem.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

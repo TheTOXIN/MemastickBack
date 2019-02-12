@@ -1,7 +1,7 @@
 package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
-import com.memastick.backmem.person.entity.Memetick;
+import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,6 @@
-package com.memastick.backmem.person.controller;
+package com.memastick.backmem.memetick.controller;
 
-import com.memastick.backmem.person.service.MemetickAvatarService;
+import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

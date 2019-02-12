@@ -1,16 +1,17 @@
-package com.memastick.backmem.person.service;
+package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.SettingException;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
-import com.memastick.backmem.person.api.ChangeNickAPI;
-import com.memastick.backmem.person.api.MemetickAPI;
-import com.memastick.backmem.person.dto.MemetickPreviewDTO;
-import com.memastick.backmem.person.entity.Memetick;
-import com.memastick.backmem.person.repository.MemetickRepository;
+import com.memastick.backmem.memetick.api.ChangeNickAPI;
+import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.dto.MemetickPreviewDTO;
+import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

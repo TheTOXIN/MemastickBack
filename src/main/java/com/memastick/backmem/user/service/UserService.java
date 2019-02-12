@@ -1,15 +1,15 @@
-package com.memastick.backmem.person.service;
+package com.memastick.backmem.user.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
-import com.memastick.backmem.person.entity.Memetick;
-import com.memastick.backmem.person.entity.MemetickAvatar;
-import com.memastick.backmem.person.entity.User;
-import com.memastick.backmem.person.repository.MemetickAvatarRepository;
-import com.memastick.backmem.person.repository.MemetickRepository;
-import com.memastick.backmem.person.repository.UserRepository;
+import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.entity.MemetickAvatar;
+import com.memastick.backmem.memetick.repository.MemetickAvatarRepository;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.security.entity.InviteCode;
+import com.memastick.backmem.user.entity.User;
+import com.memastick.backmem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
