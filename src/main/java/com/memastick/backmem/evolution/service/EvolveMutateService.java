@@ -10,6 +10,6 @@ public class EvolveMutateService implements Evolution {
 
     @Override
     public void evolution(EvolveMeme evolveMeme) {
-        System.out.println(EvolveStep.MUTATE);
+        System.out.println(evolveMeme);
     }
 }

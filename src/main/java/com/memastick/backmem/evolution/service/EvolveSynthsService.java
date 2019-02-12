@@ -10,6 +10,6 @@ public class EvolveSynthsService implements Evolution {
 
     @Override
     public void evolution(EvolveMeme evolveMeme) {
-        System.out.println(EvolveStep.SYNTHS);
+        System.out.println(evolveMeme);
     }
 }

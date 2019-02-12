@@ -10,6 +10,6 @@ public class EvolveSurvivalService implements Evolution {
 
     @Override
     public void evolution(EvolveMeme evolveMeme) {
-        System.out.println(EvolveStep.SURVIVAL.name());
+        System.out.println(evolveMeme);
     }
 }

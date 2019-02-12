@@ -10,6 +10,6 @@ public class EvolveBirthService implements Evolution {
 
     @Override
     public void evolution(EvolveMeme evolveMeme) {
-        System.out.println(EvolveStep.BIRTH.name());
+        System.out.println(evolveMeme);
     }
 }

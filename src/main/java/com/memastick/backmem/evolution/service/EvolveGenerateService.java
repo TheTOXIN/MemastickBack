@@ -10,6 +10,6 @@ public class EvolveGenerateService implements Evolution {
 
     @Override
     public void evolution(EvolveMeme evolveMeme) {
-        System.out.println(EvolveStep.GENERATE);
+        System.out.println(evolveMeme);
     }
 }
