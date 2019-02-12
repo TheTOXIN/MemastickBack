@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.main.util.MathUtil;
+import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
@@ -54,13 +55,16 @@ public class MemeLikeService {
 
     public void likeTrigger(UUID id) {
         Meme meme = memeService.findById(id);
-        MemeLike memeLike = findByMemeForCurrentUser(meme);
 
+        if (MemeType.DEATH.equals(meme.getType())) return;
+
+        MemeLike memeLike = findByMemeForCurrentUser(meme);
         memeLike.setLike(!memeLike.isLike());
 
         memeLikeRepository.save(memeLike);
 
         int randDna = MathUtil.rand(0, 100);
+
         memetickService.addDna(
             memeLike.getMeme().getMemetick(),
             memeLike.isLike() ? randDna : randDna * -1
@@ -75,6 +79,7 @@ public class MemeLikeService {
     public void chromosomeTrigger(Meme meme, int count) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
+        if (MemeType.DEATH.equals(meme.getType())) return;
         if (memeLike.getChromosome() >= MAX_CHROMOSOME) return;
 
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
