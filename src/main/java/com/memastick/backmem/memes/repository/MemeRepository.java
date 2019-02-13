@@ -18,7 +18,7 @@ public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
 
     @Query("SELECT MAX(m.chromosomes) FROM Meme m")
     Integer maxChromosomes();
-
+//TODO SUKA BLYAT
     @Query("SELECT MIN(m.chromosomes) FROM Meme m")
     Integer minChromosomes();
 

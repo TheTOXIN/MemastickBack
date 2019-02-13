@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -43,13 +44,36 @@ public class EvolveMemeService {
         ));
     }
 
-    public float computeChance(EvolveMeme evolveMeme) {
+    public float computeChance(int chromosome) {
         Integer max = memeRepository.maxChromosomes();
         Integer min = memeRepository.minChromosomes();
 
-        float onePercent = (max - min) / 100;
+        float onePercent = 100f / (max - min);
 
-        return evolveMeme.getChanceSurvive() * onePercent;
+        return chromosome * onePercent;
+    }
+
+    //TODO КОСТИК БЛЯТЬ КРАСАВА
+    public static void main(String[] args) {
+        int[] хромоебы = { 56, 15, 67, 36, 45, 62, 98 };
+
+        Arrays.sort(хромоебы);
+
+        int count = хромоебы.length;
+
+        int min = хромоебы[0];
+        int max = хромоебы[хромоебы.length - 1];
+
+        float one = 100f / (max - min);
+        System.out.println("ONE = " + one + "\n");
+
+        double avg = Arrays.stream(хромоебы).mapToDouble(x -> (x - min) * one).sum() / count;
+        System.out.println("AVG = " + avg + "\n");
+
+        Arrays.stream(хромоебы).forEach(х -> {
+            float chance = (х - min) * one;
+            System.out.println(х + " - " + chance);
+        });
     }
 
     public void nextStep(EvolveMeme evolveMeme) {

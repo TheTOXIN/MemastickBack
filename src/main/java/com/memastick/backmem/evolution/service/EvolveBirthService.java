@@ -32,10 +32,12 @@ public class EvolveBirthService implements Evolution {
     public void evolution(EvolveMeme evolveMeme) {
         Meme meme = evolveMeme.getMeme();
 
-        memetickService.addDna(meme.getMemetick(), MathUtil.rand(0, 100));
-        memeLikeService.chromosomeTrigger(meme, MathUtil.rand(0, 100));
+        float chance = evolveMemeService.computeChance(meme.getChromosomes());
 
-        float chance = evolveMemeService.computeChance(evolveMeme);
+        memetickService.addDna(meme.getMemetick(), MathUtil.rand(0, 100));
+
+        //TODO КТО ЭТО ПЕРЕДЕРГИВАЕТ?
+        memeLikeService.chromosomeTrigger(meme, MathUtil.rand(0, 100));
 
         evolveMeme.setChanceSurvive(chance);
     }
