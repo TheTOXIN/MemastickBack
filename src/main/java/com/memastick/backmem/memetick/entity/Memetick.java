@@ -30,7 +30,4 @@ public class Memetick extends AbstractEntity {
     @Column(nullable = false)
     private ZonedDateTime nickChanged = TimeConstant.START_OF_TIME;
 
-    @Column(nullable = false)
-    private ZonedDateTime memeCreated = TimeConstant.START_OF_TIME;
-
 }

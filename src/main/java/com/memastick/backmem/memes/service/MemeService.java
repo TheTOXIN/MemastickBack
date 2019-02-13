@@ -1,7 +1,6 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
-import com.memastick.backmem.errors.exception.TokenWalletException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
@@ -12,9 +11,10 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.dto.MemetickPreviewDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.tokens.constant.TokenType;
+import com.memastick.backmem.tokens.service.TokenWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
@@ -33,53 +33,41 @@ public class MemeService {
 
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
-    private final MemetickRepository memetickRepository;
     private final MemetickService memetickService;
     private final MemeLikeService memeLikeService;
     private final EvolveMemeService evolveMemeService;
+    private final TokenWalletService tokenWalletService;
 
     @Autowired
     public MemeService(
         SecurityService securityService,
         MemeRepository memeRepository,
-        MemetickRepository memetickRepository,
         MemetickService memetickService,
         @Lazy MemeLikeService memeLikeService,
-        EvolveMemeService evolveMemeService
+        EvolveMemeService evolveMemeService,
+        TokenWalletService tokenWalletService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
-        this.memetickRepository = memetickRepository;
         this.memetickService = memetickService;
         this.memeLikeService = memeLikeService;
         this.evolveMemeService = evolveMemeService;
+        this.tokenWalletService = tokenWalletService;
     }
 
+    @Transactional
     public void create(MemeCreateAPI request) {
         Memetick memetick = securityService.getCurrentMemetick();
 
-        checkCreate(memetick);
+        tokenWalletService.have(TokenType.CREATING, memetick);
 
         Meme meme = makeMeme(request, memetick);
+
         memeRepository.save(meme);
-
-        memetick.setMemeCreated(ZonedDateTime.now());
-        memetickRepository.save(memetick);
-
         evolveMemeService.startEvolve(meme);
 
+        tokenWalletService.take(TokenType.CREATING, memetick);
         memetickService.addDna(memetick, MathUtil.rand(0, 100));
-    }
-
-    public Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
-        return new Meme(
-            request.getFireId(),
-            request.getUrl(),
-            memetick,
-            ZonedDateTime.now(),
-            MemeType.EVOLVE,
-            0
-        );
     }
 
     @Transactional
@@ -96,22 +84,22 @@ public class MemeService {
         return byId.get();
     }
 
+    private Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
+        return new Meme(
+            request.getFireId(),
+            request.getUrl(),
+            memetick,
+            ZonedDateTime.now(),
+            MemeType.EVOLVE,
+            0
+        );
+    }
+
     private MemePageAPI mapToPage(Meme meme) {
         return new MemePageAPI(
             new MemeDTO(meme.getId(), meme.getUrl()),
             memeLikeService.readStateByMeme(meme),
             new MemetickPreviewDTO(meme.getMemetick().getId(), meme.getMemetick().getNick())
         );
-    }
-
-    public void meCheckCreate() {
-        Memetick memetick = securityService.getCurrentMemetick();
-        checkCreate(memetick);
-    }
-
-    private void checkCreate(Memetick memetick) {
-        if (memetick.getMemeCreated().plusDays(1).isAfter(ZonedDateTime.now())) {
-            throw new TokenWalletException();
-        }
     }
 }

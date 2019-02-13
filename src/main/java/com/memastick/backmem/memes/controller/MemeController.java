@@ -33,11 +33,4 @@ public class MemeController {
         memeService.create(request);
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/create/check")
-    public ResponseEntity checkCreate() {
-        memeService.meCheckCreate();
-        return ResponseEntity.ok().build();
-    }
-
 }

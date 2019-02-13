@@ -57,6 +57,7 @@ ALTER TABLE memes ADD COLUMN chromosomes INTEGER;
 UPDATE memes SET chromosomes = 0;
 ALTER TABLE memes ALTER COLUMN chromosomes SET NOT NULL;
 
+ALTER TABLE memeticks DROP COLUMN meme_created;
 --AFTER
 --RUN MIGRATE CHROMOSOME
 INSERT INTO evolve_memes SELECT uuid_generate_v4(), 100, 0, null, id FROM memes;
