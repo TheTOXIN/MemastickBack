@@ -44,7 +44,7 @@ public class MemeService {
         MemeRepository memeRepository,
         MemetickService memetickService,
         @Lazy MemeLikeService memeLikeService,
-        EvolveMemeService evolveMemeService,
+        @Lazy EvolveMemeService evolveMemeService,
         TokenWalletService tokenWalletService
     ) {
         this.securityService = securityService;
@@ -97,8 +97,8 @@ public class MemeService {
 
     private MemePageAPI mapToPage(Meme meme) {
         return new MemePageAPI(
-            new MemeDTO(meme.getId(), meme.getUrl()),
-            memeLikeService.readStateByMeme(meme),
+            new MemeDTO(meme.getId(), meme.getUrl(), meme.getType()),
+            memeLikeService.readByMeme(meme),
             new MemetickPreviewDTO(meme.getMemetick().getId(), meme.getMemetick().getNick())
         );
     }

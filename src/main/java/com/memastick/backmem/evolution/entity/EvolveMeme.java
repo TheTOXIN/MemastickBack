@@ -20,7 +20,7 @@ import javax.validation.constraints.Max;
 public class EvolveMeme extends AbstractEntity {
 
     @OneToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, unique = true)
     private Meme meme;
 
     @Column
