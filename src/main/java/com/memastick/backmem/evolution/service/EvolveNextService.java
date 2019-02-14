@@ -39,12 +39,13 @@ public class EvolveNextService {
 
         Arrays.stream(EvolveStep.values()).forEach(step -> {
             List<EvolveMeme> evolveMemes = evolveMemeRepository.findByStep(step);
-
-            evolveMemes.forEach(evolveHandler.pullEvolve(step)::evolution);
-            evolveMemes.forEach(evolveMemeService::nextStep);
-
+            evolveHandler.pullEvolve(step).evolution(evolveMemes);
             evolveMemeRepository.saveAll(evolveMemes);
         });
+
+        List<EvolveMeme> evolveMemes = evolveMemeRepository.findAll();
+        evolveMemeService.nextStep(evolveMemes);
+        evolveMemeRepository.saveAll(evolveMemes);
 
         log.info("END EVOLVE - {}", evolveMemeService.evolveDay());
     }

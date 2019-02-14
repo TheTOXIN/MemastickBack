@@ -7,38 +7,37 @@ import com.memastick.backmem.evolution.interfaces.Evolution;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
-import com.memastick.backmem.memetick.service.MemetickService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 @Evolve(step = EvolveStep.SURVIVAL)
 public class EvolveSurvivalService implements Evolution {
 
-    private final MemetickService memetickService;
-
-    @Autowired
-    public EvolveSurvivalService(
-        MemetickService memetickService
-    ) {
-        this.memetickService = memetickService;
-    }
-
     @Override
-    public void evolution(EvolveMeme evolveMeme) {
-        Meme meme = evolveMeme.getMeme();
+    public void evolution(List<EvolveMeme> evolveMemes) {
+        double avg = evolveMemes
+            .stream()
+            .mapToDouble(EvolveMeme::getPopulation)
+            .sum() / evolveMemes.size();
 
-        int dnaBonus = MathUtil.rand(0, 100);
-        boolean isSurvive = evolveMeme.getChanceSurvive() >= 50.0;
+        evolveMemes.forEach(e -> {
+            Meme meme = e.getMeme();
 
-        if (isSurvive) {
-            meme.setType(MemeType.INDIVID);
-            dnaBonus *= 1;
-        } else {
-            meme.setType(MemeType.DEATH);
-            dnaBonus *= -1;
-        }
+            int dnaBonus = MathUtil.rand(0, 100);
+            boolean isSurvive = e.getChanceSurvive() >= avg;
 
-        memetickService.addDna(meme.getMemetick(), dnaBonus);
+            if (isSurvive) {
+                meme.setType(MemeType.INDIVID);
+                dnaBonus *= 1;
+            } else {
+                meme.setType(MemeType.DEATH);
+                dnaBonus *= -1;
+            }
+
+            e.setChanceSurvive(null);
+            meme.getMemetick().setDna(meme.getMemetick().getDna() + dnaBonus);
+        });
     }
 
 }
