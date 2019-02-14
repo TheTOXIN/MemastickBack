@@ -43,6 +43,7 @@ public class EvolveNextService {
             evolveMemeRepository.saveAll(evolveMemes);
         });
 
+        //TODO Hmmmmmmmmmmmmmmmmmmm........................................
         List<EvolveMeme> evolveMemes = evolveMemeRepository.findAllEvolve();
         evolveMemeService.nextStep(evolveMemes);
         evolveMemeRepository.saveAll(evolveMemes);
