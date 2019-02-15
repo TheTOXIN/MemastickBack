@@ -5,6 +5,8 @@ import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.tokens.entity.TokenWallet;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TokenAllowanceService {
+
+    private static final Logger log = LoggerFactory.getLogger(TokenAllowanceService.class);
+
 
     private final MemetickInventoryRepository inventoryRepository;
     private final MemetickInventoryService memetickInventoryService;
@@ -33,6 +38,8 @@ public class TokenAllowanceService {
 
     @Scheduled(cron = "0 0 12 * * *", zone = "UTC")
     public void allowance() {
+        log.info("START ALLOWANCE");
+
         inventoryRepository.findByAllowanceTrue().forEach(inventory -> {
             TokenWallet tokenWallet = inventory.getTokenWallet();
             Memetick memetick = inventory.getMemetick();
@@ -41,7 +48,7 @@ public class TokenAllowanceService {
             var wallet = tokenWalletService.getWallet(tokenWallet);
 
             var setter = tokenWalletService.setWallet();
-            inventory.setAllowance(false);
+            //inventory.setAllowance(false);
 
             allowance.forEach((type, count) -> wallet.merge(type, count, (a, b) -> a + b));
             wallet.forEach((type, count) -> setter.get(type).accept(tokenWallet, count));
@@ -49,5 +56,7 @@ public class TokenAllowanceService {
             tokenWalletRepository.save(tokenWallet);
             inventoryRepository.save(inventory);
         });
+
+        log.info("END ALLOWANCE");
     }
 }

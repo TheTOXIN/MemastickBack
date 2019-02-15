@@ -4,7 +4,6 @@ import com.memastick.backmem.errors.exception.TokenWalletException;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
-import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -22,20 +21,17 @@ public class TokenWalletService {
 
     private final SecurityService securityService;
     private final MemetickInventoryRepository inventoryRepository;
-    private final MemetickInventoryService memetickInventoryService;
     private final TokenWalletRepository tokenWalletRepository;
 
     @Autowired
     public TokenWalletService(
         SecurityService securityService,
         MemetickInventoryRepository inventoryRepository,
-        TokenWalletRepository tokenWalletRepository,
-        MemetickInventoryService memetickInventoryService
+        TokenWalletRepository tokenWalletRepository
     ) {
         this.securityService = securityService;
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
-        this.memetickInventoryService = memetickInventoryService;
     }
 
     public void have(TokenType type) {
@@ -51,8 +47,6 @@ public class TokenWalletService {
     public TokenWalletAPI my() {
         Memetick memetick = securityService.getCurrentMemetick();
         HashMap<TokenType, Integer> wallet = wallet(memetick);
-
-        memetickInventoryService.updateAllowance(memetick);
 
         return new TokenWalletAPI(wallet);
     }
