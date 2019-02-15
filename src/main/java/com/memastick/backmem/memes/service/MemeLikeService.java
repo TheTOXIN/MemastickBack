@@ -39,7 +39,7 @@ public class MemeLikeService {
         this.memeService = memeService;
     }
 
-    public MemeLikeStateDTO readByMeme(Meme meme) {
+    public MemeLikeStateDTO readStateByMeme(Meme meme) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         long countLikes = memeLikeRepository.countByMemeIdAndIsLikeTrue(meme.getId()).orElse(0L);

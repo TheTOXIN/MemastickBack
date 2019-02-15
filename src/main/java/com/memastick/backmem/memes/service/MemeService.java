@@ -6,11 +6,11 @@ import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeType;
+import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -34,31 +34,25 @@ public class MemeService {
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
-    private final MemeLikeService memeLikeService;
     private final EvolveMemeService evolveMemeService;
     private final TokenWalletService tokenWalletService;
     private final MemeMapper memeMapper;
-    private final MemetickMapper memetickMapper;
 
     @Autowired
     public MemeService(
         SecurityService securityService,
         MemeRepository memeRepository,
         MemetickService memetickService,
-        @Lazy MemeLikeService memeLikeService,
         @Lazy EvolveMemeService evolveMemeService,
         TokenWalletService tokenWalletService,
-        MemeMapper memeMapper,
-        MemetickMapper memetickMapper
+        MemeMapper memeMapper
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickService = memetickService;
-        this.memeLikeService = memeLikeService;
         this.evolveMemeService = evolveMemeService;
         this.tokenWalletService = tokenWalletService;
         this.memeMapper = memeMapper;
-        this.memetickMapper = memetickMapper;
     }
 
     @Transactional
@@ -80,8 +74,13 @@ public class MemeService {
     public List<MemePageAPI> readPages(Pageable pageable) {
         return memeRepository.findAll(pageable)
             .stream()
-            .map(this::mapToPage)
+            .map(memeMapper::toPageAPI)
             .collect(Collectors.toList());
+    }
+
+    public MemeAPI read(UUID memeId) {
+        Meme meme = findById(memeId);
+        return memeMapper.toMemeAPI(meme);
     }
 
     public Meme findById(UUID id) {
@@ -98,14 +97,6 @@ public class MemeService {
             ZonedDateTime.now(),
             MemeType.EVOLVE,
             0
-        );
-    }
-
-    private MemePageAPI mapToPage(Meme meme) {
-        return new MemePageAPI(
-            memeMapper.toMemeDTO(meme),
-            memeLikeService.readByMeme(meme),
-            memetickMapper.toPreviewDTO(meme.getMemetick())
         );
     }
 }

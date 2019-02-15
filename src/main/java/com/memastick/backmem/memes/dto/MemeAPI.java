@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemeDTO {
+public class MemeAPI {
 
     private UUID id;
     private String url;

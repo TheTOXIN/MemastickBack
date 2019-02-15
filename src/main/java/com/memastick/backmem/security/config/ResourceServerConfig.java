@@ -24,6 +24,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
             .mvcMatchers("/migrate/**").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/memes/read/**").anonymous()
             .mvcMatchers("/hello").anonymous()
             .mvcMatchers("/memetick-avatars/download/**").anonymous()
             .mvcMatchers("/invite/registration").anonymous()
@@ -32,5 +33,4 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .mvcMatchers("/password-reset/take").anonymous()
             .mvcMatchers("/**").authenticated();
     }
-
 }
