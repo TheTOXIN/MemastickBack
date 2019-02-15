@@ -6,11 +6,11 @@ import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeType;
-import com.memastick.backmem.memes.dto.MemeDTO;
 import com.memastick.backmem.memes.entity.Meme;
+import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
-import com.memastick.backmem.memetick.dto.MemetickPreviewDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -37,6 +37,8 @@ public class MemeService {
     private final MemeLikeService memeLikeService;
     private final EvolveMemeService evolveMemeService;
     private final TokenWalletService tokenWalletService;
+    private final MemeMapper memeMapper;
+    private final MemetickMapper memetickMapper;
 
     @Autowired
     public MemeService(
@@ -45,7 +47,9 @@ public class MemeService {
         MemetickService memetickService,
         @Lazy MemeLikeService memeLikeService,
         @Lazy EvolveMemeService evolveMemeService,
-        TokenWalletService tokenWalletService
+        TokenWalletService tokenWalletService,
+        MemeMapper memeMapper,
+        MemetickMapper memetickMapper
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
@@ -53,6 +57,8 @@ public class MemeService {
         this.memeLikeService = memeLikeService;
         this.evolveMemeService = evolveMemeService;
         this.tokenWalletService = tokenWalletService;
+        this.memeMapper = memeMapper;
+        this.memetickMapper = memetickMapper;
     }
 
     @Transactional
@@ -97,9 +103,9 @@ public class MemeService {
 
     private MemePageAPI mapToPage(Meme meme) {
         return new MemePageAPI(
-            new MemeDTO(meme.getId(), meme.getUrl(), meme.getType()),
+            memeMapper.toMemeDTO(meme),
             memeLikeService.readByMeme(meme),
-            new MemetickPreviewDTO(meme.getMemetick().getId(), meme.getMemetick().getNick())
+            memetickMapper.toPreviewDTO(meme.getMemetick())
         );
     }
 }

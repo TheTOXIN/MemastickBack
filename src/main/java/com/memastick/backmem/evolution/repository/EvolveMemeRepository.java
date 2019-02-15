@@ -5,6 +5,7 @@ import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.memes.entity.Meme;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface EvolveMemeRepository extends JpaRepository<EvolveMeme, UUID> {
     @Query("SELECT em FROM EvolveMeme em WHERE em.step IS NOT NULL")
     List<EvolveMeme> findAllEvolve();
 
+    @Query("SELECT em.step FROM EvolveMeme em WHERE em.meme = :meme")
+    EvolveStep findStepByMeme(@Param("meme") Meme meme);
 }
