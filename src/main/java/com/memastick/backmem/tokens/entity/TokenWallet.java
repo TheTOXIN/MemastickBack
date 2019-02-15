@@ -21,22 +21,22 @@ public class TokenWallet extends AbstractEntity {
 
     @Max(10)
     @Column(nullable = false)
-    private Integer creating = 0;
+    private Integer creating = 1;
 
     @Max(10)
     @Column(nullable = false)
-    private Integer fitness = 0;
+    private Integer fitness = 1;
 
     @Max(10)
     @Column(nullable = false)
-    private Integer mutation = 0;
+    private Integer mutation = 1;
 
     @Max(10)
     @Column(nullable = false)
-    private Integer crossover = 0;
+    private Integer crossover = 1;
 
     @Max(10)
     @Column(nullable = false)
-    private Integer selection = 0;
+    private Integer selection = 1;
 
 }

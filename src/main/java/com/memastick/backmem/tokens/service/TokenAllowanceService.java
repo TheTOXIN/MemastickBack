@@ -48,7 +48,7 @@ public class TokenAllowanceService {
             var wallet = tokenWalletService.getWallet(tokenWallet);
 
             var setter = tokenWalletService.setWallet();
-            //inventory.setAllowance(false);
+            inventory.setAllowance(false);
 
             allowance.forEach((type, count) -> wallet.merge(type, count, (a, b) -> a + b));
             wallet.forEach((type, count) -> setter.get(type).accept(tokenWallet, count));

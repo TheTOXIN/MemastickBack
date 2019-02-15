@@ -11,6 +11,7 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -37,6 +38,7 @@ public class MemeService {
     private final EvolveMemeService evolveMemeService;
     private final TokenWalletService tokenWalletService;
     private final MemeMapper memeMapper;
+    private final MemetickInventoryService inventoryService;
 
     @Autowired
     public MemeService(
@@ -45,7 +47,8 @@ public class MemeService {
         MemetickService memetickService,
         @Lazy EvolveMemeService evolveMemeService,
         TokenWalletService tokenWalletService,
-        MemeMapper memeMapper
+        MemeMapper memeMapper,
+        MemetickInventoryService inventoryService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
@@ -53,6 +56,7 @@ public class MemeService {
         this.evolveMemeService = evolveMemeService;
         this.tokenWalletService = tokenWalletService;
         this.memeMapper = memeMapper;
+        this.inventoryService = inventoryService;
     }
 
     @Transactional
@@ -60,6 +64,7 @@ public class MemeService {
         Memetick memetick = securityService.getCurrentMemetick();
 
         tokenWalletService.have(TokenType.CREATING, memetick);
+        inventoryService.updateAllowance(memetick);
 
         Meme meme = makeMeme(request, memetick);
 
