@@ -4,6 +4,7 @@ import com.memastick.backmem.errors.exception.TokenWalletException;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -21,17 +22,20 @@ public class TokenWalletService {
 
     private final SecurityService securityService;
     private final MemetickInventoryRepository inventoryRepository;
+    private final MemetickInventoryService memetickInventoryService;
     private final TokenWalletRepository tokenWalletRepository;
 
     @Autowired
     public TokenWalletService(
         SecurityService securityService,
         MemetickInventoryRepository inventoryRepository,
-        TokenWalletRepository tokenWalletRepository
+        TokenWalletRepository tokenWalletRepository,
+        MemetickInventoryService memetickInventoryService
     ) {
         this.securityService = securityService;
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
+        this.memetickInventoryService = memetickInventoryService;
     }
 
     public void have(TokenType type) {
@@ -47,6 +51,8 @@ public class TokenWalletService {
     public TokenWalletAPI my() {
         Memetick memetick = securityService.getCurrentMemetick();
         HashMap<TokenType, Integer> wallet = wallet(memetick);
+
+        memetickInventoryService.updateAllowance(memetick);
 
         return new TokenWalletAPI(wallet);
     }
@@ -72,7 +78,7 @@ public class TokenWalletService {
         return getWallet(tokenWallet);
     }
 
-    private HashMap<TokenType, Integer> getWallet(TokenWallet tokenWallet) {
+    public HashMap<TokenType, Integer> getWallet(TokenWallet tokenWallet) {
         HashMap<TokenType, Integer> wallet = new HashMap<>();
 
         wallet.put(TokenType.CREATING, tokenWallet.getCreating());
@@ -84,7 +90,7 @@ public class TokenWalletService {
         return wallet;
     }
 
-    private HashMap<TokenType, BiConsumer<TokenWallet, Integer>> setWallet() {
+    public HashMap<TokenType, BiConsumer<TokenWallet, Integer>> setWallet() {
         HashMap<TokenType, BiConsumer<TokenWallet, Integer>> setter = new HashMap<>();
 
         setter.put(TokenType.CREATING, TokenWallet::setCreating);

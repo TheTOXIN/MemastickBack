@@ -26,6 +26,6 @@ public class MemetickInventory extends AbstractEntity {
     private TokenWallet tokenWallet;
 
     @Column(nullable = false)
-    private boolean allowance = false;
+    private boolean allowance = true;
 
 }
