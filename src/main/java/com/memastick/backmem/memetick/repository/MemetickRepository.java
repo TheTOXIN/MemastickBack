@@ -15,7 +15,7 @@ public interface MemetickRepository extends JpaRepository<Memetick, UUID> {
     @Query("SELECT SUM(m.dna) FROM Memetick m")
     Optional<Long> sumDna();
 
-    @Query("SELECT SUM(m.dna) FROM Memetick m WHERE m.id = :id")
-    Optional<Long> sumDnaById(@Param("id") UUID id);
+    @Query("SELECT m.dna FROM Memetick m WHERE m.id = :id")
+    Optional<Long> findDnaByMemetickId(@Param("id") UUID id);
 
 }
