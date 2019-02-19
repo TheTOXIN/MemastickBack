@@ -18,6 +18,7 @@ public interface MemeLikeRepository extends JpaRepository<MemeLike, UUID> {
 
     Optional<Long> countByMemeIdAndIsLikeTrue(UUID memeId);
 
+    //TODO удалить после миграции
     @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml WHERE ml.meme.id = :memeId")
     Optional<Long> sumChromosomeByMemeId(@Param("memeId") UUID memeId);
 

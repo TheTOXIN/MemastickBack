@@ -42,12 +42,8 @@ public class MemeLikeService {
     public MemeLikeStateDTO readStateByMeme(Meme meme) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
-        long countLikes = memeLikeRepository.countByMemeIdAndIsLikeTrue(meme.getId()).orElse(0L);
-        long countChromosomes = memeLikeRepository.sumChromosomeByMemeId(meme.getId()).orElse(0L);
-
         return new MemeLikeStateDTO(
-            (int) countLikes,
-            (int) countChromosomes,
+            memeLikeRepository.countByMemeIdAndIsLikeTrue(meme.getId()).orElse(0L),
             memeLike.isLike(),
             memeLike.getChromosome()
         );

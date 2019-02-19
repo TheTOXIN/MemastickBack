@@ -1,6 +1,5 @@
 package com.memastick.backmem.memes.mapper;
 
-import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.dto.MemeAPI;
@@ -38,12 +37,12 @@ public class MemeMapper {
     }
 
     public MemeAPI toMemeAPI(Meme meme) {
-        EvolveStep step = evolveMemeRepository.findStepByMeme(meme);
         return new MemeAPI(
             meme.getId(),
             meme.getUrl(),
+            meme.getChromosomes(),
             meme.getType(),
-            step
+            evolveMemeRepository.findStepByMeme(meme)
         );
     }
 }
