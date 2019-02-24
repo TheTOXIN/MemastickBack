@@ -12,9 +12,7 @@ import lombok.NoArgsConstructor;
 public class EvolveMemeAPI {
 
     private EvolveStep step;
-
     private long population;
-
     private float chanceSurvive;
 
 }
