@@ -27,5 +27,4 @@ public class EvolveMemeController {
     public EvolveMemeAPI readByMeme(@PathVariable("id") UUID memeId) {
         return evolveMemeService.readByMeme(memeId);
     }
-
 }

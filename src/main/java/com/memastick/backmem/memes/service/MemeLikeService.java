@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 public class MemeLikeService {
 
-    private static final int MAX_CHROMOSOME = 30;
+    private static final int MAX_CHROMOSOME = 10;
 
     private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;

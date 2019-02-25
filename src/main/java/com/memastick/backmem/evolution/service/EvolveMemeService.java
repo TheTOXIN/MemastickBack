@@ -65,7 +65,7 @@ public class EvolveMemeService {
         return new EvolveMemeAPI(
             evolveMeme.getStep(),
             evolveMeme.getPopulation(),
-            evolveMeme.getChanceSurvive()
+            evolveMeme.getChanceSurvive() == null ? 0 : evolveMeme.getChanceSurvive()
         );
     }
 }
