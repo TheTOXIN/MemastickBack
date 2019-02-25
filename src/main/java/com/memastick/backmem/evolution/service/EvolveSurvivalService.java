@@ -8,6 +8,7 @@ import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -16,10 +17,11 @@ public class EvolveSurvivalService implements Evolution {
 
     @Override
     public void evolution(List<EvolveMeme> evolveMemes) {
-        double avg = evolveMemes
-            .stream()
-            .mapToDouble(EvolveMeme::getPopulation)
-            .sum() / evolveMemes.size();
+        if (evolveMemes.isEmpty()) return;
+
+        evolveMemes.sort(Comparator.comparing(EvolveMeme::getPopulation));
+
+        float avg = evolveMemes.get(evolveMemes.size() / 2).getChanceSurvive();
 
         evolveMemes.forEach(e -> {
             Meme meme = e.getMeme();
