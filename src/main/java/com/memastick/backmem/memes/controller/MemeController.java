@@ -31,7 +31,7 @@ public class MemeController {
         return memeService.read(memeId);
     }
 
-    @GetMapping(value = "/pages/{filter}")
+    @GetMapping(value = "/pages/filter/{filter}")
     public List<MemePageAPI> pages(
         @PathVariable("filter") MemeFilter filter,
         Pageable pageable

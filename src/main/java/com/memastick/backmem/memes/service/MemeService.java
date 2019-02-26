@@ -88,6 +88,17 @@ public class MemeService {
             .collect(Collectors.toList());
     }
 
+    public MemeAPI read(UUID memeId) {
+        Meme meme = findById(memeId);
+        return memeMapper.toMemeAPI(meme);
+    }
+
+    public Meme findById(UUID id) {
+        Optional<Meme> byId = memeRepository.findById(id);
+        if (byId.isEmpty()) throw new EntityNotFoundException(Meme.class, "id");
+        return byId.get();
+    }
+
     private List<Meme> readByFilter(MemeFilter filter, Pageable pageable) {
         List<Meme> memes = new ArrayList<>();
 
@@ -102,17 +113,6 @@ public class MemeService {
         }
 
         return memes;
-    }
-
-    public MemeAPI read(UUID memeId) {
-        Meme meme = findById(memeId);
-        return memeMapper.toMemeAPI(meme);
-    }
-
-    public Meme findById(UUID id) {
-        Optional<Meme> byId = memeRepository.findById(id);
-        if (byId.isEmpty()) throw new EntityNotFoundException(Meme.class, "id");
-        return byId.get();
     }
 
     private Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
