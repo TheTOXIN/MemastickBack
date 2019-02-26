@@ -2,6 +2,7 @@ package com.memastick.backmem.memes.controller;
 
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
+import com.memastick.backmem.memes.constant.MemeFilter;
 import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.service.MemeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,12 @@ public class MemeController {
         return memeService.read(memeId);
     }
 
-    @GetMapping("/pages/read")
-    public List<MemePageAPI> readPages(Pageable pageable) {
-        return memeService.readPages(pageable);
+    @GetMapping(value = "/pages/{filter}")
+    public List<MemePageAPI> pages(
+        @PathVariable("filter") MemeFilter filter,
+        Pageable pageable
+    ) {
+        return memeService.pagesByFilter(filter, pageable);
     }
 
     @PostMapping("/create")

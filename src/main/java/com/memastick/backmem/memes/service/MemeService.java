@@ -5,6 +5,7 @@ import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
+import com.memastick.backmem.memes.constant.MemeFilter;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.entity.Meme;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,6 +41,7 @@ public class MemeService {
     private final TokenWalletService tokenWalletService;
     private final MemeMapper memeMapper;
     private final MemetickInventoryService inventoryService;
+    private final MemeLikeService memeLikeService;
 
     @Autowired
     public MemeService(
@@ -48,7 +51,8 @@ public class MemeService {
         @Lazy EvolveMemeService evolveMemeService,
         TokenWalletService tokenWalletService,
         MemeMapper memeMapper,
-        MemetickInventoryService inventoryService
+        MemetickInventoryService inventoryService,
+        @Lazy MemeLikeService memeLikeService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
@@ -57,6 +61,7 @@ public class MemeService {
         this.tokenWalletService = tokenWalletService;
         this.memeMapper = memeMapper;
         this.inventoryService = inventoryService;
+        this.memeLikeService = memeLikeService;
     }
 
     @Transactional
@@ -76,11 +81,27 @@ public class MemeService {
     }
 
     @Transactional
-    public List<MemePageAPI> readPages(Pageable pageable) {
-        return memeRepository.findAll(pageable)
+    public List<MemePageAPI> pagesByFilter(MemeFilter filter, Pageable pageable) {
+        return readByFilter(filter, pageable)
             .stream()
             .map(memeMapper::toPageAPI)
             .collect(Collectors.toList());
+    }
+
+    private List<Meme> readByFilter(MemeFilter filter, Pageable pageable) {
+        List<Meme> memes = new ArrayList<>();
+
+        Memetick memetick = securityService.getCurrentMemetick();
+
+        switch (filter) {
+            case INDV: memes = memeRepository.findByType(MemeType.INDIVID, pageable); break;
+            case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
+            case LIKE: memes = memeLikeService.findLikeMemesByMemetick(memetick); break;
+            case DTHS: memes = memeRepository.findByType(MemeType.DEATH, pageable);break;
+            case EVLV: memes = memeRepository.findByType(MemeType.EVOLVE, pageable);break;
+        }
+
+        return memes;
     }
 
     public MemeAPI read(UUID memeId) {

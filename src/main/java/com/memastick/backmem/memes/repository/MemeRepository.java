@@ -2,11 +2,14 @@ package com.memastick.backmem.memes.repository;
 
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
+import com.memastick.backmem.memetick.entity.Memetick;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,4 +25,8 @@ public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
 
     @Query("SELECT SUM(m.chromosomes) FROM Meme m")
     Optional<Long> sumChromosome();
+
+    List<Meme> findByType(MemeType individ, Pageable pageable);
+
+    List<Meme> findByMemetick(Memetick currentMemetick, Pageable pageable);
 }

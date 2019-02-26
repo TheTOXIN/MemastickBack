@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,4 +23,5 @@ public interface MemeLikeRepository extends JpaRepository<MemeLike, UUID> {
     @Query("SELECT SUM(ml.chromosome) FROM MemeLike ml WHERE ml.meme.id = :memeId")
     Optional<Long> sumChromosomeByMemeId(@Param("memeId") UUID memeId);
 
+    List<MemeLike> findByMemetickAndIsLikeTrue(Memetick memetick);
 }

@@ -6,14 +6,18 @@ import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
+import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -25,18 +29,21 @@ public class MemeLikeService {
     private final MemeLikeRepository memeLikeRepository;
     private final SecurityService securityService;
     private final MemeService memeService;
+    private final MemeRepository memeRepository;
 
     @Autowired
     public MemeLikeService(
         MemeLikeRepository memeLikeRepository,
         SecurityService securityService,
         MemetickService memetickService,
-        MemeService memeService
+        MemeService memeService,
+        MemeRepository memeRepository
     ) {
         this.memeLikeRepository = memeLikeRepository;
         this.securityService = securityService;
         this.memetickService = memetickService;
         this.memeService = memeService;
+        this.memeRepository = memeRepository;
     }
 
     public MemeLikeStateDTO readStateByMeme(Meme meme) {
@@ -86,6 +93,15 @@ public class MemeLikeService {
 
         memeLikeRepository.save(memeLike);
         memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));
+    }
+
+    public List<Meme> findLikeMemesByMemetick(Memetick memetick) {
+        return memeLikeRepository
+            .findByMemetickAndIsLikeTrue(memetick)
+            .stream()
+            .map(MemeLike::getMeme)
+            .sorted(Comparator.comparing(Meme::getCreating))
+            .collect(Collectors.toList());
     }
 
     private MemeLike findByMemeForCurrentUser(Meme meme) {
