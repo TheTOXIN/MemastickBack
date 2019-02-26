@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,10 +33,14 @@ public class MemetickController {
         return memetickService.viewById(id);
     }
 
+    @GetMapping("/rating")
+    public List<MemetickAPI> rating() {
+        return memetickService.rating();
+    }
+
     @PutMapping("/nick/change")
     public ResponseEntity changeNick(@RequestBody ChangeNickAPI request) {
         memetickService.changeNick(request);
         return ResponseEntity.ok().build();
     }
-
 }
