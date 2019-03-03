@@ -7,6 +7,9 @@ import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeService;
+import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.tokens.constant.TokenType;
+import com.memastick.backmem.tokens.service.TokenWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +25,17 @@ public class EvolveMemeService {
 
     private final EvolveMemeRepository evolveMemeRepository;
     private final MemeService memeService;
+    private final TokenWalletService tokenWalletService;
 
     @Autowired
     public EvolveMemeService(
-        EvolveMemeRepository evolveMemeRepository,
-        MemeService memeService
+            EvolveMemeRepository evolveMemeRepository,
+            MemeService memeService,
+            TokenWalletService tokenWalletService
     ) {
         this.evolveMemeRepository = evolveMemeRepository;
         this.memeService = memeService;
+        this.tokenWalletService = tokenWalletService;
     }
 
     public void startEvolve(Meme meme) {
@@ -67,5 +73,21 @@ public class EvolveMemeService {
             evolveMeme.getPopulation(),
             evolveMeme.getChanceSurvive() == null ? 0 : evolveMeme.getChanceSurvive()
         );
+    }
+
+    public void chance(UUID memeId) {
+        Meme meme = memeService.findById(memeId);
+        Memetick memetick = meme.getMemetick();
+
+        tokenWalletService.have(TokenType.SELECTION, memetick);
+
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
+
+        if (!evolveMeme.getStep().equals(EvolveStep.SURVIVAL)) return;
+        evolveMeme.setChanceSurvive(Math.min(evolveMeme.getChanceSurvive() * 2, 100f));
+
+        evolveMemeRepository.save(evolveMeme);
+
+        tokenWalletService.take(TokenType.SELECTION, memetick);
     }
 }
