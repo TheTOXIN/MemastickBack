@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("token-wallets")
-public class TokenController {
+public class TokenWalletController {
 
     private final TokenWalletService tokenWalletService;
 
     @Autowired
-    public TokenController(
-        TokenWalletService tokenWalletService
+    public TokenWalletController(
+            TokenWalletService tokenWalletService
     ) {
         this.tokenWalletService = tokenWalletService;
     }

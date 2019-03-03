@@ -40,7 +40,6 @@ public class MemeService {
     private final EvolveMemeService evolveMemeService;
     private final TokenWalletService tokenWalletService;
     private final MemeMapper memeMapper;
-    private final MemetickInventoryService inventoryService;
     private final MemeLikeService memeLikeService;
 
     @Autowired
@@ -51,7 +50,6 @@ public class MemeService {
         @Lazy EvolveMemeService evolveMemeService,
         TokenWalletService tokenWalletService,
         MemeMapper memeMapper,
-        MemetickInventoryService inventoryService,
         @Lazy MemeLikeService memeLikeService
     ) {
         this.securityService = securityService;
@@ -60,19 +58,15 @@ public class MemeService {
         this.evolveMemeService = evolveMemeService;
         this.tokenWalletService = tokenWalletService;
         this.memeMapper = memeMapper;
-        this.inventoryService = inventoryService;
         this.memeLikeService = memeLikeService;
     }
 
     @Transactional
     public void create(MemeCreateAPI request) {
         Memetick memetick = securityService.getCurrentMemetick();
-
         tokenWalletService.have(TokenType.CREATING, memetick);
-        inventoryService.updateAllowance(memetick);
 
         Meme meme = makeMeme(request, memetick);
-
         memeRepository.save(meme);
         evolveMemeService.startEvolve(meme);
 

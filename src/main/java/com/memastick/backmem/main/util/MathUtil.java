@@ -6,4 +6,7 @@ public class MathUtil {
         return from + (int) (Math.random() * ((to - from) + 1));
     }
 
+    public static boolean randBool() {
+        return rand(0, 1) == 0;
+    }
 }

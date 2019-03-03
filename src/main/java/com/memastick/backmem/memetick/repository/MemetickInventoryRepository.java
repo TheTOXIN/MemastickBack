@@ -13,6 +13,6 @@ public interface MemetickInventoryRepository extends CrudRepository<MemetickInve
 
     MemetickInventory findByMemetick(Memetick memetick);
 
-    List<MemetickInventory> findByAllowanceTrue();
+    List<MemetickInventory> findByAllowanceFalse();
 
 }

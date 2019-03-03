@@ -1,62 +1,72 @@
 package com.memastick.backmem.tokens.service;
 
+import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
-import com.memastick.backmem.memetick.service.MemetickInventoryService;
-import com.memastick.backmem.tokens.entity.TokenWallet;
+import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.tokens.api.TokenWalletAPI;
+import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 
 @Service
 public class TokenAllowanceService {
 
-    private static final Logger log = LoggerFactory.getLogger(TokenAllowanceService.class);
-
-
-    private final MemetickInventoryRepository inventoryRepository;
-    private final MemetickInventoryService memetickInventoryService;
+    private final SecurityService securityService;
     private final TokenWalletService tokenWalletService;
+    private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
 
     @Autowired
     public TokenAllowanceService(
-        MemetickInventoryRepository inventoryRepository,
-        MemetickInventoryService memetickInventoryService,
-        TokenWalletService tokenWalletService,
-        TokenWalletRepository tokenWalletRepository
+            SecurityService securityService,
+            TokenWalletService tokenWalletService,
+            MemetickInventoryRepository inventoryRepository,
+            TokenWalletRepository tokenWalletRepository
     ) {
-        this.inventoryRepository = inventoryRepository;
-        this.memetickInventoryService = memetickInventoryService;
+        this.securityService = securityService;
         this.tokenWalletService = tokenWalletService;
+        this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
     }
 
-    @Scheduled(cron = "0 0 12 * * *", zone = "UTC")
-    public void allowance() {
-        log.info("START ALLOWANCE");
+    public TokenWalletAPI take() {
+        Memetick memetick = securityService.getCurrentMemetick();
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
 
-        inventoryRepository.findByAllowanceTrue().forEach(inventory -> {
-            TokenWallet tokenWallet = inventory.getTokenWallet();
-            Memetick memetick = inventory.getMemetick();
+        if (!inventory.isAllowance()) return new TokenWalletAPI();
+        inventory.setAllowance(false);
 
-            var allowance = memetickInventoryService.myAllowance(memetick);
-            var wallet = tokenWalletService.getWallet(tokenWallet);
+        var tokenWallet = inventory.getTokenWallet();
+        var allowance = myAllowance(memetick);
 
-            var setter = tokenWalletService.setWallet();
-            inventory.setAllowance(false);
+        var wallet = tokenWalletService.getWallet(tokenWallet);
+        var setter = tokenWalletService.setWallet();
 
-            allowance.forEach((type, count) -> wallet.merge(type, count, (a, b) -> a + b));
-            wallet.forEach((type, count) -> setter.get(type).accept(tokenWallet, count));
+        allowance.forEach((type, count) -> wallet.merge(type, count, (a, b) -> a + b));
+        wallet.forEach((type, count) -> setter.get(type).accept(tokenWallet, count));
 
-            tokenWalletRepository.save(tokenWallet);
-            inventoryRepository.save(inventory);
-        });
+        tokenWalletRepository.save(tokenWallet);
+        inventoryRepository.save(inventory);
 
-        log.info("END ALLOWANCE");
+        return new TokenWalletAPI(allowance);
+    }
+
+    public boolean have() {
+        Memetick memetick = securityService.getCurrentMemetick();
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+
+        return inventory.isAllowance();
+    }
+
+    private Map<TokenType, Integer> myAllowance(Memetick memetick) {
+        return Map.of(
+                TokenType.CREATING, 1,
+                TokenType.SELECTION,  MathUtil.randBool() ? 1 : 0
+        );
     }
 }

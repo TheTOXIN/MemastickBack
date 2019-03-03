@@ -6,12 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TokenWalletAPI {
 
-    private HashMap<TokenType, Integer> wallet = new HashMap<>();
+    private Map<TokenType, Integer> wallet = new HashMap<>();
 
 }
