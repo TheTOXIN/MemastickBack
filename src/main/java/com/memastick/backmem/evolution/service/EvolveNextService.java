@@ -34,7 +34,7 @@ public class EvolveNextService {
     }
 
     @Scheduled(cron = "0 0 0 * * *", zone = "UTC")
-    public void next() {
+    public void evolve() {
         log.info("START EVOLVE - {}", evolveMemeService.evolveDay());
 
         Arrays.stream(EvolveStep.values()).forEach(step -> {

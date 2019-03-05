@@ -23,6 +23,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .mvcMatchers("/migrate/**").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/next-evolve").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/send-allowance").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/memes/read/**").anonymous()
             .mvcMatchers("/hello").anonymous()

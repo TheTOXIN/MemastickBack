@@ -26,7 +26,7 @@ public class EvolveMemeController {
         return evolveMemeService.readByMeme(memeId);
     }
 
-    @PatchMapping("meme/{id}/chance")
+    @PatchMapping("/chance/meme/{id}")
     public ResponseEntity chance(@PathVariable("id") UUID memeId) {
         evolveMemeService.chance(memeId);
         return ResponseEntity.ok().build();
