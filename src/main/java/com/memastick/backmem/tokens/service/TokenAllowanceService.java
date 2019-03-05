@@ -40,7 +40,7 @@ public class TokenAllowanceService {
         Memetick memetick = securityService.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
 
-        if (!inventory.isAllowance()) return new TokenWalletAPI();
+        if (!inventory.isAllowance()) return new TokenWalletAPI(emptyAllowance());
         inventory.setAllowance(false);
 
         var tokenWallet = inventory.getTokenWallet();
@@ -60,15 +60,31 @@ public class TokenAllowanceService {
 
     public boolean have() {
         Memetick memetick = securityService.getCurrentMemetick();
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        return have(memetick);
+    }
 
+    public boolean have(Memetick memetick) {
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
         return inventory.isAllowance();
     }
 
     private Map<TokenType, Integer> myAllowance(Memetick memetick) {
         return Map.of(
             TokenType.CREATING, 1,
+            TokenType.FITNESS, 0,
+            TokenType.MUTATION, 0,
+            TokenType.CROSSOVER, 0,
             TokenType.SELECTION,  MathUtil.randBool() ? 1 : 0
+        );
+    }
+
+    private Map<TokenType, Integer> emptyAllowance() {
+        return Map.of(
+            TokenType.CREATING, 0,
+            TokenType.FITNESS, 0,
+            TokenType.MUTATION, 0,
+            TokenType.CROSSOVER, 0,
+            TokenType.SELECTION,  0
         );
     }
 }

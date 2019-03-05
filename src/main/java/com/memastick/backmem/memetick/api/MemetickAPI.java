@@ -14,5 +14,6 @@ public class MemetickAPI {
     private UUID id;
     private String nick;
     private long dna;
+    private boolean allowance;
 
 }
