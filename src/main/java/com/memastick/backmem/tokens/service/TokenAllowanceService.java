@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TOKEN;
+
 @Service
 public class TokenAllowanceService {
 
@@ -47,7 +49,7 @@ public class TokenAllowanceService {
         var wallet = tokenWalletService.getWallet(tokenWallet);
         var setter = tokenWalletService.setWallet();
 
-        allowance.forEach((type, count) -> wallet.merge(type, count, (a, b) -> a + b));
+        allowance.forEach((type, count) -> wallet.merge(type, count, (a, b) -> Math.min(a + b, MAX_TOKEN)));
         wallet.forEach((type, count) -> setter.get(type).accept(tokenWallet, count));
 
         tokenWalletRepository.save(tokenWallet);
@@ -65,8 +67,8 @@ public class TokenAllowanceService {
 
     private Map<TokenType, Integer> myAllowance(Memetick memetick) {
         return Map.of(
-                TokenType.CREATING, 1,
-                TokenType.SELECTION,  MathUtil.randBool() ? 1 : 0
+            TokenType.CREATING, 1,
+            TokenType.SELECTION,  MathUtil.randBool() ? 1 : 0
         );
     }
 }

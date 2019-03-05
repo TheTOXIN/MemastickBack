@@ -8,4 +8,6 @@ public class GlobalConstant {
 
     public static final LocalDate START_EVOLVE = LocalDate.of(2019, 1, 1);
 
+    public static final int MAX_TOKEN = 10;
+
 }

@@ -4,6 +4,7 @@ import com.memastick.backmem.errors.exception.TokenWalletException;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 
 
@@ -22,16 +24,19 @@ public class TokenWalletService {
     private final SecurityService securityService;
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
+    private final MemetickService memetickService;
 
     @Autowired
     public TokenWalletService(
         SecurityService securityService,
         MemetickInventoryRepository inventoryRepository,
-        TokenWalletRepository tokenWalletRepository
+        TokenWalletRepository tokenWalletRepository,
+        MemetickService memetickService
     ) {
         this.securityService = securityService;
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
+        this.memetickService = memetickService;
     }
 
     public void have(TokenType type) {
@@ -44,8 +49,9 @@ public class TokenWalletService {
         if (wallet.get(type) <= 0) throw new TokenWalletException();
     }
 
-    public TokenWalletAPI my() {
-        Memetick memetick = securityService.getCurrentMemetick();
+
+    public TokenWalletAPI read(UUID memetickId) {
+        Memetick memetick = memetickService.findById(memetickId);
         HashMap<TokenType, Integer> wallet = wallet(memetick);
 
         return new TokenWalletAPI(wallet);

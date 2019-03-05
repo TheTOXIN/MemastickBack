@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("token-wallets")
 public class TokenWalletController {
@@ -26,8 +28,8 @@ public class TokenWalletController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("my")
-    public TokenWalletAPI my() {
-        return tokenWalletService.my();
+    @GetMapping("memetick/{memetickId}")
+    public TokenWalletAPI read(@PathVariable("memetickId")UUID memetickId) {
+        return tokenWalletService.read(memetickId);
     }
 }

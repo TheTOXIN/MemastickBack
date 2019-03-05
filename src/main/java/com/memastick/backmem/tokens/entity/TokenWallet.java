@@ -1,6 +1,7 @@
 package com.memastick.backmem.tokens.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,23 +20,23 @@ import javax.validation.constraints.Max;
 @EqualsAndHashCode(callSuper = true)
 public class TokenWallet extends AbstractEntity {
 
-    @Max(10)
+    @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
     private Integer creating = 1;
 
-    @Max(10)
+    @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
     private Integer fitness = 1;
 
-    @Max(10)
+    @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
     private Integer mutation = 1;
 
-    @Max(10)
+    @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
     private Integer crossover = 1;
 
-    @Max(10)
+    @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
     private Integer selection = 1;
 
