@@ -19,7 +19,7 @@ public class EvolveSurvivalService implements Evolution {
     public void evolution(List<EvolveMeme> evolveMemes) {
         if (evolveMemes.isEmpty()) return;
 
-        evolveMemes.sort(Comparator.comparing(EvolveMeme::getPopulation));
+        evolveMemes.sort(Comparator.comparing(e -> e.getMeme().getChromosomes()));
 
         float avg = evolveMemes.get(evolveMemes.size() / 2).getChanceSurvive();
 
