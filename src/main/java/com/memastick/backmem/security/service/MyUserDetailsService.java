@@ -1,7 +1,7 @@
 package com.memastick.backmem.security.service;
 
-import com.memastick.backmem.person.entity.User;
-import com.memastick.backmem.person.repository.UserRepository;
+import com.memastick.backmem.user.entity.User;
+import com.memastick.backmem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

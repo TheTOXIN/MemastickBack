@@ -22,17 +22,17 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/hello").anonymous()
-            .antMatchers("/invite/registration").anonymous()
-            .antMatchers("/registration").anonymous()
-            .antMatchers("/password-reset/send").anonymous()
-            .antMatchers("/password-reset/take").anonymous()
-            .antMatchers("/memetick-avatars/download/**").anonymous()
-            .antMatchers("/**").permitAll()
-            .antMatchers("/migrate/**").hasAuthority(RoleType.ADMIN.name())
-            .antMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
-            .antMatchers("/invite/**").hasAnyAuthority(RoleType.ADMIN.name(), RoleType.USER.name())
-            .antMatchers("/**").authenticated();
+            .mvcMatchers("/migrate/**").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/next-evolve").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/send-allowance").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/memes/read/**").anonymous()
+            .mvcMatchers("/hello").anonymous()
+            .mvcMatchers("/memetick-avatars/download/**").anonymous()
+            .mvcMatchers("/invite/registration").anonymous()
+            .mvcMatchers("/registration").anonymous()
+            .mvcMatchers("/password-reset/send").anonymous()
+            .mvcMatchers("/password-reset/take").anonymous()
+            .mvcMatchers("/**").authenticated();
     }
-
 }

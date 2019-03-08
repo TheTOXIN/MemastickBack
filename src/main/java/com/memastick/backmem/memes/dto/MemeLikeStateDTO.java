@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemeLikeStateDTO {
 
-    private int likes;
-    private int chromosomes;
-
+    private long likes;
     private boolean myLike;
     private int myChromosomes;
 
