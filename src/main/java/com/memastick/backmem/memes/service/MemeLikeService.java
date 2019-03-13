@@ -6,7 +6,6 @@ import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
-import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
@@ -29,21 +28,18 @@ public class MemeLikeService {
     private final MemeLikeRepository memeLikeRepository;
     private final SecurityService securityService;
     private final MemeService memeService;
-    private final MemeRepository memeRepository;
 
     @Autowired
     public MemeLikeService(
         MemeLikeRepository memeLikeRepository,
         SecurityService securityService,
         MemetickService memetickService,
-        MemeService memeService,
-        MemeRepository memeRepository
+        MemeService memeService
     ) {
         this.memeLikeRepository = memeLikeRepository;
         this.securityService = securityService;
         this.memetickService = memetickService;
         this.memeService = memeService;
-        this.memeRepository = memeRepository;
     }
 
     public MemeLikeStateDTO readStateByMeme(Meme meme) {
