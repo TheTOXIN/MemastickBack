@@ -8,6 +8,7 @@ import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.translator.iface.Translator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Comparator;
@@ -18,12 +19,15 @@ import java.util.List;
 public class EvolveSurvivalService implements Evolution {
 
     private final MemeRepository memeRepository;
+    private final Translator translate;
 
     @Autowired
     public EvolveSurvivalService(
-        MemeRepository memeRepository
+        MemeRepository memeRepository,
+        Translator translate
     ) {
         this.memeRepository = memeRepository;
+        this.translate = translate;
     }
 
     @Override
@@ -31,8 +35,9 @@ public class EvolveSurvivalService implements Evolution {
         if (evolveMemes.isEmpty()) return;
 
         evolveMemes.sort(Comparator.comparing(e -> e.getMeme().getChromosomes()));
-
         float avg = evolveMemes.get(evolveMemes.size() / 2).getChanceSurvive();
+
+        translate.translate(evolveMemes.get(evolveMemes.size() - 1).getMeme());
 
         evolveMemes.forEach(e -> {
             Meme meme = e.getMeme();

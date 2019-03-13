@@ -34,7 +34,7 @@ public class EvolveBirthService implements Evolution {
             Long likes = memeLikeRepository.countByMemeIdAndIsLikeTrue(meme.getId()).orElse(0L);
 
             meme.setChromosomes(meme.getChromosomes() + (int) (likes * 10));
-            meme.getMemetick().setDna(meme.getMemetick().getDna() + MathUtil.rand(0, 100));
+            meme.getMemetick().setDna(meme.getMemetick().getDna() + MathUtil.rand(0, meme.getChromosomes()));
         });
 
         evolveMemes.sort(Comparator.comparing(e -> e.getMeme().getChromosomes()));
