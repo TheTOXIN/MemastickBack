@@ -1,5 +1,6 @@
 package com.memastick.backmem.translator.impl;
 
+import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.translator.iface.Translator;
 import com.memastick.backmem.translator.util.TranslatorUtil;
@@ -19,7 +20,7 @@ public class TelegramTranslator implements Translator {
 
     private final static Logger log = LoggerFactory.getLogger(TelegramTranslator.class);
 
-    private final static String TEMPLATE = "https://api.telegram.org/bot%s/sendPhoto?chat_id=%s";
+    private final static String TEMPLATE = "https://api.telegram.org/bot%s/sendPhoto?chat_id=%s&caption=%s";
 
     @Value("${api.telegram.bot}")
     private String token;
@@ -28,15 +29,20 @@ public class TelegramTranslator implements Translator {
     private String chat;
 
     private final RestTemplate rest;
+    private final EvolveMemeService evolveMemeService;
 
     @Autowired
-    public TelegramTranslator(RestTemplate rest) {
+    public TelegramTranslator(
+        RestTemplate rest,
+        EvolveMemeService evolveMemeService
+    ) {
         this.rest = rest;
+        this.evolveMemeService = evolveMemeService;
     }
 
     @Override
     public void translate(Meme meme) {
-        String api = String.format(TEMPLATE, token, chat);
+        String api = String.format(TEMPLATE, token, chat, prepareText(meme));
 
         Resource resource = TranslatorUtil.downloadImage(meme.getUrl());
         if (resource == null) return;
@@ -51,5 +57,14 @@ public class TelegramTranslator implements Translator {
         ResponseEntity<String> response = rest.exchange(api, HttpMethod.POST, requestEntity, String.class);
 
         log.info("Translate TELEGRAM meme: " + response.getBody() + " - " + response.getStatusCode());
+    }
+
+    private String prepareText(Meme meme) {
+        return new StringBuilder()
+            .append("МЕМ ДНЯ" + "\n")
+            .append("Эволюция №" + evolveMemeService.evolveDay() + "\n")
+            .append("Меметик - " + meme.getMemetick().getNick() + "\n")
+            .append("Хромосом:" + meme.getChromosomes() + "\n")
+            .toString();
     }
 }
