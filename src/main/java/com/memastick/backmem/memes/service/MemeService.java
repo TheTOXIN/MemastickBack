@@ -12,7 +12,6 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -101,9 +100,9 @@ public class MemeService {
         switch (filter) {
             case INDV: memes = memeRepository.findByType(MemeType.INDIVID, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
-            case LIKE: memes = memeLikeService.findLikeMemesByMemetick(memetick); break;
-            case DTHS: memes = memeRepository.findByType(MemeType.DEATH, pageable);break;
-            case EVLV: memes = memeRepository.findByType(MemeType.EVOLVE, pageable);break;
+            case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
+            case DTHS: memes = memeRepository.findByType(MemeType.DEATH, pageable); break;
+            case EVLV: memes = memeRepository.findByType(MemeType.EVOLVE, pageable); break;
         }
 
         return memes;

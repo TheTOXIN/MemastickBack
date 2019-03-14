@@ -28,6 +28,6 @@ public class Memetick extends AbstractEntity {
     private long dna = 0L;
 
     @Column(nullable = false)
-    private ZonedDateTime nickChanged = TimeConstant.START_OF_TIME;
+    private ZonedDateTime nickChanged = TimeConstant.START_TIME;
 
 }

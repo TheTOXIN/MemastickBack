@@ -10,9 +10,12 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,6 +63,8 @@ public class MemeLikeService {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
         memeLike.setLike(!memeLike.isLike());
 
+        if (memeLike.isLike()) memeLike.setLikeTime(LocalDateTime.now());
+
         memeLikeRepository.save(memeLike);
 
         int randDna = MathUtil.rand(0, 100);
@@ -91,12 +96,13 @@ public class MemeLikeService {
         memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));
     }
 
-    public List<Meme> findLikeMemesByMemetick(Memetick memetick) {
+    public List<Meme> findMemesByLikeFilter(Memetick memetick, Pageable pageable) {
+        PageRequest likePageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("likeTime"));
+
         return memeLikeRepository
-            .findByMemetickAndIsLikeTrue(memetick)
+            .findByMemetickAndIsLikeTrue(memetick, likePageable)
             .stream()
             .map(MemeLike::getMeme)
-            .sorted(Comparator.comparing(Meme::getCreating))
             .collect(Collectors.toList());
     }
 

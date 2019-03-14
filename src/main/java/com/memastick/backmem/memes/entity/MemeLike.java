@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -35,5 +36,8 @@ public class MemeLike extends AbstractEntity {
     @Column
     @Max(30)
     private int chromosome = 0;
+
+    @Column
+    private LocalDateTime likeTime;
 
 }
