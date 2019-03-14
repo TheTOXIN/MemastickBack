@@ -58,8 +58,6 @@ public class MemeLikeService {
     public void likeTrigger(UUID id) {
         Meme meme = memeService.findById(id);
 
-        if (MemeType.DEATH.equals(meme.getType())) return;
-
         MemeLike memeLike = findByMemeForCurrentUser(meme);
         memeLike.setLike(!memeLike.isLike());
 
@@ -97,7 +95,11 @@ public class MemeLikeService {
     }
 
     public List<Meme> findMemesByLikeFilter(Memetick memetick, Pageable pageable) {
-        PageRequest likePageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("likeTime"));
+        PageRequest likePageable = PageRequest.of(
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
+            Sort.by(Sort.Order.desc(("likeTime")))
+        );
 
         return memeLikeRepository
             .findByMemetickAndIsLikeTrue(memetick, likePageable)
