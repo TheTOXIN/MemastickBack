@@ -61,3 +61,6 @@ ALTER TABLE memeticks DROP COLUMN meme_created;
 --AFTER
 --RUN MIGRATE CHROMOSOME
 INSERT INTO evolve_memes SELECT uuid_generate_v4(), 100, 0, null, id FROM memes;
+
+--==[0.2.1]==--
+UPDATE meme_likes SET like_time = '1970-01-01 00:00:00.000000' WHERE like_time IS NULL;

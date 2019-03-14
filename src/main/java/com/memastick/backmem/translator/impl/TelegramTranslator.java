@@ -61,10 +61,10 @@ public class TelegramTranslator implements Translator {
 
     private String prepareText(Meme meme) {
         return new StringBuilder()
-            .append("МЕМ ДНЯ" + "\n")
-            .append("Эволюция №" + evolveMemeService.evolveDay() + "\n")
-            .append("Меметик - " + meme.getMemetick().getNick() + "\n")
-            .append("Хромосом:" + meme.getChromosomes() + "\n")
+            .append("МЕМ ДНЯ ❗️" + "\n" )
+            .append("\uD83C\uDF0E Эволюция №" + evolveMemeService.evolveDay() + "\n")
+            .append("\uD83D\uDE0E Меметик - " + meme.getMemetick().getNick() + "\n")
+            .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
             .toString();
     }
 }

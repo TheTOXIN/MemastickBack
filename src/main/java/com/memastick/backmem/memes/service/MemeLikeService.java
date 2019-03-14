@@ -6,14 +6,16 @@ import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
-import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,21 +31,18 @@ public class MemeLikeService {
     private final MemeLikeRepository memeLikeRepository;
     private final SecurityService securityService;
     private final MemeService memeService;
-    private final MemeRepository memeRepository;
 
     @Autowired
     public MemeLikeService(
         MemeLikeRepository memeLikeRepository,
         SecurityService securityService,
         MemetickService memetickService,
-        MemeService memeService,
-        MemeRepository memeRepository
+        MemeService memeService
     ) {
         this.memeLikeRepository = memeLikeRepository;
         this.securityService = securityService;
         this.memetickService = memetickService;
         this.memeService = memeService;
-        this.memeRepository = memeRepository;
     }
 
     public MemeLikeStateDTO readStateByMeme(Meme meme) {
@@ -59,10 +58,10 @@ public class MemeLikeService {
     public void likeTrigger(UUID id) {
         Meme meme = memeService.findById(id);
 
-        if (MemeType.DEATH.equals(meme.getType())) return;
-
         MemeLike memeLike = findByMemeForCurrentUser(meme);
         memeLike.setLike(!memeLike.isLike());
+
+        if (memeLike.isLike()) memeLike.setLikeTime(LocalDateTime.now());
 
         memeLikeRepository.save(memeLike);
 
@@ -95,12 +94,17 @@ public class MemeLikeService {
         memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));
     }
 
-    public List<Meme> findLikeMemesByMemetick(Memetick memetick) {
+    public List<Meme> findMemesByLikeFilter(Memetick memetick, Pageable pageable) {
+        PageRequest likePageable = PageRequest.of(
+            pageable.getPageNumber(),
+            pageable.getPageSize(),
+            Sort.by(Sort.Order.desc(("likeTime")))
+        );
+
         return memeLikeRepository
-            .findByMemetickAndIsLikeTrue(memetick)
+            .findByMemetickAndIsLikeTrue(memetick, likePageable)
             .stream()
             .map(MemeLike::getMeme)
-            .sorted(Comparator.comparing(Meme::getCreating))
             .collect(Collectors.toList());
     }
 

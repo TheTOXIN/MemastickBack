@@ -2,6 +2,7 @@ package com.memastick.backmem.security.config;
 
 import com.memastick.backmem.security.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,13 +26,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private static final String SCOPE_WRITE = "write";
     private static final String SCOPE_TRUST = "trust";
 
-    private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 86400;
-    private static final int REFRESH_TOKEN_VALIDITY_SECONDS = ACCESS_TOKEN_VALIDITY_SECONDS * 7;
-
     private final PasswordEncoder passwordEncoder;
     private final TokenStore tokenStore;
     private final MyUserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
+
+    @Value("${token.access.time}")
+    private int accessTime;
+
+    @Value("${token.refresh.time}")
+    private int refreshTime;
 
     @Autowired
     public AuthorizationServerConfig(
@@ -53,8 +57,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             .secret(passwordEncoder.encode(CLIENT_SECRET))
             .authorizedGrantTypes(GRANT_TYPE_PASSWORD, REFRESH_TOKEN)
             .scopes(SCOPE_READ, SCOPE_WRITE, SCOPE_TRUST)
-            .accessTokenValiditySeconds(ACCESS_TOKEN_VALIDITY_SECONDS)
-            .refreshTokenValiditySeconds(REFRESH_TOKEN_VALIDITY_SECONDS);
+            .accessTokenValiditySeconds(accessTime)
+            .refreshTokenValiditySeconds(refreshTime);
     }
 
     @Override
