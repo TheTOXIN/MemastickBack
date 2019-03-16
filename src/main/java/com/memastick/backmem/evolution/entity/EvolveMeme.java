@@ -19,7 +19,7 @@ import javax.validation.constraints.Max;
 @EqualsAndHashCode(callSuper = true)
 public class EvolveMeme extends AbstractEntity {
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, unique = true)
     private Meme meme;
 
@@ -30,9 +30,12 @@ public class EvolveMeme extends AbstractEntity {
     @Column(nullable = false)
     private long population;
 
-    @Column
     @Max(100)
-    private Float chanceSurvive;
+    @Column(nullable = false)
+    private Float chanceSurvive = 0f;
+
+    @Column(nullable = false)
+    private boolean chanceIncrease = false;
 
     public EvolveMeme(Meme meme, EvolveStep step, long population) {
         this.meme = meme;

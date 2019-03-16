@@ -18,32 +18,18 @@ import java.util.List;
 @Evolve(step = EvolveStep.SURVIVAL)
 public class EvolveSurvivalService implements Evolution {
 
-    private final MemeRepository memeRepository;
-    private final Translator translate;
-
-    @Autowired
-    public EvolveSurvivalService(
-        MemeRepository memeRepository,
-        Translator translate
-    ) {
-        this.memeRepository = memeRepository;
-        this.translate = translate;
-    }
-
     @Override
     public void evolution(List<EvolveMeme> evolveMemes) {
         if (evolveMemes.isEmpty()) return;
 
-        evolveMemes.sort(Comparator.comparing(e -> e.getMeme().getChromosomes()));
+        evolveMemes.sort(Comparator.comparing(EvolveMeme::getChanceSurvive));
         float avg = evolveMemes.get(evolveMemes.size() / 2).getChanceSurvive();
-
-        translate.translate(evolveMemes.get(evolveMemes.size() - 1).getMeme());
 
         evolveMemes.forEach(e -> {
             Meme meme = e.getMeme();
 
             int dnaBonus = MathUtil.rand(0, 100);
-            boolean isSurvive = e.getChanceSurvive() >= avg;
+            boolean isSurvive = e.getChanceSurvive() >= avg || e.isChanceIncrease();
 
             if (isSurvive) {
                 meme.setType(MemeType.INDIVID);
@@ -53,10 +39,7 @@ public class EvolveSurvivalService implements Evolution {
                 dnaBonus *= -1;
             }
 
-            e.setChanceSurvive(null);
             meme.getMemetick().setDna(meme.getMemetick().getDna() + dnaBonus);
-
-            memeRepository.save(meme);
         });
     }
 }

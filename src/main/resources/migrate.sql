@@ -64,3 +64,12 @@ INSERT INTO evolve_memes SELECT uuid_generate_v4(), 100, 0, null, id FROM memes;
 
 --==[0.2.1]==--
 UPDATE meme_likes SET like_time = '1970-01-01 00:00:00.000000' WHERE like_time IS NULL;
+
+--==[0.2.2]==--
+UPDATE evolve_memes em SET chance_survive = 50 WHERE em.chance_survive IS NULL;
+
+ALTER TABLE evolve_memes ALTER COLUMN chance_increase SET NOT NULL;
+ALTER TABLE evolve_memes ALTER COLUMN chance_survive SET NOT NULL;
+
+ALTER TABLE evolve_memes ALTER COLUMN chance_increase SET DEFAULT false;
+ALTER TABLE evolve_memes ALTER COLUMN chance_survive SET DEFAULT 0;
