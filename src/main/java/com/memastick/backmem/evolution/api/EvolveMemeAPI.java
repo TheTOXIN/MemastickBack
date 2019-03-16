@@ -13,9 +13,12 @@ import java.util.UUID;
 @AllArgsConstructor
 public class EvolveMemeAPI {
 
-    private EvolveStep step;
-    private long population;
-    private float chanceSurvive;
     private UUID memeId;
+    private EvolveStep step;
+
+    private long population;
+
+    private float chanceSurvive;
+    private boolean chanceIncrease;
 
 }

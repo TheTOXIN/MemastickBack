@@ -26,7 +26,7 @@ public class Meme extends AbstractEntity {
     @Column(length = 512, nullable = false, unique = true)
     private String url;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Memetick memetick;
 

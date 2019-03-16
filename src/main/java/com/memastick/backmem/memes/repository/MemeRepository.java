@@ -29,4 +29,12 @@ public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
     List<Meme> findByType(MemeType individ, Pageable pageable);
 
     List<Meme> findByMemetick(Memetick currentMemetick, Pageable pageable);
+
+    @Query(
+        nativeQuery = true,
+        value = "SELECT * FROM memes m " +
+            "INNER JOIN evolve_memes em ON m.id = em.meme_id " +
+            "WHERE em.population = :population ORDER BY m.chromosomes DESC LIMIT 1"
+    )
+    Meme findSuperMeme(@Param("population") long population);
 }
