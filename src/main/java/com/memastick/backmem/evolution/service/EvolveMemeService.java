@@ -76,7 +76,7 @@ public class EvolveMemeService {
             meme.getId(),
             evolveMeme.getStep(),
             evolveMeme.getPopulation(),
-            evolveMeme.getChanceSurvive(),
+            evolveMeme.getChanceSurvive().intValue(),
             evolveMeme.isChanceIncrease()
         );
     }

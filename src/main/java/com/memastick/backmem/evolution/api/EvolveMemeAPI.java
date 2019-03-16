@@ -18,7 +18,7 @@ public class EvolveMemeAPI {
 
     private long population;
 
-    private float chanceSurvive;
+    private int chanceSurvive;
     private boolean chanceIncrease;
 
 }
