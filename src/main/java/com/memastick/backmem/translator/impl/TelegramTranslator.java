@@ -1,6 +1,6 @@
 package com.memastick.backmem.translator.impl;
 
-import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.translator.iface.Translator;
 import com.memastick.backmem.translator.util.TranslatorUtil;
@@ -29,15 +29,15 @@ public class TelegramTranslator implements Translator {
     private String chat;
 
     private final RestTemplate rest;
-    private final EvolveMemeService evolveMemeService;
+    private final EvolveMemeRepository evolveMemeRepository;
 
     @Autowired
     public TelegramTranslator(
         RestTemplate rest,
-        EvolveMemeService evolveMemeService
+        EvolveMemeRepository evolveMemeRepository
     ) {
         this.rest = rest;
-        this.evolveMemeService = evolveMemeService;
+        this.evolveMemeRepository = evolveMemeRepository;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class TelegramTranslator implements Translator {
     private String prepareText(Meme meme) {
         return new StringBuilder()
             .append("МЕМ ДНЯ ❗️" + "\n" )
-            .append("\uD83C\uDF0E Эволюция №" + evolveMemeService.evolveDay() + "\n")
+            .append("\uD83C\uDF0E Эволюция №" + evolveMemeRepository.findByMeme(meme).getPopulation() + "\n")
             .append("\uD83D\uDE0E Меметик - " + meme.getMemetick().getNick() + "\n")
             .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
             .toString();
