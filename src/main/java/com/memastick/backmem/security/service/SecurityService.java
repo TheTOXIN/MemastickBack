@@ -3,6 +3,7 @@ package com.memastick.backmem.security.service;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class SecurityService {
 
     @Autowired
     public SecurityService(
-        UserService userService
+        @Lazy UserService userService
     ) {
         this.userService = userService;
     }
@@ -31,5 +32,4 @@ public class SecurityService {
         UserDetails userDetails = getCurrentUser();
         return userService.findByLogin(userDetails.getUsername()).getMemetick();
     }
-
 }

@@ -2,9 +2,9 @@ package com.memastick.backmem.user.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.entity.MemetickAvatar;
 import com.memastick.backmem.memetick.repository.MemetickAvatarRepository;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
+import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.RoleType;
@@ -26,20 +26,23 @@ public class UserService {
     private final MemetickRepository memetickRepository;
     private final MemetickAvatarRepository memetickAvatarRepository;
     private final MemetickInventoryService inventoryService;
+    private final MemetickAvatarService avatarService;
 
     @Autowired
     public UserService(
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder,
-        MemetickRepository memetickRepository,
-        MemetickAvatarRepository memetickAvatarRepository,
-        MemetickInventoryService inventoryService
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            MemetickRepository memetickRepository,
+            MemetickAvatarRepository memetickAvatarRepository,
+            MemetickInventoryService inventoryService,
+            MemetickAvatarService avatarService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.memetickRepository = memetickRepository;
         this.memetickAvatarRepository = memetickAvatarRepository;
         this.inventoryService = inventoryService;
+        this.avatarService = avatarService;
     }
 
     public User findAdmin() {
@@ -58,12 +61,9 @@ public class UserService {
         memetick.setNick(inviteCode.getNick());
         memetickRepository.save(memetick);
 
-        MemetickAvatar avatar = new MemetickAvatar();
-        avatar.setMemetick(memetick);
-        memetickAvatarRepository.save(avatar);
-
         user.setMemetick(memetick);
 
+        avatarService.generateAvatar(memetick);
         inventoryService.generateInventory(memetick);
 
         return userRepository.save(user);
@@ -80,5 +80,4 @@ public class UserService {
         if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
         return byLogin.get();
     }
-
 }

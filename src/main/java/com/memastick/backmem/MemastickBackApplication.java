@@ -21,5 +21,4 @@ public class MemastickBackApplication {
 	public void initConstants(ApplicationReadyEvent event) {
 		event.getApplicationContext().getBean(Initializer.class).init();
 	}
-
 }
