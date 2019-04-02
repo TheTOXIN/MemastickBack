@@ -7,9 +7,6 @@ import com.memastick.backmem.evolution.interfaces.Evolution;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
-import com.memastick.backmem.memes.repository.MemeRepository;
-import com.memastick.backmem.translator.iface.Translator;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,14 +19,14 @@ public class EvolveSurvivalService implements Evolution {
     public void evolution(List<EvolveMeme> evolveMemes) {
         if (evolveMemes.isEmpty()) return;
 
-        evolveMemes.sort(Comparator.comparing(EvolveMeme::getChanceSurvive));
-        float avg = evolveMemes.get(evolveMemes.size() / 2).getChanceSurvive();
+        evolveMemes.sort(Comparator.comparing(EvolveMeme::getChance));
+        float avg = evolveMemes.get(evolveMemes.size() / 2).getChance();
 
         evolveMemes.forEach(e -> {
             Meme meme = e.getMeme();
 
             int dnaBonus = MathUtil.rand(0, 100);
-            boolean isSurvive = e.getChanceSurvive() >= avg || e.isChanceIncrease();
+            boolean isSurvive = e.getChance() >= avg || e.isImmunity();
 
             if (isSurvive) {
                 meme.setType(MemeType.INDIVID);

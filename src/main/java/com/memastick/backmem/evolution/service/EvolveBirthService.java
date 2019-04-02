@@ -49,7 +49,7 @@ public class EvolveBirthService implements Evolution {
             float chance = (meme.getChromosomes() - min) * onePercent;
 
             if (max == min) chance = 100;
-            e.setChanceSurvive(chance);
+            e.setChance(chance);
         });
     }
 }

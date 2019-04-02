@@ -76,8 +76,8 @@ public class EvolveMemeService {
             meme.getId(),
             evolveMeme.getStep(),
             evolveMeme.getPopulation(),
-            evolveMeme.getChanceSurvive().intValue(),
-            evolveMeme.isChanceIncrease()
+            evolveMeme.getChance().intValue(),
+            evolveMeme.isImmunity()
         );
     }
 
@@ -89,9 +89,9 @@ public class EvolveMemeService {
         EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
 
         if (!EvolveStep.SURVIVAL.equals(evolveMeme.getStep())) return;
-        if (evolveMeme.isChanceIncrease())return;
+        if (evolveMeme.isImmunity())return;
 
-        evolveMeme.setChanceIncrease(true);
+        evolveMeme.setImmunity(true);
         evolveMemeRepository.save(evolveMeme);
 
         tokenWalletService.take(TokenType.SELECTION, memetick);

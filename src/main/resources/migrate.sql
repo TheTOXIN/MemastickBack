@@ -76,3 +76,7 @@ ALTER TABLE evolve_memes ALTER COLUMN chance_survive SET NOT NULL;
 
 ALTER TABLE evolve_memes ALTER COLUMN chance_increase SET DEFAULT false;
 ALTER TABLE evolve_memes ALTER COLUMN chance_survive SET DEFAULT 0;
+
+--==[0.3]=--
+ALTER TABLE evolve_memes RENAME COLUMN chance_increase TO immunity;
+ALTER TABLE evolve_memes RENAME COLUMN chance_survive TO chance;

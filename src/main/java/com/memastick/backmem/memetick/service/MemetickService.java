@@ -62,6 +62,8 @@ public class MemetickService {
         if (memetick.getNickChanged().plusWeeks(1).isAfter(ZonedDateTime.now()))
             throw new SettingException(ErrorCode.EXPIRE_NICK);
 
+        request.setNick(request.getNick().replaceAll("\\s", ""));
+
         memetick.setNick(request.getNick());
         memetick.setNickChanged(ZonedDateTime.now());
 
