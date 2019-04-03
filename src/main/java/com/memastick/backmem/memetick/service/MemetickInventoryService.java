@@ -1,32 +1,35 @@
 package com.memastick.backmem.memetick.service;
 
+import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
-import com.memastick.backmem.security.service.SecurityService;
-import com.memastick.backmem.tokens.api.TokenWalletAPI;
-import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.entity.TokenWallet;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
+import com.memastick.backmem.tokens.service.TokenAllowanceService;
 import com.memastick.backmem.tokens.service.TokenWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 public class MemetickInventoryService {
 
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
+    private final TokenWalletService tokenWalletService;
+    private final TokenAllowanceService tokenAllowanceService;
 
     @Autowired
     public MemetickInventoryService(
-            MemetickInventoryRepository inventoryRepository,
-            TokenWalletRepository tokenWalletRepository
+        MemetickInventoryRepository inventoryRepository,
+        TokenWalletRepository tokenWalletRepository,
+        TokenWalletService tokenWalletService,
+        TokenAllowanceService tokenAllowanceService
     ) {
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
+        this.tokenWalletService = tokenWalletService;
+        this.tokenAllowanceService = tokenAllowanceService;
     }
 
     public void generateInventory(Memetick memetick) {
@@ -39,5 +42,12 @@ public class MemetickInventoryService {
 
         tokenWalletRepository.save(tokenWallet);
         inventoryRepository.save(inventory);
+    }
+
+    public MemetickInventoryAPI readAll() {
+        return new MemetickInventoryAPI(
+            tokenWalletService.read().getWallet(),
+            tokenAllowanceService.have()
+        );
     }
 }

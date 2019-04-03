@@ -49,11 +49,18 @@ public class TokenWalletService {
         if (wallet.get(type) <= 0) throw new TokenWalletException();
     }
 
+    public TokenWalletAPI read() {
+        Memetick currentMemetick = securityService.getCurrentMemetick();
+        return read(currentMemetick);
+    }
 
     public TokenWalletAPI read(UUID memetickId) {
         Memetick memetick = memetickService.findById(memetickId);
-        HashMap<TokenType, Integer> wallet = wallet(memetick);
+        return read(memetick);
+    }
 
+    public TokenWalletAPI read(Memetick memetick) {
+        HashMap<TokenType, Integer> wallet = wallet(memetick);
         return new TokenWalletAPI(wallet);
     }
 

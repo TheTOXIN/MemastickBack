@@ -24,5 +24,4 @@ public class ValidationUtil {
     public static boolean checkNick(String nick) {
         return nick.length() >= MIN_LEN_NCK && nick.length() <= MAX_LEN_NCK;
     }
-
 }
