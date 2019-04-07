@@ -10,6 +10,7 @@ import com.memastick.backmem.memetick.api.MemetickAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
+import com.memastick.backmem.notification.service.NotificationService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -29,16 +30,19 @@ public class MemetickService {
     private final MemetickRepository memetickRepository;
     private final SecurityService securityService;
     private final MemetickMapper memetickMapper;
+    private final NotificationService notificationService;
 
     @Autowired
     public MemetickService(
         MemetickRepository memetickRepository,
         SecurityService securityService,
-        MemetickMapper memetickMapper
+        MemetickMapper memetickMapper,
+        NotificationService notificationService
     ) {
         this.memetickRepository = memetickRepository;
         this.securityService = securityService;
         this.memetickMapper = memetickMapper;
+        this.notificationService = notificationService;
     }
 
     public MemetickAPI viewByMe() {
@@ -50,6 +54,8 @@ public class MemetickService {
     }
 
     public void addDna(Memetick memetick, int dna) {
+//        if (dna == 0) return; //TODO correct dna add
+        notificationService.sendNotifyDNA(dna);
         memetick.setDna(memetick.getDna() + dna);
         memetickRepository.save(memetick);
     }
