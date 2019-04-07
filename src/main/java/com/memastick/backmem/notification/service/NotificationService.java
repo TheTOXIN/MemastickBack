@@ -31,6 +31,7 @@ public class NotificationService {
         cache.put(securityService.getCurrentUser().getUsername(), sessionId);
     }
 
+    //TODO make async
     public void sendNotifyDNA(int dna) {
         String username = securityService.getCurrentUser().getUsername();
         String sessionId = cache.get(username);
@@ -44,6 +45,8 @@ public class NotificationService {
     }
 
     private void sendNotify(NotificationDTO dto, String sessionId) {
+        if (sessionId == null) return;
+
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
 
         headerAccessor.setSessionId(sessionId);
