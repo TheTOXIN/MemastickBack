@@ -2,8 +2,10 @@ package com.memastick.backmem.memetick.controller;
 
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.service.MemetickService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +35,12 @@ public class MemetickController {
         return memetickService.viewById(id);
     }
 
-    @GetMapping("/rating")
-    public List<MemetickAPI> rating() {
-        return memetickService.rating();
+    @GetMapping("/rating/{filter}")
+    public List<MemetickAPI> rating(
+        @PathVariable("filter") MemetickRatingFilter filter,
+        Pageable pageable
+    ) {
+        return memetickService.rating(filter, pageable);
     }
 
     @PutMapping("/nick/change")

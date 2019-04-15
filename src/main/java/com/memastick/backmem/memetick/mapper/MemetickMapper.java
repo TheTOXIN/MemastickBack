@@ -18,8 +18,15 @@ public class MemetickMapper {
     public MemetickAPI toMemetickAPI(Memetick memetick) {
         return new MemetickAPI(
             memetick.getId(),
+            memetick.getNick()
+        );
+    }
+
+    public MemetickAPI toMemetickAPI(Memetick memetick, long rate) {
+        return new MemetickAPI(
+            memetick.getId(),
             memetick.getNick(),
-            memetick.getDna()
+            rate
         );
     }
 }

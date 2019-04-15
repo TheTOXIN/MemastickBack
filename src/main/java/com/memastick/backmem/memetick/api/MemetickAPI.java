@@ -13,6 +13,10 @@ public class MemetickAPI {
 
     private UUID id;
     private String nick;
-    private long dna;
+    private long rate;
 
+    public MemetickAPI(UUID id, String nick) {
+        this.id = id;
+        this.nick = nick;
+    }
 }

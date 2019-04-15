@@ -5,22 +5,23 @@ import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.SettingException;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
+import com.memastick.backmem.memes.constant.MemeType;
+import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.notification.service.NotificationService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -31,18 +32,21 @@ public class MemetickService {
     private final SecurityService securityService;
     private final MemetickMapper memetickMapper;
     private final NotificationService notificationService;
+    private final MemeRepository memeRepository;
 
     @Autowired
     public MemetickService(
         MemetickRepository memetickRepository,
         SecurityService securityService,
         MemetickMapper memetickMapper,
-        NotificationService notificationService
+        NotificationService notificationService,
+        MemeRepository memeRepository
     ) {
         this.memetickRepository = memetickRepository;
         this.securityService = securityService;
         this.memetickMapper = memetickMapper;
         this.notificationService = notificationService;
+        this.memeRepository = memeRepository;
     }
 
     public MemetickAPI viewByMe() {
@@ -76,10 +80,17 @@ public class MemetickService {
         memetickRepository.save(memetick);
     }
 
-    public List<MemetickAPI> rating() {
-        return memetickRepository.findAll(PageRequest.of(0, 10, Sort.by("dna").descending()))
+    public List<MemetickAPI> rating(MemetickRatingFilter filter, Pageable pageable) {
+        HashMap<MemetickRatingFilter, Function<Memetick, Long>> mapFilter = new HashMap<>() {{
+            put(MemetickRatingFilter.DNA, Memetick::getDna);
+            put(MemetickRatingFilter.IND, m -> memeRepository.countByMemetickIdAndType(m.getId(), MemeType.INDIVID).orElse(0L));
+            put(MemetickRatingFilter.CHR, m -> memeRepository.sumChromosomeByMemetickId(m.getId()).orElse(0L));
+        }};
+
+        return memetickRepository.findAll(pageable)
             .stream()
-            .map(memetickMapper::toMemetickAPI)
+            .sorted(Comparator.comparing(mapFilter.get(filter)).reversed())
+            .map(m -> memetickMapper.toMemetickAPI(m, mapFilter.get(filter).apply(m)))
             .collect(Collectors.toList());
     }
 
