@@ -30,7 +30,7 @@ public class EvolveMeme extends AbstractEntity {
     @Column(nullable = false)
     private long population;
 
-    @Max(100)
+    @Max(101)
     @Column(nullable = false)
     private Float chance = 0f;
 
