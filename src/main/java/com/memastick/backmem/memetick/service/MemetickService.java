@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.service;
 
+import com.memastick.backmem.base.entity.AbstractEntity;
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.SettingException;
@@ -9,21 +10,21 @@ import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.api.MemetickRatingAPI;
 import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
+import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.notification.service.NotificationService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 
 @Service
 public class MemetickService {
@@ -80,18 +81,39 @@ public class MemetickService {
         memetickRepository.save(memetick);
     }
 
-    public List<MemetickAPI> rating(MemetickRatingFilter filter, Pageable pageable) {
+    public MemetickRatingAPI rating(MemetickRatingFilter filter) {
         HashMap<MemetickRatingFilter, Function<Memetick, Long>> mapFilter = new HashMap<>() {{
             put(MemetickRatingFilter.DNA, Memetick::getDna);
             put(MemetickRatingFilter.IND, m -> memeRepository.countByMemetickIdAndType(m.getId(), MemeType.INDIVID).orElse(0L));
             put(MemetickRatingFilter.CHR, m -> memeRepository.sumChromosomeByMemetickId(m.getId()).orElse(0L));
         }};
 
-        return memetickRepository.findAll(pageable)
+        List<Memetick> memeticks = memetickRepository.findAll();
+
+        Map<UUID, Long> rateMap = memeticks
             .stream()
-            .sorted(Comparator.comparing(mapFilter.get(filter)).reversed())
-            .map(m -> memetickMapper.toMemetickAPI(m, mapFilter.get(filter).apply(m)))
+            .collect(Collectors.toMap(Memetick::getId, m -> mapFilter.get(filter).apply(m)));
+
+        memeticks.sort(Comparator.comparing(m -> 0 - rateMap.get(m.getId())));
+
+        Map<UUID, Integer> posMap = memeticks
+            .stream()
+            .collect(Collectors.toMap(AbstractEntity::getId, memeticks::indexOf));
+
+        Memetick memetick = securityService.getCurrentMemetick();
+        MemetickRatingDTO me = memetickMapper.toRatingDTO(
+            memetick,
+            rateMap.get(memetick.getId()),
+            posMap.get(memetick.getId())
+        );
+
+        List<MemetickRatingDTO> top = memeticks
+            .stream()
+            .limit(10)
+            .map(m -> memetickMapper.toRatingDTO(m, rateMap.get(m.getId()), posMap.get(m.getId())))
             .collect(Collectors.toList());
+
+        return new MemetickRatingAPI(top, me);
     }
 
     public Memetick findById(UUID id) {
