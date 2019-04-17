@@ -4,10 +4,10 @@ import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
+import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeFilter;
 import com.memastick.backmem.memes.constant.MemeType;
-import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
@@ -81,9 +81,14 @@ public class MemeService {
             .collect(Collectors.toList());
     }
 
-    public MemeAPI read(UUID memeId) {
+    public MemePageAPI page(UUID memeId) {
         Meme meme = findById(memeId);
-        return memeMapper.toMemeAPI(meme);
+        return  memeMapper.toPageAPI(meme);
+    }
+
+    public MemeImgAPI readImg(UUID memeId) {
+        Meme meme = findById(memeId);
+        return new MemeImgAPI(meme.getUrl());
     }
 
     public Meme findById(UUID id) {
