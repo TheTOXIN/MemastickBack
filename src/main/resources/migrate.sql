@@ -78,5 +78,16 @@ ALTER TABLE evolve_memes ALTER COLUMN chance_increase SET DEFAULT false;
 ALTER TABLE evolve_memes ALTER COLUMN chance_survive SET DEFAULT 0;
 
 --==[0.3]=--
+
+-- BEFORE
 ALTER TABLE evolve_memes RENAME COLUMN chance_increase TO immunity;
 ALTER TABLE evolve_memes RENAME COLUMN chance_survive TO chance;
+
+ALTER TABLE memes ADD COLUMN adaptation integer;
+UPDATE memes SET adaptation = 0;
+ALTER TABLE  memes ALTER COLUMN adaptation SET NOT NULL;
+
+ALTER TABLE token_wallets RENAME creating TO tube;
+ALTER TABLE token_wallets RENAME fitness TO scope;
+ALTER TABLE token_wallets RENAME mutation TO mutagen;
+ALTER TABLE token_wallets RENAME selection TO antibiotic;

@@ -25,7 +25,7 @@ public class EvolveMeme extends AbstractEntity {
 
     @Column
     @Enumerated(EnumType.ORDINAL)
-    private EvolveStep step;
+    private EvolveStep step; //TODO optimize
 
     @Column(nullable = false)
     private long population;

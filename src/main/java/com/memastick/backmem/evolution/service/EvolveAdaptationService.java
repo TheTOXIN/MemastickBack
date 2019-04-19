@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Comparator;
 import java.util.List;
 
-@Evolve(step = EvolveStep.BIRTH)
-public class EvolveBirthService implements Evolution {
+@Evolve(step = EvolveStep.ADAPTATION)
+public class EvolveAdaptationService implements Evolution {
 
     private final MemeLikeRepository memeLikeRepository;
 
     @Autowired
-    public EvolveBirthService(
+    public EvolveAdaptationService(
         MemeLikeRepository memeLikeRepository
     ) {
         this.memeLikeRepository = memeLikeRepository;

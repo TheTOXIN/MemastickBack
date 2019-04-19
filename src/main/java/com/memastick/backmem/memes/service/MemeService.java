@@ -40,6 +40,7 @@ public class MemeService {
     private final TokenWalletService tokenWalletService;
     private final MemeMapper memeMapper;
     private final MemeLikeService memeLikeService;
+    private final MemePoolService memePoolService;
 
     @Autowired
     public MemeService(
@@ -49,7 +50,8 @@ public class MemeService {
         @Lazy EvolveMemeService evolveMemeService,
         TokenWalletService tokenWalletService,
         MemeMapper memeMapper,
-        @Lazy MemeLikeService memeLikeService
+        @Lazy MemeLikeService memeLikeService,
+        MemePoolService memePoolService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
@@ -58,18 +60,19 @@ public class MemeService {
         this.tokenWalletService = tokenWalletService;
         this.memeMapper = memeMapper;
         this.memeLikeService = memeLikeService;
+        this.memePoolService = memePoolService;
     }
 
     @Transactional
     public void create(MemeCreateAPI request) {
         Memetick memetick = securityService.getCurrentMemetick();
-        tokenWalletService.have(TokenType.CREATING, memetick);
+        tokenWalletService.have(TokenType.TUBE, memetick);
 
         Meme meme = makeMeme(request, memetick);
         memeRepository.save(meme);
         evolveMemeService.startEvolve(meme);
 
-        tokenWalletService.take(TokenType.CREATING, memetick);
+        tokenWalletService.take(TokenType.TUBE, memetick);
         memetickService.addDna(memetick, MathUtil.rand(0, 100));
     }
 
@@ -102,12 +105,13 @@ public class MemeService {
 
         Memetick memetick = securityService.getCurrentMemetick();
 
-        switch (filter) {
+        switch (filter) { //TODO default pageable and sorting
             case INDV: memes = memeRepository.findByType(MemeType.INDIVID, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
             case DTHS: memes = memeRepository.findByType(MemeType.DEATH, pageable); break;
             case EVLV: memes = memeRepository.findByType(MemeType.EVOLVE, pageable); break;
+            case POOL: memes = memePoolService.generate(pageable); break;
         }
 
         return memes;
@@ -120,6 +124,7 @@ public class MemeService {
             memetick,
             ZonedDateTime.now(),
             MemeType.EVOLVE,
+            0,
             0
         );
     }

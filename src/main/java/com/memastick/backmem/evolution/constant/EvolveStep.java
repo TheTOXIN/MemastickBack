@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public enum EvolveStep {
 
-    BIRTH(0),
+    ADAPTATION(0),
     SURVIVAL(1);
 
     @Getter

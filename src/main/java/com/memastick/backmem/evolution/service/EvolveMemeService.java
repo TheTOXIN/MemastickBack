@@ -7,10 +7,6 @@ import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeService;
-import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.security.service.SecurityService;
-import com.memastick.backmem.tokens.constant.TokenType;
-import com.memastick.backmem.tokens.service.TokenWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,26 +22,20 @@ public class EvolveMemeService {
 
     private final EvolveMemeRepository evolveMemeRepository;
     private final MemeService memeService;
-    private final TokenWalletService tokenWalletService;
-    private final SecurityService securityService;
 
     @Autowired
     public EvolveMemeService(
         EvolveMemeRepository evolveMemeRepository,
-        MemeService memeService,
-        TokenWalletService tokenWalletService,
-        SecurityService securityService
+        MemeService memeService
     ) {
         this.evolveMemeRepository = evolveMemeRepository;
         this.memeService = memeService;
-        this.tokenWalletService = tokenWalletService;
-        this.securityService = securityService;
     }
 
     public void startEvolve(Meme meme) {
         evolveMemeRepository.save(new EvolveMeme(
             meme,
-            EvolveStep.BIRTH,
+            EvolveStep.ADAPTATION,
             evolveDay()
         ));
     }
@@ -74,26 +64,11 @@ public class EvolveMemeService {
 
         return new EvolveMemeAPI(
             meme.getId(),
+            meme.getAdaptation(),
             evolveMeme.getStep(),
             evolveMeme.getPopulation(),
             evolveMeme.getChance().intValue(),
             evolveMeme.isImmunity()
         );
-    }
-
-    public void chance(UUID memeId) {
-        Meme meme = memeService.findById(memeId);
-        Memetick memetick = securityService.getCurrentMemetick();
-
-        tokenWalletService.have(TokenType.SELECTION, memetick);
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
-
-        if (!EvolveStep.SURVIVAL.equals(evolveMeme.getStep())) return;
-        if (evolveMeme.isImmunity())return;
-
-        evolveMeme.setImmunity(true);
-        evolveMemeRepository.save(evolveMeme);
-
-        tokenWalletService.take(TokenType.SELECTION, memetick);
     }
 }

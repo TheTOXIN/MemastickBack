@@ -6,6 +6,7 @@ public enum MemeFilter {
     INDV,
     EVLV,
     LIKE,
-    SELF
+    SELF,
+    POOL
 
 }

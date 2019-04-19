@@ -40,4 +40,7 @@ public class Meme extends AbstractEntity {
     @Column(nullable = false)
     private int chromosomes = 0;
 
+    @Column(nullable = false)
+    private int adaptation = 0;
+
 }

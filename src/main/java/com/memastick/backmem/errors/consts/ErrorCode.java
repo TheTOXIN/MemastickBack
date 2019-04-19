@@ -12,7 +12,8 @@ public enum  ErrorCode {
     INVALID_NICK(HttpStatus.UNPROCESSABLE_ENTITY),
     EXPIRE_NICK(HttpStatus.GATEWAY_TIMEOUT),
     LESS_TOKEN(HttpStatus.LOCKED),
-    ALLOWANCE_EMPTY(HttpStatus.NOT_FOUND);
+    ALLOWANCE_EMPTY(HttpStatus.NOT_FOUND),
+    NOT_ACCEPTABLE(HttpStatus.NOT_ACCEPTABLE);
 
     @Getter
     private HttpStatus status;

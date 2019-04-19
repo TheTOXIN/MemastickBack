@@ -22,15 +22,15 @@ public class TokenWallet extends AbstractEntity {
 
     @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
-    private Integer creating = 1;
+    private Integer tube = 1;
 
     @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
-    private Integer fitness = 1;
+    private Integer scope = 1;
 
     @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
-    private Integer mutation = 1;
+    private Integer mutagen = 1;
 
     @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
@@ -38,6 +38,6 @@ public class TokenWallet extends AbstractEntity {
 
     @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
-    private Integer selection = 1;
+    private Integer antibiotic = 1;
 
 }

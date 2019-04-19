@@ -14,10 +14,10 @@ import java.util.UUID;
 public class EvolveMemeAPI {
 
     private UUID memeId;
+    private int adaptation;
+
     private EvolveStep step;
-
     private long population;
-
     private int chance;
     private boolean immunity;
 

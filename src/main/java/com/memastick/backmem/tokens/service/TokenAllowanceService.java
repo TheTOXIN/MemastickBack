@@ -70,21 +70,21 @@ public class TokenAllowanceService {
 
     private Map<TokenType, Integer> myAllowance(Memetick memetick) {
         return Map.of(
-            TokenType.CREATING, 1,
-            TokenType.FITNESS, 0,
-            TokenType.MUTATION, 0,
+            TokenType.TUBE, 1,
+            TokenType.SCOPE, 0,
+            TokenType.MUTAGEN, 0,
             TokenType.CROSSOVER, 0,
-            TokenType.SELECTION,  MathUtil.randBool() ? 1 : 0
+            TokenType.ANTIBIOTIC,  MathUtil.randBool() ? 1 : 0
         );
     }
 
     private Map<TokenType, Integer> emptyAllowance() {
         return Map.of(
-            TokenType.CREATING, 0,
-            TokenType.FITNESS, 0,
-            TokenType.MUTATION, 0,
+            TokenType.TUBE, 0,
+            TokenType.SCOPE, 0,
+            TokenType.MUTAGEN, 0,
             TokenType.CROSSOVER, 0,
-            TokenType.SELECTION,  0
+            TokenType.ANTIBIOTIC,  0
         );
     }
 }
