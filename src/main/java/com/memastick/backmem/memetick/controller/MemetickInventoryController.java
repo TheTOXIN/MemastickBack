@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.controller;
 
+import com.memastick.backmem.memetick.api.CellAPI;
 import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,13 @@ public class MemetickInventoryController {
         MemetickInventoryService inventoryService
     ) {
         this.inventoryService = inventoryService;
+    }
+
+    @GetMapping("cell")
+    public CellAPI stateCell() {
+        return new CellAPI(
+            inventoryService.stateCell()
+        );
     }
 
     @GetMapping("all")

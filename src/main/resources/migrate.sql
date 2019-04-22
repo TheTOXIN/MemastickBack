@@ -91,3 +91,7 @@ ALTER TABLE token_wallets RENAME creating TO tube;
 ALTER TABLE token_wallets RENAME fitness TO scope;
 ALTER TABLE token_wallets RENAME mutation TO mutagen;
 ALTER TABLE token_wallets RENAME selection TO antibiotic;
+
+ALTER TABLE memetick_inventories ADD COLUMN cell_creating timestamp;
+UPDATE memetick_inventories SET cell_creating = '1970-01-01 00:00:00.000000';
+ALTER TABLE memetick_inventories ALTER COLUMN cell_creating SET NOT NULL;

@@ -13,7 +13,8 @@ public enum  ErrorCode {
     EXPIRE_NICK(HttpStatus.GATEWAY_TIMEOUT),
     LESS_TOKEN(HttpStatus.LOCKED),
     ALLOWANCE_EMPTY(HttpStatus.NOT_FOUND),
-    NOT_ACCEPTABLE(HttpStatus.NOT_ACCEPTABLE);
+    NOT_ACCEPTABLE(HttpStatus.NOT_ACCEPTABLE),
+    CELL_SMALL(HttpStatus.LOCKED);
 
     @Getter
     private HttpStatus status;

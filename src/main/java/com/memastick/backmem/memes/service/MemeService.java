@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.MathUtil;
@@ -12,16 +13,18 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.entity.MemetickInventory;
+import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
-import com.memastick.backmem.tokens.constant.TokenType;
-import com.memastick.backmem.tokens.service.TokenWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +40,11 @@ public class MemeService {
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
     private final EvolveMemeService evolveMemeService;
-    private final TokenWalletService tokenWalletService;
     private final MemeMapper memeMapper;
     private final MemeLikeService memeLikeService;
     private final MemePoolService memePoolService;
+    private final MemetickInventoryService inventoryService;
+    private final MemetickInventoryRepository inventoryRepository;
 
     @Autowired
     public MemeService(
@@ -48,31 +52,37 @@ public class MemeService {
         MemeRepository memeRepository,
         MemetickService memetickService,
         @Lazy EvolveMemeService evolveMemeService,
-        TokenWalletService tokenWalletService,
         MemeMapper memeMapper,
         @Lazy MemeLikeService memeLikeService,
-        MemePoolService memePoolService
+        MemePoolService memePoolService,
+        MemetickInventoryService inventoryService,
+        MemetickInventoryRepository inventoryRepository
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickService = memetickService;
         this.evolveMemeService = evolveMemeService;
-        this.tokenWalletService = tokenWalletService;
         this.memeMapper = memeMapper;
         this.memeLikeService = memeLikeService;
         this.memePoolService = memePoolService;
+        this.inventoryService = inventoryService;
+        this.inventoryRepository = inventoryRepository;
     }
 
     @Transactional
     public void create(MemeCreateAPI request) {
-        Memetick memetick = securityService.getCurrentMemetick();
-        tokenWalletService.have(TokenType.TUBE, memetick);
+        if (inventoryService.stateCell() != 100) throw new CellSmallException();
 
+        Memetick memetick = securityService.getCurrentMemetick();
         Meme meme = makeMeme(request, memetick);
+
         memeRepository.save(meme);
         evolveMemeService.startEvolve(meme);
 
-        tokenWalletService.take(TokenType.TUBE, memetick);
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        inventory.setCellCreating(LocalDateTime.now());
+
+        inventoryRepository.save(inventory);
         memetickService.addDna(memetick, MathUtil.rand(0, 100));
     }
 

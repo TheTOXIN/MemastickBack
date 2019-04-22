@@ -29,7 +29,7 @@ public class MemePoolService {
                 Sort.Order.desc(("creating"))
             )
         );
-
+        // TODO новые мемы не в топе
         return memeRepository.findAll(poolPageble).getContent();
     }
 }

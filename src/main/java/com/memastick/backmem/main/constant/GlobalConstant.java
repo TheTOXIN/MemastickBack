@@ -10,4 +10,6 @@ public class GlobalConstant {
 
     public static final int MAX_TOKEN = 10;
 
+    public static final int CELL_GROWTH = 1;
+
 }
