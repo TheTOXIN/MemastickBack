@@ -5,7 +5,7 @@ import com.memastick.backmem.errors.consts.ErrorCode;
 
 public class TokenAcceptException extends AbstractException {
 
-    public TokenAcceptException() {
-        super(ErrorCode.NOT_ACCEPTABLE);
+    public TokenAcceptException(ErrorCode code) {
+        super(code, "Error accept token");
     }
 }

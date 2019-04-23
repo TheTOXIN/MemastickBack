@@ -14,6 +14,7 @@ public enum  ErrorCode {
     LESS_TOKEN(HttpStatus.LOCKED),
     ALLOWANCE_EMPTY(HttpStatus.NOT_FOUND),
     NOT_ACCEPTABLE(HttpStatus.NOT_ACCEPTABLE),
+    TOKEN_SELF(HttpStatus.LOCKED),
     CELL_SMALL(HttpStatus.LOCKED);
 
     @Getter

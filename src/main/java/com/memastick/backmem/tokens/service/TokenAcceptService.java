@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+import static com.memastick.backmem.errors.consts.ErrorCode.NOT_ACCEPTABLE;
+import static com.memastick.backmem.errors.consts.ErrorCode.TOKEN_SELF;
+
 @Service
 public class TokenAcceptService {
 
@@ -42,10 +45,12 @@ public class TokenAcceptService {
         Meme meme = memeService.findById(memeId);
         Memetick memetick = securityService.getCurrentMemetick();
 
+        if (meme.getMemetick().equals(memetick)) throw new TokenAcceptException(TOKEN_SELF);
+
         tokenWalletService.have(token, memetick);
         EvolveMeme evolve = evolveMemeRepository.findByMeme(meme);
 
-        if (!evolve.getStep().equals(token.getStep())) throw new TokenAcceptException();
+        if (!evolve.getStep().equals(token.getStep())) throw new TokenAcceptException(NOT_ACCEPTABLE);
 
         switch (token) {
             case TUBE: adaptation(meme); break;
@@ -65,7 +70,7 @@ public class TokenAcceptService {
     }
 
     private void selection(EvolveMeme evolve) {
-        if (evolve.isImmunity()) throw new TokenAcceptException();
+        if (evolve.isImmunity()) throw new TokenAcceptException(NOT_ACCEPTABLE);
         evolve.setImmunity(true);
         evolveMemeRepository.save(evolve);
     }
