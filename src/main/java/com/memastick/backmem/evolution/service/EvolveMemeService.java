@@ -33,11 +33,9 @@ public class EvolveMemeService {
     }
 
     public void startEvolve(Meme meme) {
-        evolveMemeRepository.save(new EvolveMeme(
-            meme,
-            EvolveStep.ADAPTATION,
-            evolveDay()
-        ));
+        EvolveMeme evolveMeme = new EvolveMeme(evolveDay());
+        evolveMemeRepository.saveAndFlush(evolveMeme);
+        meme.setEvolveMeme(evolveMeme);
     }
 
     public void nextStep(List<EvolveMeme> evolveMemes) {
@@ -60,11 +58,11 @@ public class EvolveMemeService {
 
     public EvolveMemeAPI readByMeme(UUID memeId) {
         Meme meme = memeService.findById(memeId);
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
+        EvolveMeme evolveMeme = meme.getEvolveMeme();
 
         return new EvolveMemeAPI(
             meme.getId(),
-            meme.getAdaptation(),
+            evolveMeme.getAdaptation(),
             evolveMeme.getStep(),
             evolveMeme.getPopulation(),
             evolveMeme.getChance().intValue(),

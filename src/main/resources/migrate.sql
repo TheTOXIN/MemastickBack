@@ -83,9 +83,9 @@ ALTER TABLE evolve_memes ALTER COLUMN chance_survive SET DEFAULT 0;
 ALTER TABLE evolve_memes RENAME COLUMN chance_increase TO immunity;
 ALTER TABLE evolve_memes RENAME COLUMN chance_survive TO chance;
 
-ALTER TABLE memes ADD COLUMN adaptation integer;
-UPDATE memes SET adaptation = 0;
-ALTER TABLE  memes ALTER COLUMN adaptation SET NOT NULL;
+ALTER TABLE evolve_memes ADD COLUMN adaptation integer;
+UPDATE evolve_memes SET adaptation = 0;
+ALTER TABLE  evolve_memes ALTER COLUMN adaptation SET NOT NULL;
 
 ALTER TABLE token_wallets RENAME creating TO tube;
 ALTER TABLE token_wallets RENAME fitness TO scope;
@@ -95,3 +95,12 @@ ALTER TABLE token_wallets RENAME selection TO antibiotic;
 ALTER TABLE memetick_inventories ADD COLUMN cell_creating timestamp;
 UPDATE memetick_inventories SET cell_creating = '1970-01-01 00:00:00.000000';
 ALTER TABLE memetick_inventories ALTER COLUMN cell_creating SET NOT NULL;
+
+ALTER TABLE memes ADD evolve_meme_id uuid;
+ALTER TABLE memes ADD CONSTRAINT memes_evolve_meme_fk FOREIGN KEY (evolve_meme_id) REFERENCES evolve_memes (id);
+UPDATE memes AS m SET evolve_meme_id = em.id FROM evolve_memes AS em WHERE m.id = em.meme_id;
+ALTER TABLE  memes ALTER COLUMN evolve_meme_id SET NOT NULL;
+CREATE UNIQUE INDEX memes_evolve_meme_id_uindex ON public.memes (evolve_meme_id);
+ALTER TABLE evolve_memes DROP meme_id;
+ALTER TABLE memes DROP fire_id;
+

@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -76,8 +75,8 @@ public class MemeService {
         Memetick memetick = securityService.getCurrentMemetick();
         Meme meme = makeMeme(request, memetick);
 
-        memeRepository.save(meme);
         evolveMemeService.startEvolve(meme);
+        memeRepository.save(meme);
 
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
         inventory.setCellCreating(LocalDateTime.now());
@@ -129,13 +128,9 @@ public class MemeService {
 
     private Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
         return new Meme(
-            request.getFireId(),
-            request.getUrl(),
             memetick,
-            ZonedDateTime.now(),
-            MemeType.EVOLVE,
-            0,
-            0
+            request.getFireId(),
+            request.getUrl()
         );
     }
 }

@@ -1,6 +1,5 @@
 package com.memastick.backmem.memes.mapper;
 
-import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.entity.Meme;
@@ -15,15 +14,12 @@ public class MemeMapper {
 
     private final MemeLikeService memeLikeService;
     private final MemetickMapper memetickMapper;
-    private final EvolveMemeRepository evolveMemeRepository;
 
     @Autowired
     public MemeMapper(
-        EvolveMemeRepository evolveMemeRepository,
         @Lazy MemeLikeService memeLikeService,
         MemetickMapper memetickMapper
     ) {
-        this.evolveMemeRepository = evolveMemeRepository;
         this.memeLikeService = memeLikeService;
         this.memetickMapper = memetickMapper;
     }
@@ -42,7 +38,7 @@ public class MemeMapper {
             meme.getUrl(),
             meme.getChromosomes(),
             meme.getType(),
-            evolveMemeRepository.findStepByMeme(meme)
+            meme.getEvolveMeme().getStep()
         );
     }
 }

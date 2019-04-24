@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.repository;
 
+import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -26,15 +27,18 @@ public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
     @Query("SELECT SUM(m.chromosomes) FROM Meme m")
     Optional<Long> sumChromosome();
 
-    List<Meme> findByType(MemeType individ, Pageable pageable);
+    List<Meme> findByType(MemeType type, Pageable pageable);
 
     List<Meme> findByMemetick(Memetick currentMemetick, Pageable pageable);
+
+    Meme findByEvolveMeme(EvolveMeme evolve);
 
     @Query(
         nativeQuery = true,
         value = "SELECT * FROM memes m " +
-            "INNER JOIN evolve_memes em ON m.id = em.meme_id " +
+            "INNER JOIN evolve_memes em ON em.id = m.evolve_meme_id " +
             "WHERE em.population = :population ORDER BY m.chromosomes DESC LIMIT 1"
     )
+
     Meme findSuperMeme(@Param("population") long population);
 }

@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
@@ -20,27 +21,37 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class Meme extends AbstractEntity {
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false)
+    private Memetick memetick;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(nullable = false, unique = true)
+    private EvolveMeme evolveMeme;
+
     @Column(nullable = false, unique = true)
     private UUID fireId;
 
     @Column(length = 512, nullable = false, unique = true)
     private String url;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
-    private Memetick memetick;
-
     @Column(nullable = false)
-    private ZonedDateTime creating;
+    private ZonedDateTime creating = ZonedDateTime.now();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 32)
-    private MemeType type;
+    private MemeType type = MemeType.EVOLVE;
 
     @Column(nullable = false)
     private int chromosomes = 0;
 
-    @Column(nullable = false)
-    private int adaptation = 0;
-
+    public Meme(
+        Memetick memetick,
+        UUID fireId,
+        String url
+    ) {
+        this.memetick = memetick;
+        this.fireId = fireId;
+        this.url = url;
+    }
 }

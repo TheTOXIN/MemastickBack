@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +26,12 @@ public class MemePoolService {
             pageable.getPageNumber(),
             pageable.getPageSize(),
             Sort.by(
-                Sort.Order.desc(("adaptation")),
+                Sort.Order.asc(("evolveMeme.step")),
+                Sort.Order.desc(("evolveMeme.adaptation")),
                 Sort.Order.desc(("creating"))
             )
         );
-        // TODO новые мемы не в топе
-        return memeRepository.findAll(poolPageble).getContent();
+
+        return memeRepository.findByType(MemeType.EVOLVE, poolPageble);
     }
 }

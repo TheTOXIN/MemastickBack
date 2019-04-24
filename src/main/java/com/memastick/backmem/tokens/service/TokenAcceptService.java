@@ -4,7 +4,6 @@ import com.memastick.backmem.errors.exception.TokenAcceptException;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memes.entity.Meme;
-import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.service.SecurityService;
@@ -24,36 +23,33 @@ public class TokenAcceptService {
     private final MemeService memeService;
     private final TokenWalletService tokenWalletService;
     private final SecurityService securityService;
-    private final MemeRepository memeRepository;
 
     @Autowired
     public TokenAcceptService(
         EvolveMemeRepository evolveMemeRepository,
         MemeService memeService,
         TokenWalletService tokenWalletService,
-        SecurityService securityService,
-        MemeRepository memeRepository
+        SecurityService securityService
     ) {
         this.evolveMemeRepository = evolveMemeRepository;
         this.memeService = memeService;
         this.tokenWalletService = tokenWalletService;
         this.securityService = securityService;
-        this.memeRepository = memeRepository;
     }
 
     public void accept(TokenType token, UUID memeId) {
         Meme meme = memeService.findById(memeId);
         Memetick memetick = securityService.getCurrentMemetick();
 
+        EvolveMeme evolve = meme.getEvolveMeme();
+
         if (meme.getMemetick().equals(memetick)) throw new TokenAcceptException(TOKEN_SELF);
-
-        tokenWalletService.have(token, memetick);
-        EvolveMeme evolve = evolveMemeRepository.findByMeme(meme);
-
         if (!evolve.getStep().equals(token.getStep())) throw new TokenAcceptException(NOT_ACCEPTABLE);
 
+        tokenWalletService.have(token, memetick);
+
         switch (token) {
-            case TUBE: adaptation(meme); break;
+            case TUBE: adaptation(evolve); break;
             case SCOPE: break;
             case MUTAGEN: break;
             case CROSSOVER: break;
@@ -63,10 +59,9 @@ public class TokenAcceptService {
         tokenWalletService.take(token, memetick);
     }
 
-
-    private void adaptation(Meme meme) {
-        meme.setAdaptation(meme.getAdaptation() + 1);
-        memeRepository.save(meme);
+    private void adaptation(EvolveMeme evolve) {
+        evolve.setAdaptation(evolve.getAdaptation() + 1);
+        evolveMemeRepository.save(evolve);
     }
 
     private void selection(EvolveMeme evolve) {
