@@ -15,8 +15,10 @@ public class MemeAPI {
 
     private UUID id;
     private String url;
-    private int chromosomes;
     private MemeType type;
+    private int chromosomes;
+    private long indexer;
+
     private EvolveStep step;
 
 }

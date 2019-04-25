@@ -19,8 +19,8 @@ public enum EvolveStep {
     public static EvolveStep find(int step) {
         return Arrays
             .stream(EvolveStep.values())
-            .filter(step1 -> step1.getStep() == step)
-            .findFirst().orElse(null);
+            .filter(e -> e.getStep() == step)
+            .findFirst()
+            .orElse(null);
     }
-
 }

@@ -33,11 +33,11 @@ public class EvolveMemeService {
     }
 
     public void startEvolve(Meme meme) {
-        evolveMemeRepository.save(new EvolveMeme(
-            meme,
-            EvolveStep.ADAPTATION,
-            evolveDay()
-        ));
+        evolveMemeRepository.save(
+            new EvolveMeme(
+                meme
+            )
+        );
     }
 
     public void nextStep(List<EvolveMeme> evolveMemes) {
@@ -64,11 +64,20 @@ public class EvolveMemeService {
 
         return new EvolveMemeAPI(
             meme.getId(),
-            meme.getAdaptation(),
+            meme.getPopulation(),
             evolveMeme.getStep(),
-            evolveMeme.getPopulation(),
-            evolveMeme.getChance().intValue(),
-            evolveMeme.isImmunity()
+            evolveMeme.getChance(),
+            evolveMeme.isImmunity(),
+            evolveMeme.getAdaptation()
         );
+    }
+
+    public EvolveStep computeStep(Meme meme) {
+        long day = evolveDay();
+        long population = meme.getPopulation();
+
+        int step = (int) (day - population);
+
+        return EvolveStep.find(step);
     }
 }

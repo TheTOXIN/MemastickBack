@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +51,7 @@ public class MemeService {
         MemeRepository memeRepository,
         MemetickService memetickService,
         @Lazy EvolveMemeService evolveMemeService,
-        MemeMapper memeMapper,
+        @Lazy MemeMapper memeMapper,
         @Lazy MemeLikeService memeLikeService,
         MemePoolService memePoolService,
         MemetickInventoryService inventoryService,
@@ -110,6 +109,24 @@ public class MemeService {
         return byId.get();
     }
 
+    public void moveIndex(Meme meme) {
+        long newIndex = meme.getIndexer() + 1;
+        long oldIndex = meme.getIndexer();
+
+        Meme prevMeme = memeRepository.findByPopulationAndIndexer(
+            meme.getPopulation(),
+            newIndex
+        ).orElse(null);
+
+        if (prevMeme == null) return;
+
+        meme.setIndexer(newIndex);
+        prevMeme.setIndexer(oldIndex);
+
+        memeRepository.save(meme);
+        memeRepository.save(prevMeme);
+    }
+
     private List<Meme> readByFilter(MemeFilter filter, Pageable pageable) {
         List<Meme> memes = new ArrayList<>();
 
@@ -128,14 +145,15 @@ public class MemeService {
     }
 
     private Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
+        long population = evolveMemeService.evolveDay();
+        long indexer = memeRepository.countByPopulation(population).orElse(0L) + 1;
+
         return new Meme(
             request.getFireId(),
             request.getUrl(),
             memetick,
-            ZonedDateTime.now(),
-            MemeType.EVOLVE,
-            0,
-            0
+            population,
+            indexer
         );
     }
 }

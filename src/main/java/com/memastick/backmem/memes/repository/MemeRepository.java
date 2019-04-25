@@ -20,11 +20,15 @@ public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
 
     Optional<Long> countByType(MemeType type);
 
+    Optional<Long> countByPopulation(long population);
+
     @Query("SELECT SUM(m.chromosomes) FROM Meme m WHERE m.memetick.id = :memetickId")
     Optional<Long> sumChromosomeByMemetickId(@Param("memetickId") UUID memetickId);
 
     @Query("SELECT SUM(m.chromosomes) FROM Meme m")
     Optional<Long> sumChromosome();
+
+    Optional<Meme> findByPopulationAndIndexer(long population, long indexer);
 
     List<Meme> findByType(MemeType individ, Pageable pageable);
 

@@ -83,10 +83,6 @@ ALTER TABLE evolve_memes ALTER COLUMN chance_survive SET DEFAULT 0;
 ALTER TABLE evolve_memes RENAME COLUMN chance_increase TO immunity;
 ALTER TABLE evolve_memes RENAME COLUMN chance_survive TO chance;
 
-ALTER TABLE memes ADD COLUMN adaptation integer;
-UPDATE memes SET adaptation = 0;
-ALTER TABLE  memes ALTER COLUMN adaptation SET NOT NULL;
-
 ALTER TABLE token_wallets RENAME creating TO tube;
 ALTER TABLE token_wallets RENAME fitness TO scope;
 ALTER TABLE token_wallets RENAME mutation TO mutagen;
@@ -95,3 +91,16 @@ ALTER TABLE token_wallets RENAME selection TO antibiotic;
 ALTER TABLE memetick_inventories ADD COLUMN cell_creating timestamp;
 UPDATE memetick_inventories SET cell_creating = '1970-01-01 00:00:00.000000';
 ALTER TABLE memetick_inventories ALTER COLUMN cell_creating SET NOT NULL;
+
+ALTER TABLE evolve_memes ADD COLUMN adaptation integer;
+UPDATE evolve_memes SET adaptation = 0;
+ALTER TABLE  evolve_memes ALTER COLUMN adaptation SET NOT NULL;
+
+ALTER TABLE memes ADD COLUMN indexer bigint;
+UPDATE memes SET indexer = 0;
+ALTER TABLE  memes ALTER COLUMN indexer SET NOT NULL;
+
+ALTER TABLE memes ADD COLUMN population bigint;
+UPDATE memes AS m SET population = em.population FROM evolve_memes AS em WHERE m.id = em.meme_id;
+ALTER TABLE  memes ALTER COLUMN population SET NOT NULL;
+ALTER TABLE evolve_memes DROP COLUMN population;

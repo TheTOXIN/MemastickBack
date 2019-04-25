@@ -38,9 +38,21 @@ public class Meme extends AbstractEntity {
     private MemeType type;
 
     @Column(nullable = false)
-    private int chromosomes = 0;
+    private long population;
 
     @Column(nullable = false)
-    private int adaptation = 0;
+    private long indexer;
 
+    @Column(nullable = false)
+    private int chromosomes = 0;
+
+    public Meme(UUID fireId, String url, Memetick memetick, long population, long indexer) {
+        this.fireId = fireId;
+        this.url = url;
+        this.memetick = memetick;
+        this.population = population;
+        this.indexer = indexer;
+        this.creating = ZonedDateTime.now();
+        this.type = MemeType.EVOLVE;
+    }
 }

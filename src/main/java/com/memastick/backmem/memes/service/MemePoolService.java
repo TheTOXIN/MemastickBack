@@ -25,11 +25,11 @@ public class MemePoolService {
             pageable.getPageNumber(),
             pageable.getPageSize(),
             Sort.by(
-                Sort.Order.desc(("adaptation")),
-                Sort.Order.desc(("creating"))
+                Sort.Order.desc(("population")),
+                Sort.Order.desc(("indexer"))
             )
         );
-        // TODO новые мемы не в топе
+
         return memeRepository.findAll(poolPageble).getContent();
     }
 }
