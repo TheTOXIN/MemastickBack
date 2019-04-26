@@ -1,57 +1,40 @@
 package com.memastick.backmem.notification.service;
 
-import com.memastick.backmem.notification.NotificationType;
-import com.memastick.backmem.notification.dto.NotificationDTO;
-import com.memastick.backmem.security.service.SecurityService;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageType;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import com.memastick.backmem.notification.dto.PushNotificationDTO;
+import com.memastick.backmem.notification.repository.PushTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class NotificationService {
 
-    private Map<String, String> cache = new HashMap<>();
+    private final PushNotificationService pushService;
+    private final BellNotificationService bellService;
+    private final PushTokenRepository pushTokenRepository;
 
-    private final SimpMessagingTemplate template;
-    private final SecurityService securityService;
-
+    @Autowired
     public NotificationService(
-        SimpMessagingTemplate template,
-        SecurityService securityService
+        PushNotificationService pushService,
+        BellNotificationService bellService,
+        PushTokenRepository pushTokenRepository
     ) {
-        this.template = template;
-        this.securityService = securityService;
+        this.pushService = pushService;
+        this.bellService = bellService;
+        this.pushTokenRepository = pushTokenRepository;
     }
 
-    public void register(String sessionId) {
-        cache.put(securityService.getCurrentUser().getUsername(), sessionId);
-    }
-
-    //TODO make async
-    public void sendNotifyDNA(int dna) {
-        String username = securityService.getCurrentUser().getUsername();
-        String sessionId = cache.get(username);
-
-        NotificationDTO dto = new NotificationDTO(
-            NotificationType.DNK,
-            Integer.toString(dna)
+    public void notifyAllowance() {
+        bellService.sendAllowance();
+        // TODO refactor and send where false
+        pushTokenRepository.findAll().forEach(pt ->
+            pushService.sendPush(
+                new PushNotificationDTO(
+                    "Пришло пособие!",
+                    "Заберите свои токены в пособие",
+                    "https://www.memastick.ru/home"
+                ),
+                pt.getToken()
+            )
         );
-
-        sendNotify(dto, sessionId);
-    }
-
-    private void sendNotify(NotificationDTO dto, String sessionId) {
-        if (sessionId == null) return;
-
-        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-
-        headerAccessor.setSessionId(sessionId);
-        headerAccessor.setLeaveMutable(true);
-
-        template.convertAndSendToUser(sessionId, "/queue/notify", dto, headerAccessor.getMessageHeaders());
     }
 }

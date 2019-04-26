@@ -1,6 +1,7 @@
 package com.memastick.backmem.security.service;
 
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,15 +22,19 @@ public class SecurityService {
         this.userService = userService;
     }
 
-    public UserDetails getCurrentUser() {
+    public UserDetails getCurrentDetails() {
         return (UserDetails) SecurityContextHolder
             .getContext()
             .getAuthentication()
             .getPrincipal();
     }
 
+    public User getCurrentUser() {
+        UserDetails currentDetails = getCurrentDetails();
+        return userService.findByLogin(currentDetails.getUsername());
+    }
+
     public Memetick getCurrentMemetick() {
-        UserDetails userDetails = getCurrentUser();
-        return userService.findByLogin(userDetails.getUsername()).getMemetick();
+        return getCurrentUser().getMemetick();
     }
 }

@@ -1,4 +1,4 @@
-package com.memastick.backmem.notification;
+package com.memastick.backmem.notification.constant;
 
 public enum  NotificationType {
 

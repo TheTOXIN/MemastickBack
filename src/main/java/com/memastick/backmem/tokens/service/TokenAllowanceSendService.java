@@ -2,6 +2,7 @@ package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.notification.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,15 @@ public class TokenAllowanceSendService {
 
     private final MemetickInventoryRepository inventoryRepository;
 
+    private final NotificationService notificationService;
+
     @Autowired
     public TokenAllowanceSendService(
-        MemetickInventoryRepository inventoryRepository
+        MemetickInventoryRepository inventoryRepository,
+        NotificationService notificationService
     ) {
         this.inventoryRepository = inventoryRepository;
+        this.notificationService = notificationService;
     }
 
     @Scheduled(cron = "0 0 12 * * *", zone = "UTC")
@@ -32,6 +37,7 @@ public class TokenAllowanceSendService {
         List<MemetickInventory> inventories = inventoryRepository.findByAllowanceFalse();
         inventories.forEach(inventory -> inventory.setAllowance(true));
         inventoryRepository.saveAll(inventories);
+        notificationService.notifyAllowance();
 
         log.info("END ALLOWANCE");
     }

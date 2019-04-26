@@ -1,6 +1,6 @@
 package com.memastick.backmem.notification.dto;
 
-import com.memastick.backmem.notification.NotificationType;
+import com.memastick.backmem.notification.constant.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationDTO {
+public class BellNotificationDTO {
 
     private NotificationType type;
     private String data;

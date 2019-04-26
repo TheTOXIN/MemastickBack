@@ -1,6 +1,5 @@
 package com.memastick.backmem.translator.impl;
 
-import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.translator.iface.Translator;
 import com.memastick.backmem.translator.util.TranslatorUtil;
@@ -29,15 +28,10 @@ public class TelegramTranslator implements Translator {
     private String chat;
 
     private final RestTemplate rest;
-    private final EvolveMemeRepository evolveMemeRepository;
 
     @Autowired
-    public TelegramTranslator(
-        RestTemplate rest,
-        EvolveMemeRepository evolveMemeRepository
-    ) {
+    public TelegramTranslator(RestTemplate rest) {
         this.rest = rest;
-        this.evolveMemeRepository = evolveMemeRepository;
     }
 
     @Override

@@ -16,7 +16,7 @@ import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
-import com.memastick.backmem.notification.service.NotificationService;
+import com.memastick.backmem.notification.service.BellNotificationService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class MemetickService {
     private final MemetickRepository memetickRepository;
     private final SecurityService securityService;
     private final MemetickMapper memetickMapper;
-    private final NotificationService notificationService;
+    private final BellNotificationService bellNotificationService;
     private final MemeRepository memeRepository;
 
     @Autowired
@@ -40,13 +40,13 @@ public class MemetickService {
         MemetickRepository memetickRepository,
         SecurityService securityService,
         MemetickMapper memetickMapper,
-        NotificationService notificationService,
+        BellNotificationService bellNotificationService,
         MemeRepository memeRepository
     ) {
         this.memetickRepository = memetickRepository;
         this.securityService = securityService;
         this.memetickMapper = memetickMapper;
-        this.notificationService = notificationService;
+        this.bellNotificationService = bellNotificationService;
         this.memeRepository = memeRepository;
     }
 
@@ -60,7 +60,7 @@ public class MemetickService {
 
     public void addDna(Memetick memetick, int dna) {
 //        if (dna == 0) return; //TODO correct dna add
-        notificationService.sendNotifyDNA(dna);
+        bellNotificationService.sendDna(dna);
         memetick.setDna(memetick.getDna() + dna);
         memetickRepository.save(memetick);
     }
