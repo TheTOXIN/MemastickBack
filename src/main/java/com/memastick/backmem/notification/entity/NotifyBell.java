@@ -1,6 +1,7 @@
 package com.memastick.backmem.notification.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.notification.constant.NotifyType;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,21 +11,29 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "push_token")
+@Table(name = "notify_bell")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PushToken extends AbstractEntity {
+public class NotifyBell extends AbstractEntity {
 
-    @OneToOne
-    @JoinColumn(nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private User user;
 
     @Column(nullable = false)
-    private String token;
+    private NotifyType type;
 
-    public PushToken(User user) {
+    @Column(nullable = false)
+    private boolean isRead = false;
+
+    @Column
+    private String data;
+
+    public NotifyBell(User user, NotifyType type, String data) {
         this.user = user;
+        this.type = type;
+        this.data = data;
     }
 }

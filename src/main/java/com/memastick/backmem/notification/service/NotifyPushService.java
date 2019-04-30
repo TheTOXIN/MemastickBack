@@ -7,7 +7,11 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
-import com.memastick.backmem.notification.dto.PushNotificationDTO;
+import com.memastick.backmem.notification.dto.NotifyPushDTO;
+import com.memastick.backmem.notification.entity.NotifyPush;
+import com.memastick.backmem.notification.repository.NotifyPushRepository;
+import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.user.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +24,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Service
-public class PushNotificationService {
+public class NotifyPushService {
 
-    private static final Logger log = LoggerFactory.getLogger(PushNotificationService.class);
+    private static final Logger log = LoggerFactory.getLogger(NotifyPushService.class);
+
+    private final NotifyPushRepository notifyPushRepository;
+    private final SecurityService securityService;
 
     @Autowired
-    public PushNotificationService(
-        @Value("${fcm.push.file}") String fcmFile
+    public NotifyPushService(
+        @Value("${fcm.push.file}") String fcmFile,
+        NotifyPushRepository notifyPushRepository,
+        SecurityService securityService
     ) {
         try (InputStream service = Files.newInputStream(Paths.get(fcmFile))) {
             FirebaseApp.initializeApp(
@@ -38,10 +47,28 @@ public class PushNotificationService {
             log.error("PUSH NOTIFICATION NOT INIT");
             e.printStackTrace();
         }
+
+        this.notifyPushRepository = notifyPushRepository;
+        this.securityService = securityService;
     }
 
+    public void register(String token) {
+        User user = securityService.getCurrentUser();
 
-    public void sendPush(PushNotificationDTO dto, String token) {
+        NotifyPush pushToken = notifyPushRepository
+            .findByUser(user)
+            .orElse(new NotifyPush(
+                user
+            ));
+
+        pushToken.setToken(token);
+
+        notifyPushRepository.save(pushToken);
+    }
+
+    public void send(NotifyPushDTO dto, User user) {
+        String token = notifyPushRepository.findTokenByUser(user);
+
         WebpushConfig config = WebpushConfig.builder()
             .setNotification(builder(dto).build())
             .build();
@@ -65,19 +92,12 @@ public class PushNotificationService {
         }
     }
 
-    private WebpushNotification.Builder builder(PushNotificationDTO dto){
+    private WebpushNotification.Builder builder(NotifyPushDTO dto){
         WebpushNotification.Builder builder = WebpushNotification.builder();
 
-        WebpushNotification.Action action = new WebpushNotification.Action(
-            dto.getAction(),
-            "ОТКРЫТЬ"
-        );
-
         builder
-            .addAction(action)
             .setImage(dto.getIcon())
-            .setTitle(dto.getTitle())
-            .setBody(dto.getBody());
+            .setTitle(dto.getTitle());
 
         return builder;
     }

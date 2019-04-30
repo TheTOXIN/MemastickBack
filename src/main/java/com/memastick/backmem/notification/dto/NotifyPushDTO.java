@@ -7,16 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PushNotificationDTO {
+public class NotifyPushDTO {
 
     private String title;
     private String body;
-    private String action;
     private String icon = "https://www.memastick.ru/assets/images/title-logo.png";
 
-    public PushNotificationDTO(String title, String body, String action) {
+    public NotifyPushDTO(String title, String body) {
         this.title = title;
         this.body = body;
-        this.action = action;
     }
 }

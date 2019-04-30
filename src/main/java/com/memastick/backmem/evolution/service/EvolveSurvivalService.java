@@ -7,6 +7,11 @@ import com.memastick.backmem.evolution.interfaces.Evolution;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
+import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.notification.constant.NotifyType;
+import com.memastick.backmem.notification.dto.NotifyDTO;
+import com.memastick.backmem.notification.service.NotifyService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +19,18 @@ import java.util.List;
 
 @Evolve(step = EvolveStep.SURVIVAL)
 public class EvolveSurvivalService implements Evolution {
+
+    private final NotifyService notifyService;
+    private final MemetickService memetickService;
+
+    @Autowired
+    public EvolveSurvivalService(
+        NotifyService notifyService,
+        MemetickService memetickService
+    ) {
+        this.notifyService = notifyService;
+        this.memetickService = memetickService;
+    }
 
     @Override
     public void evolution(List<EvolveMeme> evolveMemes) {
@@ -28,15 +45,24 @@ public class EvolveSurvivalService implements Evolution {
             int dnaBonus = MathUtil.rand(0, 100);
             boolean isSurvive = e.getChance() >= avg || e.isImmunity();
 
+            MemeType type;
+
             if (isSurvive) {
-                meme.setType(MemeType.INDIVID);
+                type = MemeType.INDIVID;
                 dnaBonus *= 1;
             } else {
-                meme.setType(MemeType.DEATH);
+                type = MemeType.DEATH;
                 dnaBonus *= -1;
             }
 
-            meme.getMemetick().setDna(meme.getMemetick().getDna() + dnaBonus);
+            meme.setType(type);
+
+            memetickService.addDna(meme.getMemetick(), dnaBonus);
+
+            notifyService.send(NotifyType.MEME, new NotifyDTO(
+                meme,
+                type
+            ));
         });
     }
 }

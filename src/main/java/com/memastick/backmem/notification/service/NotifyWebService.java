@@ -1,7 +1,6 @@
 package com.memastick.backmem.notification.service;
 
-import com.memastick.backmem.notification.constant.NotificationType;
-import com.memastick.backmem.notification.dto.BellNotificationDTO;
+import com.memastick.backmem.notification.dto.NotifyWebDTO;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
@@ -12,14 +11,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class BellNotificationService {
+public class NotifyWebService {
 
     private Map<String, String> cache = new HashMap<>();
 
     private final SimpMessagingTemplate template;
     private final SecurityService securityService;
 
-    public BellNotificationService(
+    public NotifyWebService(
         SimpMessagingTemplate template,
         SecurityService securityService
     ) {
@@ -31,29 +30,14 @@ public class BellNotificationService {
         cache.put(securityService.getCurrentDetails().getUsername(), sessionId);
     }
 
-    //TODO make async
-    public void sendDna(int dna) {
+    public void send(NotifyWebDTO dto) {
         String username = securityService.getCurrentDetails().getUsername();
         String sessionId = cache.get(username);
-
-        BellNotificationDTO dto = new BellNotificationDTO(
-            NotificationType.DNK,
-            Integer.toString(dna)
-        );
 
         sendNotify(dto, sessionId);
     }
 
-    public void sendAllowance() {
-        cache.forEach((login, sessionId) ->
-            sendNotify(
-                new BellNotificationDTO(NotificationType.ALLOWANCE, null),
-                sessionId
-            )
-        );
-    }
-
-    private void sendNotify(BellNotificationDTO dto, String sessionId) {
+    private void sendNotify(NotifyWebDTO dto, String sessionId) {
         if (sessionId == null) return;
 
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);

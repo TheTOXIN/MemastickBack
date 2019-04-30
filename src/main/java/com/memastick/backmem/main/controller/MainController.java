@@ -4,6 +4,7 @@ import com.memastick.backmem.evolution.service.EvolveNextService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.service.MainService;
+import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.tokens.service.TokenAllowanceSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,14 @@ public class MainController {
         this.mainService = mainService;
         this.evolveNextService = evolveNextService;
         this.allowanceSendService = allowanceSendService;
+    }
+
+    @Autowired
+    private MemeService memeService;
+
+    @GetMapping("test")
+    public void test() {
+        memeService.test();
     }
 
     @GetMapping("hello")

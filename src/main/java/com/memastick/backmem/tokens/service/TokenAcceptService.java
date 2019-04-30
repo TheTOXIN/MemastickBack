@@ -3,9 +3,14 @@ package com.memastick.backmem.tokens.service;
 import com.memastick.backmem.errors.exception.TokenAcceptException;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
+import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.notification.constant.NotifyType;
+import com.memastick.backmem.notification.dto.NotifyDTO;
+import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.constant.TokenType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +28,24 @@ public class TokenAcceptService {
     private final MemeService memeService;
     private final TokenWalletService tokenWalletService;
     private final SecurityService securityService;
+    private final MemetickService memetickService;
+    private final NotifyService notifyService;
 
     @Autowired
     public TokenAcceptService(
         EvolveMemeRepository evolveMemeRepository,
         MemeService memeService,
         TokenWalletService tokenWalletService,
-        SecurityService securityService
+        SecurityService securityService,
+        MemetickService memetickService,
+        NotifyService notifyService
     ) {
         this.evolveMemeRepository = evolveMemeRepository;
         this.memeService = memeService;
         this.tokenWalletService = tokenWalletService;
         this.securityService = securityService;
+        this.memetickService = memetickService;
+        this.notifyService = notifyService;
     }
 
     public void accept(TokenType token, UUID memeId) {
@@ -57,6 +68,8 @@ public class TokenAcceptService {
         }
 
         tokenWalletService.take(token, memetick);
+        memetickService.addDna(memetick, MathUtil.rand(0, (token.getStep().getStep()) + 1) * 100);
+        notifyService.send(NotifyType.TOKEN, new NotifyDTO(meme, token));
     }
 
     private void adaptation(EvolveMeme evolve) {

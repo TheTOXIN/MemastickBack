@@ -16,7 +16,9 @@ import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
-import com.memastick.backmem.notification.service.BellNotificationService;
+import com.memastick.backmem.notification.constant.NotifyType;
+import com.memastick.backmem.notification.dto.NotifyDTO;
+import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +31,10 @@ import java.util.stream.Collectors;
 @Service
 public class MemetickService {
 
+    private final NotifyService notifyService;
     private final MemetickRepository memetickRepository;
     private final SecurityService securityService;
     private final MemetickMapper memetickMapper;
-    private final BellNotificationService bellNotificationService;
     private final MemeRepository memeRepository;
 
     @Autowired
@@ -40,14 +42,14 @@ public class MemetickService {
         MemetickRepository memetickRepository,
         SecurityService securityService,
         MemetickMapper memetickMapper,
-        BellNotificationService bellNotificationService,
-        MemeRepository memeRepository
+        MemeRepository memeRepository,
+        NotifyService notifyService
     ) {
         this.memetickRepository = memetickRepository;
         this.securityService = securityService;
         this.memetickMapper = memetickMapper;
-        this.bellNotificationService = bellNotificationService;
         this.memeRepository = memeRepository;
+        this.notifyService = notifyService;
     }
 
     public MemetickAPI viewByMe() {
@@ -59,8 +61,7 @@ public class MemetickService {
     }
 
     public void addDna(Memetick memetick, int dna) {
-//        if (dna == 0) return; //TODO correct dna add
-        bellNotificationService.sendDna(dna);
+        notifyService.send(NotifyType.DNA, new NotifyDTO(dna));
         memetick.setDna(memetick.getDna() + dna);
         memetickRepository.save(memetick);
     }

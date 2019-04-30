@@ -17,14 +17,19 @@ import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.notification.constant.NotifyType;
+import com.memastick.backmem.notification.dto.NotifyDTO;
+import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +40,8 @@ import java.util.stream.Collectors;
 @Service
 public class MemeService {
 
+    public final NotifyService notifyService;
+    private final TaskScheduler taskScheduler;
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
@@ -55,7 +62,9 @@ public class MemeService {
         @Lazy MemeLikeService memeLikeService,
         MemePoolService memePoolService,
         MemetickInventoryService inventoryService,
-        MemetickInventoryRepository inventoryRepository
+        MemetickInventoryRepository inventoryRepository,
+        TaskScheduler taskScheduler,
+        NotifyService notifyService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
@@ -66,6 +75,8 @@ public class MemeService {
         this.memePoolService = memePoolService;
         this.inventoryService = inventoryService;
         this.inventoryRepository = inventoryRepository;
+        this.taskScheduler = taskScheduler;
+        this.notifyService = notifyService;
     }
 
     @Transactional
@@ -78,11 +89,20 @@ public class MemeService {
         memeRepository.save(meme);
         evolveMemeService.startEvolve(meme);
 
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime end = now.plusDays(1);
+
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
-        inventory.setCellCreating(LocalDateTime.now());
+        inventory.setCellCreating(now);
 
         inventoryRepository.save(inventory);
-        memetickService.addDna(memetick, MathUtil.rand(0, 100));
+        memetickService.addDna(memetick, MathUtil.rand(0, 1000));
+
+        notifyService.send(NotifyType.CREATING, new NotifyDTO(memetick));
+        taskScheduler.schedule(
+            () -> notifyService.send(NotifyType.CELL, null),
+            end.toInstant(ZoneOffset.UTC)
+        );
     }
 
     @Transactional

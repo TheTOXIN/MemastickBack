@@ -1,12 +1,12 @@
 package com.memastick.backmem.notification.constant;
 
-public enum  NotificationType {
+public enum NotifyType {
 
-    DNK,
-    LIKE,
+    DNA,
     CELL,
     MEME,
-    MEMETICK,
+    TOKEN,
+    CREATING,
     ALLOWANCE
 
 }
