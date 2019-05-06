@@ -7,8 +7,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
+import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.dto.NotifyPushDTO;
 import com.memastick.backmem.notification.entity.NotifyPush;
+import com.memastick.backmem.notification.interfaces.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.user.entity.User;
@@ -24,7 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Service
-public class NotifyPushService {
+public class NotifyPushService implements NotifySender {
 
     private static final Logger log = LoggerFactory.getLogger(NotifyPushService.class);
 
@@ -50,6 +52,11 @@ public class NotifyPushService {
 
         this.notifyPushRepository = notifyPushRepository;
         this.securityService = securityService;
+    }
+
+    @Override
+    public void send(NotifyDTO dto) {
+
     }
 
     public void register(String token) {

@@ -1,6 +1,8 @@
 package com.memastick.backmem.notification.service;
 
+import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.dto.NotifyWebDTO;
+import com.memastick.backmem.notification.interfaces.NotifySender;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
@@ -11,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class NotifyWebService {
+public class NotifyWebService implements NotifySender {
 
     private Map<String, String> cache = new HashMap<>();
 
@@ -24,6 +26,11 @@ public class NotifyWebService {
     ) {
         this.template = template;
         this.securityService = securityService;
+    }
+
+    @Override
+    public void send(NotifyDTO dto) {
+
     }
 
     public void register(String sessionId) {

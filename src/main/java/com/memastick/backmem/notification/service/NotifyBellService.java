@@ -1,11 +1,14 @@
 package com.memastick.backmem.notification.service;
 
+import com.memastick.backmem.notification.dto.NotifyDTO;
+import com.memastick.backmem.notification.interfaces.NotifySender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NotifyBellService {
+public class NotifyBellService implements NotifySender {
 
-    public void send() {
+    @Override
+    public void send(NotifyDTO dto) {
 
     }
 }
