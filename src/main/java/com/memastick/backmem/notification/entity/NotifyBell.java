@@ -31,6 +31,8 @@ public class NotifyBell extends AbstractEntity {
     @Column
     private String data;
 
+    // TODO add creating
+
     public NotifyBell(User user, NotifyType type, String data) {
         this.user = user;
         this.type = type;

@@ -27,7 +27,7 @@ public class NotifyController {
     }
 
     @PutMapping("/web/register")
-    public void register(@RequestBody String sessionId) {
+    public void registerWeb(@RequestBody String sessionId) {
         notifyWebService.register(sessionId);
     }
 }
