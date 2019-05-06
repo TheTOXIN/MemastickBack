@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.controller;
 
+import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
@@ -36,12 +37,17 @@ public class MemeController {
         return memeService.page(memeId);
     }
 
-    @GetMapping(value = "/pages/filter/{filter}")
+    @GetMapping(value = "/pages")
     public List<MemePageAPI> pages(
-        @PathVariable("filter") MemeFilter filter,
+        @RequestParam(name = "filter", required = false) MemeFilter filter,
+        @RequestParam(name = "step", required = false) EvolveStep step,
         Pageable pageable
     ) {
-        return memeService.pagesByFilter(filter, pageable);
+        return memeService.pages(
+            filter,
+            step,
+            pageable
+        );
     }
 
     @PostMapping("/create")

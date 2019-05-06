@@ -34,6 +34,13 @@ public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
 
     List<Meme> findByMemetick(Memetick currentMemetick, Pageable pageable);
 
+    @Query("SELECT m FROM Meme m WHERE :day - m.population = :step")
+    List<Meme> findAllByStepEvolveDay(
+        @Param("day") long day,
+        @Param("step") long step,
+        Pageable pageable
+    );
+
     @Query(
         nativeQuery = true,
         value = "SELECT * FROM memes m " +

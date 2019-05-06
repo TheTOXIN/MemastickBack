@@ -2,6 +2,7 @@ package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
@@ -60,7 +61,7 @@ public class MemeService {
         @Lazy EvolveMemeService evolveMemeService,
         @Lazy MemeMapper memeMapper,
         @Lazy MemeLikeService memeLikeService,
-        MemePoolService memePoolService,
+        @Lazy MemePoolService memePoolService,
         MemetickInventoryService inventoryService,
         MemetickInventoryRepository inventoryRepository,
         TaskScheduler taskScheduler,
@@ -106,8 +107,8 @@ public class MemeService {
     }
 
     @Transactional
-    public List<MemePageAPI> pagesByFilter(MemeFilter filter, Pageable pageable) {
-        return readByFilter(filter, pageable)
+    public List<MemePageAPI> pages(MemeFilter filter, EvolveStep step, Pageable pageable) {
+        return read(filter, step, pageable)
             .stream()
             .map(memeMapper::toPageAPI)
             .collect(Collectors.toList());
@@ -147,7 +148,7 @@ public class MemeService {
         memeRepository.save(prevMeme);
     }
 
-    private List<Meme> readByFilter(MemeFilter filter, Pageable pageable) {
+    private List<Meme> read(MemeFilter filter, EvolveStep step, Pageable pageable) {
         List<Meme> memes = new ArrayList<>();
 
         Memetick memetick = securityService.getCurrentMemetick();
@@ -158,7 +159,7 @@ public class MemeService {
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
             case DTHS: memes = memeRepository.findByType(MemeType.DEATH, pageable); break;
             case EVLV: memes = memeRepository.findByType(MemeType.EVOLVE, pageable); break;
-            case POOL: memes = memePoolService.generate(pageable); break;
+            case POOL: memes = memePoolService.generate(step, pageable); break;
         }
 
         return memes;

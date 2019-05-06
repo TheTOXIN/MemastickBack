@@ -1,5 +1,7 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.evolution.constant.EvolveStep;
+import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +16,33 @@ import java.util.List;
 public class MemePoolService {
 
     private final MemeRepository memeRepository;
+    private final EvolveMemeService evolveMemeService;
 
     @Autowired
-    public MemePoolService(MemeRepository memeRepository) {
+    public MemePoolService(
+        MemeRepository memeRepository,
+        EvolveMemeService evolveMemeService
+    ) {
         this.memeRepository = memeRepository;
+        this.evolveMemeService = evolveMemeService;
     }
 
-    public List<Meme> generate(Pageable pageable) {
-        PageRequest poolPageble = PageRequest.of(
+    public List<Meme> generate(EvolveStep step, Pageable pageable) {
+        if (step == null) {
+            return memeRepository.findAll(
+                generatePageable(pageable)
+            ).getContent();
+        } else {
+            return memeRepository.findAllByStepEvolveDay(
+                evolveMemeService.evolveDay(),
+                step.getStep(),
+                pageable
+            );
+        }
+    }
+
+    private Pageable generatePageable(Pageable pageable) {
+        return PageRequest.of(
             pageable.getPageNumber(),
             pageable.getPageSize(),
             Sort.by(
@@ -29,7 +50,5 @@ public class MemePoolService {
                 Sort.Order.desc(("indexer"))
             )
         );
-
-        return memeRepository.findAll(poolPageble).getContent();
     }
 }
