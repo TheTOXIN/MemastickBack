@@ -6,11 +6,14 @@ import com.memastick.backmem.user.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface SettingFollowerRepository extends CrudRepository<SettingFollower, UUID> {
+
+    List<SettingFollower> findAllByMemetick(Memetick memetick);
 
     Optional<SettingFollower> findByMemetickAndFollower(Memetick memetick, User follower);
 }
