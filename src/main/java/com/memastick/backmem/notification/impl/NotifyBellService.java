@@ -71,6 +71,10 @@ public class NotifyBellService implements NotifySender {
         bellRepository.deleteById(id);
     }
 
+    public long countNotRead(User user) {
+        return bellRepository.countByUserAndIsReadFalse(user).orElse(0L);
+    }
+
     private NotifyBellAPI map(NotifyBell bell) {
         return new NotifyBellAPI(
             bell.getType(),

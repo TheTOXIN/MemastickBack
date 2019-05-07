@@ -4,6 +4,8 @@ import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.memetick.service.MemetickInventoryService;
+import com.memastick.backmem.notification.impl.NotifyBellService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
@@ -17,18 +19,24 @@ public class MainService {
     private final EvolveMemeService evolveMemeService;
     private final MemeRepository memeRepository;
     private final SettingUserService settingUserService;
+    private final MemetickInventoryService inventoryService;
+    private final NotifyBellService notifyBellService;
 
     @Autowired
     public MainService(
         SecurityService securityService,
         EvolveMemeService evolveMemeService,
         MemeRepository memeRepository,
-        SettingUserService settingUserService
+        SettingUserService settingUserService,
+        MemetickInventoryService inventoryService,
+        NotifyBellService notifyBellService
     ) {
         this.securityService = securityService;
         this.evolveMemeService = evolveMemeService;
         this.memeRepository = memeRepository;
         this.settingUserService = settingUserService;
+        this.inventoryService = inventoryService;
+        this.notifyBellService = notifyBellService;
     }
 
     public HomeAPI home() {
@@ -38,7 +46,9 @@ public class MainService {
             user.getMemetick().getNick(),
             evolveMemeService.evolveDay(),
             memeRepository.countByType(MemeType.EVOLVE).orElse(0L),
-            settingUserService.pushAsk(user)
+            settingUserService.pushAsk(user),
+            inventoryService.countItems(user.getMemetick()),
+            notifyBellService.countNotRead(user)
         );
     }
 }

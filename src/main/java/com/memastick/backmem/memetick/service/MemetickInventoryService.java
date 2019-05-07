@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.CELL_SIZE;
+
 @Service
 public class MemetickInventoryService {
 
@@ -56,7 +58,7 @@ public class MemetickInventoryService {
         return new MemetickInventoryAPI(
             tokenWalletService.read().getWallet(),
             tokenAllowanceService.have(),
-            this.stateCell() == 100
+            this.stateCell() == CELL_SIZE
         );
     }
 
@@ -64,16 +66,31 @@ public class MemetickInventoryService {
         Memetick memetick = securityService.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
 
+        return stateCell(inventory);
+    }
+
+    public int stateCell(MemetickInventory inventory) {
         LocalDateTime cell = inventory.getCellCreating();
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime end = cell.plusDays(GlobalConstant.CELL_GROWTH);
 
-        if (end.isBefore(now)) return 100;
+        if (end.isBefore(now)) return CELL_SIZE;
 
         long full = ChronoUnit.MINUTES.between(cell, end);
         long lift = ChronoUnit.MINUTES.between(now, end);
 
-        return 100 - Math.min((int) (100f / full * lift), 100);
+        return CELL_SIZE - Math.min((int) (CELL_SIZE / full * lift), CELL_SIZE);
+    }
+
+    public long countItems(Memetick memetick) {
+        long count = 0;
+
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+
+        if (inventory.isAllowance()) count++;
+        if (stateCell(inventory) == CELL_SIZE) count++;
+
+        return count;
     }
 }
