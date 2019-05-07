@@ -19,7 +19,7 @@ public class MemeMapper {
 
     @Autowired
     public MemeMapper(
-        @Lazy MemeLikeService memeLikeService,
+        MemeLikeService memeLikeService,
         MemetickMapper memetickMapper,
         EvolveMemeService evolveMemeService
     ) {

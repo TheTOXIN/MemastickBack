@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class NotifyDTO {
 
-    @JsonIgnore
+    @JsonIgnore // TODO remove
     private List<User> users = new ArrayList<>();
 
     private NotifyType type;

@@ -53,6 +53,7 @@ public class NotifyBellService implements NotifySender {
         bells
             .stream()
             .filter(Predicate.not(NotifyBell::isRead))
+            .map(NotifyBell::getId)
             .forEach(bellRepository::markAsRead);
 
         return bells
@@ -77,6 +78,7 @@ public class NotifyBellService implements NotifySender {
 
     private NotifyBellAPI map(NotifyBell bell) {
         return new NotifyBellAPI(
+            bell.getId(),
             bell.getType(),
             bell.getText(),
             bell.getLink(),

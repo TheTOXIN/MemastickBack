@@ -4,6 +4,7 @@ import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemeImgAPI;
@@ -91,7 +92,7 @@ public class MemeService {
         evolveMemeService.startEvolve(meme);
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime end = now.plusDays(1);
+        LocalDateTime end = now.plusDays(GlobalConstant.CELL_GROWTH);
 
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
         inventory.setCellCreating(now);

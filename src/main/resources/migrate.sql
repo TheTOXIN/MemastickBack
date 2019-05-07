@@ -104,3 +104,9 @@ ALTER TABLE memes ADD COLUMN population bigint;
 UPDATE memes AS m SET population = em.population FROM evolve_memes AS em WHERE m.id = em.meme_id;
 ALTER TABLE  memes ALTER COLUMN population SET NOT NULL;
 ALTER TABLE evolve_memes DROP COLUMN population;
+
+-- AFTER
+ALTER TABLE memeticks DROP nick_changed;
+INSERT INTO setting_users (id, nick_changed, push_work, user_id)
+SELECT uuid_generate_v4(), '2018-01-01 00:00:00.000000', null, id
+FROM users;

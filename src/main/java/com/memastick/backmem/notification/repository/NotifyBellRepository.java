@@ -4,6 +4,7 @@ import com.memastick.backmem.notification.entity.NotifyBell;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,6 +20,9 @@ public interface NotifyBellRepository extends JpaRepository<NotifyBell, UUID> {
 
     Optional<Long> countByUserAndIsReadFalse(User user);
 
-    @Query("UPDATE NotifyBell nb SET nb.read = true")
-    void markAsRead(NotifyBell b);
+    @Query(
+        nativeQuery = true,
+        value = "UPDATE notify_bell SET is_read = true WHERE id = :bellId"
+    )
+    void markAsRead(@Param("bellId") UUID bellId);
 }

@@ -7,6 +7,7 @@ import com.memastick.backmem.setting.entity.SettingFollower;
 import com.memastick.backmem.setting.repository.SettingFollowerRepository;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class SettingFollowerService {
 
     @Autowired
     public SettingFollowerService(
-        MemetickService memetickService,
+        @Lazy MemetickService memetickService,
         SecurityService securityService,
         SettingFollowerRepository settingFollowerRepository
     ) {

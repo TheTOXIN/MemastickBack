@@ -6,6 +6,7 @@ import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.setting.service.SettingFollowerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +15,9 @@ public class MemetickMapper {
     private final SettingFollowerService settingFollowerService;
 
     @Autowired
-    public MemetickMapper(SettingFollowerService settingFollowerService) {
+    public MemetickMapper(
+        @Lazy SettingFollowerService settingFollowerService
+    ) {
         this.settingFollowerService = settingFollowerService;
     }
 

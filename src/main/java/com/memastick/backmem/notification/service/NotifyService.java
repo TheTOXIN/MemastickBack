@@ -95,7 +95,7 @@ public class NotifyService {
             NotifyType.CREATING,
             "Меметик " + memetick.getNick() + " создал мем",
             "Новый мем от: " + memetick.getNick() + ", оцените его",
-            null,
+            memetick.getId().toString(),
             NotifyConstant.LINK_MEME + "/" + meme.getId()
         ));
     }
