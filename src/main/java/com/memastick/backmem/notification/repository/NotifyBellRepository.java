@@ -16,13 +16,5 @@ public interface NotifyBellRepository extends JpaRepository<NotifyBell, UUID> {
 
     List<NotifyBell> findAllByUser(User user);
 
-    void deleteAllByUser(User user);
-
     Optional<Long> countByUserAndIsReadFalse(User user);
-
-    @Query(
-        nativeQuery = true,
-        value = "UPDATE notify_bell SET is_read = true WHERE id = :bellId"
-    )
-    void markAsRead(@Param("bellId") UUID bellId);
 }

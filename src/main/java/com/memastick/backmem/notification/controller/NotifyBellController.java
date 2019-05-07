@@ -24,6 +24,11 @@ public class NotifyBellController {
         return bellService.read();
     }
 
+    @PatchMapping("/mark/{id}")
+    public void mark(@PathVariable("id")UUID id) {
+        bellService.mark(id);
+    }
+
     @DeleteMapping("/clear")
     public void clear() {
         bellService.clear();

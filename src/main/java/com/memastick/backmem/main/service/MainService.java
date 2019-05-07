@@ -48,7 +48,7 @@ public class MainService {
             memeRepository.countByType(MemeType.EVOLVE).orElse(0L),
             settingUserService.pushAsk(user),
             inventoryService.countItems(user.getMemetick()),
-            notifyBellService.countNotRead(user)
+            notifyBellService.count(user)
         );
     }
 }

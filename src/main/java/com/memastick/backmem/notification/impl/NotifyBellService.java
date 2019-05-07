@@ -1,5 +1,6 @@
 package com.memastick.backmem.notification.impl;
 
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.notification.api.NotifyBellAPI;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.entity.NotifyBell;
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,39 +42,46 @@ public class NotifyBellService implements NotifySender {
             user,
             dto.getType(),
             dto.getText(),
-            dto.getText()
+            dto.getEvent()
         ));
     }
 
     public List<NotifyBellAPI> read() {
-        User user = securityService.getCurrentUser();
-
-        List<NotifyBell> bells = bellRepository.findAllByUser(user);
-
-        bells
+        return bellRepository.findAllByUser(securityService.getCurrentUser())
             .stream()
-            .filter(Predicate.not(NotifyBell::isRead))
-            .map(NotifyBell::getId)
-            .forEach(bellRepository::markAsRead);
-
-        return bells
-            .stream()
-            .sorted(Comparator.comparing(NotifyBell::getCreating).reversed())
+            .sorted(
+                Comparator.comparing(NotifyBell::isRead)
+                    .thenComparing(Comparator.comparing(NotifyBell::getCreating).reversed())
+            )
             .map(this::map)
             .collect(Collectors.toList());
     }
 
+    public void mark(UUID id) {
+        NotifyBell bell = findById(id);
+        bell.setRead(true);
+        bellRepository.save(bell);
+    }
+
     public void clear() {
         User user = securityService.getCurrentUser();
-        bellRepository.deleteAllByUser(user);
+        List<NotifyBell> bells = bellRepository.findAllByUser(user);
+        bellRepository.deleteAll(bells);
     }
 
     public void clear(UUID id) {
-        bellRepository.deleteById(id);
+        NotifyBell bell = findById(id);
+        bellRepository.delete(bell);
     }
 
-    public long countNotRead(User user) {
+    public long count(User user) {
         return bellRepository.countByUserAndIsReadFalse(user).orElse(0L);
+    }
+
+    public NotifyBell findById(UUID id) {
+        Optional<NotifyBell> optional = bellRepository.findById(id);
+        if (optional.isEmpty()) throw new EntityNotFoundException(NotifyBell.class, "id");
+        return optional.get();
     }
 
     private NotifyBellAPI map(NotifyBell bell) {
