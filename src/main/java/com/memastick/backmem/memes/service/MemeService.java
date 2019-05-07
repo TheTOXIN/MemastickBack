@@ -87,7 +87,7 @@ public class MemeService {
         Memetick memetick = securityService.getCurrentMemetick();
         Meme meme = makeMeme(request, memetick);
 
-        memeRepository.save(meme);
+        memeRepository.saveAndFlush(meme);
         evolveMemeService.startEvolve(meme);
 
         LocalDateTime now = LocalDateTime.now();
@@ -99,9 +99,9 @@ public class MemeService {
         inventoryRepository.save(inventory);
         memetickService.addDna(memetick, MathUtil.rand(0, 1000));
 
-        notifyService.send(NotifyType.CREATING, new NotifyDTO(memetick));
+        notifyService.sendCREATING(memetick, meme);
         taskScheduler.schedule(
-            () -> notifyService.send(NotifyType.CELL, null),
+            () -> notifyService.sendCELL(memetick),
             end.toInstant(ZoneOffset.UTC)
         );
     }

@@ -58,11 +58,7 @@ public class EvolveSurvivalService implements Evolution {
             meme.setType(type);
 
             memetickService.addDna(meme.getMemetick(), dnaBonus);
-
-            notifyService.send(NotifyType.MEME, new NotifyDTO(
-                meme,
-                type
-            ));
+            notifyService.sendMEME(meme);
         });
     }
 }

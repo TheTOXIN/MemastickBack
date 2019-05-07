@@ -37,7 +37,7 @@ public class TokenAllowanceSendService {
         List<MemetickInventory> inventories = inventoryRepository.findByAllowanceFalse();
         inventories.forEach(inventory -> inventory.setAllowance(true));
         inventoryRepository.saveAll(inventories);
-        notificationService.send(NotifyType.ALLOWANCE, null);
+        notificationService.sendALLOWANCE();
 
         log.info("END ALLOWANCE");
     }

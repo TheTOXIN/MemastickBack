@@ -1,39 +1,37 @@
 package com.memastick.backmem.notification.dto;
 
-import com.memastick.backmem.memes.constant.MemeType;
-import com.memastick.backmem.memes.entity.Meme;
-import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.tokens.constant.TokenType;
+import com.memastick.backmem.notification.constant.NotifyType;
+import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotifyDTO {
 
-    private Meme meme;
-    private MemeType type;
-    private int dna;
-    private TokenType token;
-    private Memetick memetick;
+    @JsonIgnore
+    private List<User> users = new ArrayList<>();
 
-    public NotifyDTO(Meme meme, MemeType type) {
-        this.meme = meme;
+    private NotifyType type;
+
+    private String title;
+    private String text;
+    private String data;
+    private String event;
+
+    public NotifyDTO(User user, NotifyType type, String title, String text, String data, String event) {
+        this.users = Collections.singletonList(user);
         this.type = type;
-    }
-
-    public NotifyDTO(int dna) {
-        this.dna = dna;
-    }
-
-    public NotifyDTO(Meme meme, TokenType token) {
-        this.meme = meme;
-        this.token = token;
-    }
-
-    public NotifyDTO(Memetick memetick) {
-        this.memetick = memetick;
+        this.title = title;
+        this.text = text;
+        this.data = data;
+        this.event = event;
     }
 }

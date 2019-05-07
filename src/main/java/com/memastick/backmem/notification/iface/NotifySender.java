@@ -1,4 +1,4 @@
-package com.memastick.backmem.notification.interfaces;
+package com.memastick.backmem.notification.iface;
 
 import com.memastick.backmem.notification.dto.NotifyDTO;
 

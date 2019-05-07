@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notify_bell")
@@ -26,16 +27,21 @@ public class NotifyBell extends AbstractEntity {
     private NotifyType type;
 
     @Column(nullable = false)
+    private String text;
+
+    @Column(nullable = false)
+    private String link;
+
+    @Column(nullable = false)
+    private LocalDateTime creating = LocalDateTime.now();
+
+    @Column(nullable = false)
     private boolean isRead = false;
 
-    @Column
-    private String data;
-
-    // TODO add creating
-
-    public NotifyBell(User user, NotifyType type, String data) {
+    public NotifyBell(User user, NotifyType type, String text, String link) {
         this.user = user;
         this.type = type;
-        this.data = data;
+        this.text = text;
+        this.link = link;
     }
 }

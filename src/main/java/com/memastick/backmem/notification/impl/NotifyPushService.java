@@ -1,4 +1,4 @@
-package com.memastick.backmem.notification.service;
+package com.memastick.backmem.notification.impl;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -7,10 +7,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
+import com.memastick.backmem.notification.constant.NotifyConstant;
 import com.memastick.backmem.notification.dto.NotifyDTO;
-import com.memastick.backmem.notification.dto.NotifyPushDTO;
 import com.memastick.backmem.notification.entity.NotifyPush;
-import com.memastick.backmem.notification.interfaces.NotifySender;
+import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.user.entity.User;
@@ -35,45 +35,22 @@ public class NotifyPushService implements NotifySender {
 
     @Autowired
     public NotifyPushService(
-        @Value("${fcm.push.file}") String fcmFile,
         NotifyPushRepository notifyPushRepository,
-        SecurityService securityService
+        SecurityService securityService,
+        @Value("${fcm.push.file}") String fcmFile
     ) {
-        try (InputStream service = Files.newInputStream(Paths.get(fcmFile))) {
-            FirebaseApp.initializeApp(
-                new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(service))
-                    .build()
-            );
-        } catch (IOException e) {
-            log.error("PUSH NOTIFICATION NOT INIT");
-            e.printStackTrace();
-        }
-
         this.notifyPushRepository = notifyPushRepository;
         this.securityService = securityService;
+
+        this.init(fcmFile);
     }
 
     @Override
     public void send(NotifyDTO dto) {
-
+        dto.getUsers().forEach(u -> send(dto, u));
     }
 
-    public void register(String token) {
-        User user = securityService.getCurrentUser();
-
-        NotifyPush pushToken = notifyPushRepository
-            .findByUser(user)
-            .orElse(new NotifyPush(
-                user
-            ));
-
-        pushToken.setToken(token);
-
-        notifyPushRepository.save(pushToken);
-    }
-
-    public void send(NotifyPushDTO dto, User user) {
+    private void send(NotifyDTO dto, User user) {
         String token = notifyPushRepository.findTokenByUser(user);
 
         WebpushConfig config = WebpushConfig.builder()
@@ -85,10 +62,6 @@ public class NotifyPushService implements NotifySender {
             .setWebpushConfig(config)
             .build();
 
-        sender(message);
-    }
-
-    private void sender(Message message) {
         try {
             FirebaseMessaging.getInstance()
                 .sendAsync(message)
@@ -99,13 +72,45 @@ public class NotifyPushService implements NotifySender {
         }
     }
 
-    private WebpushNotification.Builder builder(NotifyPushDTO dto){
+    private WebpushNotification.Builder builder(NotifyDTO dto){
         WebpushNotification.Builder builder = WebpushNotification.builder();
 
+        WebpushNotification.Action action = new WebpushNotification.Action(
+            dto.getEvent(),
+            "ОТКРЫТЬ"
+        );
+
         builder
-            .setImage(dto.getIcon())
-            .setTitle(dto.getTitle());
+            .addAction(action)
+            .setImage(NotifyConstant.LINK_ICON)
+            .setTitle(dto.getTitle())
+            .setBody(dto.getText());
 
         return builder;
+    }
+
+    public void register(String token) {
+        User user = securityService.getCurrentUser();
+
+        NotifyPush pushToken = notifyPushRepository
+            .findByUser(user)
+            .orElse(new NotifyPush(user));
+
+        pushToken.setToken(token);
+
+        notifyPushRepository.save(pushToken);
+    }
+
+    private void init(String fcmFile) {
+        try (InputStream service = Files.newInputStream(Paths.get(fcmFile))) {
+            FirebaseApp.initializeApp(
+                new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.fromStream(service))
+                    .build()
+            );
+        } catch (IOException e) {
+            log.error("PUSH NOTIFICATION NOT INIT");
+            e.printStackTrace();
+        }
     }
 }

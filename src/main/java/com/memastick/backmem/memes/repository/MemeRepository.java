@@ -4,6 +4,7 @@ import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
+public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     Optional<Long> countByMemetickIdAndType(UUID memetickId, MemeType type);
 
@@ -43,9 +44,7 @@ public interface MemeRepository extends PagingAndSortingRepository<Meme, UUID> {
 
     @Query(
         nativeQuery = true,
-        value = "SELECT * FROM memes m " +
-            "INNER JOIN evolve_memes em ON m.id = em.meme_id " +
-            "WHERE em.population = :population ORDER BY m.chromosomes DESC LIMIT 1"
-    )
+        value = "SELECT * FROM memes m WHERE m.population = :population ORDER BY m.chromosomes DESC LIMIT 1"
+    )//TODO check
     Meme findSuperMeme(@Param("population") long population);
 }

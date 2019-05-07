@@ -61,7 +61,7 @@ public class MemetickService {
     }
 
     public void addDna(Memetick memetick, int dna) {
-        notifyService.send(NotifyType.DNA, new NotifyDTO(dna));
+        notifyService.sendDNA(dna, memetick);
         memetick.setDna(memetick.getDna() + dna);
         memetickRepository.save(memetick);
     }

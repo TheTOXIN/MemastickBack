@@ -69,7 +69,7 @@ public class TokenAcceptService {
 
         tokenWalletService.take(token, memetick);
         memetickService.addDna(memetick, MathUtil.rand(0, (token.getStep().getStep()) + 1) * 100);
-        notifyService.send(NotifyType.TOKEN, new NotifyDTO(meme, token));
+        notifyService.sendTOKEN(token, meme);
     }
 
     private void adaptation(EvolveMeme evolve) {

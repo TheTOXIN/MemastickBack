@@ -21,7 +21,7 @@ public class NotifyPush extends AbstractEntity {
     @JoinColumn(nullable = false, unique = true)
     private User user;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String token;
 
     public NotifyPush(User user) {

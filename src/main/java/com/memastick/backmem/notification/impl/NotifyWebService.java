@@ -1,8 +1,7 @@
-package com.memastick.backmem.notification.service;
+package com.memastick.backmem.notification.impl;
 
 import com.memastick.backmem.notification.dto.NotifyDTO;
-import com.memastick.backmem.notification.dto.NotifyWebDTO;
-import com.memastick.backmem.notification.interfaces.NotifySender;
+import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
@@ -30,21 +29,10 @@ public class NotifyWebService implements NotifySender {
 
     @Override
     public void send(NotifyDTO dto) {
-
+        dto.getUsers().forEach(user -> send(dto, cache.get(user.getLogin())));
     }
 
-    public void register(String sessionId) {
-        cache.put(securityService.getCurrentDetails().getUsername(), sessionId);
-    }
-
-    public void send(NotifyWebDTO dto) {
-        String username = securityService.getCurrentDetails().getUsername();
-        String sessionId = cache.get(username);
-
-        sendNotify(dto, sessionId);
-    }
-
-    private void sendNotify(NotifyWebDTO dto, String sessionId) {
+    private void send(NotifyDTO dto, String sessionId) {
         if (sessionId == null) return;
 
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
@@ -53,5 +41,9 @@ public class NotifyWebService implements NotifySender {
         headerAccessor.setLeaveMutable(true);
 
         template.convertAndSendToUser(sessionId, "/queue/notify", dto, headerAccessor.getMessageHeaders());
+    }
+
+    public void register(String sessionId) {
+        cache.put(securityService.getCurrentDetails().getUsername(), sessionId);
     }
 }
