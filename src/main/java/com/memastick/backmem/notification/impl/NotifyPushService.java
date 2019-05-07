@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Service
 public class NotifyPushService implements NotifySender {
@@ -47,12 +48,14 @@ public class NotifyPushService implements NotifySender {
 
     @Override
     public void send(NotifyDTO dto) {
-        dto.getUsers().forEach(u -> send(dto, u));
+        dto.getUsers().forEach(u ->
+            notifyPushRepository.findAllByUser(u).forEach(p ->
+                send(dto, p.getToken())
+            )
+        );
     }
 
-    private void send(NotifyDTO dto, User user) {
-        String token = notifyPushRepository.findTokenByUser(user);
-
+    private void send(NotifyDTO dto, String token) {
         WebpushConfig config = WebpushConfig.builder()
             .setNotification(builder(dto).build())
             .build();
@@ -92,13 +95,20 @@ public class NotifyPushService implements NotifySender {
     public void register(String token) {
         User user = securityService.getCurrentUser();
 
-        NotifyPush pushToken = notifyPushRepository
-            .findByUser(user)
-            .orElse(new NotifyPush(user));
+        NotifyPush notifyPush = notifyPushRepository
+            .findByToken(token)
+            .orElse(new NotifyPush(token));
 
-        pushToken.setToken(token);
+        if (user.equals(notifyPush.getUser())) return;
 
-        notifyPushRepository.save(pushToken);
+        notifyPush.setUser(user);
+
+        notifyPushRepository.save(notifyPush);
+    }
+
+    public void unregister() {
+        User user = securityService.getCurrentUser();
+        notifyPushRepository.deleteAllByUser(user);
     }
 
     private void init(String fcmFile) {

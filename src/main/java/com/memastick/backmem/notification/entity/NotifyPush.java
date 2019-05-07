@@ -17,14 +17,14 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 public class NotifyPush extends AbstractEntity {
 
-    @OneToOne
-    @JoinColumn(nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private User user;
 
     @Column(nullable = false, unique = true)
     private String token;
 
-    public NotifyPush(User user) {
-        this.user = user;
+    public NotifyPush(String token) {
+        this.token = token;
     }
 }

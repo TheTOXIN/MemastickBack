@@ -5,14 +5,16 @@ import com.memastick.backmem.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface NotifyPushRepository extends JpaRepository<NotifyPush, UUID> {
 
-    Optional<NotifyPush> findByUser(User user);
+    Optional<NotifyPush> findByToken(String token);
 
-    String findTokenByUser(User user);
+    List<NotifyPush> findAllByUser(User user);
 
+    void deleteAllByUser(User user);
 }
