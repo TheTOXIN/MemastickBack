@@ -9,6 +9,8 @@ import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.security.entity.InviteCode;
+import com.memastick.backmem.setting.entity.SettingUser;
+import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,25 +26,25 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemetickRepository memetickRepository;
-    private final MemetickAvatarRepository memetickAvatarRepository;
     private final MemetickInventoryService inventoryService;
     private final MemetickAvatarService avatarService;
+    private final SettingUserService settingService;
 
     @Autowired
     public UserService(
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder,
-            MemetickRepository memetickRepository,
-            MemetickAvatarRepository memetickAvatarRepository,
-            MemetickInventoryService inventoryService,
-            MemetickAvatarService avatarService
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder,
+        MemetickRepository memetickRepository,
+        MemetickInventoryService inventoryService,
+        MemetickAvatarService avatarService,
+        SettingUserService settingService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.memetickRepository = memetickRepository;
-        this.memetickAvatarRepository = memetickAvatarRepository;
         this.inventoryService = inventoryService;
         this.avatarService = avatarService;
+        this.settingService = settingService;
     }
 
     public User findAdmin() {
@@ -65,6 +67,7 @@ public class UserService {
 
         avatarService.generateAvatar(memetick);
         inventoryService.generateInventory(memetick);
+        settingService.generateSetting(user);
 
         return userRepository.save(user);
     }

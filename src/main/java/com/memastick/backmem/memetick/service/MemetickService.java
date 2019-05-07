@@ -20,6 +20,9 @@ import com.memastick.backmem.notification.constant.NotifyType;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.setting.entity.SettingUser;
+import com.memastick.backmem.setting.repository.SettingUserRepository;
+import com.memastick.backmem.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,7 @@ public class MemetickService {
     private final SecurityService securityService;
     private final MemetickMapper memetickMapper;
     private final MemeRepository memeRepository;
+    private final SettingUserRepository settingUserRepository;
 
     @Autowired
     public MemetickService(
@@ -43,13 +47,15 @@ public class MemetickService {
         SecurityService securityService,
         MemetickMapper memetickMapper,
         MemeRepository memeRepository,
-        NotifyService notifyService
+        NotifyService notifyService,
+        SettingUserRepository settingUserRepository
     ) {
         this.memetickRepository = memetickRepository;
         this.securityService = securityService;
         this.memetickMapper = memetickMapper;
         this.memeRepository = memeRepository;
         this.notifyService = notifyService;
+        this.settingUserRepository = settingUserRepository;
     }
 
     public MemetickAPI viewByMe() {
@@ -69,16 +75,17 @@ public class MemetickService {
     public void changeNick(ChangeNickAPI request) {
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
 
-        Memetick memetick = securityService.getCurrentMemetick();
+        User user = securityService.getCurrentUser();
+        SettingUser setting = settingUserRepository.findByUser(user);
+        Memetick memetick = user.getMemetick();
 
-        if (memetick.getNickChanged().plusWeeks(1).isAfter(ZonedDateTime.now()))
-            throw new SettingException(ErrorCode.EXPIRE_NICK);
+        if (setting.getNickChanged().plusWeeks(1).isAfter(ZonedDateTime.now())) throw new SettingException(ErrorCode.EXPIRE_NICK);
 
         request.setNick(request.getNick().replaceAll("\\s", ""));
-
         memetick.setNick(request.getNick());
-        memetick.setNickChanged(ZonedDateTime.now());
+        setting.setNickChanged(ZonedDateTime.now());
 
+        settingUserRepository.save(setting);
         memetickRepository.save(memetick);
     }
 

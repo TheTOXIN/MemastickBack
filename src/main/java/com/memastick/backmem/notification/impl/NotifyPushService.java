@@ -13,6 +13,8 @@ import com.memastick.backmem.notification.entity.NotifyPush;
 import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
 import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.setting.entity.SettingUser;
+import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,26 +35,31 @@ public class NotifyPushService implements NotifySender {
 
     private final NotifyPushRepository notifyPushRepository;
     private final SecurityService securityService;
+    private final SettingUserService settingUserService;
 
     @Autowired
     public NotifyPushService(
+        @Value("${fcm.push.file}") String fcmFile,
         NotifyPushRepository notifyPushRepository,
         SecurityService securityService,
-        @Value("${fcm.push.file}") String fcmFile
+        SettingUserService settingUserService
     ) {
+        this.init(fcmFile);
         this.notifyPushRepository = notifyPushRepository;
         this.securityService = securityService;
-
-        this.init(fcmFile);
+        this.settingUserService = settingUserService;
     }
 
     @Override
     public void send(NotifyDTO dto) {
-        dto.getUsers().forEach(u ->
-            notifyPushRepository.findAllByUser(u).forEach(p ->
-                send(dto, p.getToken())
-            )
-        );
+        dto.getUsers()
+            .stream()
+            .filter(settingUserService::pushWork)
+            .forEach(u ->
+                notifyPushRepository.findAllByUser(u).forEach(p ->
+                    send(dto, p.getToken())
+                )
+            );
     }
 
     private void send(NotifyDTO dto, String token) {
