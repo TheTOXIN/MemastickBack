@@ -4,10 +4,19 @@ import com.memastick.backmem.memetick.api.MemetickAPI;
 import com.memastick.backmem.memetick.dto.MemetickPreviewDTO;
 import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.setting.service.SettingFollowerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MemetickMapper {
+
+    private final SettingFollowerService settingFollowerService;
+
+    @Autowired
+    public MemetickMapper(SettingFollowerService settingFollowerService) {
+        this.settingFollowerService = settingFollowerService;
+    }
 
     public MemetickPreviewDTO toPreviewDTO(Memetick memetick) {
         return new MemetickPreviewDTO(
@@ -19,7 +28,8 @@ public class MemetickMapper {
     public MemetickAPI toMemetickAPI(Memetick memetick) {
         return new MemetickAPI(
             memetick.getId(),
-            memetick.getNick()
+            memetick.getNick(),
+            settingFollowerService.follow(memetick)
         );
     }
 
