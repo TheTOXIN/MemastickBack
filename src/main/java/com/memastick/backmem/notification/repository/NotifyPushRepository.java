@@ -15,6 +15,4 @@ public interface NotifyPushRepository extends JpaRepository<NotifyPush, UUID> {
     Optional<NotifyPush> findByToken(String token);
 
     List<NotifyPush> findAllByUser(User user);
-
-    void deleteAllByUser(User user);
 }

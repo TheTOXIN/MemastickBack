@@ -34,16 +34,6 @@ public class SettingUserService {
         return new SettingAPI(pushWork(user));
     }
 
-    public void pushTrigger() {
-        User user = securityService.getCurrentUser();
-        SettingUser setting = settingUserRepository.findByUser(user);
-
-        if (setting.getPushWork() == null) setting.setPushWork(false);
-        setting.setPushWork(!setting.getPushWork());
-
-        settingUserRepository.save(setting);
-    }
-
     public boolean pushWork(User user) {
         SettingUser setting = settingUserRepository.findByUser(user);
         return Boolean.TRUE.equals(setting.getPushWork());
@@ -52,5 +42,19 @@ public class SettingUserService {
     public boolean pushAsk(User user) {
         SettingUser setting = settingUserRepository.findByUser(user);
         return setting.getPushWork() == null;
+    }
+
+    public void pushOn(User user) {
+        pushSet(user, true);
+    }
+
+    public void pushOff(User user) {
+        pushSet(user, false);
+    }
+
+    private void pushSet(User user, boolean value) {
+        SettingUser setting = settingUserRepository.findByUser(user);
+        setting.setPushWork(value);
+        settingUserRepository.save(setting);
     }
 }

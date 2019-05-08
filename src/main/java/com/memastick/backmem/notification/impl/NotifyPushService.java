@@ -13,7 +13,6 @@ import com.memastick.backmem.notification.entity.NotifyPush;
 import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
 import com.memastick.backmem.security.service.SecurityService;
-import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class NotifyPushService implements NotifySender {
@@ -106,6 +105,8 @@ public class NotifyPushService implements NotifySender {
             .findByToken(token)
             .orElse(new NotifyPush(token));
 
+        settingUserService.pushOn(user);
+
         if (user.equals(notifyPush.getUser())) return;
 
         notifyPush.setUser(user);
@@ -115,7 +116,9 @@ public class NotifyPushService implements NotifySender {
 
     public void unregister() {
         User user = securityService.getCurrentUser();
-        notifyPushRepository.deleteAllByUser(user);
+        settingUserService.pushOff(user);
+        List<NotifyPush> pushes = notifyPushRepository.findAllByUser(user);
+        notifyPushRepository.deleteAll(pushes);
     }
 
     private void init(String fcmFile) {
