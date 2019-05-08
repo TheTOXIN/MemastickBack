@@ -7,7 +7,6 @@ import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.notification.impl.NotifyBellService;
 import com.memastick.backmem.security.service.SecurityService;
-import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ public class MainService {
     private final SecurityService securityService;
     private final EvolveMemeService evolveMemeService;
     private final MemeRepository memeRepository;
-    private final SettingUserService settingUserService;
     private final MemetickInventoryService inventoryService;
     private final NotifyBellService notifyBellService;
 
@@ -27,14 +25,12 @@ public class MainService {
         SecurityService securityService,
         EvolveMemeService evolveMemeService,
         MemeRepository memeRepository,
-        SettingUserService settingUserService,
         MemetickInventoryService inventoryService,
         NotifyBellService notifyBellService
     ) {
         this.securityService = securityService;
         this.evolveMemeService = evolveMemeService;
         this.memeRepository = memeRepository;
-        this.settingUserService = settingUserService;
         this.inventoryService = inventoryService;
         this.notifyBellService = notifyBellService;
     }
@@ -46,7 +42,6 @@ public class MainService {
             user.getMemetick().getNick(),
             evolveMemeService.evolveDay(),
             memeRepository.countByType(MemeType.EVOLVE).orElse(0L),
-            settingUserService.pushAsk(user),
             inventoryService.countItems(user.getMemetick()),
             notifyBellService.count(user)
         );

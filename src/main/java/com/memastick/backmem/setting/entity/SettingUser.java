@@ -27,7 +27,7 @@ public class SettingUser extends AbstractEntity {
     private ZonedDateTime nickChanged = TimeConstant.START_TIME;
 
     @Column
-    private Boolean pushWork;
+    private boolean pushWork = false;
 
     public SettingUser(User user) {
         this.user = user;

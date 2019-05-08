@@ -13,7 +13,6 @@ public class HomeAPI {
     private String nick;
     private long day;
     private long memes;
-    private boolean pushAsk;
     private long countItems;
     private long countBells;
 

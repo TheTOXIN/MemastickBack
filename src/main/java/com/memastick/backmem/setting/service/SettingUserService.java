@@ -24,9 +24,7 @@ public class SettingUserService {
     }
 
     public void generateSetting(User user) {
-        settingUserRepository.save(
-            new SettingUser(user)
-        );
+        settingUserRepository.save(new SettingUser(user));
     }
 
     public SettingAPI mySetting() {
@@ -36,12 +34,7 @@ public class SettingUserService {
 
     public boolean pushWork(User user) {
         SettingUser setting = settingUserRepository.findByUser(user);
-        return Boolean.TRUE.equals(setting.getPushWork());
-    }
-
-    public boolean pushAsk(User user) {
-        SettingUser setting = settingUserRepository.findByUser(user);
-        return setting.getPushWork() == null;
+        return setting.isPushWork();
     }
 
     public void pushOn(User user) {
