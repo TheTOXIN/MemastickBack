@@ -3,12 +3,14 @@ package com.memastick.backmem.notification.impl;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.user.entity.User;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -28,8 +30,8 @@ public class NotifyWebService implements NotifySender {
     }
 
     @Override
-    public void send(NotifyDTO dto) {
-        dto.getUsers().forEach(user -> send(dto, cache.get(user.getLogin())));
+    public void send(List<User> users, NotifyDTO dto) {
+        users.forEach(user -> send(dto, cache.get(user.getLogin())));
     }
 
     private void send(NotifyDTO dto, String sessionId) {

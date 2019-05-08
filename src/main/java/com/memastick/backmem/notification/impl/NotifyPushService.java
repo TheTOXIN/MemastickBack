@@ -50,8 +50,8 @@ public class NotifyPushService implements NotifySender {
     }
 
     @Override
-    public void send(NotifyDTO dto) {
-        dto.getUsers()
+    public void send(List<User> users, NotifyDTO dto) {
+        users
             .stream()
             .filter(settingUserService::pushWork)
             .forEach(u ->

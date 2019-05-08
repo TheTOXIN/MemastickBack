@@ -33,8 +33,8 @@ public class NotifyBellService implements NotifySender {
     }
 
     @Override
-    public void send(NotifyDTO dto) {
-        dto.getUsers().forEach(user -> send(dto, user));
+    public void send(List<User> users, NotifyDTO dto) {
+        users.forEach(user -> send(dto, user));
     }
 
     public void send(NotifyDTO dto, User user) {
