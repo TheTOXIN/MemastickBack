@@ -36,7 +36,7 @@ public class TelegramTranslator implements Translator {
 
     @Override
     public void translate(Meme meme) {
-        String api = String.format(TEMPLATE, token, chat, prepareText(meme));
+        String api = String.format(TEMPLATE, token, chat, TranslatorUtil.prepareText(meme));
 
         // TODO move to service
         Resource resource = TranslatorUtil.downloadImage(meme.getUrl());
@@ -52,14 +52,5 @@ public class TelegramTranslator implements Translator {
         ResponseEntity<String> response = rest.exchange(api, HttpMethod.POST, requestEntity, String.class);
 
         log.info("Translate TELEGRAM meme: " + response.getBody() + " - " + response.getStatusCode());
-    }
-
-    private String prepareText(Meme meme) {
-        return new StringBuilder()
-            .append("МЕМ ДНЯ ❗️" + "\n" )
-            .append("\uD83C\uDF0E Эволюция №" + meme.getPopulation() + "\n")
-            .append("\uD83D\uDE0E Меметик - " + meme.getMemetick().getNick() + "\n")
-            .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
-            .toString();
     }
 }
