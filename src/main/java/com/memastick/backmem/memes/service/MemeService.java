@@ -108,8 +108,8 @@ public class MemeService {
     }
 
     @Transactional
-    public List<MemePageAPI> pages(MemeFilter filter, EvolveStep step, Pageable pageable) {
-        return read(filter, step, pageable)
+    public List<MemePageAPI> pages(MemeFilter filter, EvolveStep step, UUID memetickId, Pageable pageable) {
+        return read(filter, step, memetickId, pageable)
             .stream()
             .map(memeMapper::toPageAPI)
             .collect(Collectors.toList());
@@ -149,17 +149,18 @@ public class MemeService {
         memeRepository.save(prevMeme);
     }
 
-    private List<Meme> read(MemeFilter filter, EvolveStep step, Pageable pageable) {
+    private List<Meme> read(MemeFilter filter, EvolveStep step, UUID memetickId, Pageable pageable) {
         List<Meme> memes = new ArrayList<>();
 
         Memetick memetick = securityService.getCurrentMemetick();
 
-        switch (filter) { //TODO default pageable and sorting
+        switch (filter) { // TODO default pageable and sorting
             case INDV: memes = memeRepository.findByType(MemeType.INDIVID, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
             case DTHS: memes = memeRepository.findByType(MemeType.DEATH, pageable); break;
             case EVLV: memes = memeRepository.findByType(MemeType.EVOLVE, pageable); break;
+            case USER: memes = memeRepository.findByMemetick(memetickService.findById(memetickId), pageable); break;
             case POOL: memes = memePoolService.generate(step, pageable); break;
         }
 

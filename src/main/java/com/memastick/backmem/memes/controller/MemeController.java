@@ -41,11 +41,14 @@ public class MemeController {
     public List<MemePageAPI> pages(
         @RequestParam(name = "filter", required = false) MemeFilter filter,
         @RequestParam(name = "step", required = false) EvolveStep step,
+        @RequestParam(name = "memetick", required = false) UUID memetickId,
         Pageable pageable
     ) {
+        // TODO refactor to DTO
         return memeService.pages(
             filter,
             step,
+            memetickId,
             pageable
         );
     }

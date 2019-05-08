@@ -6,7 +6,6 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -33,7 +32,7 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     List<Meme> findByType(MemeType individ, Pageable pageable);
 
-    List<Meme> findByMemetick(Memetick currentMemetick, Pageable pageable);
+    List<Meme> findByMemetick(Memetick memetick, Pageable pageable);
 
     @Query("SELECT m FROM Meme m WHERE :day - m.population = :step")
     List<Meme> findAllByStepEvolveDay(

@@ -99,6 +99,7 @@ public class MemetickService {
             put(MemetickRatingFilter.CHR, m -> memeRepository.sumChromosomeByMemetickId(m.getId()).orElse(0L));
         }};
 
+        // TODO refactor optimize
         List<Memetick> memeticks = memetickRepository.findAll();
 
         Map<UUID, Long> rateMap = memeticks
