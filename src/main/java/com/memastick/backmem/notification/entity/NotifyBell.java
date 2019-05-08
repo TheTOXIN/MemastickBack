@@ -1,7 +1,6 @@
 package com.memastick.backmem.notification.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
-import com.memastick.backmem.notification.constant.NotifyType;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,9 +23,6 @@ public class NotifyBell extends AbstractEntity {
     private User user;
 
     @Column(nullable = false)
-    private NotifyType type;
-
-    @Column(nullable = false)
     private String text;
 
     @Column(nullable = false)
@@ -38,9 +34,8 @@ public class NotifyBell extends AbstractEntity {
     @Column(nullable = false)
     private boolean isRead = false;
 
-    public NotifyBell(User user, NotifyType type, String text, String link) {
+    public NotifyBell(User user, String text, String link) {
         this.user = user;
-        this.type = type;
         this.text = text;
         this.link = link;
     }

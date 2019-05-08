@@ -40,7 +40,6 @@ public class NotifyBellService implements NotifySender {
     public void send(NotifyDTO dto, User user) {
         bellRepository.save(new NotifyBell(
             user,
-            dto.getType(),
             dto.getText(),
             dto.getEvent()
         ));
@@ -87,7 +86,6 @@ public class NotifyBellService implements NotifySender {
     private NotifyBellAPI map(NotifyBell bell) {
         return new NotifyBellAPI(
             bell.getId(),
-            bell.getType(),
             bell.getText(),
             bell.getLink(),
             bell.isRead()

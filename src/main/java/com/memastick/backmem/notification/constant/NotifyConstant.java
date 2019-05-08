@@ -10,7 +10,7 @@ public class NotifyConstant {
 
     public static final String LINK_ALLOWANCE = GlobalConstant.URL + "/home?event=" + NotifyType.ALLOWANCE;
 
-    public static final String LINK_MEME = GlobalConstant.URL + "/memes";
+    public static final String LINK_MEME = GlobalConstant.URL + "/memes/share";
 
     public static final String LINK_ICON = GlobalConstant.URL + "/assets/images/title-logo.png";
 }

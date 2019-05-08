@@ -102,7 +102,7 @@ public class NotifyService {
 
     @Async
     public void sendALLOWANCE() {
-        send( new NotifyDTO(
+        send(new NotifyDTO(
             userRepository.findAll(),
             NotifyType.ALLOWANCE,
             "Вы получили пособие",
@@ -116,7 +116,7 @@ public class NotifyService {
         NotifyType type = dto.getType();
 
         if (type.isWeb()) webService.send(dto);
-        if (type.isBell()) bellService.send(dto);
         if (type.isPush()) pushService.send(dto);
+        if (type.isBell()) bellService.send(dto);
     }
 }

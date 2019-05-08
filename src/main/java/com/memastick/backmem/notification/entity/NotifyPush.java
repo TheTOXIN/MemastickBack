@@ -24,6 +24,8 @@ public class NotifyPush extends AbstractEntity {
     @Column(nullable = false, unique = true)
     private String token;
 
+    // TODO add on/off
+
     public NotifyPush(String token) {
         this.token = token;
     }
