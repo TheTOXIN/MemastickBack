@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +59,13 @@ public class SettingFollowerService {
         return settingFollowerRepository.findAllByMemetick(memetick)
             .stream()
             .map(SettingFollower::getFollower)
+            .collect(Collectors.toList());
+    }
+
+    public List<Memetick> findMemeticks(User follower) {
+        return settingFollowerRepository.findAllByFollower(follower)
+            .stream()
+            .map(SettingFollower::getMemetick)
             .collect(Collectors.toList());
     }
 }

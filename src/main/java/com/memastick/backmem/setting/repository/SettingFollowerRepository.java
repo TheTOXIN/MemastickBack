@@ -15,5 +15,7 @@ public interface SettingFollowerRepository extends CrudRepository<SettingFollowe
 
     List<SettingFollower> findAllByMemetick(Memetick memetick);
 
+    List<SettingFollower> findAllByFollower(User follower);
+
     Optional<SettingFollower> findByMemetickAndFollower(Memetick memetick, User follower);
 }

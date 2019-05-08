@@ -2,6 +2,7 @@ package com.memastick.backmem.memetick.controller;
 
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.api.MemetickRatingAPI;
 import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.service.MemetickService;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,6 +39,11 @@ public class MemetickController {
     @GetMapping("/rating/{filter}")
     public MemetickRatingAPI rating(@PathVariable("filter") MemetickRatingFilter filter) {
         return memetickService.rating(filter);
+    }
+
+    @GetMapping("/following")
+    public List<MemetickPreviewAPI> following() {
+        return memetickService.following();
     }
 
     @PutMapping("/nick/change")

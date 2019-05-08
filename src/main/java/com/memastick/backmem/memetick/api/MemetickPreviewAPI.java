@@ -1,4 +1,4 @@
-package com.memastick.backmem.memetick.dto;
+package com.memastick.backmem.memetick.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemetickPreviewDTO {
+public class MemetickPreviewAPI {
 
     private UUID id;
     private String nick;

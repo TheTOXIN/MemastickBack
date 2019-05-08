@@ -10,18 +10,18 @@ import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.api.MemetickRatingAPI;
 import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
-import com.memastick.backmem.notification.constant.NotifyType;
-import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.repository.SettingUserRepository;
+import com.memastick.backmem.setting.service.SettingFollowerService;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +40,7 @@ public class MemetickService {
     private final MemetickMapper memetickMapper;
     private final MemeRepository memeRepository;
     private final SettingUserRepository settingUserRepository;
+    private final SettingFollowerService followerService;
 
     @Autowired
     public MemetickService(
@@ -48,7 +49,8 @@ public class MemetickService {
         MemetickMapper memetickMapper,
         MemeRepository memeRepository,
         NotifyService notifyService,
-        SettingUserRepository settingUserRepository
+        SettingUserRepository settingUserRepository,
+        SettingFollowerService followerService
     ) {
         this.memetickRepository = memetickRepository;
         this.securityService = securityService;
@@ -56,6 +58,7 @@ public class MemetickService {
         this.memeRepository = memeRepository;
         this.notifyService = notifyService;
         this.settingUserRepository = settingUserRepository;
+        this.followerService = followerService;
     }
 
     public MemetickAPI viewByMe() {
@@ -122,6 +125,13 @@ public class MemetickService {
             .collect(Collectors.toList());
 
         return new MemetickRatingAPI(top, me);
+    }
+
+    public List<MemetickPreviewAPI> following() {
+        return followerService.findMemeticks(securityService.getCurrentUser())
+            .stream()
+            .map(memetickMapper::toPreviewDTO)
+            .collect(Collectors.toList());
     }
 
     public Memetick findById(UUID id) {

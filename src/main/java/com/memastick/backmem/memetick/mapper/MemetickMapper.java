@@ -1,7 +1,7 @@
 package com.memastick.backmem.memetick.mapper;
 
 import com.memastick.backmem.memetick.api.MemetickAPI;
-import com.memastick.backmem.memetick.dto.MemetickPreviewDTO;
+import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.setting.service.SettingFollowerService;
@@ -21,8 +21,8 @@ public class MemetickMapper {
         this.settingFollowerService = settingFollowerService;
     }
 
-    public MemetickPreviewDTO toPreviewDTO(Memetick memetick) {
-        return new MemetickPreviewDTO(
+    public MemetickPreviewAPI toPreviewDTO(Memetick memetick) {
+        return new MemetickPreviewAPI(
             memetick.getId(),
             memetick.getNick()
         );

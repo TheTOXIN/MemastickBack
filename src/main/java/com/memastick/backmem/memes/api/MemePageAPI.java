@@ -2,7 +2,7 @@ package com.memastick.backmem.memes.api;
 
 import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
-import com.memastick.backmem.memetick.dto.MemetickPreviewDTO;
+import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +15,6 @@ public class MemePageAPI {
 
     private MemeAPI meme;
     private MemeLikeStateDTO likes;
-    private MemetickPreviewDTO memetick;
+    private MemetickPreviewAPI memetick;
 
 }
