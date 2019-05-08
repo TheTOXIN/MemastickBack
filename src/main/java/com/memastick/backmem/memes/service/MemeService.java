@@ -4,7 +4,6 @@ import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
-import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemeImgAPI;
@@ -19,8 +18,6 @@ import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.notification.constant.NotifyType;
-import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.memastick.backmem.main.constant.GlobalConstant.CELL_GROWTH;
+import static com.memastick.backmem.main.constant.GlobalConstant.CELL_SIZE;
 
 
 @Service
@@ -83,7 +83,7 @@ public class MemeService {
 
     @Transactional
     public void create(MemeCreateAPI request) {
-        if (inventoryService.stateCell() != 100) throw new CellSmallException();
+        if (inventoryService.stateCell() != CELL_SIZE) throw new CellSmallException();
 
         Memetick memetick = securityService.getCurrentMemetick();
         Meme meme = makeMeme(request, memetick);
@@ -92,7 +92,7 @@ public class MemeService {
         evolveMemeService.startEvolve(meme);
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime end = now.plusDays(GlobalConstant.CELL_GROWTH);
+        LocalDateTime end = now.plusDays(CELL_GROWTH);
 
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
         inventory.setCellCreating(now);

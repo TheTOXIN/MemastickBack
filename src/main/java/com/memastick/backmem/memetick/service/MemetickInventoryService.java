@@ -80,7 +80,7 @@ public class MemetickInventoryService {
         long full = ChronoUnit.MINUTES.between(cell, end);
         long lift = ChronoUnit.MINUTES.between(now, end);
 
-        return CELL_SIZE - Math.min((int) (CELL_SIZE / full * lift), CELL_SIZE);
+        return CELL_SIZE - Math.min((int) (100f / full * lift), CELL_SIZE);
     }
 
     public long countItems(Memetick memetick) {
