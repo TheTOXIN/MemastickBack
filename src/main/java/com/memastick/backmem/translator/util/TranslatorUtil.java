@@ -12,12 +12,23 @@ import java.net.URL;
 
 public class TranslatorUtil {
 
-    public static Resource downloadImage(String link) {
+    public static Resource downloadResource(String link) {
         try {
             URL url = new URL(link);
-            File file = new File("translator");
+            File file = new File("translator.jpeg");
             FileUtils.copyURLToFile(url, file);
             return new FileSystemResource(file);
+        } catch (IOException ex) {
+            return null;
+        }
+    }
+
+    public static File downloadFile(String link) {
+        try {
+            URL url = new URL(link);
+            File file = new File("translator.jpeg");
+            FileUtils.copyURLToFile(url, file);
+            return file;
         } catch (IOException ex) {
             return null;
         }

@@ -38,8 +38,7 @@ public class TelegramTranslator implements Translator {
     public void translate(Meme meme) {
         String api = String.format(TEMPLATE, token, chat, TranslatorUtil.prepareText(meme));
 
-        // TODO move to service
-        Resource resource = TranslatorUtil.downloadImage(meme.getUrl());
+        Resource resource = TranslatorUtil.downloadResource(meme.getUrl());
         if (resource == null) return;
 
         MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
