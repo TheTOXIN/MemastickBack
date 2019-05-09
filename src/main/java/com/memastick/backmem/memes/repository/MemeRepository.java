@@ -34,10 +34,11 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     List<Meme> findByMemetick(Memetick memetick, Pageable pageable);
 
-    @Query("SELECT m FROM Meme m WHERE :day - m.population = :step")
-    List<Meme> findAllByStepEvolveDay(
+    @Query("SELECT m FROM Meme m WHERE :day - m.population = :step AND m.type = :type")
+    List<Meme> findAllByStepEvolveDayAndType(
         @Param("day") long day,
         @Param("step") long step,
+        @Param("type") MemeType type,
         Pageable pageable
     );
 

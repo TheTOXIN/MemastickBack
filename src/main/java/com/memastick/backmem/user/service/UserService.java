@@ -16,6 +16,7 @@ import com.memastick.backmem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -52,8 +53,10 @@ public class UserService {
         return byRole.orElse(null);
     }
 
+    @Transactional
     public User generateUser(RegistrationAPI request, InviteCode inviteCode) {
         User user = new User();
+
         user.setEmail(request.getEmail());
         user.setLogin(request.getLogin());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -67,9 +70,12 @@ public class UserService {
 
         avatarService.generateAvatar(memetick);
         inventoryService.generateInventory(memetick);
+
+        user = userRepository.save(user);
+
         settingService.generateSetting(user);
 
-        return userRepository.save(user);
+        return user;
     }
 
     public void updatePassword(String login, String password) {

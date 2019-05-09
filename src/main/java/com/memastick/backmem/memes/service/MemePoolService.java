@@ -2,6 +2,7 @@ package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,13 +30,15 @@ public class MemePoolService {
 
     public List<Meme> generate(EvolveStep step, Pageable pageable) {
         if (step == null) {
-            return memeRepository.findAll(
+            return memeRepository.findByType(
+                MemeType.EVOLVE,
                 generatePageable(pageable)
-            ).getContent();
+            );
         } else {
-            return memeRepository.findAllByStepEvolveDay(
+            return memeRepository.findAllByStepEvolveDayAndType(
                 evolveMemeService.evolveDay(),
                 step.getStep(),
+                MemeType.EVOLVE,
                 pageable
             );
         }

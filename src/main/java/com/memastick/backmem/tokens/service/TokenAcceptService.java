@@ -68,7 +68,7 @@ public class TokenAcceptService {
         }
 
         tokenWalletService.take(token, memetick);
-        memetickService.addDna(memetick, MathUtil.rand(0, (token.getStep().getStep()) + 1) * 100);
+        memetickService.addDna(memetick, MathUtil.rand(0, 100));
         notifyService.sendTOKEN(token, meme);
     }
 

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class MemetickInventory extends AbstractEntity {
 
     @OneToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, unique = true)
     private Memetick memetick;
 
     @OneToOne
