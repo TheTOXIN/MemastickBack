@@ -101,6 +101,20 @@ public class NotifyService {
     }
 
     @Async
+    public void sendADMIN(String message) {
+        send(
+            userRepository.findAll(),
+            new NotifyDTO(
+                NotifyType.ADMIN,
+                "Сообщения администратора",
+                message,
+                null,
+                null
+            )
+        );
+    }
+
+    @Async
     public void sendCREATING(Memetick memetick, Meme meme) {
         send(
             followerService.findFollowers(memetick),

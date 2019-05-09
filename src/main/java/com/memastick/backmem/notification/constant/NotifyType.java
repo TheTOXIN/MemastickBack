@@ -10,6 +10,7 @@ public enum NotifyType {
     CELL(false, true, true),
     MEME(true, false, false),
     TOKEN(true, false, true),
+    ADMIN(true, false, false),
     CREATING(true, true, true),
     ALLOWANCE(false, true, true);
 
