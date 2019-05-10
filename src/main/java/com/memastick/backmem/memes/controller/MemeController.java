@@ -1,9 +1,10 @@
 package com.memastick.backmem.memes.controller;
 
+import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
+import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeFilter;
-import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.service.MemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -26,17 +27,30 @@ public class MemeController {
         this.memeService = memeService;
     }
 
-    @GetMapping("read/{id}")
-    public MemeAPI read(@PathVariable("id") UUID memeId) {
-        return memeService.read(memeId);
+    @GetMapping("/img/{id}")
+    public MemeImgAPI readImg(@PathVariable("id") UUID memeId) {
+        return memeService.readImg(memeId);
     }
 
-    @GetMapping(value = "/pages/filter/{filter}")
+    @GetMapping("/page/{id}")
+    public MemePageAPI page(@PathVariable("id") UUID memeId) {
+        return memeService.page(memeId);
+    }
+
+    @GetMapping(value = "/pages")
     public List<MemePageAPI> pages(
-        @PathVariable("filter") MemeFilter filter,
+        @RequestParam(name = "filter", required = false) MemeFilter filter,
+        @RequestParam(name = "step", required = false) EvolveStep step,
+        @RequestParam(name = "memetick", required = false) UUID memetickId,
         Pageable pageable
     ) {
-        return memeService.pagesByFilter(filter, pageable);
+        // TODO refactor to DTO
+        return memeService.pages(
+            filter,
+            step,
+            memetickId,
+            pageable
+        );
     }
 
     @PostMapping("/create")

@@ -9,6 +9,7 @@ import com.memastick.backmem.user.repository.UserRepository;
 import com.memastick.backmem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -29,6 +30,7 @@ public class RegistrationService {
         this.userService = userService;
     }
 
+    @Transactional
     public SecurityStatus registration(RegistrationAPI request) {
         SecurityStatus status = validateRegistration(request);
 

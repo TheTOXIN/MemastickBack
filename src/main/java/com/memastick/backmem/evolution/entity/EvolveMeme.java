@@ -27,19 +27,18 @@ public class EvolveMeme extends AbstractEntity {
     @Enumerated(EnumType.ORDINAL)
     private EvolveStep step;
 
+    @Max(101)
     @Column(nullable = false)
-    private long population;
-
-    @Max(100)
-    @Column(nullable = false)
-    private Float chanceSurvive = 0f;
+    private float chance = 0f;
 
     @Column(nullable = false)
-    private boolean chanceIncrease = false;
+    private boolean immunity = false;
 
-    public EvolveMeme(Meme meme, EvolveStep step, long population) {
+    @Column(nullable = false)
+    private int adaptation = 0;
+
+    public EvolveMeme(Meme meme) {
         this.meme = meme;
-        this.step = step;
-        this.population = population;
+        this.step = EvolveStep.find(0);
     }
 }

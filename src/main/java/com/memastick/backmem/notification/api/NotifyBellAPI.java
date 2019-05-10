@@ -1,4 +1,4 @@
-package com.memastick.backmem.memetick.dto;
+package com.memastick.backmem.notification.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,11 @@ import java.util.UUID;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MemetickPreviewDTO {
+public class NotifyBellAPI {
 
     private UUID id;
-    private String nick;
+    private String text;
+    private String link;
+    private boolean isRead;
 
 }

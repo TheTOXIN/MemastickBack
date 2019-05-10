@@ -60,7 +60,7 @@ public class MemetickAvatarService {
         validateImage(image);
 
         String format = "jpg";
-        if (image.getContentType().equals("image/png")) format = "png";
+        if ("image/png".equals(image.getContentType())) format = "png";
 
         BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
 
@@ -106,4 +106,9 @@ public class MemetickAvatarService {
         return baos.toByteArray();
     }
 
+    public void generateAvatar(Memetick memetick) {
+        MemetickAvatar avatar = new MemetickAvatar();
+        avatar.setMemetick(memetick);
+        memetickAvatarRepository.save(avatar);
+    }
 }

@@ -1,45 +1,58 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
+import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeFilter;
 import com.memastick.backmem.memes.constant.MemeType;
-import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.entity.MemetickInventory;
+import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
-import com.memastick.backmem.tokens.constant.TokenType;
-import com.memastick.backmem.tokens.service.TokenWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.CELL_GROWTH;
+import static com.memastick.backmem.main.constant.GlobalConstant.CELL_SIZE;
+
 
 @Service
 public class MemeService {
 
+    public final NotifyService notifyService;
+    private final TaskScheduler taskScheduler;
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
     private final EvolveMemeService evolveMemeService;
-    private final TokenWalletService tokenWalletService;
     private final MemeMapper memeMapper;
     private final MemeLikeService memeLikeService;
+    private final MemePoolService memePoolService;
+    private final MemetickInventoryService inventoryService;
+    private final MemetickInventoryRepository inventoryRepository;
 
     @Autowired
     public MemeService(
@@ -47,43 +60,69 @@ public class MemeService {
         MemeRepository memeRepository,
         MemetickService memetickService,
         @Lazy EvolveMemeService evolveMemeService,
-        TokenWalletService tokenWalletService,
-        MemeMapper memeMapper,
-        @Lazy MemeLikeService memeLikeService
+        @Lazy MemeMapper memeMapper,
+        @Lazy MemeLikeService memeLikeService,
+        @Lazy MemePoolService memePoolService,
+        MemetickInventoryService inventoryService,
+        MemetickInventoryRepository inventoryRepository,
+        TaskScheduler taskScheduler,
+        NotifyService notifyService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickService = memetickService;
         this.evolveMemeService = evolveMemeService;
-        this.tokenWalletService = tokenWalletService;
         this.memeMapper = memeMapper;
         this.memeLikeService = memeLikeService;
+        this.memePoolService = memePoolService;
+        this.inventoryService = inventoryService;
+        this.inventoryRepository = inventoryRepository;
+        this.taskScheduler = taskScheduler;
+        this.notifyService = notifyService;
     }
 
     @Transactional
     public void create(MemeCreateAPI request) {
-        Memetick memetick = securityService.getCurrentMemetick();
-        tokenWalletService.have(TokenType.CREATING, memetick);
+        if (inventoryService.stateCell() != CELL_SIZE) throw new CellSmallException();
 
+        Memetick memetick = securityService.getCurrentMemetick();
         Meme meme = makeMeme(request, memetick);
-        memeRepository.save(meme);
+
+        memeRepository.saveAndFlush(meme);
         evolveMemeService.startEvolve(meme);
 
-        tokenWalletService.take(TokenType.CREATING, memetick);
-        memetickService.addDna(memetick, MathUtil.rand(0, 100));
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime end = now.plusDays(CELL_GROWTH);
+
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        inventory.setCellCreating(now);
+
+        inventoryRepository.save(inventory);
+        memetickService.addDna(memetick, MathUtil.rand(0, 1000));
+
+        notifyService.sendCREATING(memetick, meme);
+        taskScheduler.schedule(
+            () -> notifyService.sendCELL(memetick),
+            end.toInstant(ZoneOffset.UTC)
+        );
     }
 
     @Transactional
-    public List<MemePageAPI> pagesByFilter(MemeFilter filter, Pageable pageable) {
-        return readByFilter(filter, pageable)
+    public List<MemePageAPI> pages(MemeFilter filter, EvolveStep step, UUID memetickId, Pageable pageable) {
+        return read(filter, step, memetickId, pageable)
             .stream()
             .map(memeMapper::toPageAPI)
             .collect(Collectors.toList());
     }
 
-    public MemeAPI read(UUID memeId) {
+    public MemePageAPI page(UUID memeId) {
         Meme meme = findById(memeId);
-        return memeMapper.toMemeAPI(meme);
+        return  memeMapper.toPageAPI(meme);
+    }
+
+    public MemeImgAPI readImg(UUID memeId) {
+        Meme meme = findById(memeId);
+        return new MemeImgAPI(meme.getUrl());
     }
 
     public Meme findById(UUID id) {
@@ -92,30 +131,52 @@ public class MemeService {
         return byId.get();
     }
 
-    private List<Meme> readByFilter(MemeFilter filter, Pageable pageable) {
+    public void moveIndex(Meme meme) {
+        long newIndex = meme.getIndexer() + 1;
+        long oldIndex = meme.getIndexer();
+
+        Meme prevMeme = memeRepository.findByPopulationAndIndexer(
+            meme.getPopulation(),
+            newIndex
+        ).orElse(null);
+
+        if (prevMeme == null) return;
+
+        meme.setIndexer(newIndex);
+        prevMeme.setIndexer(oldIndex);
+
+        memeRepository.save(meme);
+        memeRepository.save(prevMeme);
+    }
+
+    private List<Meme> read(MemeFilter filter, EvolveStep step, UUID memetickId, Pageable pageable) {
         List<Meme> memes = new ArrayList<>();
 
         Memetick memetick = securityService.getCurrentMemetick();
 
-        switch (filter) {
+        switch (filter) { // TODO default pageable and sorting
             case INDV: memes = memeRepository.findByType(MemeType.INDIVID, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
             case DTHS: memes = memeRepository.findByType(MemeType.DEATH, pageable); break;
             case EVLV: memes = memeRepository.findByType(MemeType.EVOLVE, pageable); break;
+            case USER: memes = memeRepository.findByMemetick(memetickService.findById(memetickId), pageable); break;
+            case POOL: memes = memePoolService.generate(step, pageable); break;
         }
 
         return memes;
     }
 
     private Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
+        long population = evolveMemeService.evolveDay();
+        long indexer = memeRepository.countByPopulation(population).orElse(0L) + 1;
+
         return new Meme(
             request.getFireId(),
             request.getUrl(),
             memetick,
-            ZonedDateTime.now(),
-            MemeType.EVOLVE,
-            0
+            population,
+            indexer
         );
     }
 }

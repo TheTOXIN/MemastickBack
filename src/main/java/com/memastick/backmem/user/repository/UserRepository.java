@@ -1,5 +1,6 @@
 package com.memastick.backmem.user.repository;
 
+import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +20,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByRole(RoleType role);
 
     Optional<User> findByMemetickId(UUID memetickId);
+
+    User findByMemetick(Memetick memetick);
 }
 

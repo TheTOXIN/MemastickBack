@@ -1,4 +1,4 @@
-package com.memastick.backmem.translator.impl;
+package com.memastick.backmem.translator.serivce;
 
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
@@ -11,22 +11,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TranslatorPublishService {
 
     private static final Logger log = LoggerFactory.getLogger(TranslatorPublishService.class);
 
-    private final Translator translator;
+    private final List<Translator> translators;
     private final EvolveMemeService evolveMemeService;
     private final MemeRepository memeRepository;
 
     @Autowired
     public TranslatorPublishService(
-        Translator translator,
+        List<Translator> translators,
         EvolveMemeService evolveMemeService,
         MemeRepository memeRepository
     ) {
-        this.translator = translator;
+        this.translators = translators;
         this.evolveMemeService = evolveMemeService;
         this.memeRepository = memeRepository;
     }
@@ -40,7 +42,7 @@ public class TranslatorPublishService {
         Meme meme = memeRepository.findSuperMeme(population);
         if (meme == null) return;
 
-        translator.translate(meme);
+        translators.forEach(t -> t.translate(meme));
 
         log.info("END TRANSLATE PUBLISH");
     }

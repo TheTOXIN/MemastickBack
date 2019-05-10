@@ -49,11 +49,18 @@ public class TokenWalletService {
         if (wallet.get(type) <= 0) throw new TokenWalletException();
     }
 
+    public TokenWalletAPI read() {
+        Memetick currentMemetick = securityService.getCurrentMemetick();
+        return read(currentMemetick);
+    }
 
     public TokenWalletAPI read(UUID memetickId) {
         Memetick memetick = memetickService.findById(memetickId);
-        HashMap<TokenType, Integer> wallet = wallet(memetick);
+        return read(memetick);
+    }
 
+    public TokenWalletAPI read(Memetick memetick) {
+        HashMap<TokenType, Integer> wallet = wallet(memetick);
         return new TokenWalletAPI(wallet);
     }
 
@@ -81,11 +88,11 @@ public class TokenWalletService {
     public HashMap<TokenType, Integer> getWallet(TokenWallet tokenWallet) {
         HashMap<TokenType, Integer> wallet = new HashMap<>();
 
-        wallet.put(TokenType.CREATING, tokenWallet.getCreating());
-        wallet.put(TokenType.FITNESS, tokenWallet.getFitness());
-        wallet.put(TokenType.MUTATION, tokenWallet.getMutation());
+        wallet.put(TokenType.TUBE, tokenWallet.getTube());
+        wallet.put(TokenType.SCOPE, tokenWallet.getScope());
+        wallet.put(TokenType.MUTAGEN, tokenWallet.getMutagen());
         wallet.put(TokenType.CROSSOVER, tokenWallet.getCrossover());
-        wallet.put(TokenType.SELECTION, tokenWallet.getSelection());
+        wallet.put(TokenType.ANTIBIOTIC, tokenWallet.getAntibiotic());
 
         return wallet;
     }
@@ -93,11 +100,11 @@ public class TokenWalletService {
     public HashMap<TokenType, BiConsumer<TokenWallet, Integer>> setWallet() {
         HashMap<TokenType, BiConsumer<TokenWallet, Integer>> setter = new HashMap<>();
 
-        setter.put(TokenType.CREATING, TokenWallet::setCreating);
-        setter.put(TokenType.FITNESS, TokenWallet::setFitness);
-        setter.put(TokenType.MUTATION, TokenWallet::setMutation);
+        setter.put(TokenType.TUBE, TokenWallet::setTube);
+        setter.put(TokenType.SCOPE, TokenWallet::setScope);
+        setter.put(TokenType.MUTAGEN, TokenWallet::setMutagen);
         setter.put(TokenType.CROSSOVER, TokenWallet::setCrossover);
-        setter.put(TokenType.SELECTION, TokenWallet::setSelection);
+        setter.put(TokenType.ANTIBIOTIC, TokenWallet::setAntibiotic);
 
         return setter;
     }

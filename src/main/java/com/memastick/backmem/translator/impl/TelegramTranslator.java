@@ -1,6 +1,5 @@
 package com.memastick.backmem.translator.impl;
 
-import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.translator.iface.Translator;
 import com.memastick.backmem.translator.util.TranslatorUtil;
@@ -29,22 +28,17 @@ public class TelegramTranslator implements Translator {
     private String chat;
 
     private final RestTemplate rest;
-    private final EvolveMemeRepository evolveMemeRepository;
 
     @Autowired
-    public TelegramTranslator(
-        RestTemplate rest,
-        EvolveMemeRepository evolveMemeRepository
-    ) {
+    public TelegramTranslator(RestTemplate rest) {
         this.rest = rest;
-        this.evolveMemeRepository = evolveMemeRepository;
     }
 
     @Override
     public void translate(Meme meme) {
-        String api = String.format(TEMPLATE, token, chat, prepareText(meme));
+        String api = String.format(TEMPLATE, token, chat, TranslatorUtil.prepareText(meme));
 
-        Resource resource = TranslatorUtil.downloadImage(meme.getUrl());
+        Resource resource = TranslatorUtil.downloadResource(meme.getUrl());
         if (resource == null) return;
 
         MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
@@ -57,14 +51,5 @@ public class TelegramTranslator implements Translator {
         ResponseEntity<String> response = rest.exchange(api, HttpMethod.POST, requestEntity, String.class);
 
         log.info("Translate TELEGRAM meme: " + response.getBody() + " - " + response.getStatusCode());
-    }
-
-    private String prepareText(Meme meme) {
-        return new StringBuilder()
-            .append("МЕМ ДНЯ ❗️" + "\n" )
-            .append("\uD83C\uDF0E Эволюция №" + evolveMemeRepository.findByMeme(meme).getPopulation() + "\n")
-            .append("\uD83D\uDE0E Меметик - " + meme.getMemetick().getNick() + "\n")
-            .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
-            .toString();
     }
 }

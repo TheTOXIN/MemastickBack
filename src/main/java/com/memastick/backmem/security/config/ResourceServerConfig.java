@@ -25,14 +25,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .mvcMatchers("/migrate/**").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/next-evolve").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/send-allowance").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/admin-message").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
-            .mvcMatchers("/memes/read/**").anonymous()
+            .mvcMatchers("/memes/img/**").anonymous()
             .mvcMatchers("/hello").anonymous()
             .mvcMatchers("/memetick-avatars/download/**").anonymous()
             .mvcMatchers("/invite/registration").anonymous()
             .mvcMatchers("/registration").anonymous()
             .mvcMatchers("/password-reset/send").anonymous()
             .mvcMatchers("/password-reset/take").anonymous()
+            .mvcMatchers("/socket/**").anonymous()
             .mvcMatchers("/**").authenticated();
     }
 }

@@ -1,7 +1,6 @@
 package com.memastick.backmem.memetick.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
-import com.memastick.backmem.main.constant.TimeConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,8 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.time.ZonedDateTime;
-
 
 @Entity
 @Table(name = "memeticks")
@@ -26,8 +23,4 @@ public class Memetick extends AbstractEntity {
 
     @Column(nullable = false)
     private long dna = 0L;
-
-    @Column(nullable = false)
-    private ZonedDateTime nickChanged = TimeConstant.START_TIME;
-
 }

@@ -64,13 +64,6 @@ public class MemeLikeService {
         if (memeLike.isLike()) memeLike.setLikeTime(LocalDateTime.now());
 
         memeLikeRepository.save(memeLike);
-
-        int randDna = MathUtil.rand(0, 100);
-
-        memetickService.addDna(
-            memeLike.getMeme().getMemetick(),
-            memeLike.isLike() ? randDna : randDna * -1
-        );
     }
 
     public void chromosomeTrigger(UUID id, int count) {

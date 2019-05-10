@@ -3,6 +3,8 @@ package com.memastick.backmem.main.service;
 
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
+import com.memastick.backmem.memetick.service.MemetickAvatarService;
+import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
@@ -29,6 +31,8 @@ public class Initializer {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final MemetickInventoryService inventoryService;
+    private final MemetickAvatarService avatarService;
 
     @Value("${memastick.admin.login}")
     private String adminLogin;
@@ -38,15 +42,18 @@ public class Initializer {
 
     @Autowired
     public Initializer(
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder,
-        UserService userService,
-        MemetickRepository memetickRepository
-    ) {
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder,
+            UserService userService,
+            MemetickRepository memetickRepository,
+            MemetickInventoryService inventoryService,
+            MemetickAvatarService avatarService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.memetickRepository = memetickRepository;
+        this.inventoryService = inventoryService;
+        this.avatarService = avatarService;
     }
 
     public void init() {
@@ -61,14 +68,18 @@ public class Initializer {
         if (admin != null) return;
 
         User user = new User();
+        Memetick memetick = makeAdminMemetick();
 
         user.setEmail(ADMIN_EMAIL);
         user.setLogin(adminLogin);
         user.setPassword(passwordEncoder.encode(adminPassword));
         user.setRole(RoleType.ADMIN);
-        user.setMemetick(makeAdminMemetick());
+        user.setMemetick(memetick);
 
         userRepository.save(user);
+
+        avatarService.generateAvatar(memetick);
+        inventoryService.generateInventory(memetick);
     }
 
     private Memetick makeAdminMemetick() {
@@ -80,5 +91,4 @@ public class Initializer {
 
         return memetick;
     }
-
 }
