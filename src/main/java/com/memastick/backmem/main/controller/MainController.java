@@ -41,17 +41,8 @@ public class MainController {
         this.notifyService = notifyService;
     }
 
-    @Autowired
-    private List<Translator> translators;
-
-    @Autowired
-    private MemeService memeService;
-
     @GetMapping("test")
-    public void test() {
-        Meme meme = memeService.findById(UUID.fromString("3dd0d8d9-60b7-442c-b73f-3140a63db003"));
-        this.translators.forEach(translator -> translator.translate(meme));
-    }
+    public void test() { }
 
     @GetMapping("hello")
     public String hello() {
