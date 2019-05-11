@@ -6,6 +6,7 @@ import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.service.MainService;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.tokens.service.TokenAllowanceSendService;
 import com.memastick.backmem.translator.iface.Translator;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class MainController {
@@ -37,6 +39,18 @@ public class MainController {
         this.evolveNextService = evolveNextService;
         this.allowanceSendService = allowanceSendService;
         this.notifyService = notifyService;
+    }
+
+    @Autowired
+    private List<Translator> translators;
+
+    @Autowired
+    private MemeService memeService;
+
+    @GetMapping("test")
+    public void test() {
+        Meme meme = memeService.findById(UUID.fromString("3dd0d8d9-60b7-442c-b73f-3140a63db003"));
+        this.translators.forEach(translator -> translator.translate(meme));
     }
 
     @GetMapping("hello")

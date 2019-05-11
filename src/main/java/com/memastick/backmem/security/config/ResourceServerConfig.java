@@ -27,6 +27,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .mvcMatchers("/send-allowance").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/admin-message").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/test").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/memes/img/**").anonymous()
             .mvcMatchers("/hello").anonymous()
             .mvcMatchers("/memetick-avatars/download/**").anonymous()
