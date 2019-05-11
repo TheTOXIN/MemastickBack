@@ -109,7 +109,7 @@ public class NotifyService {
                 "Сообщения администратора",
                 message,
                 null,
-                null
+                ""
             )
         );
     }
