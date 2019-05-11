@@ -36,20 +36,20 @@ public class TelegramTranslator implements Translator {
 
     @Override
     public void translate(Meme meme) {
-        String api = String.format(TEMPLATE, token, chat, TranslatorUtil.prepareText(meme));
-
-        Resource resource = TranslatorUtil.downloadResource(meme.getUrl());
-        if (resource == null) return;
-
-        MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
-        bodyMap.add("photo", resource);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(bodyMap, headers);
-        ResponseEntity<String> response = rest.exchange(api, HttpMethod.POST, requestEntity, String.class);
-
-        log.info("Translate TELEGRAM meme: " + response.getBody() + " - " + response.getStatusCode());
+//        String api = String.format(TEMPLATE, token, chat, TranslatorUtil.prepareText(meme));
+//
+//        Resource resource = TranslatorUtil.downloadResource(meme.getUrl());
+//        if (resource == null) return;
+//
+//        MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
+//        bodyMap.add("photo", resource);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//
+//        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(bodyMap, headers);
+//        ResponseEntity<String> response = rest.exchange(api, HttpMethod.POST, requestEntity, String.class);
+//
+//        log.info("Translate TELEGRAM meme: " + response.getBody() + " - " + response.getStatusCode());
     }
 }
