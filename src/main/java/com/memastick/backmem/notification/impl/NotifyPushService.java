@@ -91,7 +91,7 @@ public class NotifyPushService implements NotifySender {
 
         builder
             .addAction(action)
-            .setImage(NotifyConstant.LINK_ICON)
+            .setIcon(NotifyConstant.LINK_ICON)
             .setTitle(dto.getTitle())
             .setBody(dto.getText());
 

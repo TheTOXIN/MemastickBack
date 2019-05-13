@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +92,7 @@ public class MemeService {
         memeRepository.saveAndFlush(meme);
         evolveMemeService.startEvolve(meme);
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
         LocalDateTime end = now.plusDays(CELL_GROWTH);
 
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
