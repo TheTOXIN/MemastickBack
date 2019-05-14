@@ -72,9 +72,7 @@ public class NotifyPushService implements NotifySender {
             .build();
 
         try {
-            FirebaseMessaging.getInstance()
-                .sendAsync(message)
-                .get();
+            FirebaseMessaging.getInstance().sendAsync(message);
         } catch (Exception e) {
             log.error("PUSH NOTIFICATION NOT SEND");
             e.printStackTrace();
