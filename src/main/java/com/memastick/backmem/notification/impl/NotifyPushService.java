@@ -72,10 +72,10 @@ public class NotifyPushService implements NotifySender {
             .build();
 
         try {
-            FirebaseMessaging.getInstance().sendAsync(message);
-            log.info("PUSH NOTIFICATION SEND: {} TO - {}", dto, token);
+            String result = FirebaseMessaging.getInstance().send(message);
+            log.info("PUSH NOTIFICATION SEND: DTO - {} \n TOKEN - {} \n RESULT - ", dto, token, result);
         } catch (Exception e) {
-            log.error("PUSH NOTIFICATION NOT : {} TO - {}", dto, token);
+            log.info("PUSH NOTIFICATION NOT SEND: DTO - {} \n TOKEN - {}", dto, token);
             e.printStackTrace();
         }
     }
