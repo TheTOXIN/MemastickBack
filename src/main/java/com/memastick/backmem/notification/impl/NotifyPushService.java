@@ -73,8 +73,9 @@ public class NotifyPushService implements NotifySender {
 
         try {
             FirebaseMessaging.getInstance().sendAsync(message);
+            log.info("PUSH NOTIFICATION SEND: {} TO - {}", dto, token);
         } catch (Exception e) {
-            log.error("PUSH NOTIFICATION NOT SEND");
+            log.error("PUSH NOTIFICATION NOT : {} TO - {}", dto, token);
             e.printStackTrace();
         }
     }
