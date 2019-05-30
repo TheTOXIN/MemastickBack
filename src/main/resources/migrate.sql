@@ -110,3 +110,4 @@ ALTER TABLE memeticks DROP nick_changed;
 INSERT INTO setting_users (id, nick_changed, push_work, user_id)
 SELECT uuid_generate_v4(), '2018-01-01 00:00:00.000000', null, id
 FROM users;
+--
