@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class GlobalConstant {
 
-    public static final String VERSION = "0.3 alpha";
+    public static final String VERSION = "0.3.1 alpha";
 
     public static final String URL = "https://www.memastick.ru";
 
