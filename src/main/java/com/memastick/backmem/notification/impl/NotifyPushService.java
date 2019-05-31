@@ -96,20 +96,13 @@ public class NotifyPushService implements NotifySender {
             .findByToken(token)
             .orElse(new NotifyPush(token));
 
-        settingUserService.pushOn(user);
+        settingUserService.pushSet(user, true);
 
         if (user.equals(notifyPush.getUser())) return;
 
         notifyPush.setUser(user);
 
         notifyPushRepository.save(notifyPush);
-    }
-
-    public void unregister() {
-        User user = securityService.getCurrentUser();
-        settingUserService.pushOff(user);
-        List<NotifyPush> pushes = notifyPushRepository.findAllByUser(user);
-        notifyPushRepository.deleteAll(pushes);
     }
 
     private void init(String fcmFile) {

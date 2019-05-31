@@ -29,6 +29,7 @@ public class SecurityService {
             .getPrincipal();
     }
 
+    //TODO cache
     public User getCurrentUser() {
         UserDetails currentDetails = getCurrentDetails();
         return userService.findByLogin(currentDetails.getUsername());
