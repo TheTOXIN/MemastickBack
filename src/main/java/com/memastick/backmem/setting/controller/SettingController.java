@@ -39,7 +39,7 @@ public class SettingController {
     }
 
     @PatchMapping("/push/{value}")
-    public void pushSet(@PathVariable("value") boolean value) {
+    public void push(@PathVariable("value") boolean value) {
         settingUserService.pushSet(
             securityService.getCurrentUser(),
             value

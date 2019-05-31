@@ -63,6 +63,8 @@ public class NotifyPushService implements NotifySender {
     }
 
     private void send(NotifyDTO dto, List<String> tokens) {
+        if (tokens.isEmpty()) return;
+
         WebpushConfig config = WebpushConfig.builder()
             .setNotification(builder(dto).build())
             .build();
