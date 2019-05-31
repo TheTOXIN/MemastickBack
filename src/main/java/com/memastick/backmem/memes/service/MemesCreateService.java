@@ -14,7 +14,6 @@ import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +23,7 @@ import java.util.List;
 @Service
 public class MemesCreateService {
 
-    public final NotifyService notifyService;
-    private final TaskScheduler taskScheduler;
+    private final NotifyService notifyService;
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
@@ -41,7 +39,6 @@ public class MemesCreateService {
         EvolveMemeService evolveMemeService,
         MemetickInventoryService inventoryService,
         MemetickInventoryRepository inventoryRepository,
-        TaskScheduler taskScheduler,
         NotifyService notifyService
     ) {
         this.securityService = securityService;
@@ -50,7 +47,6 @@ public class MemesCreateService {
         this.evolveMemeService = evolveMemeService;
         this.inventoryService = inventoryService;
         this.inventoryRepository = inventoryRepository;
-        this.taskScheduler = taskScheduler;
         this.notifyService = notifyService;
     }
 
