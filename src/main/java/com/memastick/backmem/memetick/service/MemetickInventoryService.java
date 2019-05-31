@@ -101,4 +101,13 @@ public class MemetickInventoryService {
 
         return count;
     }
+
+    public void updateCell(Memetick memetick) {
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+
+        inventory.setCellCreating(LocalDateTime.now());
+        inventory.setCellNotify(false);
+
+        inventoryRepository.save(inventory);
+    }
 }

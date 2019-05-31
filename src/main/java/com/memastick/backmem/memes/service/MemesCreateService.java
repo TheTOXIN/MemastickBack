@@ -19,7 +19,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -65,12 +64,7 @@ public class MemesCreateService {
         memeRepository.saveAndFlush(meme);
         evolveMemeService.startEvolve(meme);
 
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
-
-        inventory.setCellCreating(LocalDateTime.now());
-        inventory.setCellNotify(false);
-
-        inventoryRepository.save(inventory);
+        inventoryService.updateCell(memetick);
         memetickService.addDna(memetick, MathUtil.rand(0, 1000));
 
         notifyService.sendCREATING(memetick, meme);
