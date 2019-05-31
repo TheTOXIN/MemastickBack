@@ -41,7 +41,7 @@ public class MemetickController {
         return memetickService.rating(filter);
     }
 
-    @GetMapping("/following")
+    @GetMapping("/following")// TODO to new controller
     public List<MemetickPreviewAPI> following() {
         return memetickService.following();
     }

@@ -58,8 +58,16 @@ public class MemetickInventoryService {
         return new MemetickInventoryAPI(
             tokenWalletService.read().getWallet(),
             tokenAllowanceService.have(),
-            this.stateCell() == CELL_SIZE
+            this.checkState()
         );
+    }
+
+    public boolean checkState() {
+        return this.stateCell() == CELL_SIZE;
+    }
+
+    public boolean checkState(MemetickInventory inventory) {
+        return this.stateCell(inventory) == CELL_SIZE;
     }
 
     public int stateCell() {
@@ -92,5 +100,14 @@ public class MemetickInventoryService {
         if (stateCell(inventory) == CELL_SIZE) count++;
 
         return count;
+    }
+
+    public void updateCell(Memetick memetick) {
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+
+        inventory.setCellCreating(LocalDateTime.now());
+        inventory.setCellNotify(false);
+
+        inventoryRepository.save(inventory);
     }
 }

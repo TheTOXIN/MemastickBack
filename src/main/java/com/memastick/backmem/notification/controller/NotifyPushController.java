@@ -22,9 +22,4 @@ public class NotifyPushController {
     public void register(@RequestBody String token) {
         pushService.register(token);
     }
-
-    @PostMapping("/unregister")
-    public void unregister() {
-        pushService.unregister();
-    }
 }

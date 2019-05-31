@@ -131,12 +131,17 @@
 		<dependency>
 			<groupId>com.google.firebase</groupId>
 			<artifactId>firebase-admin</artifactId>
-			<version>6.7.0</version>
+			<version>6.8.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vk.api</groupId>
 			<artifactId>sdk</artifactId>
 			<version>0.5.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>27.1-jre</version>
 		</dependency>
 	</dependencies>
 

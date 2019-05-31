@@ -4,7 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
 import com.memastick.backmem.notification.constant.NotifyConstant;
@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NotifyPushService implements NotifySender {
@@ -54,47 +55,40 @@ public class NotifyPushService implements NotifySender {
         users
             .stream()
             .filter(settingUserService::pushWork)
-            .forEach(u ->
-                notifyPushRepository.findAllByUser(u).forEach(p ->
-                    send(dto, p.getToken())
-                )
+            .forEach(u -> send(dto, notifyPushRepository.findAllByUser(u)
+                .stream()
+                .map(NotifyPush::getToken)
+                .collect(Collectors.toList()))
             );
     }
 
-    private void send(NotifyDTO dto, String token) {
+    private void send(NotifyDTO dto, List<String> tokens) {
+        if (tokens.isEmpty()) return;
+
         WebpushConfig config = WebpushConfig.builder()
             .setNotification(builder(dto).build())
             .build();
 
-        Message message = Message.builder()
-            .setToken(token)
+        MulticastMessage messages = MulticastMessage.builder()
+            .addAllTokens(tokens)
             .setWebpushConfig(config)
             .build();
 
         try {
-            String result = FirebaseMessaging.getInstance().send(message);
-            log.info("PUSH NOTIFICATION SEND: DTO - {} \n TOKEN - {} \n RESULT - ", dto, token, result);
+            FirebaseMessaging.getInstance().sendMulticastAsync(messages);
+            log.info("PUSH NOTIFICATION SEND: DTO - {}", dto);
         } catch (Exception e) {
-            log.info("PUSH NOTIFICATION NOT SEND: DTO - {} \n TOKEN - {}", dto, token);
+            log.error("PUSH NOTIFICATION NOT SEND: DTO - {}", dto);
             e.printStackTrace();
         }
     }
 
     private WebpushNotification.Builder builder(NotifyDTO dto){
-        WebpushNotification.Builder builder = WebpushNotification.builder();
-
-        WebpushNotification.Action action = new WebpushNotification.Action(
-            dto.getEvent(),
-            "ОТКРЫТЬ"
-        );
-
-        builder
-            .addAction(action)
+        return WebpushNotification.builder()
+            .putCustomData("click_action", dto.getEvent())
             .setIcon(NotifyConstant.LINK_ICON)
             .setTitle(dto.getTitle())
             .setBody(dto.getText());
-
-        return builder;
     }
 
     public void register(String token) {
@@ -104,20 +98,13 @@ public class NotifyPushService implements NotifySender {
             .findByToken(token)
             .orElse(new NotifyPush(token));
 
-        settingUserService.pushOn(user);
+        settingUserService.pushSet(user, true);
 
         if (user.equals(notifyPush.getUser())) return;
 
         notifyPush.setUser(user);
 
         notifyPushRepository.save(notifyPush);
-    }
-
-    public void unregister() {
-        User user = securityService.getCurrentUser();
-        settingUserService.pushOff(user);
-        List<NotifyPush> pushes = notifyPushRepository.findAllByUser(user);
-        notifyPushRepository.deleteAll(pushes);
     }
 
     private void init(String fcmFile) {

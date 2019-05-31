@@ -33,4 +33,6 @@ public class MemetickInventory extends AbstractEntity {
     @Column(nullable = false)
     private LocalDateTime cellCreating = TimeConstant.START_LOCAL_TIME;
 
+    @Column(nullable = false)
+    private boolean cellNotify = false; //TODO use task executor
 }
