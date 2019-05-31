@@ -111,3 +111,9 @@ INSERT INTO setting_users (id, nick_changed, push_work, user_id)
 SELECT uuid_generate_v4(), '2018-01-01 00:00:00.000000', null, id
 FROM users;
 --
+
+--==[0.3.1]=--
+--BEFORE
+ALTER TABLE memetick_inventories ADD COLUMN cell_notify boolean;
+UPDATE memetick_inventories SET cell_notify = false;
+ALTER TABLE memetick_inventories ALTER COLUMN cell_notify SET NOT NULL;

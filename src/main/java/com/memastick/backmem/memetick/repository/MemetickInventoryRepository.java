@@ -15,4 +15,6 @@ public interface MemetickInventoryRepository extends CrudRepository<MemetickInve
 
     List<MemetickInventory> findByAllowanceFalse();
 
+    List<MemetickInventory> findByCellNotifyFalse();
+
 }

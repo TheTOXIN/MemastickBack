@@ -6,6 +6,7 @@ import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeFilter;
 import com.memastick.backmem.memes.service.MemeService;
+import com.memastick.backmem.memes.service.MemesCreateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,15 @@ import java.util.UUID;
 public class MemeController {
 
     private final MemeService memeService;
+    private final MemesCreateService createService;
 
     @Autowired
     public MemeController(
-        MemeService memeService
+        MemeService memeService,
+        MemesCreateService createService
     ) {
         this.memeService = memeService;
+        this.createService = createService;
     }
 
     @GetMapping("/img/{id}")
@@ -55,7 +59,7 @@ public class MemeController {
 
     @PostMapping("/create")
     public ResponseEntity create(@RequestBody MemeCreateAPI request) {
-        memeService.create(request);
+        createService.create(request);
         return ResponseEntity.ok().build();
     }
 }
