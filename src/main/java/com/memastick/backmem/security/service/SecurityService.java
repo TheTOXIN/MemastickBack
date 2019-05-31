@@ -2,24 +2,28 @@ package com.memastick.backmem.security.service;
 
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.user.entity.User;
-import com.memastick.backmem.user.service.UserService;
+import com.memastick.backmem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.data.util.Pair;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
 public class SecurityService {
 
-    private final UserService userService;
+    private Map<String, Pair<LocalDateTime, User>> users = new HashMap<>();
+
+    private final UserRepository userRepository;
 
     @Autowired
-    public SecurityService(
-        @Lazy UserService userService
-    ) {
-        this.userService = userService;
+    public SecurityService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public UserDetails getCurrentDetails() {
@@ -29,10 +33,28 @@ public class SecurityService {
             .getPrincipal();
     }
 
-    //TODO cache
     public User getCurrentUser() {
-        UserDetails currentDetails = getCurrentDetails();
-        return userService.findByLogin(currentDetails.getUsername());
+        String username = getCurrentDetails().getUsername();
+
+        Pair<LocalDateTime, User> userCache = users.get(username);
+
+        if (userCache == null || cacheTime(userCache)) userCache = cacheUser(username);
+
+        return userCache.getSecond();
+    }
+
+    private Pair<LocalDateTime, User> cacheUser(String username) {
+        User user = userRepository.findByLogin(username).get();
+
+        Pair<LocalDateTime, User> userCache = Pair.of(LocalDateTime.now(), user);
+
+        users.put(username, userCache);
+
+        return userCache;
+    }
+
+    private boolean cacheTime(Pair<LocalDateTime, User> userCache) {
+        return userCache.getFirst().plusHours(1).isBefore(LocalDateTime.now());
     }
 
     public Memetick getCurrentMemetick() {
