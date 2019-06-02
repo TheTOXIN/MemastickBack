@@ -26,15 +26,12 @@ import java.util.List;
 @Service
 public class MemesCreateService {
 
-    private final static Logger LOG = LoggerFactory.getLogger(InviteCodeService.class);
-
     private final NotifyService notifyService;
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
     private final EvolveMemeService evolveMemeService;
     private final MemetickInventoryService inventoryService;
-    private final MemetickInventoryRepository inventoryRepository;
 
     @Autowired
     public MemesCreateService(
@@ -43,7 +40,6 @@ public class MemesCreateService {
         MemetickService memetickService,
         EvolveMemeService evolveMemeService,
         MemetickInventoryService inventoryService,
-        MemetickInventoryRepository inventoryRepository,
         NotifyService notifyService
     ) {
         this.securityService = securityService;
@@ -51,7 +47,6 @@ public class MemesCreateService {
         this.memetickService = memetickService;
         this.evolveMemeService = evolveMemeService;
         this.inventoryService = inventoryService;
-        this.inventoryRepository = inventoryRepository;
         this.notifyService = notifyService;
     }
 
@@ -70,22 +65,6 @@ public class MemesCreateService {
 
         notifyService.sendCREATING(memetick, meme);
     }
-
-//    @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
-//    public void notification() {
-//        LOG.info("START check cell notify");
-//
-//        List<MemetickInventory> inventories = inventoryRepository.findByCellNotifyFalse();
-//
-//        inventories
-//            .stream()
-//            .filter(inventoryService::checkState)
-//            .forEach(inventory -> notifyService.sendCELL(inventory.getMemetick()));
-//
-//        inventories.forEach(i -> i.setCellNotify(true));
-//
-//        inventoryRepository.saveAll(inventories);
-//    }
 
     private Meme make(MemeCreateAPI request, Memetick memetick) {
         long population = evolveMemeService.evolveDay();
