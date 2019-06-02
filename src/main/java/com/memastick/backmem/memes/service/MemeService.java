@@ -39,65 +39,31 @@ import java.util.stream.Collectors;
 import static com.memastick.backmem.main.constant.GlobalConstant.CELL_GROWTH;
 import static com.memastick.backmem.main.constant.GlobalConstant.CELL_SIZE;
 
-
 @Service
 public class MemeService {
 
-    private final NotifyService notifyService;
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
-    private final EvolveMemeService evolveMemeService;
     private final MemeMapper memeMapper;
     private final MemeLikeService memeLikeService;
     private final MemePoolService memePoolService;
-    private final MemetickInventoryService inventoryService;
-    private final MemetickInventoryRepository inventoryRepository;
 
     @Autowired
     public MemeService(
         SecurityService securityService,
         MemeRepository memeRepository,
         MemetickService memetickService,
-        @Lazy EvolveMemeService evolveMemeService,
         @Lazy MemeMapper memeMapper,
         @Lazy MemeLikeService memeLikeService,
-        @Lazy MemePoolService memePoolService,
-        MemetickInventoryService inventoryService,
-        MemetickInventoryRepository inventoryRepository,
-        NotifyService notifyService
+        @Lazy MemePoolService memePoolService
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickService = memetickService;
-        this.evolveMemeService = evolveMemeService;
         this.memeMapper = memeMapper;
         this.memeLikeService = memeLikeService;
         this.memePoolService = memePoolService;
-        this.inventoryService = inventoryService;
-        this.inventoryRepository = inventoryRepository;
-        this.notifyService = notifyService;
-    }
-
-    @Transactional
-    public void create(MemeCreateAPI request) {
-        if (inventoryService.stateCell() != CELL_SIZE) throw new CellSmallException();
-
-        Memetick memetick = securityService.getCurrentMemetick();
-        Meme meme = makeMeme(request, memetick);
-
-        memeRepository.saveAndFlush(meme);
-        evolveMemeService.startEvolve(meme);
-
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
-
-        inventory.setCellCreating(LocalDateTime.now());
-        inventory.setCellNotify(false);
-
-        inventoryRepository.save(inventory);
-        memetickService.addDna(memetick, MathUtil.rand(0, 1000));
-
-        notifyService.sendCREATING(memetick, meme);
     }
 
     @Transactional
@@ -158,19 +124,6 @@ public class MemeService {
         }
 
         return memes;
-    }
-
-    private Meme makeMeme(MemeCreateAPI request, Memetick memetick) {
-        long population = evolveMemeService.evolveDay();
-        long indexer = memeRepository.countByPopulation(population).orElse(0L) + 1;
-
-        return new Meme(
-            request.getFireId(),
-            request.getUrl(),
-            memetick,
-            population,
-            indexer
-        );
     }
 }
 
