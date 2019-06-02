@@ -12,7 +12,10 @@ import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.notification.service.NotifyService;
+import com.memastick.backmem.security.service.InviteCodeService;
 import com.memastick.backmem.security.service.SecurityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,8 @@ import java.util.List;
 
 @Service
 public class MemesCreateService {
+
+    private final static Logger LOG = LoggerFactory.getLogger(InviteCodeService.class);
 
     private final NotifyService notifyService;
     private final SecurityService securityService;
@@ -66,8 +71,10 @@ public class MemesCreateService {
         notifyService.sendCREATING(memetick, meme);
     }
 
-    @Scheduled(fixedDelay = 3600000)
+    @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
     public void notification() {
+        LOG.info("START check cell notify");
+
         List<MemetickInventory> inventories = inventoryRepository.findByCellNotifyFalse();
 
         inventories
