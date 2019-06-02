@@ -71,21 +71,21 @@ public class MemesCreateService {
         notifyService.sendCREATING(memetick, meme);
     }
 
-    @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
-    public void notification() {
-        LOG.info("START check cell notify");
-
-        List<MemetickInventory> inventories = inventoryRepository.findByCellNotifyFalse();
-
-        inventories
-            .stream()
-            .filter(inventoryService::checkState)
-            .forEach(inventory -> notifyService.sendCELL(inventory.getMemetick()));
-
-        inventories.forEach(i -> i.setCellNotify(true));
-
-        inventoryRepository.saveAll(inventories);
-    }
+//    @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
+//    public void notification() {
+//        LOG.info("START check cell notify");
+//
+//        List<MemetickInventory> inventories = inventoryRepository.findByCellNotifyFalse();
+//
+//        inventories
+//            .stream()
+//            .filter(inventoryService::checkState)
+//            .forEach(inventory -> notifyService.sendCELL(inventory.getMemetick()));
+//
+//        inventories.forEach(i -> i.setCellNotify(true));
+//
+//        inventoryRepository.saveAll(inventories);
+//    }
 
     private Meme make(MemeCreateAPI request, Memetick memetick) {
         long population = evolveMemeService.evolveDay();
