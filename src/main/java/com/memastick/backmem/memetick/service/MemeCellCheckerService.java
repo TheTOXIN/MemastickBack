@@ -13,35 +13,35 @@ import java.util.List;
 @Service
 public class MemeCellCheckerService {
 
-    private final static Logger LOG = LoggerFactory.getLogger(MemeCellCheckerService.class);
-
-    private final MemetickInventoryRepository inventoryRepository;
-    private final MemetickInventoryService inventoryService;
-    private final NotifyService notifyService;
-
-    public MemeCellCheckerService(
-        MemetickInventoryRepository inventoryRepository,
-        MemetickInventoryService inventoryService,
-        NotifyService notifyService
-    ) {
-        this.inventoryRepository = inventoryRepository;
-        this.inventoryService = inventoryService;
-        this.notifyService = notifyService;
-    }
-
-    @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
-    public void notification() {
-        LOG.info("START check cell notify");
-
-        List<MemetickInventory> inventories = inventoryRepository.findByCellNotifyFalse();
-
-        inventories
-            .stream()
-            .filter(inventoryService::checkState)
-            .forEach(inventory -> notifyService.sendCELL(inventory.getMemetick()));
-
-        inventories.forEach(i -> i.setCellNotify(true));
-
-        inventoryRepository.saveAll(inventories);
-    }
+//    private final static Logger LOG = LoggerFactory.getLogger(MemeCellCheckerService.class);
+//
+//    private final MemetickInventoryRepository inventoryRepository;
+//    private final MemetickInventoryService inventoryService;
+//    private final NotifyService notifyService;
+//
+//    public MemeCellCheckerService(
+//        MemetickInventoryRepository inventoryRepository,
+//        MemetickInventoryService inventoryService,
+//        NotifyService notifyService
+//    ) {
+//        this.inventoryRepository = inventoryRepository;
+//        this.inventoryService = inventoryService;
+//        this.notifyService = notifyService;
+//    }
+//
+//    @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
+//    public void notification() {
+//        LOG.info("START check cell notify");
+//
+//        List<MemetickInventory> inventories = inventoryRepository.findByCellNotifyFalse();
+//
+//        inventories
+//            .stream()
+//            .filter(inventoryService::checkState)
+//            .forEach(inventory -> notifyService.sendCELL(inventory.getMemetick()));
+//
+//        inventories.forEach(i -> i.setCellNotify(true));
+//
+//        inventoryRepository.saveAll(inventories);
+//    }
 }
