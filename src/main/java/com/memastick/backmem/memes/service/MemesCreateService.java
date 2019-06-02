@@ -57,7 +57,9 @@ public class MemesCreateService {
         Memetick memetick = securityService.getCurrentMemetick();
         Meme meme = make(request, memetick);
 
-        memeRepository.saveAndFlush(meme);
+        memeRepository.save(meme);
+        memeRepository.flush();
+
         evolveMemeService.startEvolve(meme);
 
         inventoryService.updateCell(memetick);

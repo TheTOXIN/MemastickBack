@@ -1,4 +1,4 @@
-package com.memastick.backmem.memetick.service;
+package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
