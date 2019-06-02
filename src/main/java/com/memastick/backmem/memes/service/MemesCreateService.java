@@ -50,7 +50,6 @@ public class MemesCreateService {
         this.notifyService = notifyService;
     }
 
-    @Transactional
     public void create(MemeCreateAPI request) {
         if (!inventoryService.checkState()) throw new CellSmallException();
 
