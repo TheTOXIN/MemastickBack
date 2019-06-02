@@ -26,57 +26,57 @@ import java.util.List;
 @Service
 public class MemesCreateService {
 
-    private final NotifyService notifyService;
-    private final SecurityService securityService;
-    private final MemeRepository memeRepository;
-    private final MemetickService memetickService;
-    private final EvolveMemeService evolveMemeService;
-    private final MemetickInventoryService inventoryService;
-
-    @Autowired
-    public MemesCreateService(
-        SecurityService securityService,
-        MemeRepository memeRepository,
-        MemetickService memetickService,
-        EvolveMemeService evolveMemeService,
-        MemetickInventoryService inventoryService,
-        NotifyService notifyService
-    ) {
-        this.securityService = securityService;
-        this.memeRepository = memeRepository;
-        this.memetickService = memetickService;
-        this.evolveMemeService = evolveMemeService;
-        this.inventoryService = inventoryService;
-        this.notifyService = notifyService;
-    }
-
-    public void create(MemeCreateAPI request) {
-        if (!inventoryService.checkState()) throw new CellSmallException();
-
-        Memetick memetick = securityService.getCurrentMemetick();
-        Meme meme = make(request, memetick);
-
-        memeRepository.save(meme);
-        memeRepository.flush();
-
-        evolveMemeService.startEvolve(meme);
-
-        inventoryService.updateCell(memetick);
-        memetickService.addDna(memetick, MathUtil.rand(0, 1000));
-
-        notifyService.sendCREATING(memetick, meme);
-    }
-
-    private Meme make(MemeCreateAPI request, Memetick memetick) {
-        long population = evolveMemeService.evolveDay();
-        long indexer = memeRepository.countByPopulation(population).orElse(0L) + 1;
-
-        return new Meme(
-            request.getFireId(),
-            request.getUrl(),
-            memetick,
-            population,
-            indexer
-        );
-    }
+//    private final NotifyService notifyService;
+//    private final SecurityService securityService;
+//    private final MemeRepository memeRepository;
+//    private final MemetickService memetickService;
+//    private final EvolveMemeService evolveMemeService;
+//    private final MemetickInventoryService inventoryService;
+//
+//    @Autowired
+//    public MemesCreateService(
+//        SecurityService securityService,
+//        MemeRepository memeRepository,
+//        MemetickService memetickService,
+//        EvolveMemeService evolveMemeService,
+//        MemetickInventoryService inventoryService,
+//        NotifyService notifyService
+//    ) {
+//        this.securityService = securityService;
+//        this.memeRepository = memeRepository;
+//        this.memetickService = memetickService;
+//        this.evolveMemeService = evolveMemeService;
+//        this.inventoryService = inventoryService;
+//        this.notifyService = notifyService;
+//    }
+//
+//    public void create(MemeCreateAPI request) {
+//        if (!inventoryService.checkState()) throw new CellSmallException();
+//
+//        Memetick memetick = securityService.getCurrentMemetick();
+//        Meme meme = make(request, memetick);
+//
+//        memeRepository.save(meme);
+//        memeRepository.flush();
+//
+//        evolveMemeService.startEvolve(meme);
+//
+//        inventoryService.updateCell(memetick);
+//        memetickService.addDna(memetick, MathUtil.rand(0, 1000));
+//
+//        notifyService.sendCREATING(memetick, meme);
+//    }
+//
+//    private Meme make(MemeCreateAPI request, Memetick memetick) {
+//        long population = evolveMemeService.evolveDay();
+//        long indexer = memeRepository.countByPopulation(population).orElse(0L) + 1;
+//
+//        return new Meme(
+//            request.getFireId(),
+//            request.getUrl(),
+//            memetick,
+//            population,
+//            indexer
+//        );
+//    }
 }
