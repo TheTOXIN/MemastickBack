@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.CELL_GROWTH;
 import static com.memastick.backmem.main.constant.GlobalConstant.CELL_SIZE;
 
 @Service
@@ -66,10 +67,6 @@ public class MemetickInventoryService {
         return this.stateCell() == CELL_SIZE;
     }
 
-    public boolean checkState(MemetickInventory inventory) {
-        return this.stateCell(inventory) == CELL_SIZE;
-    }
-
     public int stateCell() {
         Memetick memetick = securityService.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
@@ -81,7 +78,7 @@ public class MemetickInventoryService {
         LocalDateTime cell = inventory.getCellCreating();
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime end = cell.plusDays(GlobalConstant.CELL_GROWTH);
+        LocalDateTime end = cell.plusHours(CELL_GROWTH);
 
         if (end.isBefore(now)) return CELL_SIZE;
 
@@ -106,7 +103,6 @@ public class MemetickInventoryService {
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
 
         inventory.setCellCreating(LocalDateTime.now());
-        inventory.setCellNotify(false);
 
         inventoryRepository.save(inventory);
     }

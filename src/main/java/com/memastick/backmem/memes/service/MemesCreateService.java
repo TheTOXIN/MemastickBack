@@ -17,24 +17,28 @@ import com.memastick.backmem.security.service.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
+
+import static com.memastick.backmem.main.constant.GlobalConstant.CELL_GROWTH;
 
 @Service
 public class MemesCreateService {
 
-    private final static Logger LOG = LoggerFactory.getLogger(InviteCodeService.class);
-
+    private final TaskScheduler taskScheduler;
     private final NotifyService notifyService;
     private final SecurityService securityService;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
     private final EvolveMemeService evolveMemeService;
     private final MemetickInventoryService inventoryService;
-    private final MemetickInventoryRepository inventoryRepository;
 
     @Autowired
     public MemesCreateService(
@@ -43,16 +47,16 @@ public class MemesCreateService {
         MemetickService memetickService,
         EvolveMemeService evolveMemeService,
         MemetickInventoryService inventoryService,
-        MemetickInventoryRepository inventoryRepository,
-        NotifyService notifyService
+        NotifyService notifyService,
+        TaskScheduler taskScheduler
     ) {
         this.securityService = securityService;
         this.memeRepository = memeRepository;
         this.memetickService = memetickService;
         this.evolveMemeService = evolveMemeService;
         this.inventoryService = inventoryService;
-        this.inventoryRepository = inventoryRepository;
         this.notifyService = notifyService;
+        this.taskScheduler = taskScheduler;
     }
 
     @Transactional
@@ -68,23 +72,11 @@ public class MemesCreateService {
         inventoryService.updateCell(memetick);
         memetickService.addDna(memetick, MathUtil.rand(0, 1000));
 
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
+        LocalDateTime end = now.plusHours(CELL_GROWTH);
+
         notifyService.sendCREATING(memetick, meme);
-    }
-
-    @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
-    public void notification() {
-        LOG.info("START check cell notify");
-
-        List<MemetickInventory> inventories = inventoryRepository.findByCellNotifyFalse();
-
-        inventories
-            .stream()
-            .filter(inventoryService::checkState)
-            .forEach(inventory -> notifyService.sendCELL(inventory.getMemetick()));
-
-        inventories.forEach(i -> i.setCellNotify(true));
-
-        inventoryRepository.saveAll(inventories);
+        taskScheduler.schedule(() -> notifyService.sendCELL(memetick), end.toInstant(ZoneOffset.UTC));
     }
 
     private Meme make(MemeCreateAPI request, Memetick memetick) {
