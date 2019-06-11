@@ -4,21 +4,13 @@ import com.memastick.backmem.evolution.service.EvolveNextService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.service.MainService;
-import com.memastick.backmem.memes.entity.Meme;
-import com.memastick.backmem.memes.repository.MemeRepository;
-import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.tokens.service.TokenAllowanceSendService;
-import com.memastick.backmem.translator.iface.Translator;
-import com.memastick.backmem.translator.impl.VkontakteTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class MainController {

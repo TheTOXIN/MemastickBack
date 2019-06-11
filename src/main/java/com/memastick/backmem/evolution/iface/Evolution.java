@@ -1,4 +1,4 @@
-package com.memastick.backmem.evolution.interfaces;
+package com.memastick.backmem.evolution.iface;
 
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 

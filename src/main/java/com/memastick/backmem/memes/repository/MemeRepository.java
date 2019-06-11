@@ -45,6 +45,6 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
     @Query(
         nativeQuery = true,
         value = "SELECT * FROM memes m WHERE m.population = :population ORDER BY m.chromosomes DESC LIMIT 1"
-    )//TODO check
+    )
     Meme findSuperMeme(@Param("population") long population);
 }

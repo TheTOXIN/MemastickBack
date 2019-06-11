@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,16 +38,18 @@ public class EvolveNextService {
     public void evolve() {
         log.info("START EVOLVE - {}", evolveMemeService.evolveDay());
 
+        List<EvolveMeme> evolve = new ArrayList<>();
+
         Arrays.stream(EvolveStep.values()).forEach(step -> {
             List<EvolveMeme> evolveMemes = evolveMemeRepository.findByStep(step);
+
             evolveHandler.pullEvolve(step).evolution(evolveMemes);
-            evolveMemeRepository.saveAll(evolveMemes);
+            evolveMemeService.nextStep(evolveMemes);
+
+            evolve.addAll(evolveMemes);
         });
 
-        //TODO Hmmmmmmmmmmmmmmmmmmm........................................
-        List<EvolveMeme> evolveMemes = evolveMemeRepository.findAllEvolve();
-        evolveMemeService.nextStep(evolveMemes);
-        evolveMemeRepository.saveAll(evolveMemes);
+        evolveMemeRepository.saveAll(evolve);
 
         log.info("END EVOLVE - {}", evolveMemeService.evolveDay());
     }

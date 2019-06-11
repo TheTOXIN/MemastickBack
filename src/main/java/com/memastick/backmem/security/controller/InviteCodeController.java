@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//TODO refactor
 @RestController
 public class InviteCodeController {
 
@@ -55,5 +54,4 @@ public class InviteCodeController {
         inviteCodeService.take(code);
         return ResponseEntity.ok().build();
     }
-
 }

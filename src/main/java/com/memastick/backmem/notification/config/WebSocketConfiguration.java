@@ -1,5 +1,6 @@
 package com.memastick.backmem.notification.config;
 
+import com.memastick.backmem.main.constant.GlobalConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -14,7 +15,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
             .addEndpoint("/socket")
-            .setAllowedOrigins("*") // TODO only connect
+            .setAllowedOrigins(GlobalConstant.URL)
             .withSockJS();
     }
 

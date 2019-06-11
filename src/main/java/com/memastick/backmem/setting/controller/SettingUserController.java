@@ -2,35 +2,24 @@ package com.memastick.backmem.setting.controller;
 
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.setting.api.SettingAPI;
-import com.memastick.backmem.setting.service.SettingFollowerService;
 import com.memastick.backmem.setting.service.SettingUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
-@RequestMapping("setting")
-public class SettingController {
+@RequestMapping("setting-users")
+public class SettingUserController {
 
-    private final SettingFollowerService settingFollowerService;
     private final SettingUserService settingUserService;
     private final SecurityService securityService;
 
     @Autowired
-    public SettingController(
-        SettingFollowerService settingFollowerService,
+    public SettingUserController(
         SettingUserService settingUserService,
         SecurityService securityService
     ) {
-        this.settingFollowerService = settingFollowerService;
         this.settingUserService = settingUserService;
         this.securityService = securityService;
-    }
-
-    @PostMapping("/follow/{memetickId}")
-    public void follow(@PathVariable("memetickId")UUID memetickId) {
-        settingFollowerService.trigger(memetickId);
     }
 
     @GetMapping("/me")

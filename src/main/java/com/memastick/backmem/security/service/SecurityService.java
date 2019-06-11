@@ -12,15 +12,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SecurityService {
-
-    // TODO separate cache for memeticks and users
-
+    
     private final UserService userService;
 
     @Autowired
-    public SecurityService(
-        @Lazy UserService userService
-    ) {
+    public SecurityService(@Lazy UserService userService) {
         this.userService = userService;
     }
 

@@ -1,6 +1,8 @@
 package com.memastick.backmem.setting.service;
 
+import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.setting.entity.SettingFollower;
@@ -21,16 +23,19 @@ public class SettingFollowerService {
     private final MemetickService memetickService;
     private final SecurityService securityService;
     private final SettingFollowerRepository settingFollowerRepository;
+    private final MemetickMapper memetickMapper;
 
     @Autowired
     public SettingFollowerService(
         @Lazy MemetickService memetickService,
         SecurityService securityService,
-        SettingFollowerRepository settingFollowerRepository
+        SettingFollowerRepository settingFollowerRepository,
+        MemetickMapper memetickMapper
     ) {
         this.memetickService = memetickService;
         this.securityService = securityService;
         this.settingFollowerRepository = settingFollowerRepository;
+        this.memetickMapper = memetickMapper;
     }
 
     public void trigger(UUID memetickId) {
@@ -62,7 +67,14 @@ public class SettingFollowerService {
             .collect(Collectors.toList());
     }
 
-    public List<Memetick> findMemeticks(User follower) {
+    public List<MemetickPreviewAPI> following() {
+        return this.findMemeticks(securityService.getCurrentUser())
+            .stream()
+            .map(memetickMapper::toPreviewDTO)
+            .collect(Collectors.toList());
+    }
+
+    private List<Memetick> findMemeticks(User follower) {
         return settingFollowerRepository.findAllByFollower(follower)
             .stream()
             .map(SettingFollower::getMemetick)
