@@ -37,7 +37,7 @@ public class MemePoolService {
         } else {
             return memeRepository.findAllByStepEvolveDayAndType(
                 evolveMemeService.evolveDay(),
-                step.getStep(),
+                step.getNumber(),
                 MemeType.EVOLVE,
                 pageable
             );

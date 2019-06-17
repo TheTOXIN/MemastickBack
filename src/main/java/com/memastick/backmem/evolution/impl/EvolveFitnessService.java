@@ -7,8 +7,8 @@ import com.memastick.backmem.evolution.iface.Evolution;
 
 import java.util.List;
 
-@Evolve(step = EvolveStep.ADAPTATION)
-public class EvolveAdaptationService implements Evolution {
+@Evolve(step = EvolveStep.FITNESS)
+public class EvolveFitnessService implements Evolution {
 
     @Override
     public void evolution(List<EvolveMeme> evolveMemes) {

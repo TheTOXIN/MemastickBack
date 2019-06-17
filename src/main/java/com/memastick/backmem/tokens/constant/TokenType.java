@@ -6,9 +6,9 @@ import lombok.Getter;
 public enum TokenType {
 
     TUBE(EvolveStep.ADAPTATION),
-    SCOPE(null),
-    MUTAGEN(null),
-    CROSSOVER(null),
+    SCOPE(EvolveStep.FITNESS),
+    MUTAGEN(EvolveStep.MUTATION),
+    CROSSOVER(EvolveStep.CROSSING),
     ANTIBIOTIC(EvolveStep.SURVIVAL);
 
     @Getter

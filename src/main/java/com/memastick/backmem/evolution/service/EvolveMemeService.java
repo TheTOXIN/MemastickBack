@@ -45,7 +45,7 @@ public class EvolveMemeService {
             if (e.getStep() == null) return;
 
             EvolveStep nowStep = e.getStep();
-            EvolveStep nextStep = EvolveStep.find(nowStep.getStep() + 1);
+            EvolveStep nextStep = EvolveStep.find(nowStep.getNumber() + 1);
 
             e.setStep(nextStep);
         });
