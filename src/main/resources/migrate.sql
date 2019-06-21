@@ -50,7 +50,7 @@ create table if not exists oauth_refresh_token (
 
 --BEFORE
 ALTER TABLE memes ADD COLUMN type varchar(32);
-UPDATE memes SET type = 'INDIVID';
+UPDATE memes SET type = 'INDV';
 ALTER TABLE memes ALTER COLUMN type SET NOT NULL;
 
 ALTER TABLE memes ADD COLUMN chromosomes INTEGER;
@@ -119,3 +119,8 @@ UPDATE memetick_inventories SET cell_notify = false;
 ALTER TABLE memetick_inventories ALTER COLUMN cell_notify SET NOT NULL;
 
 ALTER TABLE memetick_inventories DROP COLUMN cell_notify;
+
+--==[0.4]=--
+UPDATE memes SET type = 'EVLV' WHERE type = 'EVOLVE';
+UPDATE memes SET type = 'INDV' WHERE type = 'INDIVID';
+UPDATE memes SET type = 'DEAD' WHERE type = 'DEATH';

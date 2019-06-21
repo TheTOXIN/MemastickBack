@@ -31,14 +31,14 @@ public class MemePoolService {
     public List<Meme> generate(EvolveStep step, Pageable pageable) {
         if (step == null) {
             return memeRepository.findByType(
-                MemeType.EVOLVE,
+                MemeType.EVLV,
                 generatePageable(pageable)
             );
         } else {
             return memeRepository.findAllByStepEvolveDayAndType(
                 evolveMemeService.evolveDay(),
                 step.getNumber(),
-                MemeType.EVOLVE,
+                MemeType.EVLV,
                 pageable
             );
         }

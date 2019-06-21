@@ -46,10 +46,10 @@ public class EvolveSurvivalService implements Evolution {
             MemeType type;
 
             if (isSurvive) {
-                type = MemeType.INDIVID;
+                type = MemeType.INDV;
                 dnaBonus *= 1;
             } else {
-                type = MemeType.DEATH;
+                type = MemeType.DEAD;
                 dnaBonus *= -1;
             }
 

@@ -92,7 +92,7 @@ public class MemetickRatingService {
 
     private void initFilter() {
         this.mapFilter.put(MemetickRatingFilter.DNA, Memetick::getDna);
-        this.mapFilter.put(MemetickRatingFilter.IND, m -> memeRepository.countByMemetickIdAndType(m.getId(), MemeType.INDIVID).orElse(0L));
+        this.mapFilter.put(MemetickRatingFilter.IND, m -> memeRepository.countByMemetickIdAndType(m.getId(), MemeType.INDV).orElse(0L));
         this.mapFilter.put(MemetickRatingFilter.CHR, m -> memeRepository.sumChromosomeByMemetickId(m.getId()).orElse(0L));
     }
 }

@@ -8,7 +8,7 @@ public class NotifyUtil {
 
     public static String typeToStr(Meme meme) {
         MemeType type = meme.getType();
-        if (type.equals(MemeType.INDIVID)) return "ВЫЖИЛ";
+        if (type.equals(MemeType.INDV)) return "ВЫЖИЛ";
         else return "УМЕР";
     }
 

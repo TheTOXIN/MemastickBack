@@ -53,6 +53,6 @@ public class Meme extends AbstractEntity {
         this.population = population;
         this.indexer = indexer;
         this.creating = ZonedDateTime.now();
-        this.type = MemeType.EVOLVE;
+        this.type = MemeType.EVLV;
     }
 }

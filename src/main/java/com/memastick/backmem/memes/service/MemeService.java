@@ -98,11 +98,11 @@ public class MemeService {
         Memetick memetick = securityService.getCurrentMemetick();
 
         switch (readDTO.getFilter()) {
-            case INDV: memes = memeRepository.findByType(MemeType.INDIVID, pageable); break;
+            case INDV: memes = memeRepository.findByType(MemeType.INDV, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
-            case DTHS: memes = memeRepository.findByType(MemeType.DEATH, pageable); break;
-            case EVLV: memes = memeRepository.findByType(MemeType.EVOLVE, pageable); break;
+            case DTHS: memes = memeRepository.findByType(MemeType.DEAD, pageable); break;
+            case EVLV: memes = memeRepository.findByType(MemeType.EVLV, pageable); break;
             case USER: memes = memeRepository.findByMemetick(memetickService.findById(readDTO.getMemetickId()), pageable); break;
             case POOL: memes = memePoolService.generate(readDTO.getStep(), pageable); break;
         }

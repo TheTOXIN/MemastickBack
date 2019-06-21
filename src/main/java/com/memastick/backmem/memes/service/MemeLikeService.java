@@ -74,7 +74,7 @@ public class MemeLikeService {
     public void chromosomeTrigger(Meme meme, int count) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
-        if (MemeType.DEATH.equals(meme.getType())) return;
+        if (MemeType.DEAD.equals(meme.getType())) return;
         if (memeLike.getChromosome() >= MAX_CHROMOSOME) return;
 
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);

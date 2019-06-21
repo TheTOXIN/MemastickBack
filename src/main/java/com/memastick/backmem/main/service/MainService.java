@@ -41,7 +41,7 @@ public class MainService {
         return new HomeAPI(
             user.getMemetick().getNick(),
             evolveMemeService.evolveDay(),
-            memeRepository.countByType(MemeType.EVOLVE).orElse(0L),
+            memeRepository.countByType(MemeType.EVLV).orElse(0L),
             inventoryService.countItems(user.getMemetick()),
             notifyBellService.count(user)
         );

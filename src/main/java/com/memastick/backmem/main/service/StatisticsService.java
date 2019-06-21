@@ -35,7 +35,7 @@ public class StatisticsService {
     public StatisticsAPI byMemetick(UUID memetickId) {
         return new StatisticsAPI(
             memetickRepository.findDnaByMemetickId(memetickId).orElse(0L),
-            memeRepository.countByMemetickIdAndType(memetickId, MemeType.INDIVID).orElse(0L),
+            memeRepository.countByMemetickIdAndType(memetickId, MemeType.INDV).orElse(0L),
             memeRepository.sumChromosomeByMemetickId(memetickId).orElse(0L)
         );
     }
@@ -45,7 +45,7 @@ public class StatisticsService {
 
         StatisticsAPI stats = globalCache.getOrDefault(evolveDay, new StatisticsAPI(
             memetickRepository.sumDna().orElse(0L),
-            memeRepository.countByType(MemeType.INDIVID).orElse(0L),
+            memeRepository.countByType(MemeType.INDV).orElse(0L),
             memeRepository.sumChromosome().orElse(0L)
         ));
 
