@@ -40,7 +40,7 @@ public class MainService {
 
         return new HomeAPI(
             user.getMemetick().getNick(),
-            evolveMemeService.evolveDay(),
+            evolveMemeService.computeEvolution(),
             memeRepository.countByType(MemeType.EVLV).orElse(0L),
             inventoryService.countItems(user.getMemetick()),
             notifyBellService.count(user)

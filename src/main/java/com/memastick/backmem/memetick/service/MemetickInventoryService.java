@@ -1,6 +1,7 @@
 package com.memastick.backmem.memetick.service;
 
-import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.memetick.api.CellAPI;
 import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
@@ -27,6 +28,7 @@ public class MemetickInventoryService {
     private final TokenWalletService tokenWalletService;
     private final TokenAllowanceService tokenAllowanceService;
     private final SecurityService securityService;
+    private final EvolveMemeService evolveMemeService;
 
     @Autowired
     public MemetickInventoryService(
@@ -34,25 +36,15 @@ public class MemetickInventoryService {
         TokenWalletRepository tokenWalletRepository,
         TokenWalletService tokenWalletService,
         TokenAllowanceService tokenAllowanceService,
-        SecurityService securityService
+        SecurityService securityService,
+        EvolveMemeService evolveMemeService
     ) {
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
         this.tokenWalletService = tokenWalletService;
         this.tokenAllowanceService = tokenAllowanceService;
         this.securityService = securityService;
-    }
-
-    public void generateInventory(Memetick memetick) {
-        MemetickInventory inventory = new MemetickInventory();
-        TokenWallet tokenWallet = new TokenWallet();
-
-        inventory.setTokenWallet(tokenWallet);
-        inventory.setAllowance(false);
-        inventory.setMemetick(memetick);
-
-        tokenWalletRepository.save(tokenWallet);
-        inventoryRepository.save(inventory);
+        this.evolveMemeService = evolveMemeService;
     }
 
     public MemetickInventoryAPI readAll() {
@@ -60,6 +52,13 @@ public class MemetickInventoryService {
             tokenWalletService.read().getWallet(),
             tokenAllowanceService.have(),
             this.checkState()
+        );
+    }
+
+    public CellAPI readStateCell() {
+        return new CellAPI(
+            stateCell(),
+            evolveMemeService.computeEPI()
         );
     }
 
@@ -104,6 +103,18 @@ public class MemetickInventoryService {
 
         inventory.setCellCreating(LocalDateTime.now());
 
+        inventoryRepository.save(inventory);
+    }
+
+    public void generateInventory(Memetick memetick) {
+        MemetickInventory inventory = new MemetickInventory();
+        TokenWallet tokenWallet = new TokenWallet();
+
+        inventory.setTokenWallet(tokenWallet);
+        inventory.setAllowance(false);
+        inventory.setMemetick(memetick);
+
+        tokenWalletRepository.save(tokenWallet);
         inventoryRepository.save(inventory);
     }
 }

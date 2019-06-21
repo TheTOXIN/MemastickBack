@@ -15,16 +15,16 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class EvolveNextService {
+public class EvolveNexterService {
 
-    private static final Logger log = LoggerFactory.getLogger(EvolveNextService.class);
+    private static final Logger log = LoggerFactory.getLogger(EvolveNexterService.class);
 
     private final EvolveHandler evolveHandler;
     private final EvolveMemeRepository evolveMemeRepository;
     private final EvolveMemeService evolveMemeService;
 
     @Autowired
-    public EvolveNextService(
+    public EvolveNexterService(
         EvolveHandler evolveHandler,
         EvolveMemeRepository evolveMemeRepository,
         EvolveMemeService evolveMemeService
@@ -34,9 +34,9 @@ public class EvolveNextService {
         this.evolveMemeService = evolveMemeService;
     }
 
-    @Scheduled(cron = "0 0 0 * * *", zone = "UTC")
-    public void evolve() {
-        log.info("START EVOLVE - {}", evolveMemeService.evolveDay());
+    @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
+    public void next() {
+        log.info("START NEXT EVOLVE - {}", evolveMemeService.computePopulation());
 
         List<EvolveMeme> evolve = new ArrayList<>();
 
@@ -51,6 +51,6 @@ public class EvolveNextService {
 
         evolveMemeRepository.saveAll(evolve);
 
-        log.info("END EVOLVE - {}", evolveMemeService.evolveDay());
+        log.info("END NEXT EVOLVE - {}", evolveMemeService.computePopulation());
     }
 }

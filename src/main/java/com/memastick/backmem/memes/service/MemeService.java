@@ -75,18 +75,19 @@ public class MemeService {
     }
 
     public void moveIndex(Meme meme) {
-        long newIndex = meme.getIndexer() + 1;
-        long oldIndex = meme.getIndexer();
+        long newIndex = meme.getIndividuation() + 1;
+        long oldIndex = meme.getIndividuation();
 
-        Meme prevMeme = memeRepository.findByPopulationAndIndexer(
+        Meme prevMeme = memeRepository.findByEvolutionAndPopulationAndIndividuation(
+            meme.getEvolution(),
             meme.getPopulation(),
             newIndex
         ).orElse(null);
 
         if (prevMeme == null) return;
 
-        meme.setIndexer(newIndex);
-        prevMeme.setIndexer(oldIndex);
+        meme.setIndividuation(newIndex);
+        prevMeme.setIndividuation(oldIndex);
 
         memeRepository.save(meme);
         memeRepository.save(prevMeme);
@@ -98,12 +99,12 @@ public class MemeService {
         Memetick memetick = securityService.getCurrentMemetick();
 
         switch (readDTO.getFilter()) {
+            case EVLV: memes = memeRepository.findByType(MemeType.EVLV, pageable); break;
+            case SLCT: memes = memeRepository.findByType(MemeType.SLCT, pageable); break;
             case INDV: memes = memeRepository.findByType(MemeType.INDV, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
-            case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
-            case DTHS: memes = memeRepository.findByType(MemeType.DEAD, pageable); break;
-            case EVLV: memes = memeRepository.findByType(MemeType.EVLV, pageable); break;
             case USER: memes = memeRepository.findByMemetick(memetickService.findById(readDTO.getMemetickId()), pageable); break;
+            case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
             case POOL: memes = memePoolService.generate(readDTO.getStep(), pageable); break;
         }
 

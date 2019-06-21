@@ -1,6 +1,5 @@
 package com.memastick.backmem.translator.serivce;
 
-import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
@@ -37,9 +36,9 @@ public class TranslatorPublishService {
     public void publish() {
         log.info("START TRANSLATE PUBLISH");
 
-        long population = evolveMemeService.evolveDay() - EvolveStep.values().length;
+        long evolution = evolveMemeService.computeEvolution() - 1;
 
-        Meme meme = memeRepository.findSuperMeme(population);
+        Meme meme = memeRepository.findSuperMeme(evolution);
         if (meme == null) return;
 
         translators.forEach(t -> t.translate(meme));

@@ -7,25 +7,18 @@ import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.entity.MemetickInventory;
-import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.notification.service.NotifyService;
-import com.memastick.backmem.security.service.InviteCodeService;
 import com.memastick.backmem.security.service.SecurityService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.List;
 
 import static com.memastick.backmem.main.constant.GlobalConstant.CELL_GROWTH;
 
@@ -80,15 +73,11 @@ public class MemesCreateService {
     }
 
     private Meme make(MemeCreateAPI request, Memetick memetick) {
-        long population = evolveMemeService.evolveDay();
-        long indexer = memeRepository.countByPopulation(population).orElse(0L) + 1;
-
         return new Meme(
             request.getFireId(),
             request.getUrl(),
             memetick,
-            population,
-            indexer
+            evolveMemeService.computeEPI()
         );
     }
 }

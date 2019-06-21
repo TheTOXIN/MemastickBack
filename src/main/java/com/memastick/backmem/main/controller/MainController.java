@@ -1,6 +1,7 @@
 package com.memastick.backmem.main.controller;
 
-import com.memastick.backmem.evolution.service.EvolveNextService;
+import com.memastick.backmem.evolution.service.EvolveNexterService;
+import com.memastick.backmem.evolution.service.EvolveSelecterService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.service.MainService;
@@ -16,21 +17,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
 
     private final MainService mainService;
-    private final EvolveNextService evolveNextService;
+    private final EvolveNexterService evolveNexterService;
     private final TokenAllowanceSendService allowanceSendService;
     private final NotifyService notifyService;
+    private final EvolveSelecterService evolveSelecterService;
 
     @Autowired
     public MainController(
         MainService mainService,
-        EvolveNextService evolveNextService,
+        EvolveNexterService evolveNexterService,
         TokenAllowanceSendService allowanceSendService,
-        NotifyService notifyService
+        NotifyService notifyService,
+        EvolveSelecterService evolveSelecterService
     ) {
         this.mainService = mainService;
-        this.evolveNextService = evolveNextService;
+        this.evolveNexterService = evolveNexterService;
         this.allowanceSendService = allowanceSendService;
         this.notifyService = notifyService;
+        this.evolveSelecterService = evolveSelecterService;
     }
 
     @GetMapping("test")
@@ -42,8 +46,13 @@ public class MainController {
     }
 
     @GetMapping("next-evolve")
-    public void evolve() {
-        evolveNextService.evolve();
+    public void nextEvolve() {
+        evolveNexterService.next();
+    }
+
+    @GetMapping("select-evolve")
+    public void selectEvolve() {
+        evolveSelecterService.select();
     }
 
     @GetMapping("send-allowance")

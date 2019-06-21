@@ -5,12 +5,15 @@ import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.entity.Meme;
+import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memes.service.MemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
@@ -22,14 +25,17 @@ public class EvolveMemeService {
 
     private final EvolveMemeRepository evolveMemeRepository;
     private final MemeService memeService;
+    private final MemeRepository memeRepository;
 
     @Autowired
     public EvolveMemeService(
         EvolveMemeRepository evolveMemeRepository,
-        MemeService memeService
+        MemeService memeService,
+        MemeRepository memeRepository
     ) {
         this.evolveMemeRepository = evolveMemeRepository;
         this.memeService = memeService;
+        this.memeRepository = memeRepository;
     }
 
     public void startEvolve(Meme meme) {
@@ -51,11 +57,37 @@ public class EvolveMemeService {
         });
     }
 
-    public long evolveDay() {
-        return DAYS.between(
-            GlobalConstant.START_EVOLVE,
-            LocalDate.now(ZoneOffset.UTC)
+    public EPI computeEPI() {
+        return new EPI(
+            this.computeEvolution(),
+            this.computePopulation(),
+            this.computeIndividuation()
         );
+    }
+
+    public long computeEvolution() {
+        return DAYS.between(GlobalConstant.START_EVOLVE, LocalDate.now(ZoneOffset.UTC));
+    }
+
+    public long computePopulation() {
+        return LocalTime.now(ZoneOffset.UTC).getHour() + 1;
+    }
+
+    public long computeIndividuation() {
+        return memeRepository.countByEvolutionAndPopulation(computeEvolution(), computePopulation()).orElse(0L);
+    }
+
+    public float computeChance(Meme meme) {
+        long max = memeRepository.maxByCromosome().orElse(0L);
+        long min = memeRepository.minByCromosome().orElse(0L);
+
+        float onePercent = 100f / (max - min);
+        float chance = (meme.getChromosomes() - min) * onePercent;
+
+        if (max == min) chance = 100;
+        if (chance > 100f) chance = 100f;
+
+        return chance;
     }
 
     public EvolveMemeAPI readByMeme(UUID memeId) {
@@ -70,14 +102,5 @@ public class EvolveMemeService {
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation()
         );
-    }
-
-    public EvolveStep computeStep(Meme meme) {
-        long day = evolveDay();
-        long population = meme.getPopulation();
-
-        int step = (int) (day - population);
-
-        return EvolveStep.find(step);
     }
 }

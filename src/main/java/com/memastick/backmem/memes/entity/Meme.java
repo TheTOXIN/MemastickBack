@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
@@ -38,21 +39,29 @@ public class Meme extends AbstractEntity {
     private MemeType type;
 
     @Column(nullable = false)
+    private int chromosomes = 0;
+
+    // -=[EPI]=-
+
+    @Column(nullable = false)
+    private long evolution;
+
+    @Column(nullable = false)
     private long population;
 
     @Column(nullable = false)
-    private long indexer;
+    private long individuation;
 
-    @Column(nullable = false)
-    private int chromosomes = 0;
-
-    public Meme(UUID fireId, String url, Memetick memetick, long population, long indexer) {
+    public Meme(UUID fireId, String url, Memetick memetick, EPI epi) {
         this.fireId = fireId;
         this.url = url;
         this.memetick = memetick;
-        this.population = population;
-        this.indexer = indexer;
+
         this.creating = ZonedDateTime.now();
         this.type = MemeType.EVLV;
+
+        this.evolution = epi.getEvolution();
+        this.population = epi.getPopulation();
+        this.individuation = epi.getIndividuation();
     }
 }

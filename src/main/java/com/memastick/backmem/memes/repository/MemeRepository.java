@@ -20,7 +20,13 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     Optional<Long> countByType(MemeType type);
 
-    Optional<Long> countByPopulation(long population);
+    Optional<Long> countByEvolutionAndPopulation(long evolution, long population);
+
+    @Query("SELECT MAX(m.chromosomes) FROM Meme m")
+    Optional<Long> maxByCromosome();
+
+    @Query("SELECT MIN(m.chromosomes) FROM Meme m")
+    Optional<Long> minByCromosome();
 
     @Query("SELECT SUM(m.chromosomes) FROM Meme m WHERE m.memetick.id = :memetickId")
     Optional<Long> sumChromosomeByMemetickId(@Param("memetickId") UUID memetickId);
@@ -28,23 +34,15 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
     @Query("SELECT SUM(m.chromosomes) FROM Meme m")
     Optional<Long> sumChromosome();
 
-    Optional<Meme> findByPopulationAndIndexer(long population, long indexer);
+    Optional<Meme> findByEvolutionAndPopulationAndIndividuation(long evolution, long population, long individuation);
 
-    List<Meme> findByType(MemeType individ, Pageable pageable);
+    List<Meme> findByType(MemeType type, Pageable pageable);
 
     List<Meme> findByMemetick(Memetick memetick, Pageable pageable);
 
-    @Query("SELECT m FROM Meme m WHERE :day - m.population = :step AND m.type = :type")
-    List<Meme> findAllByStepEvolveDayAndType(
-        @Param("day") long day,
-        @Param("step") long step,
-        @Param("type") MemeType type,
-        Pageable pageable
-    );
-
     @Query(
         nativeQuery = true,
-        value = "SELECT * FROM memes m WHERE m.population = :population ORDER BY m.chromosomes DESC LIMIT 1"
+        value = "SELECT * FROM memes m WHERE m.evolution = :evolution ORDER BY m.chromosomes DESC LIMIT 1"
     )
-    Meme findSuperMeme(@Param("population") long population);
+    Meme findSuperMeme(@Param("evolution") long evolution);
 }

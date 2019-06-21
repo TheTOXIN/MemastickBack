@@ -2,9 +2,9 @@ package com.memastick.backmem.memes.constant;
 
 public enum MemeFilter {
 
-    DTHS,
     INDV,
     EVLV,
+    SLCT,
     LIKE,
     SELF,
     USER,

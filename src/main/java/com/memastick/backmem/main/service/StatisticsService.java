@@ -41,7 +41,7 @@ public class StatisticsService {
     }
 
     public StatisticsAPI global() {
-        long evolveDay = evolveMemeService.evolveDay();
+        long evolveDay = evolveMemeService.computeEvolution();
 
         StatisticsAPI stats = globalCache.getOrDefault(evolveDay, new StatisticsAPI(
             memetickRepository.sumDna().orElse(0L),

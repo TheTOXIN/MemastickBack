@@ -13,17 +13,13 @@ public class MemetickInventoryController {
 
     private final MemetickInventoryService inventoryService;
 
-    public MemetickInventoryController(
-        MemetickInventoryService inventoryService
-    ) {
+    public MemetickInventoryController(MemetickInventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
 
     @GetMapping("cell")
     public CellAPI stateCell() {
-        return new CellAPI(
-            inventoryService.stateCell()
-        );
+        return inventoryService.readStateCell();
     }
 
     @GetMapping("all")

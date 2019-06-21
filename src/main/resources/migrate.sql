@@ -124,3 +124,9 @@ ALTER TABLE memetick_inventories DROP COLUMN cell_notify;
 UPDATE memes SET type = 'EVLV' WHERE type = 'EVOLVE';
 UPDATE memes SET type = 'INDV' WHERE type = 'INDIVID';
 UPDATE memes SET type = 'DEAD' WHERE type = 'DEATH';
+
+ALTER TABLE memes ADD COLUMN evolution BIGINT;
+UPDATE memes SET evolution = population;
+ALTER TABLE  memes ALTER COLUMN evolution SET NOT NULL;
+
+ALTER TABLE memes RENAME COLUMN indexer TO individuation;

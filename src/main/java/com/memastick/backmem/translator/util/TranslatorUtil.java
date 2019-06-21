@@ -37,7 +37,7 @@ public class TranslatorUtil {
     public static String prepareText(Meme meme) {
         return new StringBuilder()
             .append("МЕМ ДНЯ ❗️" + "\n" )
-            .append("\uD83C\uDF0E Эволюция №" + meme.getPopulation() + "\n")
+            .append("\uD83C\uDF0E Эволюция №" + meme.getEvolution() + "\n")
             .append("\uD83D\uDE0E Меметик - " + meme.getMemetick().getNick() + "\n")
             .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
             .append(GlobalConstant.URL + "/memes/share/" + meme.getId())
