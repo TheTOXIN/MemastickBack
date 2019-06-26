@@ -27,15 +27,15 @@ public class EvolveMeme extends AbstractEntity {
     @Enumerated(EnumType.ORDINAL)
     private EvolveStep step;
 
-    @Max(101)
-    @Column(nullable = false)
-    private float chance = 0f;
-
     @Column(nullable = false)
     private boolean immunity = false;
 
     @Column(nullable = false)
     private int adaptation = 0;
+
+    @Column
+    @Max(101)
+    private float chance;
 
     public EvolveMeme(Meme meme) {
         this.meme = meme;

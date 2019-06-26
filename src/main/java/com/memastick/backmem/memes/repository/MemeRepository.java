@@ -22,11 +22,11 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     Optional<Long> countByEvolutionAndPopulation(long evolution, long population);
 
-    @Query("SELECT MAX(m.chromosomes) FROM Meme m")
-    Optional<Long> maxByCromosome();
+    @Query("SELECT MAX(m.chromosomes) FROM Meme m WHERE m.type = :type")
+    Optional<Long> maxByCromosome(@Param("type") MemeType type);
 
-    @Query("SELECT MIN(m.chromosomes) FROM Meme m")
-    Optional<Long> minByCromosome();
+    @Query("SELECT MIN(m.chromosomes) FROM Meme m WHERE m.type = :type")
+    Optional<Long> minByCromosome(@Param("type") MemeType type);
 
     @Query("SELECT SUM(m.chromosomes) FROM Meme m WHERE m.memetick.id = :memetickId")
     Optional<Long> sumChromosomeByMemetickId(@Param("memetickId") UUID memetickId);

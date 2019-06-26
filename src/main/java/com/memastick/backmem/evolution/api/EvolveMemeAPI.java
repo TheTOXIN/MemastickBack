@@ -17,7 +17,6 @@ public class EvolveMemeAPI {
     private long population;
 
     private EvolveStep step;
-    private float chance;
     private boolean immunity;
     private int adaptation;
 

@@ -23,8 +23,13 @@ public class EvolveMemeController {
         this.evolveMemeService = evolveMemeService;
     }
 
-    @GetMapping("meme/{id}")
-    public EvolveMemeAPI readByMeme(@PathVariable("id") UUID memeId) {
+    @GetMapping("meme/{memeId}")
+    public EvolveMemeAPI readByMeme(@PathVariable("memeId") UUID memeId) {
         return evolveMemeService.readByMeme(memeId);
+    }
+
+    @GetMapping("/meme/chance/{memeId}")
+    public Float readChance(@PathVariable("memeId") UUID memeId) {
+        return evolveMemeService.readChance(memeId);
     }
 }

@@ -6,6 +6,7 @@ import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.dto.EPI;
+import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memes.service.MemeService;
@@ -78,8 +79,8 @@ public class EvolveMemeService {
     }
 
     public float computeChance(Meme meme) {
-        long max = memeRepository.maxByCromosome().orElse(0L);
-        long min = memeRepository.minByCromosome().orElse(0L);
+        long max = memeRepository.maxByCromosome(MemeType.SLCT).orElse(0L);
+        long min = memeRepository.minByCromosome(MemeType.SLCT).orElse(0L);
 
         float onePercent = 100f / (max - min);
         float chance = (meme.getChromosomes() - min) * onePercent;
@@ -98,9 +99,18 @@ public class EvolveMemeService {
             meme.getId(),
             meme.getPopulation(),
             evolveMeme.getStep(),
-            evolveMeme.getChance(),
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation()
         );
+    }
+
+    public Float readChance(UUID memeId) {
+        Meme meme = memeService.findById(memeId);
+        if (!meme.getType().equals(MemeType.SLCT)) return null;
+
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
+        if (evolveMeme.isImmunity()) return 100F;
+
+        return computeChance(meme);
     }
 }
