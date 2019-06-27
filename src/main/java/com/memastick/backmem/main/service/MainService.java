@@ -43,7 +43,8 @@ public class MainService {
             evolveMemeService.computeEvolution(),
             memeRepository.countByType(MemeType.EVLV).orElse(0L),
             inventoryService.countItems(user.getMemetick()),
-            notifyBellService.count(user)
+            notifyBellService.count(user),
+            evolveMemeService.computeSelectTimer()
         );
     }
 }

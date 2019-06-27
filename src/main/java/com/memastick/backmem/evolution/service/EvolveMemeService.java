@@ -91,6 +91,15 @@ public class EvolveMemeService {
         return chance;
     }
 
+    public LocalTime computeSelectTimer() {
+        LocalTime now = LocalTime.now();
+
+        return LocalTime.MIDNIGHT
+            .minusHours(now.getHour())
+            .minusMinutes(now.getMinute())
+            .minusSeconds(now.getSecond());
+    }
+
     public EvolveMemeAPI readByMeme(UUID memeId) {
         Meme meme = memeService.findById(memeId);
         EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
