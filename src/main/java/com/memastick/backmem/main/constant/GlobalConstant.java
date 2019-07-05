@@ -15,4 +15,6 @@ public class GlobalConstant {
     public static final int CELL_GROWTH = 24;
 
     public static final int CELL_SIZE = 100;
+
+    public static final int MAX_CHROMOSOME = 50;
 }

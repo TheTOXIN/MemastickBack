@@ -21,11 +21,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
+
 
 @Service
 public class MemeLikeService {
-
-    private static final int MAX_CHROMOSOME = 10;
 
     private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;
