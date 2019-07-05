@@ -58,8 +58,8 @@ public class NotifyPushService implements NotifySender {
             .forEach(u -> send(dto, notifyPushRepository.findAllByUser(u)
                 .stream()
                 .map(NotifyPush::getToken)
-                .collect(Collectors.toList()))
-            );
+                .collect(Collectors.toList())
+            ));
     }
 
     private void send(NotifyDTO dto, List<String> tokens) {

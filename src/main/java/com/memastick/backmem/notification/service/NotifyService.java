@@ -129,9 +129,9 @@ public class NotifyService {
     }
 
     @Async
-    public void sendALLOWANCE() {
+    public void sendALLOWANCE(List<Memetick> memeticks) {
         send(
-            userRepository.findAll(),
+            userRepository.findByMemetickIn(memeticks),
             new NotifyDTO(
                 NotifyType.ALLOWANCE,
                 "Вы получили пособие",
