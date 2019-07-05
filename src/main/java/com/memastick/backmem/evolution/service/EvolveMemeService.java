@@ -106,7 +106,11 @@ public class EvolveMemeService {
 
         return new EvolveMemeAPI(
             meme.getId(),
-            meme.getPopulation(),
+            new EPI(
+              meme.getEvolution(),
+              meme.getPopulation(),
+              meme.getIndividuation()
+            ),
             evolveMeme.getStep(),
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation()
