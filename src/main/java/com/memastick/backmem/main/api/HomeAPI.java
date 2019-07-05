@@ -13,10 +13,12 @@ import java.time.LocalTime;
 public class HomeAPI {
 
     private String nick;
+
     private long day;
     private long memes;
+
     private long countItems;
     private long countBells;
-    private LocalTime selectTimer;
 
+    private LocalTime selectTimer;
 }

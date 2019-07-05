@@ -100,6 +100,20 @@ public class EvolveMemeService {
             .minusSeconds(now.getSecond());
     }
 
+    public LocalTime computeEvolveTimer() {
+        LocalTime now = LocalTime.now();
+
+        LocalTime next = now
+            .plusHours(1)
+            .withMinute(0)
+            .withSecond(0);
+
+        return next
+            .minusHours(now.getHour())
+            .minusMinutes(now.getMinute())
+            .minusSeconds(now.getSecond());
+    }
+
     public EvolveMemeAPI readByMeme(UUID memeId) {
         Meme meme = memeService.findById(memeId);
         EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
@@ -113,7 +127,8 @@ public class EvolveMemeService {
             ),
             evolveMeme.getStep(),
             evolveMeme.isImmunity(),
-            evolveMeme.getAdaptation()
+            evolveMeme.getAdaptation(),
+            computeEvolveTimer()
         );
     }
 

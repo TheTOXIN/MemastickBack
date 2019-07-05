@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.UUID;
 
 
@@ -21,4 +22,5 @@ public class EvolveMemeAPI {
     private boolean immunity;
     private int adaptation;
 
+    private LocalTime evolveTimer;
 }
