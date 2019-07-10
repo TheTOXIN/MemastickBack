@@ -1,9 +1,7 @@
 package com.memastick.backmem.notification.impl;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
-import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.notification.api.NotifyBellAPI;
-import com.memastick.backmem.notification.api.NotifyBellCountAPI;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.entity.NotifyBell;
 import com.memastick.backmem.notification.iface.NotifySender;
@@ -11,7 +9,6 @@ import com.memastick.backmem.notification.repository.NotifyBellRepository;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -25,17 +22,14 @@ public class NotifyBellService implements NotifySender {
 
     private final NotifyBellRepository bellRepository;
     private final SecurityService securityService;
-    private final MemetickInventoryService inventoryService;
 
     @Autowired
     public NotifyBellService(
         NotifyBellRepository bellRepository,
-        SecurityService securityService,
-        @Lazy MemetickInventoryService inventoryService
+        SecurityService securityService
     ) {
         this.bellRepository = bellRepository;
         this.securityService = securityService;
-        this.inventoryService = inventoryService;
     }
 
     @Override
@@ -79,6 +73,10 @@ public class NotifyBellService implements NotifySender {
         bellRepository.delete(bell);
     }
 
+    public long count(User user) {
+        return bellRepository.countByUserAndIsReadFalse(user).orElse(0L);
+    }
+
     public NotifyBell findById(UUID id) {
         Optional<NotifyBell> optional = bellRepository.findById(id);
         if (optional.isEmpty()) throw new EntityNotFoundException(NotifyBell.class, "id");
@@ -91,15 +89,6 @@ public class NotifyBellService implements NotifySender {
             bell.getText(),
             bell.getLink(),
             bell.isRead()
-        );
-    }
-
-    public NotifyBellCountAPI count() {
-        User user = securityService.getCurrentUser();
-
-        return new NotifyBellCountAPI(
-            inventoryService.countItems(user.getMemetick()),
-            bellRepository.countByUserAndIsReadFalse(user).orElse(0L)
         );
     }
 }
