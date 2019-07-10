@@ -1,8 +1,10 @@
 package com.memastick.backmem.notification.controller;
 
 import com.memastick.backmem.notification.api.NotifyBellAPI;
+import com.memastick.backmem.notification.api.NotifyBellCountAPI;
 import com.memastick.backmem.notification.impl.NotifyBellService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +39,10 @@ public class NotifyBellController {
     @DeleteMapping("/clear/{id}")
     public void clear(@PathVariable("id")UUID id) {
         bellService.clear(id);
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<NotifyBellCountAPI> count() {
+        return ResponseEntity.ok(bellService.count());
     }
 }

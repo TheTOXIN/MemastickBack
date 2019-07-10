@@ -17,8 +17,5 @@ public class HomeAPI {
     private long day;
     private long memes;
 
-    private long countItems;
-    private long countBells;
-
     private LocalTime selectTimer;
 }
