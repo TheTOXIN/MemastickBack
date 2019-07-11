@@ -14,5 +14,5 @@ public class MemetickAPI {
     private UUID id;
     private String nick;
     private boolean follow;
-
+    private boolean online;
 }

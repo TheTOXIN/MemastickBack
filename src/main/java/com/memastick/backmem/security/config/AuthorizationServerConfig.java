@@ -50,7 +50,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
             .withClient(oauthClient)
-            .secret(passwordEncoder.encode(oauthClient))
+            .secret(passwordEncoder.encode(oauthSecret))
             .authorizedGrantTypes(GRANT_TYPE_PASSWORD, REFRESH_TOKEN)
             .scopes(SCOPE_READ, SCOPE_WRITE, SCOPE_TRUST)
             .accessTokenValiditySeconds(accessTime)

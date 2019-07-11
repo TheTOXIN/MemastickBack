@@ -2,19 +2,19 @@ package com.memastick.backmem.user.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.repository.MemetickAvatarRepository;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.security.entity.InviteCode;
-import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +30,10 @@ public class UserService {
     private final MemetickInventoryService inventoryService;
     private final MemetickAvatarService avatarService;
     private final SettingUserService settingService;
+    private final TokenStore tokenStore;
+
+    @Value("${oauth.client}")
+    private String oauthClient;
 
     @Autowired
     public UserService(
@@ -38,7 +42,8 @@ public class UserService {
         MemetickRepository memetickRepository,
         MemetickInventoryService inventoryService,
         MemetickAvatarService avatarService,
-        SettingUserService settingService
+        SettingUserService settingService,
+        TokenStore tokenStore
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -46,6 +51,7 @@ public class UserService {
         this.inventoryService = inventoryService;
         this.avatarService = avatarService;
         this.settingService = settingService;
+        this.tokenStore = tokenStore;
     }
 
     public User findAdmin() {
@@ -88,5 +94,12 @@ public class UserService {
         Optional<User> byLogin = userRepository.findByLogin(login);
         if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
         return byLogin.get();
+    }
+
+    public boolean isOnline(Memetick memetick) {
+        var user = userRepository.findByMemetick(memetick);
+        var tokens = tokenStore.findTokensByClientIdAndUserName(oauthClient, user.getLogin());
+
+        return tokens.stream().anyMatch(token -> !token.isExpired());
     }
 }
