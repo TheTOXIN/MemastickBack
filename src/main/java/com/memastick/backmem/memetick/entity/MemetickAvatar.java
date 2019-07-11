@@ -17,11 +17,11 @@ import javax.persistence.*;
 public class MemetickAvatar extends AbstractEntity {
 
     @OneToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, unique = true)
     private Memetick memetick;
 
     @Lob
-    @Column
+    @Column(nullable = false)
     private byte[] avatar;
 
 }

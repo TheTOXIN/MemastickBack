@@ -7,7 +7,10 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickAvatar;
 import com.memastick.backmem.memetick.repository.MemetickAvatarRepository;
 import com.memastick.backmem.security.service.SecurityService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,6 +41,9 @@ public class MemetickAvatarService {
 
     private final SecurityService securityService;
     private final MemetickAvatarRepository memetickAvatarRepository;
+
+    @Value("classpath:images/avatar.png")
+    private Resource defaultAvatar;
 
     @Autowired
     public MemetickAvatarService(
@@ -107,8 +113,15 @@ public class MemetickAvatarService {
     }
 
     public void generateAvatar(Memetick memetick) {
-        MemetickAvatar avatar = new MemetickAvatar();
-        avatar.setMemetick(memetick);
-        memetickAvatarRepository.save(avatar);
+        try {
+            MemetickAvatar avatar = new MemetickAvatar();
+
+            avatar.setMemetick(memetick);
+            avatar.setAvatar(IOUtils.toByteArray(defaultAvatar.getInputStream()));
+
+            memetickAvatarRepository.save(avatar);
+        } catch (IOException e) {
+            throw new RuntimeException("ERROR GENERATE AVATAR");
+        }
     }
 }

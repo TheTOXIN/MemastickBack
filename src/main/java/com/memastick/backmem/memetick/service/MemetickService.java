@@ -47,11 +47,15 @@ public class MemetickService {
     }
 
     public MemetickAPI viewByMe() {
-        return memetickMapper.toMemetickAPI(securityService.getCurrentMemetick());
+        return memetickMapper.toMemetickAPI(
+            securityService.getCurrentMemetick()
+        );
     }
 
     public MemetickAPI viewById(UUID id) {
-        return memetickMapper.toMemetickAPI(findById(id));
+        return memetickMapper.toMemetickAPI(
+            this.findById(id)
+        );
     }
 
     public void addDna(Memetick memetick, int dna) {
