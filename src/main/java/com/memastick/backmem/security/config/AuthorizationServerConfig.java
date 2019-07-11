@@ -17,9 +17,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    private static final String CLIENT_ID = "memastick-client";
-    private static final String CLIENT_SECRET = "memastick-secret";
-
     private static final String GRANT_TYPE_PASSWORD = "password";
     private static final String REFRESH_TOKEN = "refresh_token";
     private static final String SCOPE_READ = "read";
@@ -31,11 +28,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final MyUserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
 
-    @Value("${token.access.time}")
-    private int accessTime;
-
-    @Value("${token.refresh.time}")
-    private int refreshTime;
+    @Value("${oauth.client}") private String oauthClient;
+    @Value("${oauth.secret}") private String oauthSecret;
+    @Value("${token.access.time}") private int accessTime;
+    @Value("${token.refresh.time}") private int refreshTime;
 
     @Autowired
     public AuthorizationServerConfig(
@@ -53,8 +49,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-            .withClient(CLIENT_ID)
-            .secret(passwordEncoder.encode(CLIENT_SECRET))
+            .withClient(oauthClient)
+            .secret(passwordEncoder.encode(oauthClient))
             .authorizedGrantTypes(GRANT_TYPE_PASSWORD, REFRESH_TOKEN)
             .scopes(SCOPE_READ, SCOPE_WRITE, SCOPE_TRUST)
             .accessTokenValiditySeconds(accessTime)
@@ -68,5 +64,4 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             .authenticationManager(this.authenticationManager)
             .userDetailsService(this.userDetailsService);
     }
-
 }
