@@ -8,17 +8,11 @@ import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.service.MainService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.tokens.service.TokenAllowanceSendService;
-import com.memastick.backmem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collection;
 
 @RestController
 public class MainController {
@@ -44,17 +38,9 @@ public class MainController {
         this.evolveSelecterService = evolveSelecterService;
     }
 
-    @Autowired private TokenStore tokenStore;
-    @Autowired private UserRepository userRepository;
-
-    @Value("oauth.client") private String client;
-
     @GetMapping("test")
     public void test() {
-        userRepository.findAll().forEach(u -> {
-            Collection<OAuth2AccessToken> tokens = tokenStore.findTokensByClientIdAndUserName(client, u.getLogin());
-            System.out.println(tokens);
-        });
+
     }
 
     @GetMapping("hello")

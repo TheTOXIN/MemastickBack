@@ -4,20 +4,17 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.translator.iface.Translator;
 import com.memastick.backmem.translator.util.TranslatorUtil;
 import com.vk.api.sdk.client.VkApiClient;
-import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.client.actors.UserActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.photos.Photo;
 import com.vk.api.sdk.objects.photos.PhotoUpload;
-import com.vk.api.sdk.objects.photos.responses.GetResponse;
 import com.vk.api.sdk.objects.photos.responses.WallUploadResponse;
 import com.vk.api.sdk.objects.wall.responses.PostResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -44,10 +41,7 @@ public class VkontakteTranslator implements Translator {
     }
 
     @Override
-    public void translate(Meme meme) {
-        File file = TranslatorUtil.downloadFile(meme.getUrl());
-        if (file == null) return;
-
+    public void translate(File file, Meme meme) {
         try {
             PhotoUpload serverResponse = vk
                 .photos()
