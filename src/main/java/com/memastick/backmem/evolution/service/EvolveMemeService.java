@@ -100,7 +100,7 @@ public class EvolveMemeService {
             .minusSeconds(now.getSecond());
     }
 
-    public LocalTime computeEvolveTimer() {
+    public LocalTime computeNextTimer() {
         LocalTime now = LocalTime.now();
 
         LocalTime next = now
@@ -128,7 +128,7 @@ public class EvolveMemeService {
             evolveMeme.getStep(),
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation(),
-            computeEvolveTimer()
+            computeNextTimer()
         );
     }
 

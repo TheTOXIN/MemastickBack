@@ -22,5 +22,5 @@ public class EvolveMemeAPI {
     private boolean immunity;
     private int adaptation;
 
-    private LocalTime evolveTimer;
+    private LocalTime nextTimer;
 }
