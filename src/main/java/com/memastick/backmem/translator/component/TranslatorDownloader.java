@@ -17,7 +17,7 @@ import java.net.URL;
 @Component
 public class TranslatorDownloader {
 
-    private static final int WATERMARK_SIZE = 150;
+    private static final int WATERMARK_SIZE = 100;
     private static final String IMAGE_FORMAT = "jpeg";
     private static final String FILE_NAME = "translator." + IMAGE_FORMAT;
 
@@ -46,7 +46,7 @@ public class TranslatorDownloader {
 
         Graphics2D w = (Graphics2D) watermarked.getGraphics();
         w.drawImage(image, 0, 0, null);
-        AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f);
+        AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.33f);
         w.setComposite(alphaChannel);
 
         int centerX = MathUtil.rand(image.getWidth() - WATERMARK_SIZE);
