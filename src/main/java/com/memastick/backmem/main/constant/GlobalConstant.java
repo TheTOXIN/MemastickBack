@@ -17,4 +17,6 @@ public class GlobalConstant {
     public static final int CELL_SIZE = 100;
 
     public static final int MAX_CHROMOSOME = 50;
+
+    public static final int MAX_TEXT_LEN = 256;
 }

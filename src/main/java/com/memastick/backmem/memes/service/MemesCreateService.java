@@ -21,6 +21,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 
 import static com.memastick.backmem.main.constant.GlobalConstant.CELL_GROWTH;
+import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TEXT_LEN;
 
 @Service
 public class MemesCreateService {
@@ -73,6 +74,10 @@ public class MemesCreateService {
     }
 
     private Meme make(MemeCreateAPI request, Memetick memetick) {
+        if (request.getText().length() > MAX_TEXT_LEN) {
+            request.setText(request.getText().substring(0, MAX_TEXT_LEN));
+        }
+
         return new Meme(
             request,
             memetick,

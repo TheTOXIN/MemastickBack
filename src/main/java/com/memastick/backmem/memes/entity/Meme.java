@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.constant.MemeType;
@@ -44,7 +45,7 @@ public class Meme extends AbstractEntity {
     private int chromosomes = 0;
 
     @Column
-    @Length(max = 256)
+    @Length(max = GlobalConstant.MAX_TEXT_LEN)
     private String text;
 
     // -=[EPI]=-
