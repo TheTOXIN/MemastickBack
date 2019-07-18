@@ -74,8 +74,7 @@ public class MemesCreateService {
 
     private Meme make(MemeCreateAPI request, Memetick memetick) {
         return new Meme(
-            request.getFireId(),
-            request.getUrl(),
+            request,
             memetick,
             evolveMemeService.computeEPI()
         );

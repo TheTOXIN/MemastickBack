@@ -2,12 +2,14 @@ package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
 import com.memastick.backmem.main.dto.EPI;
+import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -41,6 +43,10 @@ public class Meme extends AbstractEntity {
     @Column(nullable = false)
     private int chromosomes = 0;
 
+    @Column
+    @Length(max = 256)
+    private String text;
+
     // -=[EPI]=-
 
     @Column(nullable = false)
@@ -52,11 +58,12 @@ public class Meme extends AbstractEntity {
     @Column(nullable = false)
     private long individuation;
 
-    public Meme(UUID fireId, String url, Memetick memetick, EPI epi) {
-        this.fireId = fireId;
-        this.url = url;
-        this.memetick = memetick;
+    public Meme(MemeCreateAPI api, Memetick memetick, EPI epi) {
+        this.fireId = api.getFireId();
+        this.url = api.getUrl();
+        this.text = api.getText();
 
+        this.memetick = memetick;
         this.creating = ZonedDateTime.now();
         this.type = MemeType.EVLV;
 

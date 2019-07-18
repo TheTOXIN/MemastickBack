@@ -40,6 +40,7 @@ public class MemeMapper {
         return new MemeAPI(
             meme.getId(),
             meme.getUrl(),
+            meme.getText(),
             meme.getType(),
             meme.getChromosomes(),
             meme.getIndividuation(),
