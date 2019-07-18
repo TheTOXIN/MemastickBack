@@ -84,7 +84,6 @@ public class MemeLikeService {
         meme.setChromosomes(allChromosome);
 
         memeLikeRepository.save(memeLike);
-        memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));
     }
 
     public List<Meme> findMemesByLikeFilter(Memetick memetick, Pageable pageable) {
@@ -115,6 +114,8 @@ public class MemeLikeService {
 
         memeLike.setMeme(meme);
         memeLike.setMemetick(memetick);
+
+        memetickService.addDna(meme.getMemetick(), MathUtil.rand(1, 10));
 
         return memeLikeRepository.save(memeLike);
     }

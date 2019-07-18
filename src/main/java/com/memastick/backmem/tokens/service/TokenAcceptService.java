@@ -8,8 +8,6 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.notification.constant.NotifyType;
-import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -68,7 +66,7 @@ public class TokenAcceptService {
         }
 
         tokenWalletService.take(token, memetick);
-        memetickService.addDna(memetick, MathUtil.rand(0, 100));
+        memetickService.addDna(memetick, MathUtil.rand(10, 100));
         notifyService.sendTOKEN(token, meme);
     }
 

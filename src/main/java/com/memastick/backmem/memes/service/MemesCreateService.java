@@ -63,7 +63,7 @@ public class MemesCreateService {
         evolveMemeService.startEvolve(meme);
 
         inventoryService.updateCell(memetick);
-        memetickService.addDna(memetick, MathUtil.rand(0, 1000));
+        memetickService.addDna(memetick, MathUtil.rand(100, 1000));
 
         LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
         LocalDateTime end = now.plusHours(CELL_GROWTH);
