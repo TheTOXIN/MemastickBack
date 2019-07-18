@@ -77,6 +77,8 @@ public class MemeLikeService {
         if (MemeType.DEAD.equals(meme.getType())) return;
         if (memeLike.getChromosome() >= MAX_CHROMOSOME) return;
 
+        if (memeLike.getChromosome() == 0) memetickService.addDna(meme.getMemetick(), MathUtil.rand(1, 10));
+
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
         int allChromosome = meme.getChromosomes() + (chromosome - memeLike.getChromosome());
 
@@ -114,8 +116,6 @@ public class MemeLikeService {
 
         memeLike.setMeme(meme);
         memeLike.setMemetick(memetick);
-
-        memetickService.addDna(meme.getMemetick(), MathUtil.rand(1, 10));
 
         return memeLikeRepository.save(memeLike);
     }

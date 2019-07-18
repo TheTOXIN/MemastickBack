@@ -88,8 +88,6 @@ public class MemetickRatingService {
         return cache.getFirst().plusDays(1).isAfter(LocalDate.now());
     }
 
-
-
     private void initFilter() {
         this.mapFilter.put(MemetickRatingFilter.DNA, Memetick::getDna);
         this.mapFilter.put(MemetickRatingFilter.IND, m -> memeRepository.countByMemetickIdAndType(m.getId(), MemeType.INDV).orElse(0L));
