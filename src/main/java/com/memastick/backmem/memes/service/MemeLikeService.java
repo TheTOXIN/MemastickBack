@@ -8,7 +8,7 @@ import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,18 +29,18 @@ public class MemeLikeService {
 
     private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemeService memeService;
 
     @Autowired
     public MemeLikeService(
         MemeLikeRepository memeLikeRepository,
-        SecurityService securityService,
+        OauthData oauthData,
         MemetickService memetickService,
         MemeService memeService
     ) {
         this.memeLikeRepository = memeLikeRepository;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.memetickService = memetickService;
         this.memeService = memeService;
     }
@@ -103,7 +103,7 @@ public class MemeLikeService {
     }
 
     private MemeLike findByMemeForCurrentUser(Meme meme) {
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
 
         Optional<MemeLike> byMemeAndMemetick = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
         if (byMemeAndMemetick.isEmpty()) return generateMemeLike(meme, memetick);

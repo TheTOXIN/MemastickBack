@@ -4,7 +4,7 @@ import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
@@ -18,26 +18,26 @@ import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TOKEN;
 @Service
 public class TokenAllowanceService {
 
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final TokenWalletService tokenWalletService;
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
 
     @Autowired
     public TokenAllowanceService(
-            SecurityService securityService,
-            TokenWalletService tokenWalletService,
-            MemetickInventoryRepository inventoryRepository,
-            TokenWalletRepository tokenWalletRepository
+        OauthData oauthData,
+        TokenWalletService tokenWalletService,
+        MemetickInventoryRepository inventoryRepository,
+        TokenWalletRepository tokenWalletRepository
     ) {
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.tokenWalletService = tokenWalletService;
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
     }
 
     public TokenWalletAPI take() {
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
 
         if (!inventory.isAllowance()) return new TokenWalletAPI(emptyAllowance());
@@ -59,7 +59,7 @@ public class TokenAllowanceService {
     }
 
     public boolean have() {
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
         return have(memetick);
     }
 

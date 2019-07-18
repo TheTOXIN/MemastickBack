@@ -6,7 +6,7 @@ import com.memastick.backmem.main.util.ImageUtil;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickAvatar;
 import com.memastick.backmem.memetick.repository.MemetickAvatarRepository;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +39,7 @@ public class MemetickAvatarService {
         "image/png"
     ));
 
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemetickAvatarRepository memetickAvatarRepository;
 
     @Value("classpath:images/avatar.png")
@@ -47,11 +47,11 @@ public class MemetickAvatarService {
 
     @Autowired
     public MemetickAvatarService(
-        SecurityService securityService,
+        OauthData oauthData,
         MemetickAvatarRepository memetickAvatarRepository
     ) {
 
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.memetickAvatarRepository = memetickAvatarRepository;
     }
 
@@ -72,7 +72,7 @@ public class MemetickAvatarService {
 
         byte[] photoBytes = optimizeImage(bufferedImage, format);
 
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
         MemetickAvatar memetickAvatar = memetickAvatarRepository.findByMemetickId(memetick.getId());
 
         memetickAvatar.setAvatar(photoBytes);

@@ -12,7 +12,7 @@ import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.entity.NotifyPush;
 import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
 import org.slf4j.Logger;
@@ -34,19 +34,19 @@ public class NotifyPushService implements NotifySender {
     private static final Logger log = LoggerFactory.getLogger(NotifyPushService.class);
 
     private final NotifyPushRepository notifyPushRepository;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final SettingUserService settingUserService;
 
     @Autowired
     public NotifyPushService(
         @Value("${fcm.push.file}") String fcmFile,
         NotifyPushRepository notifyPushRepository,
-        SecurityService securityService,
+        OauthData oauthData,
         SettingUserService settingUserService
     ) {
         this.init(fcmFile);
         this.notifyPushRepository = notifyPushRepository;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.settingUserService = settingUserService;
     }
 
@@ -92,7 +92,7 @@ public class NotifyPushService implements NotifySender {
     }
 
     public void register(String token) {
-        User user = securityService.getCurrentUser();
+        User user = oauthData.getCurrentUser();
 
         NotifyPush notifyPush = notifyPushRepository
             .findByToken(token)

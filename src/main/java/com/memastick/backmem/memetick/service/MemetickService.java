@@ -11,7 +11,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.notification.service.NotifyService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.repository.SettingUserRepository;
 import com.memastick.backmem.user.entity.User;
@@ -27,20 +27,20 @@ public class MemetickService {
 
     private final NotifyService notifyService;
     private final MemetickRepository memetickRepository;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemetickMapper memetickMapper;
     private final SettingUserRepository settingUserRepository;
 
     @Autowired
     public MemetickService(
         MemetickRepository memetickRepository,
-        SecurityService securityService,
+        OauthData oauthData,
         MemetickMapper memetickMapper,
         NotifyService notifyService,
         SettingUserRepository settingUserRepository
     ) {
         this.memetickRepository = memetickRepository;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.memetickMapper = memetickMapper;
         this.notifyService = notifyService;
         this.settingUserRepository = settingUserRepository;
@@ -48,7 +48,7 @@ public class MemetickService {
 
     public MemetickAPI viewByMe() {
         return memetickMapper.toMemetickAPI(
-            securityService.getCurrentMemetick()
+            oauthData.getCurrentMemetick()
         );
     }
 
@@ -67,7 +67,7 @@ public class MemetickService {
     public void changeNick(ChangeNickAPI request) {
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
 
-        User user = securityService.getCurrentUser();
+        User user = oauthData.getCurrentUser();
         SettingUser setting = settingUserRepository.findByUser(user);
         Memetick memetick = user.getMemetick();
 

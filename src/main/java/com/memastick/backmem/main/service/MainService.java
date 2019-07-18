@@ -7,7 +7,7 @@ import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.notification.impl.NotifyBellService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MainService {
 
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final EvolveMemeService evolveMemeService;
     private final MemeRepository memeRepository;
     private final MemetickInventoryService inventoryService;
@@ -23,13 +23,13 @@ public class MainService {
 
     @Autowired
     public MainService(
-        SecurityService securityService,
+        OauthData oauthData,
         EvolveMemeService evolveMemeService,
         MemeRepository memeRepository,
         MemetickInventoryService inventoryService,
         NotifyBellService notifyBellService
     ) {
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.evolveMemeService = evolveMemeService;
         this.memeRepository = memeRepository;
         this.inventoryService = inventoryService;
@@ -37,7 +37,7 @@ public class MainService {
     }
 
     public HomeAPI home() {
-        User user = securityService.getCurrentUser();
+        User user = oauthData.getCurrentUser();
 
         return new HomeAPI(
             user.getMemetick().getNick(),
@@ -48,7 +48,7 @@ public class MainService {
     }
 
     public NotifyCountAPI notifyCount() {
-        User user = securityService.getCurrentUser();
+        User user = oauthData.getCurrentUser();
 
         return new NotifyCountAPI(
             inventoryService.countItems(user.getMemetick()),

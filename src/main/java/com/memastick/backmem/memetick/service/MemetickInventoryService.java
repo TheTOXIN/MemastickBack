@@ -6,7 +6,7 @@ import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.entity.TokenWallet;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
 import com.memastick.backmem.tokens.service.TokenAllowanceService;
@@ -27,7 +27,7 @@ public class MemetickInventoryService {
     private final TokenWalletRepository tokenWalletRepository;
     private final TokenWalletService tokenWalletService;
     private final TokenAllowanceService tokenAllowanceService;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final EvolveMemeService evolveMemeService;
 
     @Autowired
@@ -36,14 +36,14 @@ public class MemetickInventoryService {
         TokenWalletRepository tokenWalletRepository,
         TokenWalletService tokenWalletService,
         TokenAllowanceService tokenAllowanceService,
-        SecurityService securityService,
+        OauthData oauthData,
         EvolveMemeService evolveMemeService
     ) {
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
         this.tokenWalletService = tokenWalletService;
         this.tokenAllowanceService = tokenAllowanceService;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.evolveMemeService = evolveMemeService;
     }
 
@@ -67,7 +67,7 @@ public class MemetickInventoryService {
     }
 
     public int stateCell() {
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
 
         return stateCell(inventory);

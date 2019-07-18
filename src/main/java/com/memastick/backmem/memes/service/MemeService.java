@@ -10,7 +10,7 @@ import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class MemeService {
 
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
     private final MemeMapper memeMapper;
@@ -35,14 +35,14 @@ public class MemeService {
 
     @Autowired
     public MemeService(
-        SecurityService securityService,
+        OauthData oauthData,
         MemeRepository memeRepository,
         MemetickService memetickService,
         @Lazy MemeMapper memeMapper,
         @Lazy MemeLikeService memeLikeService,
         @Lazy MemePoolService memePoolService
     ) {
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.memeRepository = memeRepository;
         this.memetickService = memetickService;
         this.memeMapper = memeMapper;
@@ -96,7 +96,7 @@ public class MemeService {
     private List<Meme> read(MemeReadDTO readDTO, Pageable pageable) {
         List<Meme> memes = new ArrayList<>();
 
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
 
         switch (readDTO.getFilter()) {
             case EVLV: memes = memeRepository.findByType(MemeType.EVLV, pageable); break;

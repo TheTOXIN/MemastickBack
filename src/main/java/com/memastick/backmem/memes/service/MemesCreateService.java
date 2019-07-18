@@ -10,7 +10,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.notification.service.NotifyService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class MemesCreateService {
 
     private final TaskScheduler taskScheduler;
     private final NotifyService notifyService;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
     private final EvolveMemeService evolveMemeService;
@@ -36,7 +36,7 @@ public class MemesCreateService {
 
     @Autowired
     public MemesCreateService(
-        SecurityService securityService,
+        OauthData oauthData,
         MemeRepository memeRepository,
         MemetickService memetickService,
         EvolveMemeService evolveMemeService,
@@ -44,7 +44,7 @@ public class MemesCreateService {
         NotifyService notifyService,
         TaskScheduler taskScheduler
     ) {
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.memeRepository = memeRepository;
         this.memetickService = memetickService;
         this.evolveMemeService = evolveMemeService;
@@ -57,7 +57,7 @@ public class MemesCreateService {
     public void create(MemeCreateAPI request) {
         if (!inventoryService.checkState()) throw new CellSmallException();
 
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = make(request, memetick);
 
         memeRepository.saveAndFlush(meme);

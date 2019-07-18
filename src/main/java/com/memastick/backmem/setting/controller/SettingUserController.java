@@ -1,6 +1,6 @@
 package com.memastick.backmem.setting.controller;
 
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.api.SettingAPI;
 import com.memastick.backmem.setting.service.SettingUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.*;
 public class SettingUserController {
 
     private final SettingUserService settingUserService;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
 
     @Autowired
     public SettingUserController(
         SettingUserService settingUserService,
-        SecurityService securityService
+        OauthData oauthData
     ) {
         this.settingUserService = settingUserService;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
     }
 
     @GetMapping("/me")
@@ -30,7 +30,7 @@ public class SettingUserController {
     @PatchMapping("/push/{value}")
     public void push(@PathVariable("value") boolean value) {
         settingUserService.pushSet(
-            securityService.getCurrentUser(),
+            oauthData.getCurrentUser(),
             value
         );
     }

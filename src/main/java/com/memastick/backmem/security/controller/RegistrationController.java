@@ -28,5 +28,4 @@ public class RegistrationController {
         if (status.equals(SecurityStatus.SUCCESSFUL)) return ResponseEntity.ok(status);
         return ResponseEntity.unprocessableEntity().body(status);
     }
-
 }

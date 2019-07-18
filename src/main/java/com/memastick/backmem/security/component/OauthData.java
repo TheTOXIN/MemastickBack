@@ -1,4 +1,4 @@
-package com.memastick.backmem.security.service;
+package com.memastick.backmem.security.component;
 
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.user.entity.User;
@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 
-@Service
-public class SecurityService {
+@Component
+public class OauthData {
     
     private final UserService userService;
 
     @Autowired
-    public SecurityService(@Lazy UserService userService) {
+    public OauthData(@Lazy UserService userService) {
         this.userService = userService;
     }
 

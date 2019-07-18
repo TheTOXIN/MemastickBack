@@ -4,7 +4,7 @@ import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.entity.SettingFollower;
 import com.memastick.backmem.setting.repository.SettingFollowerRepository;
 import com.memastick.backmem.user.entity.User;
@@ -21,25 +21,25 @@ import java.util.stream.Collectors;
 public class SettingFollowerService {
 
     private final MemetickService memetickService;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final SettingFollowerRepository settingFollowerRepository;
     private final MemetickMapper memetickMapper;
 
     @Autowired
     public SettingFollowerService(
         @Lazy MemetickService memetickService,
-        SecurityService securityService,
+        OauthData oauthData,
         SettingFollowerRepository settingFollowerRepository,
         MemetickMapper memetickMapper
     ) {
         this.memetickService = memetickService;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.settingFollowerRepository = settingFollowerRepository;
         this.memetickMapper = memetickMapper;
     }
 
     public void trigger(UUID memetickId) {
-        User follower = securityService.getCurrentUser();
+        User follower = oauthData.getCurrentUser();
         Memetick memetick = memetickService.findById(memetickId);
 
         if (follower.getMemetick().equals(memetick)) return;
@@ -54,7 +54,7 @@ public class SettingFollowerService {
     }
 
     public boolean follow(Memetick memetick) {
-        User follower = securityService.getCurrentUser();
+        User follower = oauthData.getCurrentUser();
         Optional<SettingFollower> optional = settingFollowerRepository.findByMemetickAndFollower(memetick, follower);
 
         return optional.isPresent();
@@ -68,7 +68,7 @@ public class SettingFollowerService {
     }
 
     public List<MemetickPreviewAPI> following() {
-        return this.findMemeticks(securityService.getCurrentUser())
+        return this.findMemeticks(oauthData.getCurrentUser())
             .stream()
             .map(memetickMapper::toPreviewDTO)
             .collect(Collectors.toList());

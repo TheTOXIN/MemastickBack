@@ -9,7 +9,7 @@ import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -26,19 +26,19 @@ public class MemetickRatingService {
     private Map<MemetickRatingFilter, Function<Memetick, Long>> mapFilter = new HashMap<>();
 
     private final MemetickRepository memetickRepository;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemetickMapper memetickMapper;
     private final MemeRepository memeRepository;
 
     @Autowired
     public MemetickRatingService(
         MemetickRepository memetickRepository,
-        SecurityService securityService,
+        OauthData oauthData,
         MemetickMapper memetickMapper,
         MemeRepository memeRepository
     ) {
         this.memetickRepository = memetickRepository;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.memetickMapper = memetickMapper;
         this.memeRepository = memeRepository;
 
@@ -60,7 +60,7 @@ public class MemetickRatingService {
             .stream()
             .collect(Collectors.toMap(AbstractEntity::getId, memeticks::indexOf));
 
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
         MemetickRatingDTO me = memetickMapper.toRatingDTO(
             memetick,
             rateMap.get(memetick.getId()),
