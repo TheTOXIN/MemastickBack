@@ -7,32 +7,35 @@ import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.entity.MemetickInventory;
+import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.component.OauthData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.CELL_GROWTH;
 import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TEXT_LEN;
 
 @Service
 public class MemesCreateService {
 
-    private final TaskScheduler taskScheduler;
+    private final static Logger LOG = LoggerFactory.getLogger(MemesCreateService.class);
+
     private final NotifyService notifyService;
     private final OauthData oauthData;
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
     private final EvolveMemeService evolveMemeService;
     private final MemetickInventoryService inventoryService;
+    private final MemetickInventoryRepository inventoryRepository;
 
     @Autowired
     public MemesCreateService(
@@ -42,7 +45,7 @@ public class MemesCreateService {
         EvolveMemeService evolveMemeService,
         MemetickInventoryService inventoryService,
         NotifyService notifyService,
-        TaskScheduler taskScheduler
+        MemetickInventoryRepository inventoryRepository
     ) {
         this.oauthData = oauthData;
         this.memeRepository = memeRepository;
@@ -50,7 +53,7 @@ public class MemesCreateService {
         this.evolveMemeService = evolveMemeService;
         this.inventoryService = inventoryService;
         this.notifyService = notifyService;
-        this.taskScheduler = taskScheduler;
+        this.inventoryRepository = inventoryRepository;
     }
 
     @Transactional
@@ -66,11 +69,23 @@ public class MemesCreateService {
         inventoryService.updateCell(memetick);
         memetickService.addDna(memetick, MathUtil.rand(100, 1000));
 
-        LocalDateTime now = LocalDateTime.now(ZoneId.of("UTC"));
-        LocalDateTime end = now.plusHours(CELL_GROWTH);
-
         notifyService.sendCREATING(memetick, meme);
-        taskScheduler.schedule(() -> notifyService.sendCELL(memetick), end.toInstant(ZoneOffset.UTC));
+    }
+
+    public void notification() {
+        LOG.info("START check cell notify");
+
+        List<MemetickInventory> inventories = inventoryRepository.findByCellNotifyFalse();
+
+        List<Memetick> memeticks = inventories
+            .stream()
+            .filter(inventoryService::checkState)
+            .peek(i -> i.setCellNotify(true))
+            .map(MemetickInventory::getMemetick)
+            .collect(Collectors.toList());
+
+        notifyService.sendCELL(memeticks);
+        inventoryRepository.saveAll(inventories);
     }
 
     private Meme make(MemeCreateAPI request, Memetick memetick) {

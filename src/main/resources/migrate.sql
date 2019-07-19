@@ -132,3 +132,7 @@ ALTER TABLE  memes ALTER COLUMN evolution SET NOT NULL;
 ALTER TABLE memes RENAME COLUMN indexer TO individuation;
 
 ALTER TABLE evolve_memes ALTER COLUMN chance DROP NOT NULL;
+
+ALTER TABLE memetick_inventories ADD COLUMN cell_notify boolean;
+UPDATE memetick_inventories SET cell_notify = false;
+ALTER TABLE memetick_inventories ALTER COLUMN cell_notify SET NOT NULL;

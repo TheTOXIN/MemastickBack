@@ -66,6 +66,10 @@ public class MemetickInventoryService {
         return this.stateCell() == CELL_SIZE;
     }
 
+    public boolean checkState(MemetickInventory inventory) {
+        return this.stateCell(inventory) == CELL_SIZE;
+    }
+
     public int stateCell() {
         Memetick memetick = oauthData.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
@@ -102,6 +106,7 @@ public class MemetickInventoryService {
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
 
         inventory.setCellCreating(LocalDateTime.now());
+        inventory.setCellNotify(false);
 
         inventoryRepository.save(inventory);
     }

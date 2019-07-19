@@ -4,6 +4,7 @@ import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.handler.EvolveHandler;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
+import com.memastick.backmem.memes.service.MemesCreateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,19 @@ public class EvolveNexterService {
     private final EvolveHandler evolveHandler;
     private final EvolveMemeRepository evolveMemeRepository;
     private final EvolveMemeService evolveMemeService;
+    private final MemesCreateService memesCreateService;
 
     @Autowired
     public EvolveNexterService(
         EvolveHandler evolveHandler,
         EvolveMemeRepository evolveMemeRepository,
-        EvolveMemeService evolveMemeService
+        EvolveMemeService evolveMemeService,
+        MemesCreateService memesCreateService
     ) {
         this.evolveHandler = evolveHandler;
         this.evolveMemeRepository = evolveMemeRepository;
         this.evolveMemeService = evolveMemeService;
+        this.memesCreateService = memesCreateService;
     }
 
     @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
@@ -50,6 +54,7 @@ public class EvolveNexterService {
         });
 
         evolveMemeRepository.saveAll(evolve);
+        memesCreateService.notification();
 
         log.info("END NEXT EVOLVE - {}", evolveMemeService.computePopulation());
     }

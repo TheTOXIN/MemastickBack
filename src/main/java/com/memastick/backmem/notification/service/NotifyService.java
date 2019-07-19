@@ -59,9 +59,9 @@ public class NotifyService {
     }
 
     @Async
-    public void sendCELL(Memetick memetick) {
+    public void sendCELL(List<Memetick> memeticks) {
         send(
-            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            userRepository.findByMemetickIn(memeticks),
             new NotifyDTO(
                 NotifyType.CELL,
                 "Ваша клетка выросла",
