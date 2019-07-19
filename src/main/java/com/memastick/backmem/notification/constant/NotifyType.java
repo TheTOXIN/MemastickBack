@@ -12,7 +12,8 @@ public enum NotifyType {
     TOKEN(true, false, true),
     ADMIN(true, false, true),
     CREATING(true, true, true),
-    ALLOWANCE(false, true, true);
+    ALLOWANCE(false, true, true),
+    MEME_DAY(true, false, false);
 
     @Getter boolean bell;
     @Getter boolean push;

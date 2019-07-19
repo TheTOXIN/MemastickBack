@@ -142,6 +142,20 @@ public class NotifyService {
         );
     }
 
+    @Async
+    public void sendMEMEDAY(Meme meme) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(meme.getMemetick())),
+            new NotifyDTO(
+                NotifyType.MEME_DAY,
+                "МЕМ ДНЯ",
+                "Ваша особь лучший мем, " + meme.getEvolution() + "дня эволюции",
+                null,
+                NotifyConstant.LINK_MEME + "/" + meme.getId()
+            )
+        );
+    }
+
     private void send(List<User> users, NotifyDTO dto) {
         if (dto.getType().isWeb()) webService.send(users, dto);
         if (dto.getType().isPush()) pushService.send(users, dto);

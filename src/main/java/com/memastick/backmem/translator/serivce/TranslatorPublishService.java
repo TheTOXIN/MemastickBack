@@ -3,6 +3,7 @@ package com.memastick.backmem.translator.serivce;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.translator.component.TranslatorDownloader;
 import com.memastick.backmem.translator.iface.Translator;
 import org.slf4j.Logger;
@@ -23,18 +24,21 @@ public class TranslatorPublishService {
     private final EvolveMemeService evolveMemeService;
     private final MemeRepository memeRepository;
     private final TranslatorDownloader translatorDownloader;
+    private final NotifyService notifyService;
 
     @Autowired
     public TranslatorPublishService(
         List<Translator> translators,
         EvolveMemeService evolveMemeService,
         MemeRepository memeRepository,
-        TranslatorDownloader translatorDownloader
+        TranslatorDownloader translatorDownloader,
+        NotifyService notifyService
     ) {
         this.translators = translators;
         this.evolveMemeService = evolveMemeService;
         this.memeRepository = memeRepository;
         this.translatorDownloader = translatorDownloader;
+        this.notifyService = notifyService;
     }
 
     @Scheduled(cron = "0 0 3 * * *", zone = "UTC")
@@ -49,6 +53,7 @@ public class TranslatorPublishService {
         File file = translatorDownloader.download(meme);
         if (file == null) return;
 
+        notifyService.sendMEMEDAY(meme);
         translators.forEach(t -> t.translate(file, meme));
 
         log.info("END TRANSLATE PUBLISH");
