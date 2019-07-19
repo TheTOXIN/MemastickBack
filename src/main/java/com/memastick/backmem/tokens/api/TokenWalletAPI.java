@@ -14,5 +14,4 @@ import java.util.Map;
 public class TokenWalletAPI {
 
     private Map<TokenType, Integer> wallet = new HashMap<>();
-
 }

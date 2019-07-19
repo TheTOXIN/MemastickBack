@@ -6,9 +6,11 @@ import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.api.RegistrationAPI;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.setting.service.SettingUserService;
+import com.memastick.backmem.user.api.MeAPI;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ public class UserService {
     private final MemetickAvatarService avatarService;
     private final SettingUserService settingService;
     private final TokenStore tokenStore;
+    private final OauthData oauthData;
 
     @Value("${oauth.client}")
     private String oauthClient;
@@ -43,7 +46,8 @@ public class UserService {
         MemetickInventoryService inventoryService,
         MemetickAvatarService avatarService,
         SettingUserService settingService,
-        TokenStore tokenStore
+        TokenStore tokenStore,
+        OauthData oauthData
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -52,6 +56,7 @@ public class UserService {
         this.avatarService = avatarService;
         this.settingService = settingService;
         this.tokenStore = tokenStore;
+        this.oauthData = oauthData;
     }
 
     public User findAdmin() {
@@ -101,5 +106,15 @@ public class UserService {
         var tokens = tokenStore.findTokensByClientIdAndUserName(oauthClient, user.getLogin());
 
         return tokens.stream().anyMatch(token -> !token.isExpired());
+    }
+
+    public MeAPI me() {
+        User user = oauthData.getCurrentUser();
+
+        return new MeAPI(
+            user.getId(),
+            user.getLogin(),
+            user.getRole()
+        );
     }
 }
