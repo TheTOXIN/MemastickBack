@@ -65,7 +65,7 @@ public class UserService {
     }
 
     @Transactional
-    public User generateUser(RegistrationAPI request, InviteCode inviteCode) {
+    public User generateUser(RegistrationAPI request, String nick) {
         User user = new User();
 
         user.setEmail(request.getEmail());
@@ -74,7 +74,7 @@ public class UserService {
         user.setRole(RoleType.USER);
 
         Memetick memetick = new Memetick();
-        memetick.setNick(inviteCode.getNick());
+        memetick.setNick(nick);
         memetickRepository.save(memetick);
 
         user.setMemetick(memetick);

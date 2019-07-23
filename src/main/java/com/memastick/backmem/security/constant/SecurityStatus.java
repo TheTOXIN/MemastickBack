@@ -11,5 +11,4 @@ public enum SecurityStatus {
     LOGIN_INVALID,
     EMAIL_INVALID,
     INVITE
-
 }

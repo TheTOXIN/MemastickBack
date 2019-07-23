@@ -12,6 +12,7 @@ import com.memastick.backmem.sender.dto.EmailStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,9 @@ public class InviteCodeService {
     private final InviteCodeRepository inviteCodeRepository;
     private final SenderInviteCodeService senderInviteCodeService;
 
+    @Value("${memastick.invite.auto}")
+    boolean autoInvite;
+
     @Autowired
     public InviteCodeService(
         InviteCodeRepository inviteCodeRepository,
@@ -41,12 +45,20 @@ public class InviteCodeService {
     public void register(InviteCodeAPI request) {
         Optional<InviteCode> byEmail = inviteCodeRepository.findByEmail(request.getEmail());
         if (byEmail.isPresent()) return;
+
         InviteCode inviteCode = generateInvite(request);
         inviteCodeRepository.save(inviteCode);
+
+        if (autoInvite) send(inviteCode);
     }
 
     public EmailStatus send(String code) {
-        InviteCode inviteCode = findByCode(code);
+        return send(
+            findByCode(code)
+        );
+    }
+
+    public EmailStatus send(InviteCode inviteCode) {
         EmailStatus emailStatus = senderInviteCodeService.send(inviteCode);
 
         if (emailStatus.isSuccess()) {

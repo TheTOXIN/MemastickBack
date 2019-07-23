@@ -39,7 +39,7 @@ public class AdminController {
 
     @GetMapping("test")
     public void test() {
-
+        //TODO TEST NOTIFY
     }
 
     @PatchMapping("admin-translate")
