@@ -89,7 +89,7 @@ public class MemesCreateService {
     }
 
     private Meme make(MemeCreateAPI request, Memetick memetick) {
-        if (request.getText().length() > MAX_TEXT_LEN) {
+        if (request.getText() != null && request.getText().length() > MAX_TEXT_LEN) {
             request.setText(request.getText().substring(0, MAX_TEXT_LEN));
         }
 
