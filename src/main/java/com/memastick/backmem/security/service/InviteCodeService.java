@@ -43,13 +43,11 @@ public class InviteCodeService {
     }
 
     public void register(InviteCodeAPI request) {
-        Optional<InviteCode> byEmail = inviteCodeRepository.findByEmail(request.getEmail());
-        if (byEmail.isPresent()) return;
+        Optional<InviteCode> optional = inviteCodeRepository.findByEmail(request.getEmail());
 
-        InviteCode inviteCode = generateInvite(request);
-        inviteCodeRepository.save(inviteCode);
+        InviteCode invite = optional.orElseGet(() -> generateInvite(request));
 
-        if (autoInvite) send(inviteCode);
+        if (autoInvite) send(invite);
     }
 
     public EmailStatus send(String code) {
@@ -87,6 +85,8 @@ public class InviteCodeService {
         inviteCode.setNick(request.getNick());
         inviteCode.setCode(code);
         inviteCode.setDate(create);
+
+        inviteCodeRepository.save(inviteCode);
 
         LOGGER.info("Generate NEW inviteCode - " + inviteCode.toString());
 
