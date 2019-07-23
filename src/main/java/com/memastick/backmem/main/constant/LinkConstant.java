@@ -1,8 +1,8 @@
-package com.memastick.backmem.notification.constant;
+package com.memastick.backmem.main.constant;
 
-import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.notification.constant.NotifyType;
 
-public class NotifyConstant {
+public class LinkConstant {
     
     public static final String LINK_DNA = GlobalConstant.URL + "/home?event=" + NotifyType.DNA;
 

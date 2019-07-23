@@ -5,7 +5,9 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.translator.component.TranslatorDownloader;
+import com.memastick.backmem.translator.dto.TranslatorDTO;
 import com.memastick.backmem.translator.iface.Translator;
+import com.memastick.backmem.translator.util.TranslatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +55,10 @@ public class TranslatorPublishService {
         File file = translatorDownloader.download(meme);
         if (file == null) return;
 
+        TranslatorDTO dto = new TranslatorDTO(meme, file, TranslatorUtil.prepareText(meme));
+
+        translators.forEach(t -> t.translate(dto));
         notifyService.sendMEMEDAY(meme);
-        translators.forEach(t -> t.translate(file, meme));
 
         log.info("END TRANSLATE PUBLISH");
     }

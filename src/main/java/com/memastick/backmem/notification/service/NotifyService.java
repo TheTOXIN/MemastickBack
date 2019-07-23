@@ -1,8 +1,8 @@
 package com.memastick.backmem.notification.service;
 
+import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.notification.constant.NotifyConstant;
 import com.memastick.backmem.notification.constant.NotifyType;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.impl.NotifyBellService;
@@ -53,7 +53,7 @@ public class NotifyService {
                 "+ ДНК",
                 "Вы получили ДНК",
                 String.valueOf(dna),
-                NotifyConstant.LINK_DNA
+                LinkConstant.LINK_DNA
             )
         );
     }
@@ -67,7 +67,7 @@ public class NotifyService {
                 "Ваша клетка выросла",
                 "Теперь вы можете создать мем",
                 null,
-                NotifyConstant.LINK_CREATING
+                LinkConstant.LINK_CREATING
             )
         );
     }
@@ -81,7 +81,7 @@ public class NotifyService {
                 "Мем " + NotifyUtil.typeToStr(meme),
                 "Ваш мем №" + meme.getEvolution() + " закончил эволюцию, и " + NotifyUtil.typeToStr(meme),
                 String.valueOf(meme.getEvolution()),
-                NotifyConstant.LINK_MEME + "/" + meme.getId()
+                LinkConstant.LINK_MEME + "/" + meme.getId()
             )
         );
     }
@@ -95,7 +95,7 @@ public class NotifyService {
                 "Мему №" + meme.getEvolution() + " дали токен",
                 "Мему №" + meme.getEvolution() + " дали токен: " + NotifyUtil.tokenToStr(token),
                 token.name(),
-                NotifyConstant.LINK_MEME + "/" + meme.getId()
+                LinkConstant.LINK_MEME + "/" + meme.getId()
             )
         );
     }
@@ -123,7 +123,7 @@ public class NotifyService {
                 "Меметик " + memetick.getNick() + " создал мем",
                 "Новый мем от: " + memetick.getNick() + ", оцените его",
                 memetick.getId().toString(),
-                NotifyConstant.LINK_MEME + "/" + meme.getId()
+                LinkConstant.LINK_MEME + "/" + meme.getId()
             )
         );
     }
@@ -137,7 +137,7 @@ public class NotifyService {
                 "Вы получили пособие",
                 "Заберите пособие его и получите токены",
                 null,
-                NotifyConstant.LINK_ALLOWANCE
+                LinkConstant.LINK_ALLOWANCE
             )
         );
     }
@@ -151,7 +151,7 @@ public class NotifyService {
                 "МЕМ ДНЯ",
                 "Ваша особь лучший мем, " + meme.getEvolution() + "дня эволюции",
                 null,
-                NotifyConstant.LINK_MEME + "/" + meme.getId()
+                LinkConstant.LINK_MEME + "/" + meme.getId()
             )
         );
     }

@@ -15,20 +15,21 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private static final String RESOURCE_ID = "memastick-resource";
 
     @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+    public void configure(ResourceServerSecurityConfigurer resources) {
         resources.resourceId(RESOURCE_ID);
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .mvcMatchers("/migrate/**").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/test").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/admin-translate").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/next-evolve").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/select-evolve").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/send-allowance").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/admin-message").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/migrate").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/invites").hasAuthority(RoleType.ADMIN.name())
-            .mvcMatchers("/test").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/memes/img/**").anonymous()
             .mvcMatchers("/hello").anonymous()
             .mvcMatchers("/memetick-avatars/download/**").anonymous()

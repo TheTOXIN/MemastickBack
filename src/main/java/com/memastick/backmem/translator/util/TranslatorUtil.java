@@ -1,6 +1,6 @@
 package com.memastick.backmem.translator.util;
 
-import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.memes.entity.Meme;
 
 public class TranslatorUtil {
@@ -15,7 +15,19 @@ public class TranslatorUtil {
             .append("\uD83C\uDF0E Эволюция №" + meme.getEvolution() + "\n")
             .append("\uD83D\uDE0E Меметик - " + meme.getMemetick().getNick() + "\n")
             .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
-            .append(GlobalConstant.URL + "/memes/share/" + meme.getId());
+            .append(LinkConstant.LINK_MEME + "/" + meme.getId());
+
+        return builder.toString();
+    }
+
+    public static String prepareAdminText(Meme meme) {
+        StringBuilder builder = new StringBuilder();
+
+        builder
+            .append("МЕМ ОТ АДМИНА \uD83D\uDC99" + "\n")
+            .append("Автор - " + meme.getMemetick().getNick() + "\n")
+            .append(String.format("ЭПИ: %d/%d/%d", meme.getEvolution(), meme.getPopulation(), meme.getIndividuation()) + "\n")
+            .append(LinkConstant.LINK_MEME + "/" + meme.getId());
 
         return builder.toString();
     }

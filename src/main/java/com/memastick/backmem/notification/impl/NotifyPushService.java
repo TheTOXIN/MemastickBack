@@ -7,7 +7,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
-import com.memastick.backmem.notification.constant.NotifyConstant;
+import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.entity.NotifyPush;
 import com.memastick.backmem.notification.iface.NotifySender;
@@ -86,7 +86,7 @@ public class NotifyPushService implements NotifySender {
     private WebpushNotification.Builder builder(NotifyDTO dto){
         return WebpushNotification.builder()
             .putCustomData("click_action", dto.getEvent())
-            .setIcon(NotifyConstant.LINK_ICON)
+            .setIcon(LinkConstant.LINK_ICON)
             .setTitle(dto.getTitle())
             .setBody(dto.getText());
     }

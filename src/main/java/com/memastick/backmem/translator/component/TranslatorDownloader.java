@@ -24,7 +24,7 @@ public class TranslatorDownloader {
     @Value("classpath:images/watermark.png")
     private Resource watermark;
 
-    public File download(Meme meme) {
+    public synchronized File download(Meme meme) {
         try {
             URL url = new URL(meme.getUrl());
             File file = new File(FILE_NAME);
