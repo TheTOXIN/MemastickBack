@@ -86,4 +86,14 @@ public class MemetickService {
         if (byId.isEmpty()) throw new EntityNotFoundException(Memetick.class, "id");
         return byId.get();
     }
+
+    public Memetick generateMemetick(String nick) {
+        Memetick memetick = new Memetick();
+
+        memetick.setNick(nick);
+
+        memetickRepository.save(memetick);
+
+        return memetick;
+    }
 }

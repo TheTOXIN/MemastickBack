@@ -5,6 +5,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
+import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.security.constant.RoleType;
@@ -34,6 +35,7 @@ public class UserService {
     private final SettingUserService settingService;
     private final TokenStore tokenStore;
     private final OauthData oauthData;
+    private final MemetickService memetickService;
 
     @Value("${oauth.client}")
     private String oauthClient;
@@ -47,7 +49,8 @@ public class UserService {
         MemetickAvatarService avatarService,
         SettingUserService settingService,
         TokenStore tokenStore,
-        OauthData oauthData
+        OauthData oauthData,
+        MemetickService memetickService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -57,6 +60,7 @@ public class UserService {
         this.settingService = settingService;
         this.tokenStore = tokenStore;
         this.oauthData = oauthData;
+        this.memetickService = memetickService;
     }
 
     public User findAdmin() {
@@ -67,23 +71,18 @@ public class UserService {
     @Transactional
     public User generateUser(RegistrationAPI request, String nick) {
         User user = new User();
+        Memetick memetick = memetickService.generateMemetick(nick);
 
         user.setEmail(request.getEmail());
         user.setLogin(request.getLogin());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(RoleType.USER);
-
-        Memetick memetick = new Memetick();
-        memetick.setNick(nick);
-        memetickRepository.save(memetick);
-
         user.setMemetick(memetick);
+
+        userRepository.save(user);
 
         avatarService.generateAvatar(memetick);
         inventoryService.generateInventory(memetick);
-
-        user = userRepository.save(user);
-
         settingService.generateSetting(user);
 
         return user;
