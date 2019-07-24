@@ -128,7 +128,6 @@ UPDATE memes SET type = 'DEAD' WHERE type = 'DEATH';
 ALTER TABLE memes ADD COLUMN evolution BIGINT;
 UPDATE memes SET evolution = population;
 ALTER TABLE  memes ALTER COLUMN evolution SET NOT NULL;
-
 ALTER TABLE memes RENAME COLUMN indexer TO individuation;
 
 ALTER TABLE evolve_memes ALTER COLUMN chance DROP NOT NULL;
@@ -138,7 +137,10 @@ UPDATE memetick_inventories SET cell_notify = false;
 ALTER TABLE memetick_inventories ALTER COLUMN cell_notify SET NOT NULL;
 
 ALTER TABLE invite_codes RENAME COLUMN date TO date_create;
-
 ALTER TABLE invite_codes ADD COLUMN date_send timestamp;
 UPDATE invite_codes SET date_send = '1970-01-01 00:00:00.000000';
 ALTER TABLE invite_codes ALTER COLUMN date_send SET NOT NULL;
+
+--TEST
+ALTER TABLE memes RENAME COLUMN individuation TO indexer;
+ALTER TABLE invite_codes RENAME COLUMN date_create TO date;

@@ -143,6 +143,11 @@
 			<artifactId>guava</artifactId>
 			<version>27.1-jre</version>
 		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>3.7.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
