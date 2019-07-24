@@ -1,14 +1,17 @@
 package com.memastick.backmem.security.service;
 
 import com.memastick.backmem.errors.consts.ErrorCode;
+import com.memastick.backmem.errors.exception.EmailNotSendException;
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.errors.exception.TimeInException;
 import com.memastick.backmem.errors.exception.ValidationException;
+import com.memastick.backmem.main.constant.TimeConstant;
 import com.memastick.backmem.main.util.ValidationUtil;
-import com.memastick.backmem.sender.service.SenderInviteCodeService;
 import com.memastick.backmem.security.api.InviteCodeAPI;
 import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.security.repository.InviteCodeRepository;
-import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.sender.dto.EmailStatus;
+import com.memastick.backmem.sender.service.SenderInviteCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +46,17 @@ public class InviteCodeService {
     }
 
     public void register(InviteCodeAPI request) {
-        Optional<InviteCode> optional = inviteCodeRepository.findByEmail(request.getEmail());
+        InviteCode invite = inviteCodeRepository
+            .findByEmail(request.getEmail())
+            .orElseGet(() -> generateInvite(request));
 
-        InviteCode invite = optional.orElseGet(() -> generateInvite(request));
+        invite.setNick(request.getNick());
 
-        if (autoInvite) send(invite);
+        if (autoInvite) {
+            if (invite.getDateSend().plusHours(1).isAfter(LocalDateTime.now())) throw new TimeInException("INVITE WAITE SEND");
+            EmailStatus status = send(invite);
+            if (status.isError()) throw new EmailNotSendException(status.getEmail().getTo());
+        }
     }
 
     public EmailStatus send(String code) {
@@ -61,6 +70,8 @@ public class InviteCodeService {
 
         if (emailStatus.isSuccess()) {
             inviteCode.setSend(true);
+            inviteCode.setDateSend(LocalDateTime.now());
+
             inviteCodeRepository.save(inviteCode);
         }
 
@@ -84,7 +95,8 @@ public class InviteCodeService {
         inviteCode.setEmail(request.getEmail());
         inviteCode.setNick(request.getNick());
         inviteCode.setCode(code);
-        inviteCode.setDate(create);
+        inviteCode.setDateCreate(create);
+        inviteCode.setDateSend(TimeConstant.START_LOCAL_TIME);
 
         inviteCodeRepository.save(inviteCode);
 

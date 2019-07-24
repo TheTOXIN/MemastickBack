@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -35,12 +37,14 @@ public class InviteCode extends AbstractEntity {
     private String code;
 
     @Column(nullable = false)
-    private LocalDateTime date;
+    private LocalDateTime dateSend;
+
+    @Column(nullable = false)
+    private LocalDateTime dateCreate;
 
     @Column(nullable = false)
     private boolean isSend = false;
 
     @Column(nullable = false)
     private boolean isTake = false;
-
 }

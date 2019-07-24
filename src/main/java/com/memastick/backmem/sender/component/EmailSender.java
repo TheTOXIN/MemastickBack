@@ -5,15 +5,11 @@ import com.memastick.backmem.sender.dto.EmailStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 
 @Component
@@ -46,7 +42,6 @@ public class EmailSender {
             LOGGER.info("SUCCESS: send email - " + email.toString());
             return new EmailStatus(email).success();
         } catch (MailException e) {
-            e.printStackTrace();
             LOGGER.info("ERROR: send email - " + email.toString());
             return new EmailStatus(email).error(e.getMessage());
         }
