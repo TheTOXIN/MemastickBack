@@ -6,7 +6,7 @@ public class GlobalConstant {
 
     public static final String VERSION = "0.4 alpha";
 
-    public static final String URL = "http://192.168.1.7:4200";
+    public static final String URL = "http://192.168.10.54:4200";
 
     public static final LocalDate START_EVOLVE = LocalDate.of(2019, 1, 1);
 
