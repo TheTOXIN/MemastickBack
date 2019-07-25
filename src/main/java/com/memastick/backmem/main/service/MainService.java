@@ -3,6 +3,7 @@ package com.memastick.backmem.main.service;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.main.api.NotifyCountAPI;
+import com.memastick.backmem.main.component.HelloMessageGenerate;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
@@ -20,6 +21,7 @@ public class MainService {
     private final MemeRepository memeRepository;
     private final MemetickInventoryService inventoryService;
     private final NotifyBellService notifyBellService;
+    private final HelloMessageGenerate messageGenerate;
 
     @Autowired
     public MainService(
@@ -27,20 +29,21 @@ public class MainService {
         EvolveMemeService evolveMemeService,
         MemeRepository memeRepository,
         MemetickInventoryService inventoryService,
-        NotifyBellService notifyBellService
+        NotifyBellService notifyBellService,
+        HelloMessageGenerate messageGenerate
     ) {
         this.oauthData = oauthData;
         this.evolveMemeService = evolveMemeService;
         this.memeRepository = memeRepository;
         this.inventoryService = inventoryService;
         this.notifyBellService = notifyBellService;
+        this.messageGenerate = messageGenerate;
     }
 
     public HomeAPI home() {
-        User user = oauthData.getCurrentUser();
-
         return new HomeAPI(
-            user.getMemetick().getNick(),
+            oauthData.getCurrentMemetick().getNick(),
+            messageGenerate.getMessage(),
             evolveMemeService.computeEvolution(),
             memeRepository.countByType(MemeType.EVLV).orElse(0L),
             evolveMemeService.computeSelectTimer()

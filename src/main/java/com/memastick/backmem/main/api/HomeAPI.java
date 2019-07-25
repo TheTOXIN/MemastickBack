@@ -13,6 +13,7 @@ import java.time.LocalTime;
 public class HomeAPI {
 
     private String nick;
+    private String message;
 
     private long day;
     private long memes;
