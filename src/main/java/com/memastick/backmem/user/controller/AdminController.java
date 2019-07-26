@@ -40,12 +40,8 @@ public class AdminController {
         this.translatorAdminService = translatorAdminService;
     }
 
-    @Autowired MemeCoinService coinService;
-    @Autowired OauthData oauthData;
-    @GetMapping("test/{value}")
-    public void test(@PathVariable("value") long value) {
-        coinService.transaction(oauthData.getCurrentMemetick(), value);
-    }
+    @GetMapping("test")
+    public void test() { }
 
     @PatchMapping("admin-translate")
     public void adminTranslate(@RequestBody IdAPI request) {
