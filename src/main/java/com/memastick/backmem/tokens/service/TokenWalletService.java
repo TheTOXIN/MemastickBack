@@ -1,6 +1,7 @@
 package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.errors.exception.TokenWalletException;
+import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;

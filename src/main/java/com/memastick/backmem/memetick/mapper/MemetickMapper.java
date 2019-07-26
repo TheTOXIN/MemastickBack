@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.mapper;
 
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.api.MemetickAPI;
 import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
@@ -15,14 +16,17 @@ public class MemetickMapper {
 
     private final SettingFollowerService settingFollowerService;
     private final UserService userService;
+    private final MemeCoinService memeCoinService;
 
     @Autowired
     public MemetickMapper(
         @Lazy SettingFollowerService settingFollowerService,
-        @Lazy UserService userService
+        @Lazy UserService userService,
+        @Lazy MemeCoinService memeCoinService
     ) {
         this.settingFollowerService = settingFollowerService;
         this.userService = userService;
+        this.memeCoinService = memeCoinService;
     }
 
     public MemetickPreviewAPI toPreviewDTO(Memetick memetick) {
@@ -37,7 +41,8 @@ public class MemetickMapper {
             memetick.getId(),
             memetick.getNick(),
             settingFollowerService.follow(memetick),
-            userService.isOnline(memetick)
+            userService.isOnline(memetick),
+            memeCoinService.balance(memetick)
         );
     }
 

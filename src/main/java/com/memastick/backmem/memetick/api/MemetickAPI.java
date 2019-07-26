@@ -15,4 +15,5 @@ public class MemetickAPI {
     private String nick;
     private boolean follow;
     private boolean online;
+    private long memecoins;
 }

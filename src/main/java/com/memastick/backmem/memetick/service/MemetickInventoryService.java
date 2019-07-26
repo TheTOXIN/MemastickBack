@@ -1,6 +1,7 @@
 package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.api.CellAPI;
 import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -29,6 +30,7 @@ public class MemetickInventoryService {
     private final TokenAllowanceService tokenAllowanceService;
     private final OauthData oauthData;
     private final EvolveMemeService evolveMemeService;
+    private final MemeCoinService coinService;
 
     @Autowired
     public MemetickInventoryService(
@@ -37,7 +39,8 @@ public class MemetickInventoryService {
         TokenWalletService tokenWalletService,
         TokenAllowanceService tokenAllowanceService,
         OauthData oauthData,
-        EvolveMemeService evolveMemeService
+        EvolveMemeService evolveMemeService,
+        MemeCoinService coinService
     ) {
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
@@ -45,13 +48,17 @@ public class MemetickInventoryService {
         this.tokenAllowanceService = tokenAllowanceService;
         this.oauthData = oauthData;
         this.evolveMemeService = evolveMemeService;
+        this.coinService = coinService;
     }
 
     public MemetickInventoryAPI readAll() {
+        Memetick memetick = oauthData.getCurrentMemetick();
+
         return new MemetickInventoryAPI(
-            tokenWalletService.read().getWallet(),
-            tokenAllowanceService.have(),
-            this.checkState()
+            coinService.balance(memetick),
+            this.checkState(),
+            tokenAllowanceService.have(memetick),
+            tokenWalletService.read(memetick).getWallet()
         );
     }
 

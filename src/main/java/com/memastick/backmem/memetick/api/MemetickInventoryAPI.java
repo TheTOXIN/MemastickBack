@@ -13,8 +13,10 @@ import java.util.Map;
 @AllArgsConstructor
 public class MemetickInventoryAPI {
 
-    private Map<TokenType, Integer> wallet = new HashMap<>();
-    private boolean allowance;
-    private boolean cell;
+    private long memecoins;
 
+    private boolean cell;
+    private boolean allowance;
+
+    private Map<TokenType, Integer> wallet = new HashMap<>();
 }

@@ -165,7 +165,7 @@ public class NotifyService {
                 NotifyType.MEME_COIN,
                 "МЕМКОЙНЫ",
                 "Траназакция мемкойнов на" + value,
-                String.valueOf(value),
+                value > 0 ? ("+" + value) : String.valueOf(value),
                 ""
             )
         );
