@@ -13,10 +13,10 @@ public enum NotifyType {
     ADMIN(true, false, true),
     CREATING(true, true, true),
     ALLOWANCE(false, true, true),
-    MEME_DAY(true, false, false);
+    MEME_DAY(true, false, false),
+    MEME_COIN(false, false, true);
 
     @Getter boolean bell;
     @Getter boolean push;
     @Getter boolean web;
-
 }

@@ -6,6 +6,8 @@ public class LinkConstant {
     
     public static final String LINK_DNA = GlobalConstant.URL + "/home?event=" + NotifyType.DNA;
 
+    public static final String LINK_MEMECOINS = GlobalConstant.URL + "/home?event=" + NotifyType.MEME_COIN;
+
     public static final String LINK_CREATING = GlobalConstant.URL + "/memes/create";
 
     public static final String LINK_ALLOWANCE = GlobalConstant.URL + "/modal?type=" + NotifyType.ALLOWANCE;

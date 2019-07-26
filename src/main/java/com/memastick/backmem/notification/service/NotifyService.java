@@ -1,6 +1,7 @@
 package com.memastick.backmem.notification.service;
 
 import com.memastick.backmem.main.constant.LinkConstant;
+import com.memastick.backmem.memecoin.entity.MemeCoin;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.notification.constant.NotifyType;
@@ -152,6 +153,20 @@ public class NotifyService {
                 "Ваша особь лучший мем, " + meme.getEvolution() + "дня эволюции",
                 null,
                 LinkConstant.LINK_MEME + "/" + meme.getId()
+            )
+        );
+    }
+
+    @Async
+    public void sendMEMECOIN(Memetick memetick, long value) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            new NotifyDTO(
+                NotifyType.MEME_COIN,
+                "МЕМКОЙНЫ",
+                "Траназакция мемкойнов на" + value,
+                String.valueOf(value),
+                ""
             )
         );
     }

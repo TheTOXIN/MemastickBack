@@ -4,7 +4,10 @@ import com.memastick.backmem.evolution.service.EvolveNexterService;
 import com.memastick.backmem.evolution.service.EvolveSelecterService;
 import com.memastick.backmem.main.api.IdAPI;
 import com.memastick.backmem.main.service.MigrateService;
+import com.memastick.backmem.memecoin.entity.MemeCoin;
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.notification.service.NotifyService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.service.TokenAllowanceSendService;
 import com.memastick.backmem.translator.serivce.TranslatorAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +40,11 @@ public class AdminController {
         this.translatorAdminService = translatorAdminService;
     }
 
-    @GetMapping("test")
-    public void test() {
-        //TODO TEST NOTIFY
+    @Autowired MemeCoinService coinService;
+    @Autowired OauthData oauthData;
+    @GetMapping("test/{value}")
+    public void test(@PathVariable("value") long value) {
+        coinService.transaction(oauthData.getCurrentMemetick(), value);
     }
 
     @PatchMapping("admin-translate")
