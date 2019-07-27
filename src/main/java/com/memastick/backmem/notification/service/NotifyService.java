@@ -166,7 +166,7 @@ public class NotifyService {
                 "МЕМКОЙНЫ",
                 "Траназакция мемкойнов на" + value,
                 value > 0 ? ("+" + value) : String.valueOf(value),
-                ""
+                LinkConstant.LINK_MEMECOINS
             )
         );
     }
