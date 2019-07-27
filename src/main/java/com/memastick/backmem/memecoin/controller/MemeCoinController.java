@@ -5,6 +5,7 @@ import com.memastick.backmem.memecoin.entity.MemeCoin;
 import com.memastick.backmem.memecoin.repository.MemeCoinRepository;
 import com.memastick.backmem.security.component.OauthData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +31,10 @@ public class MemeCoinController {
     }
 
     @GetMapping("history")
-    public List<MemeCoinAPI> history(Pageable pageable) {
+    public Page<MemeCoinAPI> history(Pageable pageable) {
         return coinRepository.findByMemetick(
             oauthData.getCurrentMemetick(),
             pageable
-        ).stream().map(MemeCoinAPI::new).collect(Collectors.toList());
+        ).map(MemeCoinAPI::new);
     }
 }
