@@ -14,6 +14,7 @@ import java.util.Map;
 public class MemetickInventoryAPI {
 
     private long memecoins;
+    private int cookies;
 
     private boolean cell;
     private boolean allowance;

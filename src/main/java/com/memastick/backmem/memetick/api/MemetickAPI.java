@@ -16,4 +16,5 @@ public class MemetickAPI {
     private boolean follow;
     private boolean online;
     private long memecoins;
+    private int cookies;
 }

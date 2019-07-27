@@ -42,7 +42,8 @@ public class MemetickMapper {
             memetick.getNick(),
             settingFollowerService.follow(memetick),
             userService.isOnline(memetick),
-            memeCoinService.balance(memetick)
+            memeCoinService.balance(memetick),
+            memetick.getCookies()
         );
     }
 

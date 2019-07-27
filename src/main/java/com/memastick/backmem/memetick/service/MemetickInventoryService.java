@@ -56,6 +56,7 @@ public class MemetickInventoryService {
 
         return new MemetickInventoryAPI(
             coinService.balance(memetick),
+            memetick.getCookies(),
             this.checkState(),
             tokenAllowanceService.have(memetick),
             tokenWalletService.read(memetick).getWallet()
