@@ -24,4 +24,8 @@
         <sqlFile path="scripts/05_0.4.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="06_0.4" author="toxin"  failOnError="false">
+        <sqlFile path="scripts/06_0.4.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>
