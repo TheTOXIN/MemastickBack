@@ -6,12 +6,14 @@ import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.dto.EPI;
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memes.service.MemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,16 +29,19 @@ public class EvolveMemeService {
     private final EvolveMemeRepository evolveMemeRepository;
     private final MemeService memeService;
     private final MemeRepository memeRepository;
+    private final MemeCoinService coinService;
 
     @Autowired
     public EvolveMemeService(
         EvolveMemeRepository evolveMemeRepository,
         MemeService memeService,
-        MemeRepository memeRepository
+        MemeRepository memeRepository,
+        MemeCoinService coinService
     ) {
         this.evolveMemeRepository = evolveMemeRepository;
         this.memeService = memeService;
         this.memeRepository = memeRepository;
+        this.coinService = coinService;
     }
 
     public void startEvolve(Meme meme) {
@@ -140,5 +145,17 @@ public class EvolveMemeService {
         if (evolveMeme.isImmunity()) return 100F;
 
         return computeChance(meme);
+    }
+
+    @Transactional
+    public void resurrectMeme(UUID memeId) {
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
+        Meme meme = evolveMeme.getMeme();
+
+        if (!MemeType.DEAD.equals(meme.getType())) return;
+        coinService.transaction(meme.getMemetick(), -150);
+
+        meme.setType(MemeType.SLCT);
+        memeRepository.save(meme);
     }
 }

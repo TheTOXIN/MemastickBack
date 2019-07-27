@@ -27,4 +27,5 @@ public interface EvolveMemeRepository extends JpaRepository<EvolveMeme, UUID> {
     @Query("SELECT em.step FROM EvolveMeme em WHERE em.meme = :meme")
     Object findStepByMeme(@Param("meme") Meme meme);
 
+    EvolveMeme findByMemeId(UUID memeId);
 }

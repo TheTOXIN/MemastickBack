@@ -2,6 +2,7 @@ package com.memastick.backmem.evolution.service;
 
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.notification.service.NotifyService;
@@ -24,16 +25,19 @@ public class EvolveSelecterService {
     private final EvolveMemeRepository evolveMemeRepository;
     private final EvolveMemeService evolveMemeService;
     private final NotifyService notifyService;
+    private final MemeCoinService coinService;
 
     @Autowired
     public EvolveSelecterService(
         EvolveMemeService evolveMemeService,
         EvolveMemeRepository evolveMemeRepository,
-        NotifyService notifyService
+        NotifyService notifyService,
+        MemeCoinService coinService
     ) {
         this.evolveMemeService = evolveMemeService;
         this.evolveMemeRepository = evolveMemeRepository;
         this.notifyService = notifyService;
+        this.coinService = coinService;
     }
 
     @Scheduled(cron = "0 0 0 * * *", zone = "UTC")
@@ -54,10 +58,10 @@ public class EvolveSelecterService {
             Meme meme = e.getMeme();
 
             boolean isSurvive = e.getChance() >= avg || e.isImmunity();
-
             meme.setType(isSurvive ? MemeType.INDV : MemeType.DEAD);
 
             notifyService.sendMEME(meme);
+            if (isSurvive) coinService.transaction(meme.getMemetick(), 100);
         });
 
         evolveMemeRepository.saveAll(evolveMemes);
