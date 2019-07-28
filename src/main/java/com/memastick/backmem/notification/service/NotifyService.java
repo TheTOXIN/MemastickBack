@@ -79,8 +79,8 @@ public class NotifyService {
             Collections.singletonList(userRepository.findByMemetick(meme.getMemetick())),
             new NotifyDTO(
                 NotifyType.MEME,
-                "Мем " + NotifyUtil.typeToStr(meme),
-                "Ваш мем №" + meme.getEvolution() + " закончил эволюцию, и " + NotifyUtil.typeToStr(meme),
+                "Ваш мем " + NotifyUtil.typeToStr(meme),
+                "Ваш мем эволюции №" + meme.getEvolution() + NotifyUtil.typeToStr(meme),
                 String.valueOf(meme.getEvolution()),
                 LinkConstant.LINK_MEME + "/" + meme.getId()
             )
@@ -93,8 +93,8 @@ public class NotifyService {
             Collections.singletonList(userRepository.findByMemetick(meme.getMemetick())),
             new NotifyDTO(
                 NotifyType.TOKEN,
-                "Мему №" + meme.getEvolution() + " дали токен",
-                "Мему №" + meme.getEvolution() + " дали токен: " + NotifyUtil.tokenToStr(token),
+                "Вашему мему дали токен",
+                "Мему эволюции №" + meme.getEvolution() + " дали токен: " + NotifyUtil.tokenToStr(token),
                 token.name(),
                 LinkConstant.LINK_MEME + "/" + meme.getId()
             )
