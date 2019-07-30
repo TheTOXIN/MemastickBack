@@ -44,6 +44,8 @@ public class EvolveSelecterService {
     public void select() {
         log.info("START SELECT EVOLVE - {}", evolveMemeService.computeEvolution());
 
+        // TODO OPTIMIZE
+
         List<EvolveMeme> evolveMemes = evolveMemeRepository.findAllSelection()
             .stream()
             .peek(e -> e.setChance(evolveMemeService.computeChance(e.getMeme())))
