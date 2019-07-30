@@ -1,11 +1,10 @@
 package com.memastick.backmem.translator.iface;
 
-import com.memastick.backmem.memes.entity.Meme;
+import com.memastick.backmem.translator.dto.TranslatorDTO;
 import org.springframework.scheduling.annotation.Async;
 
 public interface Translator {
 
     @Async
-    void translate(Meme meme);
-
+    void translate(TranslatorDTO dto);
 }

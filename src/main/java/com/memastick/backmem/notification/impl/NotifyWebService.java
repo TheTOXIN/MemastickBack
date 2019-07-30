@@ -2,7 +2,7 @@ package com.memastick.backmem.notification.impl;
 
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.iface.NotifySender;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
@@ -19,14 +19,14 @@ public class NotifyWebService implements NotifySender {
     private Map<String, String> cache = new HashMap<>();
 
     private final SimpMessagingTemplate template;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
 
     public NotifyWebService(
         SimpMessagingTemplate template,
-        SecurityService securityService
+        OauthData oauthData
     ) {
         this.template = template;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class NotifyWebService implements NotifySender {
     }
 
     public void register(String sessionId) {
-        cache.put(securityService.getCurrentDetails().getUsername(), sessionId);
+        cache.put(oauthData.getCurrentDetails().getUsername(), sessionId);
     }
 }

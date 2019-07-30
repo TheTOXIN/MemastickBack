@@ -6,12 +6,13 @@ import com.memastick.backmem.security.repository.InviteCodeRepository;
 import com.memastick.backmem.security.service.InviteCodeService;
 import com.memastick.backmem.sender.dto.EmailStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//TODO refactor
 @RestController
 public class InviteCodeController {
 
@@ -35,7 +36,7 @@ public class InviteCodeController {
 
     @GetMapping("invites")
     public ResponseEntity<List<InviteCode>> readAll() {
-        return ResponseEntity.ok(inviteCodeRepository.findAll());
+        return ResponseEntity.ok(inviteCodeRepository.findAll(Sort.by("dateCreate").descending()));
     }
 
     @GetMapping("invite/{code}")
@@ -47,7 +48,7 @@ public class InviteCodeController {
     public ResponseEntity send(@RequestBody String code) {
         EmailStatus status = inviteCodeService.send(code);
         if (status.isSuccess()) return ResponseEntity.ok().build();
-        else return ResponseEntity.unprocessableEntity().build();
+        else return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @PatchMapping("invite/take")
@@ -55,5 +56,4 @@ public class InviteCodeController {
         inviteCodeService.take(code);
         return ResponseEntity.ok().build();
     }
-
 }

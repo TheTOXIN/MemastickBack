@@ -37,7 +37,7 @@ public class RegistrationService {
         if (!status.equals(SecurityStatus.SUCCESSFUL)) return status;
 
         InviteCode inviteCode = inviteCodeService.findByCode(request.getInvite());
-        User user = userService.generateUser(request, inviteCode);
+        User user = userService.generateUser(request, inviteCode.getNick());
 
         if (userRepository.findById(user.getId()).isEmpty()) return SecurityStatus.ERROR;
 
@@ -60,5 +60,4 @@ public class RegistrationService {
 
         return SecurityStatus.SUCCESSFUL;
     }
-
 }

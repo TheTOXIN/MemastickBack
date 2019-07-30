@@ -8,5 +8,4 @@ public class TimeInException extends AbstractException {
     public TimeInException(String message) {
         super(ErrorCode.TIME_IN, message);
     }
-
 }

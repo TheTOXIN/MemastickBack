@@ -8,10 +8,8 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.notification.constant.NotifyType;
-import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.service.NotifyService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.constant.TokenType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ public class TokenAcceptService {
     private final EvolveMemeRepository evolveMemeRepository;
     private final MemeService memeService;
     private final TokenWalletService tokenWalletService;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemetickService memetickService;
     private final NotifyService notifyService;
 
@@ -36,21 +34,21 @@ public class TokenAcceptService {
         EvolveMemeRepository evolveMemeRepository,
         MemeService memeService,
         TokenWalletService tokenWalletService,
-        SecurityService securityService,
+        OauthData oauthData,
         MemetickService memetickService,
         NotifyService notifyService
     ) {
         this.evolveMemeRepository = evolveMemeRepository;
         this.memeService = memeService;
         this.tokenWalletService = tokenWalletService;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.memetickService = memetickService;
         this.notifyService = notifyService;
     }
 
     public void accept(TokenType token, UUID memeId) {
         Meme meme = memeService.findById(memeId);
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
 
         if (meme.getMemetick().equals(memetick)) throw new TokenAcceptException(TOKEN_SELF);
 
@@ -68,7 +66,7 @@ public class TokenAcceptService {
         }
 
         tokenWalletService.take(token, memetick);
-        memetickService.addDna(memetick, MathUtil.rand(0, 100));
+        memetickService.addDna(memetick, MathUtil.rand(10, 100));
         notifyService.sendTOKEN(token, meme);
     }
 

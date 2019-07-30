@@ -3,10 +3,7 @@ package com.memastick.backmem.evolution.controller;
 import com.memastick.backmem.evolution.api.EvolveMemeAPI;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -23,8 +20,18 @@ public class EvolveMemeController {
         this.evolveMemeService = evolveMemeService;
     }
 
-    @GetMapping("meme/{id}")
-    public EvolveMemeAPI readByMeme(@PathVariable("id") UUID memeId) {
+    @GetMapping("meme/{memeId}")
+    public EvolveMemeAPI readByMeme(@PathVariable("memeId") UUID memeId) {
         return evolveMemeService.readByMeme(memeId);
+    }
+
+    @GetMapping("meme/chance/{memeId}")
+    public Float readChance(@PathVariable("memeId") UUID memeId) {
+        return evolveMemeService.readChance(memeId);
+    }
+
+    @PatchMapping("meme/resurrect/{memeId}")
+    public void resurrectMeme(@PathVariable("memeId") UUID memeId) {
+        evolveMemeService.resurrectMeme(memeId);
     }
 }

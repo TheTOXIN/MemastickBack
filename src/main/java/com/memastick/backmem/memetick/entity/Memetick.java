@@ -23,4 +23,7 @@ public class Memetick extends AbstractEntity {
 
     @Column(nullable = false)
     private long dna = 0L;
+
+    @Column(nullable = false)
+    private int cookies = 0;
 }

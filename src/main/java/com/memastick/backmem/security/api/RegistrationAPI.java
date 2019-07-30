@@ -14,5 +14,4 @@ public class RegistrationAPI {
     private String password;
     private String passwordRepeat;
     private String invite;
-
 }

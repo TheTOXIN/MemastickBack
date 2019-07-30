@@ -1,12 +1,12 @@
 package com.memastick.backmem.translator.impl;
 
-import com.memastick.backmem.memes.entity.Meme;
+import com.memastick.backmem.translator.dto.TranslatorDTO;
 import com.memastick.backmem.translator.iface.Translator;
-import com.memastick.backmem.translator.util.TranslatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -35,11 +35,9 @@ public class TelegramTranslator implements Translator {
     }
 
     @Override
-    public void translate(Meme meme) {
-        String api = String.format(TEMPLATE, token, chat, TranslatorUtil.prepareText(meme));
-
-        Resource resource = TranslatorUtil.downloadResource(meme.getUrl());
-        if (resource == null) return;
+    public void translate(TranslatorDTO dto) {
+        String api = String.format(TEMPLATE, token, chat, dto.getText());
+        Resource resource = new FileSystemResource(dto.getFile());
 
         MultiValueMap<String, Object> bodyMap = new LinkedMultiValueMap<>();
         bodyMap.add("photo", resource);

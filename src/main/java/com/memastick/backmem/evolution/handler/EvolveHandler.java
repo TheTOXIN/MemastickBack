@@ -2,7 +2,7 @@ package com.memastick.backmem.evolution.handler;
 
 import com.memastick.backmem.evolution.annotation.Evolve;
 import com.memastick.backmem.evolution.constant.EvolveStep;
-import com.memastick.backmem.evolution.interfaces.Evolution;
+import com.memastick.backmem.evolution.iface.Evolution;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;

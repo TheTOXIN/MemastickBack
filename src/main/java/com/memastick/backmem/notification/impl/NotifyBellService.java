@@ -6,7 +6,7 @@ import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.entity.NotifyBell;
 import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyBellRepository;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,15 +21,15 @@ import java.util.stream.Collectors;
 public class NotifyBellService implements NotifySender {
 
     private final NotifyBellRepository bellRepository;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
 
     @Autowired
     public NotifyBellService(
         NotifyBellRepository bellRepository,
-        SecurityService securityService
+        OauthData oauthData
     ) {
         this.bellRepository = bellRepository;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class NotifyBellService implements NotifySender {
     }
 
     public List<NotifyBellAPI> read() {
-        return bellRepository.findAllByUser(securityService.getCurrentUser())
+        return bellRepository.findAllByUser(oauthData.getCurrentUser())
             .stream()
             .sorted(
                 Comparator.comparing(NotifyBell::isRead)
@@ -63,7 +63,7 @@ public class NotifyBellService implements NotifySender {
     }
 
     public void clear() {
-        User user = securityService.getCurrentUser();
+        User user = oauthData.getCurrentUser();
         List<NotifyBell> bells = bellRepository.findAllByUser(user);
         bellRepository.deleteAll(bells);
     }

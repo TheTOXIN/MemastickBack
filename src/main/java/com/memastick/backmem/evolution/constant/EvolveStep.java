@@ -7,19 +7,22 @@ import java.util.Arrays;
 public enum EvolveStep {
 
     ADAPTATION(0),
-    SURVIVAL(1);
+    FITNESS(1),
+    MUTATION(2),
+    CROSSING(3),
+    SURVIVAL(4);
 
     @Getter
-    private int step;
+    private int number;
 
-    EvolveStep(int step) {
-        this.step = step;
+    EvolveStep(int number) {
+        this.number = number;
     }
 
-    public static EvolveStep find(int step) {
+    public static EvolveStep find(int number) {
         return Arrays
             .stream(EvolveStep.values())
-            .filter(e -> e.getStep() == step)
+            .filter(e -> e.getNumber() == number)
             .findFirst()
             .orElse(null);
     }

@@ -1,11 +1,12 @@
 package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.errors.exception.TokenWalletException;
+import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.entity.TokenWallet;
@@ -21,26 +22,26 @@ import java.util.function.BiConsumer;
 @Service
 public class TokenWalletService {
 
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
     private final MemetickService memetickService;
 
     @Autowired
     public TokenWalletService(
-        SecurityService securityService,
+        OauthData oauthData,
         MemetickInventoryRepository inventoryRepository,
         TokenWalletRepository tokenWalletRepository,
         MemetickService memetickService
     ) {
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
         this.memetickService = memetickService;
     }
 
     public void have(TokenType type) {
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
         have(type, memetick);
     }
 
@@ -50,7 +51,7 @@ public class TokenWalletService {
     }
 
     public TokenWalletAPI read() {
-        Memetick currentMemetick = securityService.getCurrentMemetick();
+        Memetick currentMemetick = oauthData.getCurrentMemetick();
         return read(currentMemetick);
     }
 

@@ -1,12 +1,16 @@
 package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.main.dto.EPI;
+import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -26,7 +30,7 @@ public class Meme extends AbstractEntity {
     @Column(length = 512, nullable = false, unique = true)
     private String url;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(nullable = false)
     private Memetick memetick;
 
@@ -38,21 +42,34 @@ public class Meme extends AbstractEntity {
     private MemeType type;
 
     @Column(nullable = false)
+    private int chromosomes = 0;
+
+    @Column
+    @Length(max = GlobalConstant.MAX_TEXT_LEN)
+    private String text;
+
+    // -=[EPI]=-
+
+    @Column(nullable = false)
+    private long evolution;
+
+    @Column(nullable = false)
     private long population;
 
     @Column(nullable = false)
-    private long indexer;
+    private long individuation;
 
-    @Column(nullable = false)
-    private int chromosomes = 0;
+    public Meme(MemeCreateAPI api, Memetick memetick, EPI epi) {
+        this.fireId = api.getFireId();
+        this.url = api.getUrl();
+        this.text = api.getText();
 
-    public Meme(UUID fireId, String url, Memetick memetick, long population, long indexer) {
-        this.fireId = fireId;
-        this.url = url;
         this.memetick = memetick;
-        this.population = population;
-        this.indexer = indexer;
         this.creating = ZonedDateTime.now();
-        this.type = MemeType.EVOLVE;
+        this.type = MemeType.EVLV;
+
+        this.evolution = epi.getEvolution();
+        this.population = epi.getPopulation();
+        this.individuation = epi.getIndividuation();
     }
 }

@@ -7,12 +7,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.MulticastMessage;
 import com.google.firebase.messaging.WebpushConfig;
 import com.google.firebase.messaging.WebpushNotification;
-import com.memastick.backmem.notification.constant.NotifyConstant;
+import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.entity.NotifyPush;
 import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
 import org.slf4j.Logger;
@@ -34,19 +34,19 @@ public class NotifyPushService implements NotifySender {
     private static final Logger log = LoggerFactory.getLogger(NotifyPushService.class);
 
     private final NotifyPushRepository notifyPushRepository;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final SettingUserService settingUserService;
 
     @Autowired
     public NotifyPushService(
         @Value("${fcm.push.file}") String fcmFile,
         NotifyPushRepository notifyPushRepository,
-        SecurityService securityService,
+        OauthData oauthData,
         SettingUserService settingUserService
     ) {
         this.init(fcmFile);
         this.notifyPushRepository = notifyPushRepository;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.settingUserService = settingUserService;
     }
 
@@ -58,8 +58,8 @@ public class NotifyPushService implements NotifySender {
             .forEach(u -> send(dto, notifyPushRepository.findAllByUser(u)
                 .stream()
                 .map(NotifyPush::getToken)
-                .collect(Collectors.toList()))
-            );
+                .collect(Collectors.toList())
+            ));
     }
 
     private void send(NotifyDTO dto, List<String> tokens) {
@@ -86,13 +86,13 @@ public class NotifyPushService implements NotifySender {
     private WebpushNotification.Builder builder(NotifyDTO dto){
         return WebpushNotification.builder()
             .putCustomData("click_action", dto.getEvent())
-            .setIcon(NotifyConstant.LINK_ICON)
+            .setIcon(LinkConstant.LINK_ICON)
             .setTitle(dto.getTitle())
             .setBody(dto.getText());
     }
 
     public void register(String token) {
-        User user = securityService.getCurrentUser();
+        User user = oauthData.getCurrentUser();
 
         NotifyPush notifyPush = notifyPushRepository
             .findByToken(token)

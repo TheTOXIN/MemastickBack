@@ -1,8 +1,9 @@
 package com.memastick.backmem.notification.service;
 
+import com.memastick.backmem.main.constant.LinkConstant;
+import com.memastick.backmem.memecoin.entity.MemeCoin;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.notification.constant.NotifyConstant;
 import com.memastick.backmem.notification.constant.NotifyType;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.impl.NotifyBellService;
@@ -53,21 +54,21 @@ public class NotifyService {
                 "+ ДНК",
                 "Вы получили ДНК",
                 String.valueOf(dna),
-                NotifyConstant.LINK_DNA
+                LinkConstant.LINK_DNA
             )
         );
     }
 
     @Async
-    public void sendCELL(Memetick memetick) {
+    public void sendCELL(List<Memetick> memeticks) {
         send(
-            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            userRepository.findByMemetickIn(memeticks),
             new NotifyDTO(
                 NotifyType.CELL,
                 "Ваша клетка выросла",
                 "Теперь вы можете создать мем",
                 null,
-                NotifyConstant.LINK_CREATING
+                LinkConstant.LINK_CREATING
             )
         );
     }
@@ -78,10 +79,10 @@ public class NotifyService {
             Collections.singletonList(userRepository.findByMemetick(meme.getMemetick())),
             new NotifyDTO(
                 NotifyType.MEME,
-                "Мем " + NotifyUtil.typeToStr(meme),
-                "Ваш мем №" + meme.getPopulation() + " закончил эволюцию, и " + NotifyUtil.typeToStr(meme),
-                String.valueOf(meme.getPopulation()),
-                NotifyConstant.LINK_MEME + "/" + meme.getId()
+                "Ваш мем " + NotifyUtil.typeToStr(meme),
+                "Ваш мем эволюции №" + meme.getEvolution() + NotifyUtil.typeToStr(meme),
+                String.valueOf(meme.getEvolution()),
+                LinkConstant.LINK_MEME + "/" + meme.getId()
             )
         );
     }
@@ -92,10 +93,10 @@ public class NotifyService {
             Collections.singletonList(userRepository.findByMemetick(meme.getMemetick())),
             new NotifyDTO(
                 NotifyType.TOKEN,
-                "Мему №" + meme.getPopulation() + " дали токен",
-                "Мему №" + meme.getPopulation() + " дали токен: " + NotifyUtil.tokenToStr(token),
+                "Вашему мему дали токен",
+                "Мему эволюции №" + meme.getEvolution() + " дали токен: " + NotifyUtil.tokenToStr(token),
                 token.name(),
-                NotifyConstant.LINK_MEME + "/" + meme.getId()
+                LinkConstant.LINK_MEME + "/" + meme.getId()
             )
         );
     }
@@ -123,21 +124,49 @@ public class NotifyService {
                 "Меметик " + memetick.getNick() + " создал мем",
                 "Новый мем от: " + memetick.getNick() + ", оцените его",
                 memetick.getId().toString(),
-                NotifyConstant.LINK_MEME + "/" + meme.getId()
+                LinkConstant.LINK_MEME + "/" + meme.getId()
             )
         );
     }
 
     @Async
-    public void sendALLOWANCE() {
+    public void sendALLOWANCE(List<Memetick> memeticks) {
         send(
-            userRepository.findAll(),
+            userRepository.findByMemetickIn(memeticks),
             new NotifyDTO(
                 NotifyType.ALLOWANCE,
                 "Вы получили пособие",
                 "Заберите пособие его и получите токены",
                 null,
-                NotifyConstant.LINK_ALLOWANCE
+                LinkConstant.LINK_ALLOWANCE
+            )
+        );
+    }
+
+    @Async
+    public void sendMEMEDAY(Meme meme) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(meme.getMemetick())),
+            new NotifyDTO(
+                NotifyType.MEME_DAY,
+                "МЕМ ДНЯ",
+                "Ваша особь лучший мем, " + meme.getEvolution() + "дня эволюции",
+                null,
+                LinkConstant.LINK_MEME + "/" + meme.getId()
+            )
+        );
+    }
+
+    @Async
+    public void sendMEMECOIN(Memetick memetick, long value) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            new NotifyDTO(
+                NotifyType.MEME_COIN,
+                "МЕМКОЙНЫ",
+                "Траназакция мемкойнов на" + value,
+                value > 0 ? ("+" + value) : String.valueOf(value),
+                LinkConstant.LINK_MEMECOINS
             )
         );
     }

@@ -5,6 +5,7 @@ import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeFilter;
+import com.memastick.backmem.memes.dto.MemeReadDTO;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memes.service.MemesCreateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,8 @@ public class MemeController {
         @RequestParam(name = "memetick", required = false) UUID memetickId,
         Pageable pageable
     ) {
-        // TODO refactor to DTO
         return memeService.pages(
-            filter,
-            step,
-            memetickId,
+            new MemeReadDTO(filter, step, memetickId),
             pageable
         );
     }

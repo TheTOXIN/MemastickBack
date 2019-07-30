@@ -1,13 +1,13 @@
 package com.memastick.backmem.memes.mapper;
 
-import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.constant.EvolveStep;
+import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeLikeService;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,17 +15,17 @@ public class MemeMapper {
 
     private final MemeLikeService memeLikeService;
     private final MemetickMapper memetickMapper;
-    private final EvolveMemeService evolveMemeService;
+    private final EvolveMemeRepository evolveMemeRepository;
 
     @Autowired
     public MemeMapper(
         MemeLikeService memeLikeService,
         MemetickMapper memetickMapper,
-        EvolveMemeService evolveMemeService
+        EvolveMemeRepository evolveMemeRepository
     ) {
         this.memeLikeService = memeLikeService;
         this.memetickMapper = memetickMapper;
-        this.evolveMemeService = evolveMemeService;
+        this.evolveMemeRepository = evolveMemeRepository;
     }
 
     public MemePageAPI toPageAPI(Meme meme) {
@@ -40,10 +40,11 @@ public class MemeMapper {
         return new MemeAPI(
             meme.getId(),
             meme.getUrl(),
+            meme.getText(),
             meme.getType(),
             meme.getChromosomes(),
-            meme.getIndexer(),
-            evolveMemeService.computeStep(meme)
+            meme.getIndividuation(),
+            (EvolveStep) evolveMemeRepository.findStepByMeme(meme)
         );
     }
 }

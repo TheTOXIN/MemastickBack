@@ -8,7 +8,7 @@ import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,26 +21,26 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
+
 
 @Service
 public class MemeLikeService {
 
-    private static final int MAX_CHROMOSOME = 10;
-
     private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
     private final MemeService memeService;
 
     @Autowired
     public MemeLikeService(
         MemeLikeRepository memeLikeRepository,
-        SecurityService securityService,
+        OauthData oauthData,
         MemetickService memetickService,
         MemeService memeService
     ) {
         this.memeLikeRepository = memeLikeRepository;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
         this.memetickService = memetickService;
         this.memeService = memeService;
     }
@@ -74,8 +74,10 @@ public class MemeLikeService {
     public void chromosomeTrigger(Meme meme, int count) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
-        if (MemeType.DEATH.equals(meme.getType())) return;
+        if (MemeType.DEAD.equals(meme.getType())) return;
         if (memeLike.getChromosome() >= MAX_CHROMOSOME) return;
+
+        if (memeLike.getChromosome() == 0) memetickService.addDna(meme.getMemetick(), MathUtil.rand(1, 10));
 
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
         int allChromosome = meme.getChromosomes() + (chromosome - memeLike.getChromosome());
@@ -84,7 +86,6 @@ public class MemeLikeService {
         meme.setChromosomes(allChromosome);
 
         memeLikeRepository.save(memeLike);
-        memetickService.addDna(memeLike.getMeme().getMemetick(), MathUtil.rand(0, chromosome));
     }
 
     public List<Meme> findMemesByLikeFilter(Memetick memetick, Pageable pageable) {
@@ -102,7 +103,7 @@ public class MemeLikeService {
     }
 
     private MemeLike findByMemeForCurrentUser(Meme meme) {
-        Memetick memetick = securityService.getCurrentMemetick();
+        Memetick memetick = oauthData.getCurrentMemetick();
 
         Optional<MemeLike> byMemeAndMemetick = memeLikeRepository.findByMemeAndMemetick(meme, memetick);
         if (byMemeAndMemetick.isEmpty()) return generateMemeLike(meme, memetick);

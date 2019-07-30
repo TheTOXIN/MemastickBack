@@ -1,6 +1,6 @@
 package com.memastick.backmem.setting.service;
 
-import com.memastick.backmem.security.service.SecurityService;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.api.SettingAPI;
 import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.repository.SettingUserRepository;
@@ -12,15 +12,15 @@ import org.springframework.stereotype.Service;
 public class SettingUserService {
 
     private final SettingUserRepository settingUserRepository;
-    private final SecurityService securityService;
+    private final OauthData oauthData;
 
     @Autowired
     public SettingUserService(
         SettingUserRepository settingUserRepository,
-        SecurityService securityService
+        OauthData oauthData
     ) {
         this.settingUserRepository = settingUserRepository;
-        this.securityService = securityService;
+        this.oauthData = oauthData;
     }
 
     public void generateSetting(User user) {
@@ -28,7 +28,7 @@ public class SettingUserService {
     }
 
     public SettingAPI mySetting() {
-        User user = securityService.getCurrentUser();
+        User user = oauthData.getCurrentUser();
         return new SettingAPI(pushWork(user));
     }
 

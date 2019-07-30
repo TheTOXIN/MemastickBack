@@ -12,5 +12,4 @@ public class InviteCodeAPI {
 
     private String email;
     private String nick;
-
 }

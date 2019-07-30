@@ -14,5 +14,7 @@ public class MemetickAPI {
     private UUID id;
     private String nick;
     private boolean follow;
-
+    private boolean online;
+    private long memecoins;
+    private int cookies;
 }

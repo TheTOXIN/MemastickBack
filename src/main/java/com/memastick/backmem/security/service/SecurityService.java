@@ -1,42 +1,27 @@
 package com.memastick.backmem.security.service;
 
-import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.user.entity.User;
-import com.memastick.backmem.user.service.UserService;
+import com.memastick.backmem.notification.entity.NotifyPush;
+import com.memastick.backmem.notification.repository.NotifyPushRepository;
+import com.memastick.backmem.security.api.LogOutAPI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 @Service
 public class SecurityService {
 
-    // TODO separate cache for memeticks and users
-
-    private final UserService userService;
+    private final NotifyPushRepository pushRepository;
 
     @Autowired
     public SecurityService(
-        @Lazy UserService userService
+        NotifyPushRepository pushRepository
     ) {
-        this.userService = userService;
+        this.pushRepository = pushRepository;
     }
 
-    public UserDetails getCurrentDetails() {
-        return (UserDetails) SecurityContextHolder
-            .getContext()
-            .getAuthentication()
-            .getPrincipal();
-    }
-
-    public User getCurrentUser() {
-        UserDetails currentDetails = getCurrentDetails();
-        return userService.findByLogin(currentDetails.getUsername());
-    }
-
-    public Memetick getCurrentMemetick() {
-        return getCurrentUser().getMemetick();
+    public void logout(LogOutAPI request) {
+        Optional<NotifyPush> byToken = pushRepository.findByToken(request.getDeviceToken());
+        byToken.ifPresent(pushRepository::delete);
     }
 }
