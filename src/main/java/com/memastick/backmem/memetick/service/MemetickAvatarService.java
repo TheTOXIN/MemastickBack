@@ -42,7 +42,7 @@ public class MemetickAvatarService {
     private final OauthData oauthData;
     private final MemetickAvatarRepository memetickAvatarRepository;
 
-    @Value("classpath:images/avatar.png")
+    @Value("classpath*:images/avatar.png")
     private Resource defaultAvatar;
 
     @Autowired
