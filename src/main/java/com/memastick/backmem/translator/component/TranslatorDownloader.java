@@ -21,7 +21,7 @@ public class TranslatorDownloader {
     private static final String IMAGE_FORMAT = "jpeg";
     private static final String FILE_NAME = "translator." + IMAGE_FORMAT;
 
-    @Value("classpath*:images/watermark.png")
+    @Value("classpath:images/watermark.png")
     private Resource watermark;
 
     public synchronized File download(Meme meme) {
