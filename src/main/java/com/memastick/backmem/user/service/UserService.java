@@ -9,7 +9,6 @@ import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.security.constant.RoleType;
-import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.api.MeAPI;
 import com.memastick.backmem.user.entity.User;
@@ -95,7 +94,7 @@ public class UserService {
     }
 
     public User findByLogin(String login) {
-        Optional<User> byLogin = userRepository.findByLogin(login);
+        Optional<User> byLogin = userRepository.findByLoginWithCache(login);
         if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
         return byLogin.get();
     }
