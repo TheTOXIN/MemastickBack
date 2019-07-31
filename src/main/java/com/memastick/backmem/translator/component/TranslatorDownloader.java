@@ -12,12 +12,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 @Component
 public class TranslatorDownloader {
 
-    private static final int WATERMARK_SIZE = 100;
     private static final String IMAGE_FORMAT = "jpeg";
     private static final String FILE_NAME = "translator." + IMAGE_FORMAT;
 
@@ -30,7 +30,7 @@ public class TranslatorDownloader {
             File file = new File(FILE_NAME);
 
             FileUtils.copyURLToFile(url, file);
-            watermark(watermark.getFile(), file);
+            watermark(watermark.getInputStream(), file);
 
             return file;
         } catch (IOException ex) {
@@ -39,9 +39,12 @@ public class TranslatorDownloader {
         }
     }
 
-    private void watermark(File watermark, File file) throws IOException {
+    private void watermark(InputStream watermark, File file) throws IOException {
         BufferedImage image = ImageIO.read(file);
-        BufferedImage overlay = resize(ImageIO.read(watermark));
+
+        int size = Math.max(image.getWidth(), image.getHeight()) / 5;
+
+        BufferedImage overlay = resize(ImageIO.read(watermark), size);
         BufferedImage watermarked = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         Graphics2D w = (Graphics2D) watermarked.getGraphics();
@@ -49,17 +52,17 @@ public class TranslatorDownloader {
         AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.33f);
         w.setComposite(alphaChannel);
 
-        int centerX = MathUtil.rand(image.getWidth() - WATERMARK_SIZE);
-        int centerY = MathUtil.rand(image.getHeight() - WATERMARK_SIZE);
+        int centerX = MathUtil.rand(image.getWidth() - size);
+        int centerY = MathUtil.rand(image.getHeight() - size);
 
         w.drawImage(overlay, centerX, centerY, null);
         ImageIO.write(watermarked, IMAGE_FORMAT, file);
         w.dispose();
     }
 
-    private BufferedImage resize(BufferedImage img) {
-        Image tmp = img.getScaledInstance(WATERMARK_SIZE, WATERMARK_SIZE, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(WATERMARK_SIZE, WATERMARK_SIZE, BufferedImage.TYPE_INT_ARGB);
+    private BufferedImage resize(BufferedImage img, int size) {
+        Image tmp = img.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = resized.createGraphics();
 
