@@ -8,14 +8,14 @@ public class TranslatorUtil {
     public static String prepareText(Meme meme) {
         StringBuilder builder = new StringBuilder();
 
-        if (meme.getText() != null) builder.append("\"" + meme.getText() + "\"");
-
         builder
             .append("МЕМ ДНЯ ❗️" + "\n")
             .append("\uD83C\uDF0E Эволюция №" + meme.getEvolution() + "\n")
             .append("\uD83D\uDE0E Меметик - " + meme.getMemetick().getNick() + "\n")
             .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
-            .append(LinkConstant.LINK_MEME + "/" + meme.getId());
+            .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");
+
+        if (meme.getText() != null) builder.append("\"" + meme.getText() + "\"");
 
         return builder.toString();
     }
