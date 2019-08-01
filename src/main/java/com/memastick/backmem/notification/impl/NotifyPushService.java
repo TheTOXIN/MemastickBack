@@ -3,10 +3,7 @@ package com.memastick.backmem.notification.impl;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.MulticastMessage;
-import com.google.firebase.messaging.WebpushConfig;
-import com.google.firebase.messaging.WebpushNotification;
+import com.google.firebase.messaging.*;
 import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.entity.NotifyPush;
@@ -75,8 +72,8 @@ public class NotifyPushService implements NotifySender {
             .build();
 
         try {
-            FirebaseMessaging.getInstance().sendMulticastAsync(messages);
-            log.info("PUSH NOTIFICATION SEND: DTO - {}", dto);
+            BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(messages);
+            log.info("PUSH NOTIFICATION SEND: DTO - {}, RESPONSE - {}", dto, response);
         } catch (Exception e) {
             log.error("PUSH NOTIFICATION NOT SEND: DTO - {}", dto);
             e.printStackTrace();
