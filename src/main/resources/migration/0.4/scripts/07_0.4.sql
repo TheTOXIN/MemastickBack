@@ -1,0 +1,1 @@
+ALTER TABLE meme_likes DROP CONSTRAINT IF EXISTS meme_likes_chromosome_check;
