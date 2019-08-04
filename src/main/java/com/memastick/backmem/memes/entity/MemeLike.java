@@ -11,6 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import java.time.LocalDateTime;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
+
 @Entity
 @Table(
     name = "meme_likes",
@@ -34,7 +36,7 @@ public class MemeLike extends AbstractEntity {
     private boolean isLike = false;
 
     @Column
-    @Max(30)
+    @Max(MAX_CHROMOSOME)
     private int chromosome = 0;
 
     @Column
