@@ -69,7 +69,13 @@ public class Initializer {
 
     private void createAdmin() {
         User admin = userService.findAdmin();
-        if (admin != null) return;
+
+        if (admin != null) {
+            admin.setPassword(passwordEncoder.encode(adminPassword));
+            admin.setLogin(adminLogin);
+            userRepository.save(admin);
+            return;
+        }
 
         User user = new User();
         Memetick memetick = makeAdminMemetick();
@@ -91,7 +97,6 @@ public class Initializer {
         Memetick memetick = new Memetick();
 
         memetick.setNick(ADMIN_NICK);
-
         memetickRepository.save(memetick);
 
         return memetick;
