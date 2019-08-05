@@ -16,12 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,12 +36,12 @@ public class NotifyPushService implements NotifySender {
 
     @Autowired
     public NotifyPushService(
-        @Value("${fcm.push.file}") String fcmFile,
+        @Value("${fcm.push.file}") String fcmPath,
         NotifyPushRepository notifyPushRepository,
         OauthData oauthData,
         SettingUserService settingUserService
     ) {
-        this.init(fcmFile);
+        this.init(new ClassPathResource(fcmPath));
         this.notifyPushRepository = notifyPushRepository;
         this.oauthData = oauthData;
         this.settingUserService = settingUserService;
@@ -104,8 +104,8 @@ public class NotifyPushService implements NotifySender {
         notifyPushRepository.save(notifyPush);
     }
 
-    private void init(String fcmFile) {
-        try (InputStream service = Files.newInputStream(Paths.get(fcmFile))) {
+    private void init(Resource fcmFile) {
+        try (InputStream service = fcmFile.getInputStream()) {
             FirebaseApp.initializeApp(
                 new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(service))
