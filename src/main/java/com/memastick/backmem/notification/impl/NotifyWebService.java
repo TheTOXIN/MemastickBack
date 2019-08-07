@@ -48,4 +48,8 @@ public class NotifyWebService implements NotifySender {
     public void register(String sessionId) {
         cache.put(oauthData.getCurrentDetails().getUsername(), sessionId);
     }
+
+    public void remove() {
+        cache.remove(oauthData.getCurrentDetails().getUsername());
+    }
 }

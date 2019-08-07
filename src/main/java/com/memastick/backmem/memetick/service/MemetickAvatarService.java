@@ -50,7 +50,6 @@ public class MemetickAvatarService {
         OauthData oauthData,
         MemetickAvatarRepository memetickAvatarRepository
     ) {
-
         this.oauthData = oauthData;
         this.memetickAvatarRepository = memetickAvatarRepository;
     }
