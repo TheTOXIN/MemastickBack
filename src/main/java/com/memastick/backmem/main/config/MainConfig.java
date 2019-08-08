@@ -17,7 +17,6 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.sql.DataSource;
@@ -85,17 +84,6 @@ public class MainConfig {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
         threadPoolTaskScheduler.setPoolSize(100);
         return threadPoolTaskScheduler;
-    }
-
-    @Bean
-    public CommonsRequestLoggingFilter requestLoggingFilter() {
-        CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter();
-        filter.setIncludeQueryString(true);
-        filter.setIncludePayload(true);
-        filter.setMaxPayloadLength(10000);
-        filter.setIncludeHeaders(false);
-        filter.setAfterMessagePrefix("REQUEST DATA : ");
-        return filter;
     }
 
     @Bean
