@@ -10,10 +10,11 @@ import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.notification.impl.NotifyBellService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class MainService {
 
     private final OauthData oauthData;
@@ -22,23 +23,6 @@ public class MainService {
     private final MemetickInventoryService inventoryService;
     private final NotifyBellService notifyBellService;
     private final HelloMessageGenerate messageGenerate;
-
-    @Autowired
-    public MainService(
-        OauthData oauthData,
-        EvolveMemeService evolveMemeService,
-        MemeRepository memeRepository,
-        MemetickInventoryService inventoryService,
-        NotifyBellService notifyBellService,
-        HelloMessageGenerate messageGenerate
-    ) {
-        this.oauthData = oauthData;
-        this.evolveMemeService = evolveMemeService;
-        this.memeRepository = memeRepository;
-        this.inventoryService = inventoryService;
-        this.notifyBellService = notifyBellService;
-        this.messageGenerate = messageGenerate;
-    }
 
     public HomeAPI home() {
         return new HomeAPI(
