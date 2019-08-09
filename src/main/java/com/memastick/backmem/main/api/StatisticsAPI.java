@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class StatisticsAPI {
 
-    private long dna;
     private long individual;
     private long chromosome;
-
+    private long dna;
 }
