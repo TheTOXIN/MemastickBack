@@ -37,7 +37,7 @@ public class MemetickInventoryService {
             memetick.getCookies(),
             cellService.checkState(inventory),
             inventory.isAllowance(),
-            tokenWalletService.wallet(inventory)
+            tokenWalletService.wallet(memetick)
         );
     }
 
@@ -63,7 +63,6 @@ public class MemetickInventoryService {
         MemetickInventory inventory = new MemetickInventory();
         TokenWallet tokenWallet = new TokenWallet();
 
-        inventory.setTokenWallet(tokenWallet);
         inventory.setAllowance(false);
         inventory.setMemetick(memetick);
 

@@ -9,10 +9,11 @@ import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.setting.service.SettingUserService;
+import com.memastick.backmem.tokens.service.TokenWalletService;
 import com.memastick.backmem.user.api.MeAPI;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -33,30 +35,10 @@ public class UserService {
     private final TokenStore tokenStore;
     private final OauthData oauthData;
     private final MemetickService memetickService;
+    private final TokenWalletService walletService;
 
     @Value("${oauth.client}")
     private String oauthClient;
-
-    @Autowired
-    public UserService(
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder,
-        MemetickInventoryService inventoryService,
-        MemetickAvatarService avatarService,
-        SettingUserService settingService,
-        TokenStore tokenStore,
-        OauthData oauthData,
-        MemetickService memetickService
-    ) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.inventoryService = inventoryService;
-        this.avatarService = avatarService;
-        this.settingService = settingService;
-        this.tokenStore = tokenStore;
-        this.oauthData = oauthData;
-        this.memetickService = memetickService;
-    }
 
     public User findAdmin() {
         Optional<User> byRole = userRepository.findByRole(RoleType.ADMIN);
@@ -66,6 +48,7 @@ public class UserService {
     @Transactional
     public User generateUser(RegistrationAPI request, String nick) {
         User user = new User();
+
         Memetick memetick = memetickService.generateMemetick(nick);
 
         user.setEmail(request.getEmail());
@@ -75,12 +58,16 @@ public class UserService {
         user.setMemetick(memetick);
 
         userRepository.save(user);
-
-        avatarService.generateAvatar(memetick);
-        inventoryService.generateInventory(memetick);
-        settingService.generateSetting(user);
+        generateDependencies(user);
 
         return user;
+    }
+
+    public void generateDependencies(User user) {
+        settingService.generateSetting(user);
+        avatarService.generateAvatar(user.getMemetick());
+        walletService.generateWallet(user.getMemetick());
+        inventoryService.generateInventory(user.getMemetick());
     }
 
     public void updatePassword(String login, String password) {

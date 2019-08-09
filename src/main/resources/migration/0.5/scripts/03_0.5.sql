@@ -1,0 +1,1 @@
+ALTER TABLE memetick_inventories DROP IF EXISTS token_wallet_id;

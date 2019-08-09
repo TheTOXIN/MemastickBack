@@ -2,8 +2,6 @@ package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.errors.exception.TokenWalletException;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.entity.MemetickInventory;
-import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
@@ -22,19 +20,16 @@ import java.util.function.BiConsumer;
 public class TokenWalletService {
 
     private final OauthData oauthData;
-    private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
     private final MemetickService memetickService;
 
     @Autowired
     public TokenWalletService(
         OauthData oauthData,
-        MemetickInventoryRepository inventoryRepository,
         TokenWalletRepository tokenWalletRepository,
         MemetickService memetickService
     ) {
         this.oauthData = oauthData;
-        this.inventoryRepository = inventoryRepository;
         this.tokenWalletRepository = tokenWalletRepository;
         this.memetickService = memetickService;
     }
@@ -58,8 +53,7 @@ public class TokenWalletService {
     }
 
     public void take(TokenType type, Memetick memetick) {
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
-        TokenWallet tokenWallet = inventory.getTokenWallet();
+        TokenWallet tokenWallet = tokenWalletRepository.findByMemetick(memetick);
 
         HashMap<TokenType, Integer> wallet = getWallet(tokenWallet);
         Integer count = wallet.get(type);
@@ -72,11 +66,9 @@ public class TokenWalletService {
     }
 
     public HashMap<TokenType, Integer> wallet(Memetick memetick) {
-        return wallet(inventoryRepository.findByMemetick(memetick));
-    }
-
-    public HashMap<TokenType, Integer> wallet(MemetickInventory inventory) {
-        return getWallet(inventory.getTokenWallet());
+        return getWallet(
+            tokenWalletRepository.findByMemetick(memetick)
+        );
     }
 
     public HashMap<TokenType, Integer> getWallet(TokenWallet tokenWallet) {
@@ -101,5 +93,11 @@ public class TokenWalletService {
         setter.put(TokenType.ANTIBIOTIC, TokenWallet::setAntibiotic);
 
         return setter;
+    }
+
+    public void generateWallet(Memetick memetick) {
+        TokenWallet wallet = new TokenWallet();
+        wallet.setMemetick(memetick);
+        tokenWalletRepository.save(wallet);
     }
 }
