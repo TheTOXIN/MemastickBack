@@ -24,11 +24,11 @@ import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
 @EqualsAndHashCode(callSuper = true)
 public class MemeLike extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Meme meme;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Memetick memetick;
 
@@ -41,5 +41,4 @@ public class MemeLike extends AbstractEntity {
 
     @Column
     private LocalDateTime likeTime;
-
 }
