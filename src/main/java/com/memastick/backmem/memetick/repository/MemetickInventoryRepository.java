@@ -2,7 +2,10 @@ package com.memastick.backmem.memetick.repository;
 
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
+import com.memastick.backmem.memetick.view.MemetickInventoryView;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +19,10 @@ public interface MemetickInventoryRepository extends CrudRepository<MemetickInve
     List<MemetickInventory> findByAllowanceFalse();
 
     List<MemetickInventory> findByCellNotifyFalse();
+
+    @Query(
+        "SELECT new com.memastick.backmem.memetick.view.MemetickInventoryView(mi.allowance, mi.cellCreating) " +
+            "FROM MemetickInventory mi WHERE mi.memetick = :memetick"
+    )
+    MemetickInventoryView findInventoryView(@Param("memetick") Memetick memetick);
 }
