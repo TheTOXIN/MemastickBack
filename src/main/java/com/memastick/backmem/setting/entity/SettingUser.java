@@ -1,6 +1,6 @@
 package com.memastick.backmem.setting.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.main.constant.TimeConstant;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;

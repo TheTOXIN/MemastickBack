@@ -1,6 +1,6 @@
 package com.memastick.backmem.errors.handler;
 
-import com.memastick.backmem.base.entity.AbstractException;
+import com.memastick.backmem.base.AbstractException;
 import com.memastick.backmem.errors.api.ResponseErrorAPI;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

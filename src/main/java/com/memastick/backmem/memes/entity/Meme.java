@@ -1,6 +1,6 @@
 package com.memastick.backmem.memes.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.api.MemeCreateAPI;

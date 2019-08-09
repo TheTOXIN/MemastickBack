@@ -1,6 +1,6 @@
 package com.memastick.backmem.notification.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;

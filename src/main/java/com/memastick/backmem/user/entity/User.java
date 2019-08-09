@@ -1,6 +1,6 @@
 package com.memastick.backmem.user.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.constant.RoleType;
 import lombok.AllArgsConstructor;

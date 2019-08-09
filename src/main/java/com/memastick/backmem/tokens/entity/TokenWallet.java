@@ -1,6 +1,6 @@
 package com.memastick.backmem.tokens.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;

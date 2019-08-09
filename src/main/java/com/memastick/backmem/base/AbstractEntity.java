@@ -1,4 +1,4 @@
-package com.memastick.backmem.base.entity;
+package com.memastick.backmem.base;
 
 import lombok.Data;
 
