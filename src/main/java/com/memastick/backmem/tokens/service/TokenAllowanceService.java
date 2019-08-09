@@ -59,12 +59,14 @@ public class TokenAllowanceService {
     }
 
     public boolean have() {
-        Memetick memetick = oauthData.getCurrentMemetick();
-        return have(memetick);
+        return have(oauthData.getCurrentMemetick());
     }
 
     public boolean have(Memetick memetick) {
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        return have( inventoryRepository.findByMemetick(memetick));
+    }
+
+    public boolean have(MemetickInventory inventory) {
         return inventory.isAllowance();
     }
 

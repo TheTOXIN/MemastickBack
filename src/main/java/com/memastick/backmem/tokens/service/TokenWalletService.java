@@ -1,7 +1,6 @@
 package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.errors.exception.TokenWalletException;
-import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
@@ -50,19 +49,12 @@ public class TokenWalletService {
         if (wallet.get(type) <= 0) throw new TokenWalletException();
     }
 
-    public TokenWalletAPI read() {
-        Memetick currentMemetick = oauthData.getCurrentMemetick();
-        return read(currentMemetick);
-    }
-
     public TokenWalletAPI read(UUID memetickId) {
-        Memetick memetick = memetickService.findById(memetickId);
-        return read(memetick);
+        return read(memetickService.findById(memetickId));
     }
 
     public TokenWalletAPI read(Memetick memetick) {
-        HashMap<TokenType, Integer> wallet = wallet(memetick);
-        return new TokenWalletAPI(wallet);
+        return new TokenWalletAPI(wallet(memetick));
     }
 
     public void take(TokenType type, Memetick memetick) {
@@ -80,10 +72,11 @@ public class TokenWalletService {
     }
 
     public HashMap<TokenType, Integer> wallet(Memetick memetick) {
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
-        TokenWallet tokenWallet = inventory.getTokenWallet();
+        return wallet(inventoryRepository.findByMemetick(memetick));
+    }
 
-        return getWallet(tokenWallet);
+    public HashMap<TokenType, Integer> wallet(MemetickInventory inventory) {
+        return getWallet(inventory.getTokenWallet());
     }
 
     public HashMap<TokenType, Integer> getWallet(TokenWallet tokenWallet) {

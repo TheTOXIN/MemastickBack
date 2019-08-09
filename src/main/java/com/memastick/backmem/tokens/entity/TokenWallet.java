@@ -39,5 +39,4 @@ public class TokenWallet extends AbstractEntity {
     @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
     private Integer antibiotic = 1;
-
 }
