@@ -12,5 +12,4 @@ public class MemeLikeStateDTO {
     private long likes;
     private boolean myLike;
     private int myChromosomes;
-
 }

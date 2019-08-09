@@ -123,6 +123,15 @@ public class EvolveMemeService {
             .minusSeconds(now.getSecond());
     }
 
+    public EvolveStep computeStep(Meme meme) {
+        long currentPop = computePopulation();
+        long memePop = meme.getPopulation();
+
+        int step = (int) (currentPop - memePop) - 1;
+
+        return EvolveStep.find(step);
+    }
+
     public EvolveMemeAPI readByMeme(UUID memeId) {
         Meme meme = memeService.findById(memeId);
         EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);

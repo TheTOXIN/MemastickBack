@@ -9,7 +9,7 @@ import com.memastick.backmem.memes.repository.MemeLikeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,25 +25,13 @@ import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
 
 
 @Service
+@AllArgsConstructor
 public class MemeLikeService {
 
     private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;
     private final OauthData oauthData;
     private final MemeService memeService;
-
-    @Autowired
-    public MemeLikeService(
-        MemeLikeRepository memeLikeRepository,
-        OauthData oauthData,
-        MemetickService memetickService,
-        MemeService memeService
-    ) {
-        this.memeLikeRepository = memeLikeRepository;
-        this.oauthData = oauthData;
-        this.memetickService = memetickService;
-        this.memeService = memeService;
-    }
 
     public MemeLikeStateDTO readStateByMeme(Meme meme) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);

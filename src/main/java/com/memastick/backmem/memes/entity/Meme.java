@@ -30,7 +30,7 @@ public class Meme extends AbstractEntity {
     @Column(length = 512, nullable = false, unique = true)
     private String url;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Memetick memetick;
 
