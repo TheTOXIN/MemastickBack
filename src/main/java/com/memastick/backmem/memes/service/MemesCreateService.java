@@ -13,9 +13,9 @@ import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.component.OauthData;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TEXT_LEN;
 
 @Service
+@AllArgsConstructor
 public class MemesCreateService {
 
     private final static Logger LOG = LoggerFactory.getLogger(MemesCreateService.class);
@@ -36,29 +37,11 @@ public class MemesCreateService {
     private final EvolveMemeService evolveMemeService;
     private final MemetickInventoryService inventoryService;
     private final MemetickInventoryRepository inventoryRepository;
-
-    @Autowired
-    public MemesCreateService(
-        OauthData oauthData,
-        MemeRepository memeRepository,
-        MemetickService memetickService,
-        EvolveMemeService evolveMemeService,
-        MemetickInventoryService inventoryService,
-        NotifyService notifyService,
-        MemetickInventoryRepository inventoryRepository
-    ) {
-        this.oauthData = oauthData;
-        this.memeRepository = memeRepository;
-        this.memetickService = memetickService;
-        this.evolveMemeService = evolveMemeService;
-        this.inventoryService = inventoryService;
-        this.notifyService = notifyService;
-        this.inventoryRepository = inventoryRepository;
-    }
+    private final MemeCellService memeCellService;
 
     @Transactional
     public void create(MemeCreateAPI request) {
-        if (!inventoryService.checkState()) throw new CellSmallException();
+        if (!memeCellService.checkState()) throw new CellSmallException();
 
         Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = make(request, memetick);
@@ -66,7 +49,7 @@ public class MemesCreateService {
         memeRepository.saveAndFlush(meme);
         evolveMemeService.startEvolve(meme);
 
-        inventoryService.updateCell(memetick);
+        memeCellService.updateCell(memetick);
         memetickService.addDna(memetick, MathUtil.rand(100, 1000));
 
         notifyService.sendCREATING(memetick, meme);
@@ -79,7 +62,7 @@ public class MemesCreateService {
 
         List<Memetick> memeticks = inventories
             .stream()
-            .filter(inventoryService::checkState)
+            .filter(memeCellService::checkState)
             .peek(i -> i.setCellNotify(true))
             .map(MemetickInventory::getMemetick)
             .collect(Collectors.toList());
