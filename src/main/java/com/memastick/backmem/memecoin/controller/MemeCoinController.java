@@ -36,8 +36,8 @@ public class MemeCoinController {
 
     @GetMapping("history")
     public Page<MemeCoinAPI> history(Pageable pageable) {
-        return coinRepository.findByMemetick(
-            oauthData.getCurrentMemetick(),
+        return coinRepository.findByMemetickId(
+            oauthData.getCurrentMemetick().getId(),
             pageable
         ).map(MemeCoinAPI::new);
     }

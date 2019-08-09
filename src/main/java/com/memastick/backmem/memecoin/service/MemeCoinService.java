@@ -30,7 +30,7 @@ public class MemeCoinService {
 
         coinRepository.save(new MemeCoin(
             value,
-            memetick,
+            memetick.getId(),
             ZonedDateTime.now()
         ));
 
@@ -39,7 +39,7 @@ public class MemeCoinService {
 
     public long balance(Memetick memetick) {
         return coinRepository
-            .sumValueByMemetick(memetick)
+            .sumValueByMemetick(memetick.getId())
             .orElse(0L);
     }
 }
