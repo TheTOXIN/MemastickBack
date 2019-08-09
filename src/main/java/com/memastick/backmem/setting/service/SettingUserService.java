@@ -33,11 +33,11 @@ public class SettingUserService {
     }
 
     public boolean pushWork(User user) {
-        return settingUserRepository.findByUser(user).isPushWork();
+        return settingUserRepository.findByUserId(user.getId()).isPushWork();
     }
 
     public void pushSet(User user, boolean value) {
-        SettingUser setting = settingUserRepository.findByUser(user);
+        SettingUser setting = settingUserRepository.findByUserId(user.getId());
         setting.setPushWork(value);
         settingUserRepository.save(setting);
     }

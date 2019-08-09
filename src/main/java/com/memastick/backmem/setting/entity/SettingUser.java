@@ -7,9 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "setting_users")
@@ -19,9 +23,9 @@ import java.time.ZonedDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class SettingUser extends AbstractEntity {
 
-    @OneToOne
-    @JoinColumn(nullable = false, unique = true)
-    private User user;
+    @NaturalId
+    @Column(nullable = false, unique = true)
+    private UUID userId;
 
     @Column(nullable = false)
     private ZonedDateTime nickChanged = TimeConstant.START_TIME;
@@ -30,6 +34,6 @@ public class SettingUser extends AbstractEntity {
     private boolean pushWork = false;
 
     public SettingUser(User user) {
-        this.user = user;
+        this.userId = user.getId();
     }
 }

@@ -35,6 +35,5 @@ public class User extends AbstractEntity {
     @OneToOne
     @JoinColumn(nullable = false)
     private Memetick memetick;
-
 }
 

@@ -87,6 +87,10 @@ public class EvolveMemeService {
         long max = memeRepository.maxByCromosome(MemeType.SLCT).orElse(0L);
         long min = memeRepository.minByCromosome(MemeType.SLCT).orElse(0L);
 
+        return computeChance(meme, max, min);
+    }
+
+    public float computeChance(Meme meme, long max, long min) {
         float onePercent = 100f / (max - min);
         float chance = (meme.getChromosomes() - min) * onePercent;
 

@@ -68,7 +68,7 @@ public class MemetickService {
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
 
         User user = oauthData.getCurrentUser();
-        SettingUser setting = settingUserRepository.findByUser(user);
+        SettingUser setting = settingUserRepository.findByUserId(user.getId());
         Memetick memetick = user.getMemetick();
 
         if (setting.getNickChanged().plusWeeks(1).isAfter(ZonedDateTime.now())) throw new SettingException(ErrorCode.EXPIRE_NICK);

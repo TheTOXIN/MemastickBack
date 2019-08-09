@@ -44,9 +44,9 @@ public class MemeCellService {
 
     public int stateCell() {
         Memetick memetick = oauthData.getCurrentMemetick();
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        MemetickInventoryView inventoryView = inventoryRepository.findInventoryView(memetick);
 
-        return stateCell(inventory.getCellCreating());
+        return stateCell(inventoryView.getCellCreating());
     }
 
     public int stateCell(LocalDateTime cellCreating) {
