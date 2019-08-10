@@ -17,7 +17,8 @@ public enum  ErrorCode {
     TOKEN_SELF(HttpStatus.LOCKED),
     CELL_SMALL(HttpStatus.LOCKED),
     EMAIL_NOT_SEND(HttpStatus.INTERNAL_SERVER_ERROR),
-    MEME_COIN_ENOUGH(HttpStatus.LOCKED);
+    MEME_COIN_ENOUGH(HttpStatus.LOCKED),
+    MINE_FAIL(HttpStatus.UNPROCESSABLE_ENTITY);
 
     @Getter
     private HttpStatus status;

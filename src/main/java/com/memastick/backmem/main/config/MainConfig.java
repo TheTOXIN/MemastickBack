@@ -1,5 +1,7 @@
 package com.memastick.backmem.main.config;
 
+import com.memastick.backmem.main.constant.GlobalConstant;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -23,23 +25,17 @@ import org.springframework.web.filter.CorsFilter;
 import javax.sql.DataSource;
 
 @Configuration
+@AllArgsConstructor
 public class MainConfig {
 
     private final DataSource dataSource;
-
-    @Autowired
-    public MainConfig(
-        DataSource dataSource
-    ) {
-        this.dataSource = dataSource;
-    }
 
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOrigin("*"); //TODO BY URL
         configuration.addAllowedHeader("Authorization");
         configuration.addAllowedHeader("Content-Type");
         configuration.addAllowedHeader("Accept");
