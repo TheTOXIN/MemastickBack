@@ -21,9 +21,6 @@ public interface MemetickInventoryRepository extends CrudRepository<MemetickInve
 
     List<MemetickInventory> findByCellNotifyFalse();
 
-    @Query("SELECT mi.pickaxeToken FROM MemetickInventory  mi WHERE mi.pickaxeToken = :token")
-    Object pickaxeByToken(@Param("token") UUID token);
-
     @Query(
         "SELECT new com.memastick.backmem.memetick.view.MemetickInventoryView(mi.allowance, mi.cellCreating) " +
             "FROM MemetickInventory mi WHERE mi.memetick = :memetick"

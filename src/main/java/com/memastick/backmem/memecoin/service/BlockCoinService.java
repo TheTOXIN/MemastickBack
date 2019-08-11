@@ -1,28 +1,18 @@
 package com.memastick.backmem.memecoin.service;
 
-import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.BlockCoinException;
-import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.util.CryptoUtil;
 import com.memastick.backmem.memecoin.entity.BlockCoin;
 import com.memastick.backmem.memecoin.repository.BlockCoinRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.entity.MemetickInventory;
-import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
-import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
-import org.aspectj.weaver.BCException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_NONCE;
-import static com.memastick.backmem.main.constant.GlobalConstant.PICKAXE_HOURS;
 
 @Service
 @AllArgsConstructor
@@ -30,7 +20,7 @@ public class BlockCoinService {
 
     private final BlockCoinRepository blockCoinRepository;
     private final MemeCoinService memeCoinService;
-    private final MemetickInventoryService inventoryService;
+    private final PickaxeService pickaxeService;
     private final OauthData oauthData;
 
     @Transactional
@@ -46,9 +36,10 @@ public class BlockCoinService {
 
             block.setTimestamp(timestamp);
             block.setHash(hash);
+        } else {
+            block.setNonce(0);
+            block.setCache(0);
         }
-
-        block.setCache(0);
 
         return blockCoinRepository.save(block).getHash();
     }
@@ -60,7 +51,7 @@ public class BlockCoinService {
         Memetick memetick = oauthData.getCurrentMemetick();
         BlockCoin block = blockCoinRepository.findByMemetick(memetick);
 
-        if ((block.getNonce()) > MAX_NONCE) throw new BlockCoinException(ErrorCode.MINE_END);
+        pickaxeService.checkate(block.getNonce());
 
         String target = CryptoUtil.profString();
         String hash = CryptoUtil.hashSHA256(block.getHash() + nonce);
@@ -76,7 +67,7 @@ public class BlockCoinService {
 
     @Transactional
     public void flushBlock(UUID token) {
-        if (!inventoryService.checkPickaxe(token)) throw new BlockCoinException("Token expire");
+        pickaxeService.deactivate(token);
 
         Memetick memetick = oauthData.getCurrentMemetick();
         BlockCoin block = blockCoinRepository.findByMemetick(memetick);

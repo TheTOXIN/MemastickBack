@@ -1,4 +1,4 @@
-package com.memastick.backmem.memetick.api;
+package com.memastick.backmem.memecoin.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PickaxeAPI {
 
-    private boolean have;
-    private LocalTime time;
     private UUID token;
+    private boolean have;
+    private LocalTime receipt;
 }

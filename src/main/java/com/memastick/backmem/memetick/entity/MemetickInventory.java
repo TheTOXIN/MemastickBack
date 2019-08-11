@@ -27,12 +27,6 @@ public class MemetickInventory extends AbstractEntity {
     private boolean allowance = false;
 
     @Column(nullable = false)
-    private LocalDateTime pickaxeTime = TimeConstant.START_LOCAL_TIME;
-
-    @Column(nullable = false, unique = true)
-    private UUID pickaxeToken = UUID.randomUUID(); //TODO new entity
-
-    @Column(nullable = false)
     private LocalDateTime cellCreating = TimeConstant.START_LOCAL_TIME;
 
     @Column(nullable = false)
