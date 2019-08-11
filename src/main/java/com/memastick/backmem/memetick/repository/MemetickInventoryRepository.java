@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.repository;
 
+import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.view.MemetickInventoryView;
@@ -19,6 +20,9 @@ public interface MemetickInventoryRepository extends CrudRepository<MemetickInve
     List<MemetickInventory> findByAllowanceFalse();
 
     List<MemetickInventory> findByCellNotifyFalse();
+
+    @Query("SELECT mi.pickaxeToken FROM MemetickInventory  mi WHERE mi.pickaxeToken = :token")
+    Object pickaxeByToken(@Param("token") UUID token);
 
     @Query(
         "SELECT new com.memastick.backmem.memetick.view.MemetickInventoryView(mi.allowance, mi.cellCreating) " +

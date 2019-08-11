@@ -26,6 +26,7 @@ public class MemeCoinService {
 
     @Transactional
     public void transaction(Memetick memetick, long value) {
+        if (value == 0) return;
         if (value < 0 && (balance(memetick) + value) < 0) throw new MemeCoinNotEnoughException();
 
         coinRepository.save(new MemeCoin(

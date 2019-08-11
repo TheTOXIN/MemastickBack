@@ -18,7 +18,8 @@ public enum  ErrorCode {
     CELL_SMALL(HttpStatus.LOCKED),
     EMAIL_NOT_SEND(HttpStatus.INTERNAL_SERVER_ERROR),
     MEME_COIN_ENOUGH(HttpStatus.LOCKED),
-    MINE_FAIL(HttpStatus.UNPROCESSABLE_ENTITY);
+    MINE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR),
+    MINE_END(HttpStatus.UNPROCESSABLE_ENTITY);
 
     @Getter
     private HttpStatus status;

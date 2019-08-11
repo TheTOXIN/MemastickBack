@@ -21,6 +21,8 @@ public class GlobalConstant {
     public static final int MAX_CHROMOSOME = 100;
     public static final int MAX_TEXT_LEN = 256;
     public static final int BLOCK_DFCLT = 1;
+    public static final int MAX_NONCE = 10; // TODO
+    public static final int PICKAXE_HOURS = 1;
 
     @Autowired
     public GlobalConstant(

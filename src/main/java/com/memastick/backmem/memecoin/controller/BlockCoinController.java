@@ -6,6 +6,8 @@ import com.memastick.backmem.memecoin.service.BlockCoinService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("block-coins")
 @AllArgsConstructor
@@ -15,20 +17,16 @@ public class BlockCoinController {
 
     @GetMapping("make")
     public BlockHashAPI makeBlock() {
-        return new BlockHashAPI(
-            blockCoinService.makeBlock()
-        );
+        return new BlockHashAPI(blockCoinService.makeBlock());
     }
 
     @PatchMapping("mine")
     public void mineBlock(@RequestBody BlockNonceAPI api) {
-        blockCoinService.mineBlock(
-            api.getNonce()
-        );
+        blockCoinService.mineBlock(api.getNonce());
     }
 
-    @PutMapping("flush")
-    public void flushBlock() {
-        blockCoinService.flushBlock();
+    @PutMapping("flush/{token}")
+    public void flushBlock(@PathVariable("token") UUID token) {
+        blockCoinService.flushBlock(token);
     }
 }

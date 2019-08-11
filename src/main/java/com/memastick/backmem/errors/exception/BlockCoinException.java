@@ -8,4 +8,8 @@ public class BlockCoinException extends AbstractException {
     public BlockCoinException(String text) {
         super(ErrorCode.MINE_FAIL, text);
     }
+
+    public BlockCoinException(ErrorCode code) {
+        super(code);
+    }
 }

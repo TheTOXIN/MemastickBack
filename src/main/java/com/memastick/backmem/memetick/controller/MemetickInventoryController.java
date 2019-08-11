@@ -2,6 +2,7 @@ package com.memastick.backmem.memetick.controller;
 
 import com.memastick.backmem.memetick.api.CellAPI;
 import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
+import com.memastick.backmem.memetick.api.PickaxeAPI;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,11 @@ public class MemetickInventoryController {
 
     public MemetickInventoryController(MemetickInventoryService inventoryService) {
         this.inventoryService = inventoryService;
+    }
+
+    @GetMapping("pickaxe")
+    public PickaxeAPI getPickaxe() {
+        return inventoryService.getPickaxe();
     }
 
     @GetMapping("cell")

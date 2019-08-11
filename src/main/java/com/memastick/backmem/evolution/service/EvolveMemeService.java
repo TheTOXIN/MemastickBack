@@ -6,6 +6,7 @@ import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.dto.EPI;
+import com.memastick.backmem.main.util.TimeUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
@@ -101,12 +102,10 @@ public class EvolveMemeService {
     }
 
     public LocalTime computeSelectTimer() {
-        LocalTime now = LocalTime.now();
-
-        return LocalTime.MIDNIGHT
-            .minusHours(now.getHour())
-            .minusMinutes(now.getMinute())
-            .minusSeconds(now.getSecond());
+        return TimeUtil.minusTime(
+            LocalTime.MIDNIGHT,
+            LocalTime.now()
+        );
     }
 
     public LocalTime computeNextTimer() {
@@ -117,10 +116,7 @@ public class EvolveMemeService {
             .withMinute(0)
             .withSecond(0);
 
-        return next
-            .minusHours(now.getHour())
-            .minusMinutes(now.getMinute())
-            .minusSeconds(now.getSecond());
+        return TimeUtil.minusTime(next, now);
     }
 
     public EvolveStep computeStep(Meme meme) {

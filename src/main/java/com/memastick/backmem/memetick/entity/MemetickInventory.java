@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "memetick_inventories")
@@ -20,10 +21,16 @@ public class MemetickInventory extends AbstractEntity {
 
     @OneToOne
     @JoinColumn(nullable = false, unique = true)
-    private Memetick memetick;
+    private Memetick memetick; // TODO to id
 
     @Column(nullable = false)
     private boolean allowance = false;
+
+    @Column(nullable = false)
+    private LocalDateTime pickaxeTime = TimeConstant.START_LOCAL_TIME;
+
+    @Column(nullable = false, unique = true)
+    private UUID pickaxeToken = UUID.randomUUID(); //TODO new entity
 
     @Column(nullable = false)
     private LocalDateTime cellCreating = TimeConstant.START_LOCAL_TIME;

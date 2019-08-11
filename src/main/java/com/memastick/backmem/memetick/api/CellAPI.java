@@ -12,5 +12,4 @@ public class CellAPI {
 
     private int state;
     private EPI epi;
-
 }
