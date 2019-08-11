@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -29,49 +28,43 @@ public class BlockCoinService {
             .findByMemetickId(memetick.getId())
             .orElse(new BlockCoin(memetick.getId()));
 
-        refreshBlock(memetick, block, 0);
-
-        return blockCoinRepository.save(block).getHash();
-    }
-
-    @Transactional
-    public String mineBlock(int nonce) {
-        Memetick memetick = oauthData.getCurrentMemetick();
-        BlockCoin block = findByMemetick(memetick);
-
-        String target = CryptoUtil.profString();
-        String hash = CryptoUtil.hashSHA256(block.getHash() + nonce);
-
-        if (!hash.startsWith(target)) throw new BlockCoinException("Nonce not fit");
-        else refreshBlock(memetick, block, block.getCache() + 1);
-
-        return blockCoinRepository.save(block).getHash();
-    }
-
-    @Transactional
-    public void flushBlock() {
-        Memetick memetick = oauthData.getCurrentMemetick();
-        BlockCoin block = findByMemetick(memetick);
-
-        if (block.getCache() == 0) return;
-
-        memeCoinService.transaction(memetick, block.getCache());
-        blockCoinRepository.delete(block);
-    }
-
-    private void refreshBlock(Memetick memetick, BlockCoin block, int cache) {
         var timestamp = new Timestamp(System.currentTimeMillis());
         var hash = CryptoUtil.hashSHA256(memetick.getId().toString() + timestamp.getTime());
 
         block.setTimestamp(timestamp);
         block.setHash(hash);
+        block.setCache(0);
 
-        block.setCache(cache);
+        return blockCoinRepository.save(block).getHash();
     }
 
-    private BlockCoin findByMemetick(Memetick memetick) {
-        Optional<BlockCoin> optional = blockCoinRepository.findByMemetickId(memetick.getId());
-        if (optional.isEmpty()) throw new BlockCoinException("Block not found");
-        return optional.get();
+    @Transactional
+    public void mineBlock(int nonce) {
+        if (nonce < 0) throw new BlockCoinException("Nonce less zero");
+
+        Memetick memetick = oauthData.getCurrentMemetick();
+        BlockCoin block = blockCoinRepository.findByMemetick(memetick);
+
+        String target = CryptoUtil.profString();
+        String hash = CryptoUtil.hashSHA256(block.getHash() + nonce);
+
+        if (!hash.startsWith(target)) throw new BlockCoinException("Nonce not fit");
+
+        block.setHash(CryptoUtil.hashSHA256(hash));
+        block.setCache(block.getCache() + 1);
+        block.setNonce(block.getNonce() + nonce);
+
+        blockCoinRepository.save(block);
+    }
+
+    @Transactional
+    public void flushBlock() {
+        Memetick memetick = oauthData.getCurrentMemetick();
+        BlockCoin block = blockCoinRepository.findByMemetick(memetick);
+
+        if (block.getCache() == 0) return;
+
+        memeCoinService.transaction(memetick, block.getCache());
+        blockCoinRepository.delete(block);
     }
 }

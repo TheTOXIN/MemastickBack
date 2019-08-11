@@ -1,8 +1,6 @@
 package com.memastick.backmem.memecoin.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
-import com.memastick.backmem.main.util.CryptoUtil;
-import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +10,6 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -25,7 +22,10 @@ import java.util.UUID;
 public class BlockCoin extends AbstractEntity {
 
     @Column(nullable = false)
-    private int cache = 0;
+    private long cache = 0;
+
+    @Column(nullable = false)
+    private int nonce = 0;
 
     @Column(nullable = false)
     private String hash;

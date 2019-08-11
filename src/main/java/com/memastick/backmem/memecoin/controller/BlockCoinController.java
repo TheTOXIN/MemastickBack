@@ -21,9 +21,9 @@ public class BlockCoinController {
     }
 
     @PatchMapping("mine")
-    public BlockHashAPI mineBlock(@RequestBody BlockNonceAPI api) {
-        return new BlockHashAPI(
-            blockCoinService.mineBlock(api.getNonce())
+    public void mineBlock(@RequestBody BlockNonceAPI api) {
+        blockCoinService.mineBlock(
+            api.getNonce()
         );
     }
 
