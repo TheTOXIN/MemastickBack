@@ -15,8 +15,8 @@ public interface BlockCoinRepository extends CrudRepository<BlockCoin, UUID> {
     Optional<BlockCoin> findByMemetickId(UUID memetickId);
 
     default BlockCoin findByMemetick(Memetick memetick) {
-        Optional<BlockCoin> optional = this.findByMemetickId(memetick.getId());
-        if (optional.isEmpty()) throw new BlockCoinException("Block not found");
-        return optional.get();
+        return this
+            .findByMemetickId(memetick.getId())
+            .orElseThrow(() -> new BlockCoinException("Block not found"));
     }
 }

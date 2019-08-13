@@ -26,7 +26,7 @@ public class Pickaxe extends AbstractEntity {
     private UUID token = UUID.randomUUID();
 
     @Column(nullable = false)
-    private boolean isActive = true;
+    private boolean isActive = false;
 
     @Column(nullable = false)
     private LocalDateTime creating = TimeConstant.START_LOCAL_TIME;
