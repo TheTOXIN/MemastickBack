@@ -31,4 +31,16 @@ public class TranslatorUtil {
 
         return builder.toString();
     }
+
+    public static String prepareUserText(Meme meme) {
+        StringBuilder builder = new StringBuilder();
+
+        builder
+            .append("ПУБЛИКАЦИЯ МЕМЕТИКА\n")
+            .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");
+
+        if (meme.getText() != null) builder.append("\"" + meme.getText() + "\"");
+
+        return builder.toString();
+    }
 }

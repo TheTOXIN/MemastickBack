@@ -27,7 +27,6 @@ public class EvolveSelecterService {
     private final EvolveMemeRepository evolveMemeRepository;
     private final EvolveMemeService evolveMemeService;
     private final NotifyService notifyService;
-    private final MemeCoinService coinService;
     private final MemeRepository memeRepository;
 
     @Scheduled(cron = "0 0 0 * * *", zone = "UTC")
@@ -54,7 +53,6 @@ public class EvolveSelecterService {
             meme.setType(isSurvive ? MemeType.INDV : MemeType.DEAD);
 
             notifyService.sendMEME(meme);
-            if (isSurvive) coinService.transaction(meme.getMemetick(), 100);
         });
 
         evolveMemeRepository.saveAll(evolveMemes);

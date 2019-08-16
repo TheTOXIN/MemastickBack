@@ -153,3 +153,5 @@ SELECT SUM(memeticks.dna) FROM memeticks;
 SELECT COUNT(*) FROM memes WHERE type = 'INDV' AND memetick_id = 'ca922d14-8762-4f1f-859d-b42fc581508f' UNION ALL
 SELECT SUM(chromosomes) FROM memes WHERE memetick_id = 'ca922d14-8762-4f1f-859d-b42fc581508f' UNION ALL
 SELECT SUM(dna) FROM memeticks WHERE id = 'ca922d14-8762-4f1f-859d-b42fc581508f';
+
+UPDATE DATABASECHANGELOGLOCK SET LOCKED=FALSE, LOCKGRANTED=null, LOCKEDBY=null where ID=1;

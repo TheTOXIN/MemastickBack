@@ -24,7 +24,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
             .mvcMatchers("/test").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/meme-coins/transaction/**").hasAuthority(RoleType.ADMIN.name())
-            .mvcMatchers("/admin-translate").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/translator/admin").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/next-evolve").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/select-evolve").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/send-allowance").hasAuthority(RoleType.ADMIN.name())

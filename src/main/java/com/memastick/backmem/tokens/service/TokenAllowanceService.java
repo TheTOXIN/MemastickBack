@@ -1,10 +1,12 @@
 package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.main.util.MathUtil;
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.security.component.OauthData;
+import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
@@ -23,6 +25,7 @@ public class TokenAllowanceService {
     private final TokenWalletService tokenWalletService;
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
+    private final MemeCoinService coinService;
 
     public TokenWalletAPI take() {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -44,6 +47,14 @@ public class TokenAllowanceService {
         tokenWalletRepository.save(tokenWallet);
 
         return new TokenWalletAPI(allowance);
+    }
+
+    public void make() {
+        Memetick memetick = oauthData.getCurrentMemetick();
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        coinService.transaction(memetick, PriceConst.ALLOWANCE.getValue());
+        inventory.setAllowance(true);
+        inventoryRepository.save(inventory);
     }
 
     public boolean have() {

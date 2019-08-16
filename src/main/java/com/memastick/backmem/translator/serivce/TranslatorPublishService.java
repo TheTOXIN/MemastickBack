@@ -8,6 +8,7 @@ import com.memastick.backmem.translator.component.TranslatorDownloader;
 import com.memastick.backmem.translator.dto.TranslatorDTO;
 import com.memastick.backmem.translator.iface.Translator;
 import com.memastick.backmem.translator.util.TranslatorUtil;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TranslatorPublishService {
 
     private static final Logger log = LoggerFactory.getLogger(TranslatorPublishService.class);
@@ -27,21 +29,6 @@ public class TranslatorPublishService {
     private final MemeRepository memeRepository;
     private final TranslatorDownloader translatorDownloader;
     private final NotifyService notifyService;
-
-    @Autowired
-    public TranslatorPublishService(
-        List<Translator> translators,
-        EvolveMemeService evolveMemeService,
-        MemeRepository memeRepository,
-        TranslatorDownloader translatorDownloader,
-        NotifyService notifyService
-    ) {
-        this.translators = translators;
-        this.evolveMemeService = evolveMemeService;
-        this.memeRepository = memeRepository;
-        this.translatorDownloader = translatorDownloader;
-        this.notifyService = notifyService;
-    }
 
     @Scheduled(cron = "0 0 3 * * *", zone = "UTC")
     public void publish() {

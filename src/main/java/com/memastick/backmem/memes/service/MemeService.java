@@ -1,9 +1,12 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.evolution.entity.EvolveMeme;
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeType;
+import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.dto.MemeReadDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
@@ -11,6 +14,7 @@ import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
+import com.memastick.backmem.shop.constant.PriceConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +36,7 @@ public class MemeService {
     private final MemeMapper memeMapper;
     private final MemeLikeService memeLikeService;
     private final MemePoolService memePoolService;
+    private final MemeCoinService memeCoinService;
 
     @Autowired
     public MemeService(
@@ -40,7 +45,8 @@ public class MemeService {
         MemetickService memetickService,
         @Lazy MemeMapper memeMapper,
         @Lazy MemeLikeService memeLikeService,
-        @Lazy MemePoolService memePoolService
+        @Lazy MemePoolService memePoolService,
+        MemeCoinService memeCoinService
     ) {
         this.oauthData = oauthData;
         this.memeRepository = memeRepository;
@@ -48,11 +54,18 @@ public class MemeService {
         this.memeMapper = memeMapper;
         this.memeLikeService = memeLikeService;
         this.memePoolService = memePoolService;
+        this.memeCoinService = memeCoinService;
     }
 
-    @Transactional
+    public List<MemeAPI> read(MemeReadDTO readDTO, Pageable pageable) {
+        return reader(readDTO, pageable)
+            .stream()
+            .map(memeMapper::toMemeAPI)
+            .collect(Collectors.toList());
+    }
+
     public List<MemePageAPI> pages(MemeReadDTO readDTO, Pageable pageable) {
-        return read(readDTO, pageable)
+        return reader(readDTO, pageable)
             .stream()
             .map(memeMapper::toPageAPI)
             .collect(Collectors.toList());
@@ -93,7 +106,7 @@ public class MemeService {
         memeRepository.save(prevMeme);
     }
 
-    private List<Meme> read(MemeReadDTO readDTO, Pageable pageable) {
+    public List<Meme> reader(MemeReadDTO readDTO, Pageable pageable) {
         List<Meme> memes = new ArrayList<>();
 
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -102,6 +115,7 @@ public class MemeService {
             case EVLV: memes = memeRepository.findByType(MemeType.EVLV, pageable); break;
             case SLCT: memes = memeRepository.findByType(MemeType.SLCT, pageable); break;
             case INDV: memes = memeRepository.findByType(MemeType.INDV, pageable); break;
+            case DTHS: memes = memeRepository.findByTypeAndMemetick(MemeType.DEAD, memetick, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
             case USER: memes = memeRepository.findByMemetick(memetickService.findById(readDTO.getMemetickId()), pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
@@ -109,6 +123,17 @@ public class MemeService {
         }
 
         return memes;
+    }
+
+    @Transactional
+    public void resurrect(UUID memeId) {
+        Meme meme = this.findById(memeId);
+
+        if (!MemeType.DEAD.equals(meme.getType())) return;
+        memeCoinService.transaction(meme.getMemetick(), PriceConst.RESSURECTION.getValue());
+
+        meme.setType(MemeType.SLCT);
+        memeRepository.save(meme);
     }
 }
 

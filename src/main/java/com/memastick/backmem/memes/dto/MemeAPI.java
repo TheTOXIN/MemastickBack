@@ -19,7 +19,4 @@ public class MemeAPI {
     private MemeType type;
     private int chromosomes;
     private long indexer;
-
-    private EvolveStep step;
-
 }

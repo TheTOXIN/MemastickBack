@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class ChangeNickAPI {
 
     private String nick;
-
+    private boolean force;
 }

@@ -12,6 +12,7 @@ import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memes.service.MemeService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,25 +26,12 @@ import java.util.UUID;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
+@AllArgsConstructor
 public class EvolveMemeService {
 
     private final EvolveMemeRepository evolveMemeRepository;
     private final MemeService memeService;
     private final MemeRepository memeRepository;
-    private final MemeCoinService coinService;
-
-    @Autowired
-    public EvolveMemeService(
-        EvolveMemeRepository evolveMemeRepository,
-        MemeService memeService,
-        MemeRepository memeRepository,
-        MemeCoinService coinService
-    ) {
-        this.evolveMemeRepository = evolveMemeRepository;
-        this.memeService = memeService;
-        this.memeRepository = memeRepository;
-        this.coinService = coinService;
-    }
 
     public void startEvolve(Meme meme) {
         evolveMemeRepository.save(
@@ -123,7 +111,7 @@ public class EvolveMemeService {
         long currentPop = computePopulation();
         long memePop = meme.getPopulation();
 
-        int step = (int) (currentPop - memePop) - 1;
+        int step = (int) (currentPop - memePop);
 
         return EvolveStep.find(step);
     }
@@ -154,17 +142,5 @@ public class EvolveMemeService {
         if (evolveMeme.isImmunity()) return 100F;
 
         return computeChance(meme);
-    }
-
-    @Transactional
-    public void resurrectMeme(UUID memeId) {
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
-        Meme meme = evolveMeme.getMeme();
-
-        if (!MemeType.DEAD.equals(meme.getType())) return;
-        coinService.transaction(meme.getMemetick(), -150);
-
-        meme.setType(MemeType.SLCT);
-        memeRepository.save(meme);
     }
 }

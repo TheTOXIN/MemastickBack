@@ -21,7 +21,8 @@ public class MemeMapper {
         return new MemePageAPI(
             this.toMemeAPI(meme),
             memeLikeService.readStateByMeme(meme),
-            memetickMapper.toPreviewDTO(meme.getMemetick())
+            memetickMapper.toPreviewDTO(meme.getMemetick()),
+            evolveMemeService.computeStep(meme)
         );
     }
 
@@ -32,8 +33,7 @@ public class MemeMapper {
             meme.getText(),
             meme.getType(),
             meme.getChromosomes(),
-            meme.getIndividuation(),
-            evolveMemeService.computeStep(meme)
+            meme.getIndividuation()
         );
     }
 }

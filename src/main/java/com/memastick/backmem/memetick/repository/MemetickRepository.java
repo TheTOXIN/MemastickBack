@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.repository;
 
+import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,5 @@ public interface MemetickRepository extends JpaRepository<Memetick, UUID> {
     @Query("SELECT m.dna FROM Memetick m WHERE m.id = :id")
     Optional<Long> findDnaByMemetickId(@Param("id") UUID id);
 
+    Optional<Memetick> findByNick(String nick);
 }
