@@ -14,6 +14,7 @@ import com.memastick.backmem.translator.util.TranslatorUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import javax.transaction.TransactionalException;
 import java.io.File;
 import java.util.List;
@@ -29,11 +30,12 @@ public class TranslatorUserService {
     private final OauthData oauthData;
     private final MemeCoinService coinService;
 
+    @Transactional
     public void userPublish(UUID memeId) {
         Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = memeService.findById(memeId);
 
-        if (memetick.equals(meme.getMemetick())) throw new TranslatorException();
+        if (!memetick.equals(meme.getMemetick())) throw new TranslatorException();
         coinService.transaction(memetick, PriceConst.PUBLISH.getValue());
 
         File file = translatorDownloader.download(meme);

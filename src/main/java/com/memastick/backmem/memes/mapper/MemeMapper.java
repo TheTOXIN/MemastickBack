@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.mapper;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.entity.Meme;
@@ -33,7 +34,11 @@ public class MemeMapper {
             meme.getText(),
             meme.getType(),
             meme.getChromosomes(),
-            meme.getIndividuation()
+            new EPI(
+                meme.getEvolution(),
+                meme.getPopulation(),
+                meme.getIndividuation()
+            )
         );
     }
 }

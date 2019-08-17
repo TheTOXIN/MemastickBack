@@ -1,7 +1,6 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
-import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
@@ -115,7 +114,7 @@ public class MemeService {
             case EVLV: memes = memeRepository.findByType(MemeType.EVLV, pageable); break;
             case SLCT: memes = memeRepository.findByType(MemeType.SLCT, pageable); break;
             case INDV: memes = memeRepository.findByType(MemeType.INDV, pageable); break;
-            case DTHS: memes = memeRepository.findByTypeAndMemetick(MemeType.DEAD, memetick, pageable); break;
+            case DEAD: memes = memeRepository.findByTypeAndMemetick(MemeType.DEAD, memetick, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
             case USER: memes = memeRepository.findByMemetick(memetickService.findById(readDTO.getMemetickId()), pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;

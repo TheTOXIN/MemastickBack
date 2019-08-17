@@ -4,9 +4,9 @@ public enum MemeFilter {
     INDV,
     EVLV,
     SLCT,
+    DEAD,
     LIKE,
     SELF,
-    DTHS,
     USER,
     POOL
 }
