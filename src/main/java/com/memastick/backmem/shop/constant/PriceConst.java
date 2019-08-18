@@ -7,7 +7,8 @@ public enum  PriceConst {
     ALLOWANCE(1000),
     RESSURECTION(150),
     NICK(500),
-    PUBLISH(10000);
+    PUBLISH(10000),
+    MEMOTYPE(100);
 
     @Getter
     private int value;

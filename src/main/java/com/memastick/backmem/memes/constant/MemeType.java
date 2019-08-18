@@ -6,5 +6,4 @@ public enum MemeType {
     SLCT,
     INDV,
     DEAD
-
 }
