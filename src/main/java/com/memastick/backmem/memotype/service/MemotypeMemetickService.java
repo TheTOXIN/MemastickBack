@@ -64,6 +64,7 @@ public class MemotypeMemetickService {
 
         Map<String, List<MemotypeAPI>> memotypesBySet = memotypesMy
             .stream()
+            .distinct()
             .map(m -> memotypeMapper.toAPI(m, setById.get(m.getSetId()).getName()))
             .sorted(Comparator.comparing(m -> -1 * m.getRarity().getLvl()))
             .peek(m -> m.setCount(memotypeByCount.getOrDefault(m.getId(), 0)))

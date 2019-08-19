@@ -14,8 +14,8 @@ public class MemotypeController {
     private final MemotypeService memotypeService;
 
 
-    @GetMapping("/collection")
-    public MemotypeMemetickAPI collection() {
+    @GetMapping("/all")
+    public MemotypeMemetickAPI all() {
         return memotypeService.all();
     }
 

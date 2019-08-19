@@ -22,7 +22,7 @@ public class MemotypeMemetickMapper {
         Map<UUID, MemotypeSet> setById,
         Map<String, List<MemotypeAPI>> memotypesBySet
     ) {
-        return new MemotypeMemetickAPI(
+        var result = new MemotypeMemetickAPI(
             setById
                 .values()
                 .stream()
@@ -31,5 +31,9 @@ public class MemotypeMemetickMapper {
                     memotypesBySet.getOrDefault(set.getName(), Collections.emptyList()))
                 ).collect(Collectors.toList())
         );
+
+        result.getContent().removeIf(set -> set.getMemotypes().isEmpty());
+
+        return result;
     }
 }
