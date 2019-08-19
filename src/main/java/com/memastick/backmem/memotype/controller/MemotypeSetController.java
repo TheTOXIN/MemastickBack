@@ -1,12 +1,11 @@
 package com.memastick.backmem.memotype.controller;
 
-import com.memastick.backmem.memotype.api.MemotypeAPI;
+import com.memastick.backmem.memotype.api.MemotypeMemetickAPI;
 import com.memastick.backmem.memotype.api.MemotypeSetAPI;
 import com.memastick.backmem.memotype.service.MemotypeSetService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("memotype-set")
@@ -16,7 +15,7 @@ public class MemotypeSetController {
     private final MemotypeSetService memotypeSetService;
 
     @GetMapping("/collection")
-    public List<MemotypeSetAPI> all() {
+    public MemotypeMemetickAPI all() {
         return memotypeSetService.collection();
     }
 

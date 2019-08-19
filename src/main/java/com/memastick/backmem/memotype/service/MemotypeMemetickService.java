@@ -1,7 +1,10 @@
 package com.memastick.backmem.memotype.service;
 
+import com.memastick.backmem.main.util.StreamUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.memotype.api.MemotypeAPI;
 import com.memastick.backmem.memotype.api.MemotypeMemetickAPI;
 import com.memastick.backmem.memotype.entity.Memotype;
 import com.memastick.backmem.memotype.entity.MemotypeMemetick;
@@ -10,18 +13,16 @@ import com.memastick.backmem.memotype.mapper.MemotypeMapper;
 import com.memastick.backmem.memotype.mapper.MemotypeMemetickMapper;
 import com.memastick.backmem.memotype.repository.MemotypeMemetickRepository;
 import com.memastick.backmem.memotype.repository.MemotypeRepository;
-import com.memastick.backmem.memotype.repository.MemotypeSetRepository;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.shop.constant.PriceConst;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,9 +31,11 @@ public class MemotypeMemetickService {
 
     private final MemotypeMemetickRepository memotypeMemetickRepository;
     private final MemotypeRepository memotypeRepository;
-    private final MemotypeSetService setService;
-    private final MemotypeMemetickMapper memotypeMemetickMapper;
     private final MemeCoinService memeCoinService;
+    private final MemotypeSetService memotypeSetService;
+    private final MemotypeMapper memotypeMapper;
+    private final MemotypeMemetickMapper memotypeMemetickMapper;
+    private final MemetickService memetickService;
     private final OauthData oauthData;
 
     @Transactional
@@ -52,22 +55,20 @@ public class MemotypeMemetickService {
     }
 
     public MemotypeMemetickAPI read(UUID memetickId) {
-        List<Memotype> memotypes = memotypeMemetickRepository.findMemotypesIdByMemetickId(memetickId);
-        Map<UUID, MemotypeSet> setById = setService.allSetById();
+        Memetick memetick = memetickService.findById(memetickId);
 
-        Map<UUID, Integer> memotypeByCount = memotypes
+        List<Memotype> memotypesMy = memotypeMemetickRepository.findMemotypesIdByMemetickId(memetick.getId());
+        Map<UUID, MemotypeSet> setById = memotypeSetService.allSetById();
+
+        Map<UUID, Integer> memotypeByCount = StreamUtil.countById(memotypesMy);
+
+        Map<String, List<MemotypeAPI>> memotypesBySet = memotypesMy
             .stream()
-            .map(Memotype::getId)
-            .collect(Collectors.toMap(id -> id, m -> 1, Math::addExact));
+            .map(m -> memotypeMapper.toAPI(m, setById.get(m.getSetId()).getName()))
+            .sorted(Comparator.comparing(m -> -1 * m.getRarity().getLvl()))
+            .peek(m -> m.setCount(memotypeByCount.getOrDefault(m.getId(), 0)))
+            .collect(Collectors.groupingBy(MemotypeAPI::getSet));
 
-        Map<MemotypeSet, List<Memotype>> memotypeBySet = memotypes
-            .stream()
-            .distinct()
-            .collect(Collectors.groupingBy(m -> setById.get(m.getSetId())));
-
-        return memotypeMemetickMapper.toAPI(
-            memotypeBySet,
-            memotypeByCount
-        );
+        return memotypeMemetickMapper.toAPI(setById, memotypesBySet);
     }
 }

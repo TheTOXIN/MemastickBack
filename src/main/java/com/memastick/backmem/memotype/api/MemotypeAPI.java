@@ -1,6 +1,5 @@
 package com.memastick.backmem.memotype.api;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +21,6 @@ public class MemotypeAPI {
     private String set;
 
     private int level;
-    private boolean have;
     private int count;
 
     public MemotypeAPI(UUID id, MemotypeRarity rarity, String title, String text, String image, String set) {
