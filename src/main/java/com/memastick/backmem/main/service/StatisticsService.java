@@ -40,10 +40,14 @@ public class StatisticsService {
     }
 
     private StatisticsAPI parse(List<BigDecimal> result) {
+        BigDecimal i = result.get(0);
+        BigDecimal c = result.get(1);
+        BigDecimal d = result.get(2);
+
         return new StatisticsAPI(
-            result.get(0).longValue(),
-            result.get(1).longValue(),
-            result.get(2).longValue()
+            i != null ? i.longValue() : 0L,
+            c != null ? c.longValue() : 0L,
+            d != null ? d.longValue() : 0L
         );
     }
 }
