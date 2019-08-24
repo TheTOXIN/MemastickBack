@@ -23,5 +23,4 @@ public abstract class AbstractException extends RuntimeException {
     public AbstractException(ErrorCode code) {
         response.setCode(code);
     }
-
 }

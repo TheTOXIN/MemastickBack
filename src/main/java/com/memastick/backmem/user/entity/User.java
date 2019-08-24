@@ -17,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedMemetick", includeAllAttributes = true)
 public class User extends AbstractEntity {
 
     @Column(nullable = false, unique = true)

@@ -37,7 +37,6 @@ public class MemeLikeService {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         return new MemeLikeStateDTO(
-            memeLikeRepository.countByMemeIdAndIsLikeTrue(meme.getId()).orElse(0L),
             memeLike.isLike(),
             memeLike.getChromosome()
         );
@@ -45,21 +44,18 @@ public class MemeLikeService {
 
     public void likeTrigger(UUID id) {
         Meme meme = memeService.findById(id);
-
         MemeLike memeLike = findByMemeForCurrentUser(meme);
+
         memeLike.setLike(!memeLike.isLike());
+        meme.setLikes(meme.getLikes() + (memeLike.isLike() ? 1 : -1));
 
         if (memeLike.isLike()) memeLike.setLikeTime(LocalDateTime.now());
 
         memeLikeRepository.save(memeLike);
     }
 
-    public void chromosomeTrigger(UUID id, int count) {
-        Meme meme = memeService.findById(id);
-        chromosomeTrigger(meme, count);
-    }
-
-    public void chromosomeTrigger(Meme meme, int count) {
+    public void chromosomeTrigger(UUID memeId, int count) {
+        Meme meme = memeService.findById(memeId);
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         if (MemeType.DEAD.equals(meme.getType())) return;

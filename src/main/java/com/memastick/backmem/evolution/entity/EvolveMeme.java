@@ -17,6 +17,7 @@ import javax.validation.constraints.Max;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedMeme", includeAllAttributes = true)
 public class EvolveMeme extends AbstractEntity {
 
     @OneToOne(cascade = CascadeType.ALL)

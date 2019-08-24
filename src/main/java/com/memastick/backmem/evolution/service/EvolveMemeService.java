@@ -117,8 +117,8 @@ public class EvolveMemeService {
     }
 
     public EvolveMemeAPI readByMeme(UUID memeId) {
-        Meme meme = memeService.findById(memeId);
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
+        Meme meme = evolveMeme.getMeme();
 
         return new EvolveMemeAPI(
             meme.getId(),
@@ -135,10 +135,10 @@ public class EvolveMemeService {
     }
 
     public Float readChance(UUID memeId) {
-        Meme meme = memeService.findById(memeId);
-        if (!meme.getType().equals(MemeType.SLCT)) return null;
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
+        Meme meme = evolveMeme.getMeme();
 
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
+        if (!meme.getType().equals(MemeType.SLCT)) return null;
         if (evolveMeme.isImmunity()) return 100F;
 
         return computeChance(meme);

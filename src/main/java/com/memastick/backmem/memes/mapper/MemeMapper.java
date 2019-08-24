@@ -33,6 +33,7 @@ public class MemeMapper {
             meme.getUrl(),
             meme.getText(),
             meme.getType(),
+            meme.getLikes(),
             meme.getChromosomes(),
             new EPI(
                 meme.getEvolution(),

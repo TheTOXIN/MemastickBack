@@ -16,7 +16,5 @@ public interface MemeLikeRepository extends JpaRepository<MemeLike, UUID> {
 
     Optional<MemeLike> findByMemeAndMemetick(Meme meme, Memetick memetick);
 
-    Optional<Long> countByMemeIdAndIsLikeTrue(UUID memeId);
-
     List<MemeLike> findByMemetickAndIsLikeTrue(Memetick memetick, Pageable pageable);
 }

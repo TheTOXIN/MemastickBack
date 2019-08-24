@@ -1,9 +1,11 @@
 package com.memastick.backmem.errors.consts;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-public enum  ErrorCode {
+@AllArgsConstructor
+public enum ErrorCode {
 
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND),
     TIME_IN(HttpStatus.GATEWAY_TIMEOUT),
@@ -24,9 +26,4 @@ public enum  ErrorCode {
 
     @Getter
     private HttpStatus status;
-
-    ErrorCode(HttpStatus status) {
-        this.status = status;
-    }
-
 }

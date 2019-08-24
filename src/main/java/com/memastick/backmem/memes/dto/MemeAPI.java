@@ -18,6 +18,7 @@ public class MemeAPI {
     private String url;
     private String text;
     private MemeType type;
+    private int likes;
     private int chromosomes;
     private EPI epi;
 }

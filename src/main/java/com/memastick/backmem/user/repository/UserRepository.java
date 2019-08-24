@@ -4,6 +4,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.user.entity.User;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,6 +20,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmail(String email);
 
+    @EntityGraph(value = "joinedMemetick")
     Optional<User> findByLogin(String login);
 
     @Cacheable(cacheNames = "findUserByLogin")

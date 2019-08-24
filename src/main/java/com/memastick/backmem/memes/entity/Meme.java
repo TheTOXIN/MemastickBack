@@ -42,6 +42,9 @@ public class Meme extends AbstractEntity {
     private MemeType type;
 
     @Column(nullable = false)
+    private int likes = 0;
+
+    @Column(nullable = false)
     private int chromosomes = 0;
 
     @Column
