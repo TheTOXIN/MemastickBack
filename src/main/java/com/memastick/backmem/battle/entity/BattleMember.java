@@ -14,7 +14,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "battle_members")
+@Table(name = "battle_member")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

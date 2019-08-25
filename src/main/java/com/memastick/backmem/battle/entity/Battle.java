@@ -14,7 +14,7 @@ import javax.validation.constraints.Max;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "battles")
+@Table(name = "battle")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

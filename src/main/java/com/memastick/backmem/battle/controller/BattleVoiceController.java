@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("battle-voices")
+@RequestMapping("battle-voice")
 @AllArgsConstructor
 public class BattleVoiceController {
 }
