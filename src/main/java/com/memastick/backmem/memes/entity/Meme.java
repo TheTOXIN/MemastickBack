@@ -30,16 +30,16 @@ public class Meme extends AbstractEntity {
     @Column(length = 512, nullable = false, unique = true)
     private String url;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private Memetick memetick;
-
-    @Column(nullable = false)
-    private ZonedDateTime creating;
+    @Column
+    @Length(max = GlobalConstant.MAX_TEXT_LEN)
+    private String text;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 32)
     private MemeType type;
+
+    @Column(nullable = false)
+    private ZonedDateTime creating;
 
     @Column(nullable = false)
     private int likes = 0;
@@ -47,9 +47,12 @@ public class Meme extends AbstractEntity {
     @Column(nullable = false)
     private int chromosomes = 0;
 
-    @Column
-    @Length(max = GlobalConstant.MAX_TEXT_LEN)
-    private String text;
+    @Column(nullable = false)
+    private int victory = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Memetick memetick;
 
     // -=[EPI]=-
 

@@ -1,6 +1,7 @@
 package com.memastick.backmem.battle.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
+import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.memes.constant.MemeType;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -33,5 +35,9 @@ public class Battle extends AbstractEntity {
     private BattleStatus status;
 
     @Column(nullable = false)
-    private ZonedDateTime creating;
+    private ZonedDateTime updating;
+
+    @Max(BattleConst.MAX_PVP)
+    @Column(nullable = false)
+    private int pvp = 0;
 }
