@@ -3,13 +3,12 @@ package com.memastick.backmem.setting.service;
 import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
-import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.entity.SettingFollower;
 import com.memastick.backmem.setting.repository.SettingFollowerRepository;
 import com.memastick.backmem.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,29 +17,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class SettingFollowerService {
 
-    private final MemetickService memetickService;
     private final OauthData oauthData;
     private final SettingFollowerRepository settingFollowerRepository;
     private final MemetickMapper memetickMapper;
-
-    @Autowired
-    public SettingFollowerService(
-        @Lazy MemetickService memetickService,
-        OauthData oauthData,
-        SettingFollowerRepository settingFollowerRepository,
-        MemetickMapper memetickMapper
-    ) {
-        this.memetickService = memetickService;
-        this.oauthData = oauthData;
-        this.settingFollowerRepository = settingFollowerRepository;
-        this.memetickMapper = memetickMapper;
-    }
+    private final MemetickRepository memetickRepository;
 
     public void trigger(UUID memetickId) {
         User follower = oauthData.getCurrentUser();
-        Memetick memetick = memetickService.findById(memetickId);
+        Memetick memetick = memetickRepository.tryfFndById(memetickId);
 
         if (follower.getMemetick().equals(memetick)) return;
 

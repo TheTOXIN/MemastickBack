@@ -1,5 +1,7 @@
 package com.memastick.backmem.battle.service;
 
+import com.memastick.backmem.battle.api.BattleHomeAPI;
+import com.memastick.backmem.battle.api.BattleViewAPI;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.battle.repository.BattleRepository;
@@ -13,6 +15,14 @@ import java.time.ZonedDateTime;
 public class BattleService {
 
     private final BattleRepository battleRepository;
+
+    public BattleHomeAPI home() {
+        return null;
+    }
+
+    public BattleViewAPI view() {
+        return null;
+    }
 
     public void battleUpdate(BattleStatus status, Battle battle) {
         battle.setStatus(status);

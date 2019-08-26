@@ -10,7 +10,7 @@ import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.shop.constant.PriceConst;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,29 +29,29 @@ public class MemeService {
 
     private final OauthData oauthData;
     private final MemeRepository memeRepository;
-    private final MemetickService memetickService;
     private final MemeMapper memeMapper;
     private final MemeLikeService memeLikeService;
     private final MemePoolService memePoolService;
     private final MemeCoinService memeCoinService;
+    private final MemetickRepository memetickRepository;
 
     @Autowired
     public MemeService(
         OauthData oauthData,
         MemeRepository memeRepository,
-        MemetickService memetickService,
         @Lazy MemeMapper memeMapper,
         @Lazy MemeLikeService memeLikeService,
         @Lazy MemePoolService memePoolService,
-        MemeCoinService memeCoinService
+        MemeCoinService memeCoinService,
+        MemetickRepository memetickRepository
     ) {
         this.oauthData = oauthData;
         this.memeRepository = memeRepository;
-        this.memetickService = memetickService;
         this.memeMapper = memeMapper;
         this.memeLikeService = memeLikeService;
         this.memePoolService = memePoolService;
         this.memeCoinService = memeCoinService;
+        this.memetickRepository = memetickRepository;
     }
 
     public List<MemeAPI> read(MemeReadDTO readDTO, Pageable pageable) {
@@ -108,7 +108,7 @@ public class MemeService {
             case INDV: memes = memeRepository.findByType(MemeType.INDV, pageable); break;
             case DEAD: memes = memeRepository.findByTypeAndMemetick(MemeType.DEAD, memetick, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
-            case USER: memes = memeRepository.findByMemetick(memetickService.findById(readDTO.getMemetickId()), pageable); break;
+            case USER: memes = memeRepository.findByMemetick(memetickRepository.tryfFndById(readDTO.getMemetickId()), pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
             case POOL: memes = memePoolService.generate(readDTO.getStep(), pageable); break;
         }

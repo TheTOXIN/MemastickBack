@@ -3,6 +3,7 @@ package com.memastick.backmem.memotype.service;
 import com.memastick.backmem.main.util.StreamUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.memotype.api.MemotypeAPI;
 import com.memastick.backmem.memotype.api.MemotypeMemetickAPI;
@@ -37,6 +38,7 @@ public class MemotypeMemetickService {
     private final MemotypeMemetickMapper memotypeMemetickMapper;
     private final MemetickService memetickService;
     private final OauthData oauthData;
+    private final MemetickRepository memetickRepository;
 
     @Transactional
     public void buy(UUID memotypeId) {
@@ -55,7 +57,7 @@ public class MemotypeMemetickService {
     }
 
     public MemotypeMemetickAPI read(UUID memetickId) {
-        Memetick memetick = memetickService.findById(memetickId);
+        Memetick memetick = memetickRepository.tryfFndById(memetickId);
 
         List<Memotype> memotypesMy = memotypeMemetickRepository.findMemotypesIdByMemetickId(memetick.getId());
         Map<UUID, MemotypeSet> setById = memotypeSetService.allSetById();

@@ -16,5 +16,4 @@ public abstract class AbstractEntity {
     @GeneratedValue
     @Column(nullable = false)
     private UUID id;
-
 }

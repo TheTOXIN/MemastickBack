@@ -200,6 +200,20 @@ public class NotifyService {
         );
     }
 
+    @Async
+    public void sendBATTLECOMPETE(Battle battle, Memetick memetick, boolean isWin) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            new NotifyDTO(
+                NotifyType.BATTLE_COMLETE,
+                "Битва завершилась!",
+                "Вы " + (isWin ? "проиграли" : "выиграли") + " битву с меметиком: " + memetick.getNick(),
+                null,
+                LinkConstant.LINK_BATTLE + "/" + battle.getId()
+            )
+        );
+    }
+
     private void send(List<User> users, NotifyDTO dto) {
         if (dto.getType().isWeb()) webService.send(users, dto);
         if (dto.getType().isPush()) pushService.send(users, dto);

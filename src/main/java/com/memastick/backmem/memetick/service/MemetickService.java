@@ -1,7 +1,6 @@
 package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.errors.consts.ErrorCode;
-import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.SettingException;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
@@ -18,11 +17,9 @@ import com.memastick.backmem.setting.repository.SettingUserRepository;
 import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -44,7 +41,7 @@ public class MemetickService {
 
     public MemetickAPI viewById(UUID id) {
         return memetickMapper.toMemetickAPI(
-            this.findById(id)
+            memetickRepository.tryfFndById(id)
         );
     }
 
@@ -74,12 +71,6 @@ public class MemetickService {
 
         settingUserRepository.save(setting);
         memetickRepository.save(memetick);
-    }
-
-    public Memetick findById(UUID id) {
-        Optional<Memetick> byId = memetickRepository.findById(id);
-        if (byId.isEmpty()) throw new EntityNotFoundException(Memetick.class, "id");
-        return byId.get();
     }
 
     public Memetick generateMemetick(String nick) {

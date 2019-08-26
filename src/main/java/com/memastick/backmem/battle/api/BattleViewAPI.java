@@ -1,17 +1,13 @@
 package com.memastick.backmem.battle.api;
 
-import com.memastick.backmem.battle.constant.BattleRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BattleVoteAPI {
+public class BattleViewAPI {
 
-    private UUID battleId;
-    private BattleRole role;
+    private String tmp;
 }

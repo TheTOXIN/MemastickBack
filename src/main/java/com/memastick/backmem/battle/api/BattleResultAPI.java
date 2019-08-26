@@ -7,5 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BattleMemberAPI {
+public class BattleResultAPI {
+
+    private int forwardCount;
+    private int defenderCount;
+    private boolean iamGuessed;
+    private int dnaCombo;
 }

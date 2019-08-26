@@ -7,5 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BattleAPI {
+public class BattleHomeAPI {
+
+    private String tmp;
 }

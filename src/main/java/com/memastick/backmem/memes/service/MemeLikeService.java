@@ -6,6 +6,7 @@ import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
+import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
@@ -31,7 +32,8 @@ public class MemeLikeService {
     private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;
     private final OauthData oauthData;
-    private final MemeService memeService;
+
+    private final MemeRepository memeRepository;
 
     public MemeLikeStateDTO readStateByMeme(Meme meme) {
         MemeLike memeLike = findByMemeForCurrentUser(meme);
@@ -43,7 +45,7 @@ public class MemeLikeService {
     }
 
     public void likeTrigger(UUID id) {
-        Meme meme = memeService.findById(id);
+        Meme meme = memeRepository.tryFindById(id);
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         memeLike.setLike(!memeLike.isLike());
@@ -55,7 +57,7 @@ public class MemeLikeService {
     }
 
     public void chromosomeTrigger(UUID memeId, int count) {
-        Meme meme = memeService.findById(memeId);
+        Meme meme = memeRepository.tryFindById(memeId);
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         if (MemeType.DEAD.equals(meme.getType())) return;

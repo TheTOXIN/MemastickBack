@@ -2,13 +2,13 @@ package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.errors.exception.TokenWalletException;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.entity.TokenWallet;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,22 +17,12 @@ import java.util.function.BiConsumer;
 
 
 @Service
+@AllArgsConstructor
 public class TokenWalletService {
 
     private final OauthData oauthData;
     private final TokenWalletRepository tokenWalletRepository;
-    private final MemetickService memetickService;
-
-    @Autowired
-    public TokenWalletService(
-        OauthData oauthData,
-        TokenWalletRepository tokenWalletRepository,
-        MemetickService memetickService
-    ) {
-        this.oauthData = oauthData;
-        this.tokenWalletRepository = tokenWalletRepository;
-        this.memetickService = memetickService;
-    }
+    private final MemetickRepository memetickRepository;
 
     public void have(TokenType type) {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -45,7 +35,7 @@ public class TokenWalletService {
     }
 
     public TokenWalletAPI read(UUID memetickId) {
-        return read(memetickService.findById(memetickId));
+        return read(memetickRepository.tryfFndById(memetickId));
     }
 
     public TokenWalletAPI read(Memetick memetick) {

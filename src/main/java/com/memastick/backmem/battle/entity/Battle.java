@@ -2,6 +2,7 @@ package com.memastick.backmem.battle.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.battle.constant.BattleConst;
+import com.memastick.backmem.battle.constant.BattleRole;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,5 +44,25 @@ public class Battle extends AbstractEntity {
     public Battle(BattleMember forward, BattleMember defender) {
         this.forward = forward;
         this.defender = defender;
+    }
+
+    public BattleMember getMember(BattleRole role) {
+        switch (role) {
+            case FORWARD: return forward;
+            case DEFENDER: return defender;
+            default: return null;
+        }
+    }
+
+    public BattleMember getLeader() {
+        if (forward.getVoices() > defender.getVoices()) return forward;
+        else if (defender.getVoices() > forward.getVoices()) return defender;
+        else return null;
+    }
+
+    public BattleMember getLooser() {
+        if (forward.getVoices() < defender.getVoices()) return forward;
+        else if (defender.getVoices() < forward.getVoices()) return defender;
+        else return null;
     }
 }
