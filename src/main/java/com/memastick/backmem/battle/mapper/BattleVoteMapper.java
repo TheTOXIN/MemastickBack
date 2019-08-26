@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 
 @Component
 @AllArgsConstructor
-public class BattleVoiceMapper {
+public class BattleVoteMapper {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)

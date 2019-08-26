@@ -10,10 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "battle_voice")
+@Table(name = "battle_vote")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BattleVoice extends AbstractEntity {
+public class BattleVote extends AbstractEntity {
 }
