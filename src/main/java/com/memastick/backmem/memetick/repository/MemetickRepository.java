@@ -21,6 +21,9 @@ public interface MemetickRepository extends JpaRepository<Memetick, UUID> {
 
     Optional<Memetick> findByNick(String nick);
 
+    @Query("SELECT m.cookies FROM Memetick m WHERE m.id = :memetickId")
+    Optional<Integer> findCookieByMemetickId(@Param("memetickId") UUID memetickId);
+
     default Memetick tryfFndById(UUID memtickId) {
         return this
             .findById(memtickId)

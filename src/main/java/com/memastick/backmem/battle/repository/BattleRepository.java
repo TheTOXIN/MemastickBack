@@ -42,7 +42,7 @@ public interface BattleRepository extends CrudRepository<Battle, UUID> {
             .orElseThrow(() -> new EntityNotFoundException(Battle.class, "id or memetickId"));
     }
 
-    @EntityGraph("joinedMembers")
+    @EntityGraph("joinedMembers")//TODO NOT WORK WITH MEME AND MEMETICK
     default Battle tryFindById(UUID battleId) {
         return this
             .findById(battleId)

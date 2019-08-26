@@ -1,15 +1,14 @@
 package com.memastick.backmem.battle.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
+import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
@@ -20,11 +19,11 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class BattleVote extends AbstractEntity {
 
-    @NaturalId
-    @Column(nullable = false)
-    private UUID battleId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Battle battle;
 
-    @NaturalId
-    @Column(nullable = false)
-    private UUID memetickId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Memetick memetick;
 }

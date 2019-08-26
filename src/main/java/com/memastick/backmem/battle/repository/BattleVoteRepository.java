@@ -12,6 +12,6 @@ import java.util.UUID;
 @Repository
 public interface BattleVoteRepository extends CrudRepository<BattleVote, UUID> {
 
-    @Query("SELECT bv.battleId FROM BattleVote bv WHERE bv.battleId = :memetickId")
+    @Query("SELECT bv.battle.id FROM BattleVote bv WHERE bv.memetick.id = :memetickId")
     List<UUID> findAllBattleIds(@Param("memetickId") UUID memetickId);
 }

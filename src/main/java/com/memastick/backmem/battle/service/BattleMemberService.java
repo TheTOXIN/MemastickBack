@@ -29,6 +29,8 @@ public class BattleMemberService {
     private final OauthData oauthData;
 
     public void request(BattleRequestAPI api) {
+        Memetick currentMemetick = oauthData.getCurrentMemetick();
+
         Meme fromMeme = memeRepository.tryFindById(api.getFromMeme());
         Meme toMeme = memeRepository.tryFindById(api.getToMeme());
 
@@ -38,8 +40,8 @@ public class BattleMemberService {
         Memetick forwardMemetick = fromMeme.getMemetick();
         Memetick defenderMemetick = toMeme.getMemetick();
 
-        if (!forwardMemetick.equals(oauthData.getCurrentMemetick())) throw new BattleException("NOT MY FROM");
-        if (!defenderMemetick.equals(oauthData.getCurrentMemetick())) throw new BattleException("NOT MY TO");
+        if (!forwardMemetick.equals(currentMemetick)) throw new BattleException("NOT MY FROM");
+        if (defenderMemetick.equals(currentMemetick)) throw new BattleException("IT MY TO");
 
         Battle battle = new Battle(
             new BattleMember(fromMeme, BattleRole.FORWARD),
@@ -54,12 +56,13 @@ public class BattleMemberService {
         Battle battle = battleRepository.tryFindById(api.getBattleId());
         Memetick memetick = oauthData.getCurrentMemetick();
 
+        if (!BattleStatus.WAIT.equals(battle.getStatus())) throw new BattleException("BATTLE NOT WAIT");
         if (!battle.getDefender().getMemetickId().equals(memetick.getId())) throw new BattleException("NOT ME TO");
         if (!ValidationUtil.checkPVP(api.getPvp())) throw new BattleException("PVP INVALID");
 
         BattleStatus status = api.isAccept() ? BattleStatus.START : BattleStatus.CANCEL;
 
-        if (BattleStatus.START.equals(battle.getStatus())) battle.setPvp(api.getPvp());
+        if (BattleStatus.START.equals(status)) battle.setPvp(api.getPvp());
 
         battleService.battleUpdate(status, battle);
         notifyService.sendBATTLERESPONSE(battle, memetick, battle.getDefender().getMemetickId(), api.isAccept());

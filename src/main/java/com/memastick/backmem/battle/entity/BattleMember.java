@@ -20,7 +20,6 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class BattleMember extends AbstractEntity {
 
-    @NaturalId
     @Column(nullable = false)
     private UUID memetickId;
 

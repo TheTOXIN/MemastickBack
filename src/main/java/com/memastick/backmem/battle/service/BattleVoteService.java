@@ -7,11 +7,13 @@ import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.battle.entity.BattleMember;
+import com.memastick.backmem.battle.entity.BattleVote;
 import com.memastick.backmem.battle.repository.BattleMemberRepository;
 import com.memastick.backmem.battle.repository.BattleRepository;
 import com.memastick.backmem.battle.repository.BattleVoteRepository;
 import com.memastick.backmem.errors.exception.BattleException;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
@@ -33,10 +35,11 @@ public class BattleVoteService {
     private final BattleRepository battleRepository;
     private final BattleMemberRepository battleMemberRepository;
     private final MemetickService memetickService;
+    private final MemetickRepository memetickRepository;
     private final BattleChecker battleCheck;
     private final OauthData oauthData;
 
-    public List<UUID> battleList() {
+    public List<UUID> battleList() { // TODO filter self battles
         Memetick memetick = oauthData.getCurrentMemetick();
 
         List<UUID> battles = battleRepository.findAllBattleIds(BattleStatus.START);
@@ -50,12 +53,14 @@ public class BattleVoteService {
     @Transactional
     public BattleResultAPI giveVote(BattleVoteAPI api) {
         Memetick memetick = oauthData.getCurrentMemetick();
-
         Battle battle = battleRepository.tryFindById(api.getBattleId());
         BattleMember member = battle.getMember(api.getMemberId());
 
+        //TODO CHECK SELF VOTE
+        //TODO check vote again
+
         if (!BattleStatus.START.equals(battle.getStatus())) throw new BattleException("BATTLE NOT START");
-        if (memetick.getCookies() <= 0) throw new BattleException("NOT HAVE COOKIE"); // TODO check cookie with cache
+        if (!memetickService.haveCookie(memetick)) throw new BattleException("NOT HAVE COOKIE"); // TODO check cookie with cache
         if (member == null) throw new BattleException("MEMBER NOT FOUND");
 
         member.setVotes(member.getVotes() + 1);
@@ -68,7 +73,9 @@ public class BattleVoteService {
 
         memetickService.addDna(memetick, combo * BattleConst.DNA_VOTE);
 
+        battleVoteRepository.save(new BattleVote(battle, memetick));
         battleMemberRepository.save(member);
+
         battleCheck.check(battle);
 
         return new BattleResultAPI(

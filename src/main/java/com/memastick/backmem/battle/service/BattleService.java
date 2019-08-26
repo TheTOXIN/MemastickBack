@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +33,7 @@ public class BattleService {
 
         return battles
             .stream()
+            .sorted(Comparator.comparing(Battle::getUpdating))
             .map(battleMapper::toView)
             .collect(Collectors.groupingBy(BattleViewAPI::getStatus));
     }

@@ -17,6 +17,7 @@ import com.memastick.backmem.setting.repository.SettingUserRepository;
 import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -81,5 +82,11 @@ public class MemetickService {
         memetickRepository.save(memetick);
 
         return memetick;
+    }
+
+    public boolean haveCookie(Memetick memetick) {
+        return memetickRepository
+            .findCookieByMemetickId(memetick.getId())
+            .orElse(0) > 0;
     }
 }

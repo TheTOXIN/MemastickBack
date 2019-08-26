@@ -20,19 +20,22 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmail(String email);
 
-    @EntityGraph(value = "joinedMemetick")
-    Optional<User> findByLogin(String login);
+    Optional<User> findByRole(RoleType role);
 
     @Cacheable(cacheNames = "findUserByLogin")
     @Query("SELECT u FROM User u WHERE u.login = :login")
     Optional<User> findByLoginWithCache(@Param("login") String login);
 
-    Optional<User> findByRole(RoleType role);
+    @EntityGraph(value = "joinedMemetick")
+    Optional<User> findByLogin(String login);
 
+    @EntityGraph(value = "joinedMemetick")
     User findByMemetickId(UUID memetickId);
 
+    @EntityGraph(value = "joinedMemetick")
     User findByMemetick(Memetick memetick);
 
+    @EntityGraph(value = "joinedMemetick")
     List<User> findByMemetickIn(List<Memetick> memeticks);
 }
 
