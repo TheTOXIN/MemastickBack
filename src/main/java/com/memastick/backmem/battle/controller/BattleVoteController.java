@@ -3,11 +3,9 @@ package com.memastick.backmem.battle.controller;
 import com.memastick.backmem.battle.api.BattleResultAPI;
 import com.memastick.backmem.battle.api.BattleVoteAPI;
 import com.memastick.backmem.battle.service.BattleVoteService;
+import com.memastick.backmem.main.api.IdAPI;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +18,7 @@ public class BattleVoteController {
     private final BattleVoteService battleVoteService;
 
     @PatchMapping("give")
-    public BattleResultAPI give(BattleVoteAPI api) {
+    public BattleResultAPI give(@RequestBody BattleVoteAPI api) {
         return battleVoteService.giveVote(api);
     }
 

@@ -51,7 +51,7 @@ public class BattleMemberService {
     }
 
     public void response(BattleResponseAPI api) {
-        Battle battle = battleRepository.findBattleById(api.getBattleId());
+        Battle battle = battleRepository.tryFindById(api.getBattleId());
         Memetick memetick = oauthData.getCurrentMemetick();
 
         if (!battle.getDefender().getMemetickId().equals(memetick.getId())) throw new BattleException("NOT ME TO");

@@ -1,13 +1,20 @@
 package com.memastick.backmem.battle.api;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.memastick.backmem.battle.constant.BattleStatus;
+import com.memastick.backmem.battle.dto.BattleMemberViewDTO;
+import lombok.*;
+
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BattleViewAPI {
 
-    private String tmp;
+    private UUID battleId;
+    private BattleStatus status;
+    private Integer pvp;
+
+    private BattleMemberViewDTO forward;
+    private BattleMemberViewDTO defender;
 }

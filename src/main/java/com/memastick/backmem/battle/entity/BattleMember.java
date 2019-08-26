@@ -33,7 +33,7 @@ public class BattleMember extends AbstractEntity {
     private BattleRole role;
 
     @Column(nullable = false)
-    private int voices = 0;
+    private int votes = 0;
 
     public BattleMember(Meme meme, BattleRole role) {
         this.meme = meme;

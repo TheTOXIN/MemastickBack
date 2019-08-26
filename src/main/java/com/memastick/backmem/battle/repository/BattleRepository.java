@@ -3,6 +3,7 @@ package com.memastick.backmem.battle.repository;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -16,14 +17,33 @@ import java.util.UUID;
 @Repository
 public interface BattleRepository extends CrudRepository<Battle, UUID> {
 
-    @Query("SELECT b FROM Battle b WHERE b.forward.memetickId = :forward AND b.defender.memetickId = :defender")
-    Optional<Battle> findByMembers(@Param("forward") UUID forward, @Param("defender") UUID defender);
-
     @Query("SELECT b.id FROM Battle b WHERE b.status = :status")
     List<UUID> findAllBattleIds(@Param("status") BattleStatus status);
 
+    @Query(
+        "SELECT b FROM Battle b WHERE " +
+            "b.forward.memetickId = :memetickId OR b.defender.memetickId = :memetickId"
+    )
+    List<Battle> findAllByMemetickId(@Param("memetickId") UUID memetickId);
+
+    @Query(
+        "SELECT b FROM Battle b WHERE b.id = :battleId AND " +
+            "(b.forward.memetickId = :memetickId OR b.defender.memetickId = :memetickId)"
+    )
+    Optional<Battle> findByMemetickIdAndBattleId(
+        @Param("memetickId") UUID memetickId,
+        @Param("battleId") UUID battleId
+    );
+
     @EntityGraph("joinedMembers")
-    default Battle findBattleById(UUID battleId) {
+    default Battle tryFindByMemetickAndId(Memetick memetick, UUID battleId) {
+        return this
+            .findByMemetickIdAndBattleId(memetick.getId(), battleId)
+            .orElseThrow(() -> new EntityNotFoundException(Battle.class, "id or memetickId"));
+    }
+
+    @EntityGraph("joinedMembers")
+    default Battle tryFindById(UUID battleId) {
         return this
             .findById(battleId)
             .orElseThrow(() -> new EntityNotFoundException(Battle.class, "id"));

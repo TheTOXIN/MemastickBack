@@ -47,9 +47,6 @@ public class Meme extends AbstractEntity {
     @Column(nullable = false)
     private int chromosomes = 0;
 
-    @Column(nullable = false)
-    private int victory = 0;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Memetick memetick;

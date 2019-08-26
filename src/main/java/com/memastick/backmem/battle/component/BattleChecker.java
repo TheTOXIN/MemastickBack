@@ -32,7 +32,7 @@ public class BattleChecker {
         BattleMember forward = battle.getForward();
         BattleMember defender = battle.getDefender();
 
-        int absents = MathUtil.absents(forward.getVoices(), defender.getVoices());
+        int absents = MathUtil.absents(forward.getVotes(), defender.getVotes());
         boolean complete = absents >= battle.getPvp();
 
         if (!complete) return;

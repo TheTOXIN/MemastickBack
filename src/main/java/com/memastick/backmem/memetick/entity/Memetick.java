@@ -26,7 +26,4 @@ public class Memetick extends AbstractEntity {
 
     @Column(nullable = false)
     private int cookies = 0;
-
-    @Column(nullable = false)
-    private int score = 0;
 }

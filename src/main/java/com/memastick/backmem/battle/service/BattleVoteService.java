@@ -32,7 +32,6 @@ public class BattleVoteService {
     private final BattleVoteRepository battleVoteRepository;
     private final BattleRepository battleRepository;
     private final BattleMemberRepository battleMemberRepository;
-    private final BattleService battleService;
     private final MemetickService memetickService;
     private final BattleChecker battleCheck;
     private final OauthData oauthData;
@@ -51,14 +50,15 @@ public class BattleVoteService {
     @Transactional
     public BattleResultAPI giveVote(BattleVoteAPI api) {
         Memetick memetick = oauthData.getCurrentMemetick();
-        Battle battle = battleRepository.findBattleById(api.getBattleId());
+
+        Battle battle = battleRepository.tryFindById(api.getBattleId());
+        BattleMember member = battle.getMember(api.getMemberId());
 
         if (!BattleStatus.START.equals(battle.getStatus())) throw new BattleException("BATTLE NOT START");
         if (memetick.getCookies() <= 0) throw new BattleException("NOT HAVE COOKIE"); // TODO check cookie with cache
+        if (member == null) throw new BattleException("MEMBER NOT FOUND");
 
-        BattleMember member = battle.getMember(api.getRole());
-
-        member.setVoices(member.getVoices() + 1);
+        member.setVotes(member.getVotes() + 1);
         memetick.setCookies(memetick.getCookies() - 1);
 
         boolean guessed = member.equals(battle.getLeader());
@@ -72,8 +72,8 @@ public class BattleVoteService {
         battleCheck.check(battle);
 
         return new BattleResultAPI(
-            battle.getForward().getVoices(),
-            battle.getDefender().getVoices(),
+            battle.getForward().getVotes(),
+            battle.getDefender().getVotes(),
             guessed,
             combo
         );

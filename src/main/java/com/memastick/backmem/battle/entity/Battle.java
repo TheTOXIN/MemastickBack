@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "battle")
@@ -46,23 +47,21 @@ public class Battle extends AbstractEntity {
         this.defender = defender;
     }
 
-    public BattleMember getMember(BattleRole role) {
-        switch (role) {
-            case FORWARD: return forward;
-            case DEFENDER: return defender;
-            default: return null;
-        }
+    public BattleMember getMember(UUID memberId) {
+        if (forward.getId().equals(memberId)) return forward;
+        else if (defender.getId().equals(memberId)) return defender;
+        else return null;
     }
 
     public BattleMember getLeader() {
-        if (forward.getVoices() > defender.getVoices()) return forward;
-        else if (defender.getVoices() > forward.getVoices()) return defender;
+        if (forward.getVotes() > defender.getVotes()) return forward;
+        else if (defender.getVotes() > forward.getVotes()) return defender;
         else return null;
     }
 
     public BattleMember getLooser() {
-        if (forward.getVoices() < defender.getVoices()) return forward;
-        else if (defender.getVoices() < forward.getVoices()) return defender;
+        if (forward.getVotes() < defender.getVotes()) return forward;
+        else if (defender.getVotes() < forward.getVotes()) return defender;
         else return null;
     }
 }
