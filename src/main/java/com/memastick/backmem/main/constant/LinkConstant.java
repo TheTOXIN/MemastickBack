@@ -11,6 +11,8 @@ public class LinkConstant {
 
     public static final String LINK_ALLOWANCE = URL + "/modal?type=" + ModalType.ALLOWANCE;
 
+    public static final String LINK_BATTLE = URL + "/battle/view";
+
     public static final String LINK_CREATING = URL + "/memes/create";
 
     public static final String LINK_MEME = URL + "/memes/share";

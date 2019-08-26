@@ -29,7 +29,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByRole(RoleType role);
 
-    Optional<User> findByMemetickId(UUID memetickId);
+    User findByMemetickId(UUID memetickId);
 
     User findByMemetick(Memetick memetick);
 

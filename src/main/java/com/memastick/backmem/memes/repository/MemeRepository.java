@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.repository;
 
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -47,4 +48,10 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
         value = "SELECT * FROM memes m WHERE m.evolution = :evolution ORDER BY m.chromosomes DESC LIMIT 1"
     )
     Meme findSuperMeme(@Param("evolution") long evolution);
+
+    default Meme tryFindById(UUID memeId) {
+        return this
+            .findById(memeId)
+            .orElseThrow(() -> new EntityNotFoundException(Meme.class, "id"));
+    }
 }

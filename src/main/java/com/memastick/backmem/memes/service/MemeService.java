@@ -1,6 +1,5 @@
 package com.memastick.backmem.memes.service;
 
-import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -71,19 +69,13 @@ public class MemeService {
     }
 
     public MemePageAPI page(UUID memeId) {
-        Meme meme = findById(memeId);
-        return  memeMapper.toPageAPI(meme);
+        Meme meme = memeRepository.tryFindById(memeId);
+        return memeMapper.toPageAPI(meme);
     }
 
     public MemeImgAPI readImg(UUID memeId) {
-        Meme meme = findById(memeId);
+        Meme meme = memeRepository.tryFindById(memeId);
         return new MemeImgAPI(meme.getUrl());
-    }
-
-    public Meme findById(UUID id) {
-        Optional<Meme> byId = memeRepository.findById(id);
-        if (byId.isEmpty()) throw new EntityNotFoundException(Meme.class, "id");
-        return byId.get();
     }
 
     public void moveIndex(Meme meme) {
@@ -126,7 +118,7 @@ public class MemeService {
 
     @Transactional
     public void resurrect(UUID memeId) {
-        Meme meme = this.findById(memeId);
+        Meme meme = memeRepository.tryFindById(memeId);
 
         if (!MemeType.DEAD.equals(meme.getType())) return;
         memeCoinService.transaction(meme.getMemetick(), PriceConst.RESSURECTION.getValue());

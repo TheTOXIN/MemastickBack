@@ -3,7 +3,6 @@ package com.memastick.backmem.battle.entity;
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.constant.BattleStatus;
-import com.memastick.backmem.memes.constant.MemeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,11 +21,11 @@ import java.time.ZonedDateTime;
 @NamedEntityGraph(name = "joinedMembers", includeAllAttributes = true)
 public class Battle extends AbstractEntity {
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private BattleMember forward;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private BattleMember defender;
 
@@ -37,7 +36,12 @@ public class Battle extends AbstractEntity {
     @Column(nullable = false)
     private ZonedDateTime updating;
 
+    @Column
     @Max(BattleConst.MAX_PVP)
-    @Column(nullable = false)
-    private int pvp = 0;
+    private Integer pvp;
+
+    public Battle(BattleMember forward, BattleMember defender) {
+        this.forward = forward;
+        this.defender = defender;
+    }
 }

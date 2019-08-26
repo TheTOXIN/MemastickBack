@@ -2,7 +2,6 @@ package com.memastick.backmem.battle.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.battle.constant.BattleRole;
-import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,4 +34,10 @@ public class BattleMember extends AbstractEntity {
 
     @Column(nullable = false)
     private int voices = 0;
+
+    public BattleMember(Meme meme, BattleRole role) {
+        this.meme = meme;
+        this.memetickId = meme.getMemetick().getId();
+        this.role = role;
+    }
 }

@@ -22,7 +22,8 @@ public enum ErrorCode {
     EMAIL_NOT_SEND(HttpStatus.INTERNAL_SERVER_ERROR),
     MEME_COIN_ENOUGH(HttpStatus.LOCKED),
     MINE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR),
-    MINE_END(HttpStatus.UNPROCESSABLE_ENTITY);
+    MINE_END(HttpStatus.UNPROCESSABLE_ENTITY),
+    BATTLE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR);
 
     @Getter
     private HttpStatus status;

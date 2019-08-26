@@ -1,7 +1,10 @@
 package com.memastick.backmem.main.util;
 
+import com.memastick.backmem.battle.constant.BattleConst;
+
 public class ValidationUtil {
 
+    //TODO to valid const
     private static int MIN_LEN_NCK = 3;
     private static int MAX_LEN_NCK = 16;
 
@@ -23,5 +26,9 @@ public class ValidationUtil {
 
     public static boolean checkNick(String nick) {
         return nick.length() >= MIN_LEN_NCK && nick.length() <= MAX_LEN_NCK;
+    }
+
+    public static boolean checkPVP(int pvp) {
+        return pvp >= 0 && pvp <= BattleConst.MAX_PVP;
     }
 }
