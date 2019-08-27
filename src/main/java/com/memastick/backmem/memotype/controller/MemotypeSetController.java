@@ -23,6 +23,4 @@ public class MemotypeSetController {
     public void create(@RequestBody MemotypeSetAPI request) {
         memotypeSetService.create(request);
     }
-
-    //TODO UPDATE
 }

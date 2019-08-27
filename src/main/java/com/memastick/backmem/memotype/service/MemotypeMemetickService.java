@@ -4,7 +4,6 @@ import com.memastick.backmem.main.util.StreamUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
-import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.memotype.api.MemotypeAPI;
 import com.memastick.backmem.memotype.api.MemotypeMemetickAPI;
 import com.memastick.backmem.memotype.entity.Memotype;
@@ -36,7 +35,6 @@ public class MemotypeMemetickService {
     private final MemotypeSetService memotypeSetService;
     private final MemotypeMapper memotypeMapper;
     private final MemotypeMemetickMapper memotypeMemetickMapper;
-    private final MemetickService memetickService;
     private final OauthData oauthData;
     private final MemetickRepository memetickRepository;
 

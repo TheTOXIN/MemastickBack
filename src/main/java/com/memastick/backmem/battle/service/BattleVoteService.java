@@ -13,7 +13,6 @@ import com.memastick.backmem.battle.repository.BattleRepository;
 import com.memastick.backmem.battle.repository.BattleVoteRepository;
 import com.memastick.backmem.errors.exception.BattleException;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
@@ -35,14 +34,13 @@ public class BattleVoteService {
     private final BattleRepository battleRepository;
     private final BattleMemberRepository battleMemberRepository;
     private final MemetickService memetickService;
-    private final MemetickRepository memetickRepository;
     private final BattleChecker battleCheck;
     private final OauthData oauthData;
 
-    public List<UUID> battleList() { // TODO filter self battles
+    public List<UUID> battleList() {
         Memetick memetick = oauthData.getCurrentMemetick();
 
-        List<UUID> battles = battleRepository.findAllBattleIds(BattleStatus.START);
+        List<UUID> battles = battleRepository.findAvailableBattleIds(BattleStatus.START);
         List<UUID> votes = battleVoteRepository.findAllBattleIds(memetick.getId());
 
         battles.removeAll(votes);
@@ -54,13 +52,10 @@ public class BattleVoteService {
     public BattleResultAPI giveVote(BattleVoteAPI api) {
         Memetick memetick = oauthData.getCurrentMemetick();
         Battle battle = battleRepository.tryFindById(api.getBattleId());
+
+        checkVote(battle, memetick);
+
         BattleMember member = battle.getMember(api.getMemberId());
-
-        //TODO CHECK SELF VOTE
-        //TODO check vote again
-
-        if (!BattleStatus.START.equals(battle.getStatus())) throw new BattleException("BATTLE NOT START");
-        if (!memetickService.haveCookie(memetick)) throw new BattleException("NOT HAVE COOKIE"); // TODO check cookie with cache
         if (member == null) throw new BattleException("MEMBER NOT FOUND");
 
         member.setVotes(member.getVotes() + 1);
@@ -84,5 +79,13 @@ public class BattleVoteService {
             guessed,
             combo
         );
+    }
+
+    private void checkVote(Battle battle, Memetick memetick) {
+        if (!BattleStatus.START.equals(battle.getStatus())) throw new BattleException("BATTLE NOT START");
+        if (!memetickService.haveCookie(memetick)) throw new BattleException("NOT HAVE COOKIE");
+        if (memetick.getId().equals(battle.getDefender().getMemetickId())) throw new BattleException("VOTE TO SELF");
+        if (memetick.getId().equals(battle.getForward().getMemetickId())) throw new BattleException("VOTE TO SELF");
+        if (battleVoteRepository.findByBattleAndMemetick(battle, memetick).isPresent()) throw new BattleException("VOTE EXIST");
     }
 }

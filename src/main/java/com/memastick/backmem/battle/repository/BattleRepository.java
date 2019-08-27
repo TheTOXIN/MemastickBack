@@ -17,8 +17,11 @@ import java.util.UUID;
 @Repository
 public interface BattleRepository extends CrudRepository<Battle, UUID> {
 
-    @Query("SELECT b.id FROM Battle b WHERE b.status = :status")
-    List<UUID> findAllBattleIds(@Param("status") BattleStatus status);
+    @Query(
+        "SELECT b.id FROM Battle b WHERE b.status = :status AND " +
+            "NOT(b.forward.memetickId = :memetickId OR b.defender.memetickId = :memetickId)"
+    )
+    List<UUID> findAvailableBattleIds(@Param("status") BattleStatus status);
 
     @Query(
         "SELECT b FROM Battle b WHERE " +
@@ -42,7 +45,7 @@ public interface BattleRepository extends CrudRepository<Battle, UUID> {
             .orElseThrow(() -> new EntityNotFoundException(Battle.class, "id or memetickId"));
     }
 
-    @EntityGraph("joinedMembers")//TODO NOT WORK WITH MEME AND MEMETICK
+    @EntityGraph("joinedMembers")
     default Battle tryFindById(UUID battleId) {
         return this
             .findById(battleId)
