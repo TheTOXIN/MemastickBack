@@ -4,6 +4,7 @@ import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.battle.entity.BattleMember;
+import com.memastick.backmem.battle.service.BattleRatingService;
 import com.memastick.backmem.battle.service.BattleService;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
@@ -26,6 +27,7 @@ public class BattleChecker {
     private final MemeRepository memeRepository;
     private final NotifyService notifyService;
     private final BattleService battleService;
+    private final BattleRatingService battleRatingService;
 
     @Async
     public void check(Battle battle) {
@@ -49,7 +51,7 @@ public class BattleChecker {
         Memetick memetick = memetickRepository.tryfFndById(member.getMemetickId());
 
         if (isWin) processLeader(memetick, battle.getPvp());
-        else processLooser(member.getMeme());
+        else processLooser(member.getMeme(), memetick, battle.getPvp());
 
         notifyService.sendBATTLECOMPETE(battle, memetick, isWin);
     }
@@ -57,10 +59,12 @@ public class BattleChecker {
     private void processLeader(Memetick memetick, int pvp) {
         int coins = pvp * BattleConst.MEMCOIN_PRESENT;
         coinService.transaction(memetick, coins);
+        battleRatingService.generate(memetick, pvp);
     }
 
-    private void processLooser(Meme meme) {
+    private void processLooser(Meme meme, Memetick memetick, int pvp) {
         meme.setType(MemeType.DEAD);
         memeRepository.save(meme);
+        battleRatingService.generate(memetick, pvp * -1);
     }
 }

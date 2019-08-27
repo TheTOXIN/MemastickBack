@@ -13,5 +13,4 @@ public class MemetickPreviewAPI {
 
     private UUID id;
     private String nick;
-
 }
