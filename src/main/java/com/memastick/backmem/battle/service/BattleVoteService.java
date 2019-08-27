@@ -40,7 +40,7 @@ public class BattleVoteService {
     public List<UUID> battleList() {
         Memetick memetick = oauthData.getCurrentMemetick();
 
-        List<UUID> battles = battleRepository.findAvailableBattleIds(BattleStatus.START);
+        List<UUID> battles = battleRepository.findAvailableBattleIds(BattleStatus.START, memetick.getId());
         List<UUID> votes = battleVoteRepository.findAllBattleIds(memetick.getId());
 
         battles.removeAll(votes);

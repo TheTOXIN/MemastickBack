@@ -21,7 +21,7 @@ public interface BattleRepository extends CrudRepository<Battle, UUID> {
         "SELECT b.id FROM Battle b WHERE b.status = :status AND " +
             "NOT(b.forward.memetickId = :memetickId OR b.defender.memetickId = :memetickId)"
     )
-    List<UUID> findAvailableBattleIds(@Param("status") BattleStatus status);
+    List<UUID> findAvailableBattleIds(@Param("status") BattleStatus status, @Param("memetickId") UUID memetickId);
 
     @Query(
         "SELECT b FROM Battle b WHERE " +

@@ -17,6 +17,7 @@ import com.memastick.backmem.notification.service.NotifyService;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @AllArgsConstructor
@@ -30,6 +31,7 @@ public class BattleChecker {
     private final BattleRatingService battleRatingService;
 
     @Async
+    @Transactional
     public void check(Battle battle) {
         BattleMember forward = battle.getForward();
         BattleMember defender = battle.getDefender();

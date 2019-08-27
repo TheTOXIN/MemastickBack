@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class BattleRatingAPI {
 
     private MemetickPreviewAPI memetick;
-    private boolean isFree;
+    private boolean exist;
     private int position;
     private int score;
 }
