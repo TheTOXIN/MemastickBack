@@ -1,10 +1,12 @@
 package com.memastick.backmem.battle.service;
 
+import com.memastick.backmem.battle.api.BattleHomeAPI;
 import com.memastick.backmem.battle.api.BattlePreviewAPI;
 import com.memastick.backmem.battle.api.BattleViewAPI;
 import com.memastick.backmem.battle.component.BattleMapper;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.battle.entity.Battle;
+import com.memastick.backmem.battle.repository.BattleRatingRepository;
 import com.memastick.backmem.battle.repository.BattleRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.component.OauthData;
@@ -16,7 +18,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,18 +25,28 @@ import java.util.stream.Collectors;
 public class BattleService {
 
     private final BattleRepository battleRepository;
+    private final BattleRatingRepository battleRatingRepository;
     private final BattleMapper battleMapper;
     private final OauthData oauthData;
 
-    public Map<BattleStatus, List<BattleViewAPI>> home() {
+    public BattleHomeAPI home() {
         Memetick memetick = oauthData.getCurrentMemetick();
         List<Battle> battles = battleRepository.findAllByMemetickId(memetick.getId());
 
-        return battles
+        Map<BattleStatus, List<BattleViewAPI>> mapBattles = battles
             .stream()
             .sorted(Comparator.comparing(Battle::getUpdating))
             .map(battleMapper::toView)
             .collect(Collectors.groupingBy(BattleViewAPI::getStatus));
+
+        long countMembers = battleRatingRepository.count();
+        long countBattles = battleRepository.countByStatus(BattleStatus.START).orElse(0L);
+
+        return new BattleHomeAPI(
+            mapBattles,
+            countBattles,
+            countMembers
+        );
     }
 
     public BattleViewAPI view(UUID battleId) {

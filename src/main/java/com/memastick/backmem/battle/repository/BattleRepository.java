@@ -17,6 +17,8 @@ import java.util.UUID;
 @Repository
 public interface BattleRepository extends CrudRepository<Battle, UUID> {
 
+    Optional<Long> countByStatus(BattleStatus status);
+
     @Query(
         "SELECT b.id FROM Battle b WHERE b.status = :status AND " +
             "NOT(b.forward.memetickId = :memetickId OR b.defender.memetickId = :memetickId)"

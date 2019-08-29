@@ -1,15 +1,15 @@
 package com.memastick.backmem.battle.controller;
 
+import com.memastick.backmem.battle.api.BattleHomeAPI;
 import com.memastick.backmem.battle.api.BattlePreviewAPI;
 import com.memastick.backmem.battle.api.BattleViewAPI;
-import com.memastick.backmem.battle.api.BattleVoteAPI;
-import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.battle.service.BattleService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -20,7 +20,7 @@ public class BattleController {
     private final BattleService battleService;
 
     @GetMapping("home")
-    public Map<BattleStatus, List<BattleViewAPI>> home() {
+    public BattleHomeAPI home() {
         return battleService.home();
     }
 
