@@ -7,6 +7,7 @@ import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.battle.entity.BattleMember;
 import com.memastick.backmem.battle.repository.BattleRepository;
+import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.BattleException;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memes.constant.MemeType;
@@ -41,7 +42,7 @@ public class BattleMemberService {
         Memetick defenderMemetick = toMeme.getMemetick();
 
         if (!forwardMemetick.equals(currentMemetick)) throw new BattleException("NOT MY FROM");
-        if (defenderMemetick.equals(currentMemetick)) throw new BattleException("IT MY TO");
+        if (defenderMemetick.equals(currentMemetick)) throw new BattleException(ErrorCode.BATTLE_REQUEST_ME);
 
         Battle battle = new Battle(
             new BattleMember(fromMeme, BattleRole.FORWARD),

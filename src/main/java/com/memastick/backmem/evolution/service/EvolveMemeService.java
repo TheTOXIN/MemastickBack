@@ -7,15 +7,12 @@ import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.main.util.TimeUtil;
-import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memes.service.MemeService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -134,6 +131,7 @@ public class EvolveMemeService {
         );
     }
 
+    //TODO optimize
     public Float readChance(UUID memeId) {
         EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
         Meme meme = evolveMeme.getMeme();

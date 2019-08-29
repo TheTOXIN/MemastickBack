@@ -7,12 +7,10 @@ import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeFilter;
 import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.dto.MemeReadDTO;
-import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memes.service.MemesCreateService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +40,7 @@ public class MemeController {
         @RequestParam(name = "filter", required = false) MemeFilter filter,
         @RequestParam(name = "step", required = false) EvolveStep step,
         @RequestParam(name = "memetick", required = false) UUID memetickId,
-        @PageableDefault(size = 3, sort = {"creating"}) Pageable pageable
+        Pageable pageable
     ) {
         return memeService.pages(
             new MemeReadDTO(filter, step, memetickId),
@@ -55,7 +53,7 @@ public class MemeController {
         @RequestParam(name = "filter", required = false) MemeFilter filter,
         @RequestParam(name = "step", required = false) EvolveStep step,
         @RequestParam(name = "memetick", required = false) UUID memetickId,
-        @PageableDefault(size = 3, sort = {"creating"}) Pageable pageable
+        Pageable pageable
     ) {
         return memeService.read(
             new MemeReadDTO(filter, step, memetickId),

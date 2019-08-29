@@ -23,7 +23,8 @@ public enum ErrorCode {
     MEME_COIN_ENOUGH(HttpStatus.LOCKED),
     MINE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR),
     MINE_END(HttpStatus.UNPROCESSABLE_ENTITY),
-    BATTLE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR);
+    BATTLE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR),
+    BATTLE_REQUEST_ME(HttpStatus.UNPROCESSABLE_ENTITY);
 
     @Getter
     private HttpStatus status;
