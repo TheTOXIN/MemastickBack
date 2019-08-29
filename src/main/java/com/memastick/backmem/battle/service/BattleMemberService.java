@@ -66,6 +66,6 @@ public class BattleMemberService {
         if (BattleStatus.START.equals(status)) battle.setPvp(api.getPvp());
 
         battleService.battleUpdate(status, battle);
-        notifyService.sendBATTLERESPONSE(battle, memetick, battle.getDefender().getMemetickId(), api.isAccept());
+        notifyService.sendBATTLERESPONSE(battle, battle.getForward().getMemetickId(), memetick, api.isAccept());
     }
 }
