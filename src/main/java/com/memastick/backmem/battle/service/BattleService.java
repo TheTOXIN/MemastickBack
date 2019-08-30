@@ -36,7 +36,7 @@ public class BattleService {
         Map<BattleStatus, List<BattleViewAPI>> mapBattles = battles
             .stream()
             .sorted(Comparator.comparing(Battle::getUpdating))
-            .map(battleMapper::toView)
+            .map(battle -> battleMapper.toView(battle, memetick))
             .collect(Collectors.groupingBy(BattleViewAPI::getStatus));
 
         long countMembers = battleRatingRepository.count();
@@ -50,11 +50,12 @@ public class BattleService {
     }
 
     public BattleViewAPI view(UUID battleId) {
+        Memetick memetick = oauthData.getCurrentMemetick();
         return battleMapper.toView(
             battleRepository.tryFindByMemetickAndId(
-                oauthData.getCurrentMemetick(),
+                memetick,
                 battleId
-            )
+            ), memetick
         );
     }
 
