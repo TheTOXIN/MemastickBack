@@ -173,13 +173,13 @@ public class NotifyService {
     }
 
     @Async
-    public void sendBATTLEREQUEST(Battle battle, Memetick from, Memetick to) {
+    public void sendBATTLEREQUEST(Battle battle, Memetick forward, Memetick defender) {
         send(
-            Collections.singletonList(userRepository.findByMemetick(to)),
+            Collections.singletonList(userRepository.findByMemetick(defender)),
             new NotifyDTO(
                 NotifyType.BATTLE_REQUEST,
                 "Вас вызвают на битву",
-                "Меметик - " + from.getNick() + " бросает вам вызов",
+                "Меметик - " + forward.getNick() + " бросает вам вызов",
                 null,
                 LinkConstant.LINK_BATTLE + "/" + battle.getId()
             )
@@ -187,9 +187,9 @@ public class NotifyService {
     }
 
     @Async
-    public void sendBATTLERESPONSE(Battle battle, Memetick defender, UUID memetickId, boolean isAccept) {
+    public void sendBATTLERESPONSE(Battle battle, UUID forwardId, Memetick defender, boolean isAccept) {
         send(
-            Collections.singletonList(userRepository.findByMemetickId(memetickId)),
+            Collections.singletonList(userRepository.findByMemetickId(forwardId)),
             new NotifyDTO(
                 NotifyType.BATTLE_RESPONSE,
                 isAccept ? "Ваш вызов прянили!" : "Ваш вызов отклонили!",

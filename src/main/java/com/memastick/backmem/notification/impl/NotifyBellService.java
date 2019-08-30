@@ -62,6 +62,7 @@ public class NotifyBellService implements NotifySender {
         bellRepository.save(bell);
     }
 
+    //TODO optimize
     public void clear() {
         User user = oauthData.getCurrentUser();
         List<NotifyBell> bells = bellRepository.findAllByUser(user);
