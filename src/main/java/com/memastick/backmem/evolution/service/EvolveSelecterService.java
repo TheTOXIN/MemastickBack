@@ -1,5 +1,6 @@
 package com.memastick.backmem.evolution.service;
 
+import com.memastick.backmem.battle.component.BattleTrigger;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
@@ -28,6 +29,7 @@ public class EvolveSelecterService {
     private final EvolveMemeService evolveMemeService;
     private final NotifyService notifyService;
     private final MemeRepository memeRepository;
+    private final BattleTrigger battleTrigger;
 
     @Scheduled(cron = "0 0 0 * * *", zone = "UTC")
     public void select() {
@@ -58,5 +60,7 @@ public class EvolveSelecterService {
         evolveMemeRepository.saveAll(evolveMemes);
 
         log.info("END SELECT EVOLVE - {}", evolveMemeService.computeEvolution());
+
+        battleTrigger.ratingCheck();
     }
 }

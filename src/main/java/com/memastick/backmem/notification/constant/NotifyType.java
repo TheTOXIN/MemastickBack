@@ -16,8 +16,9 @@ public enum NotifyType {
     MEME_DAY(true, false, false),
     MEME_COIN(false, false, true),
     BATTLE_REQUEST(true, true, true),
-    BATTLE_RESPONSE(true, true, true),
-    BATTLE_COMLETE(true, true, true);
+    BATTLE_RESPONSE(true, false, true),
+    BATTLE_COMPLETE(true, true, true),
+    BATTLE_RATING(true, false, true);
 
     @Getter boolean bell;
     @Getter boolean push;

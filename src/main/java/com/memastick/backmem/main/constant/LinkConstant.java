@@ -17,5 +17,7 @@ public class LinkConstant {
 
     public static final String LINK_MEME = URL + "/memes/share";
 
+    public static final String LINK_MEMOTYPES = URL + "/memotype/collection";
+
     public static final String LINK_ICON = URL + "/assets/images/title-logo.png";
 }

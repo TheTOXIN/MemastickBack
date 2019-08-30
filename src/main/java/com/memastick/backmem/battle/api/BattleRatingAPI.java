@@ -14,4 +14,5 @@ public class BattleRatingAPI {
     private boolean exist;
     private int position;
     private int score;
+    private int days;
 }

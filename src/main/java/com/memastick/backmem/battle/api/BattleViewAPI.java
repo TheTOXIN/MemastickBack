@@ -17,4 +17,6 @@ public class BattleViewAPI {
 
     private BattleMemberViewDTO forward;
     private BattleMemberViewDTO defender;
+
+    private boolean my;
 }

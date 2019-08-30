@@ -54,8 +54,9 @@ public class EvolveNexterService {
         });
 
         evolveMemeRepository.saveAll(evolve);
-        memesCreateService.notification();
 
         log.info("END NEXT EVOLVE - {}", evolveMemeService.computePopulation());
+
+        memesCreateService.notification();
     }
 }

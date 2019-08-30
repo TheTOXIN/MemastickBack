@@ -1,5 +1,6 @@
 package com.memastick.backmem.battle.controller;
 
+import com.memastick.backmem.battle.api.BattleHomeAPI;
 import com.memastick.backmem.battle.api.BattlePreviewAPI;
 import com.memastick.backmem.battle.api.BattleViewAPI;
 import com.memastick.backmem.battle.api.BattleVoteAPI;
@@ -20,7 +21,7 @@ public class BattleController {
     private final BattleService battleService;
 
     @GetMapping("home")
-    public Map<BattleStatus, List<BattleViewAPI>> home() {
+    public BattleHomeAPI home() {
         return battleService.home();
     }
 
