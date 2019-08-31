@@ -1,5 +1,7 @@
 package com.memastick.backmem.memotype.constant;
 
+import com.memastick.backmem.battle.constant.BattleConst;
+import com.memastick.backmem.battle.entity.Battle;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -17,10 +19,10 @@ public enum MemotypeRarity {
     @Getter
     private int lvl;
 
-    public static MemotypeRarity find(int lvl) {
+    public static MemotypeRarity findByPositino(int position) {
         return Arrays
             .stream(MemotypeRarity.values())
-            .filter(e -> e.getLvl() == lvl)
+            .filter(e -> e.getLvl() == BattleConst.RATING_SIZE - position)
             .findFirst()
             .orElse(null);
     }
