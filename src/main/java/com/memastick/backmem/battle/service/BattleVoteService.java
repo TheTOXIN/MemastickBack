@@ -68,7 +68,7 @@ public class BattleVoteService {
 
         boolean guessed = member.equals(battle.getLeader());
 
-        if (guessed) comboCache.merge(memetick.getId(), 1, Math::addExact); else comboCache.put(memetick.getId(), 1);
+        if (guessed) comboCache.merge(memetick.getId(), 1, Math::addExact); else comboCache.put(memetick.getId(), 0);
         int combo = comboCache.getOrDefault(memetick.getId(), 0);
 
         memetickService.addDna(memetick, combo * BattleConst.DNA_VOTE);
