@@ -1,6 +1,6 @@
 package com.memastick.backmem.battle.service;
 
-import com.memastick.backmem.battle.api.BattleHomeAPI;
+import com.memastick.backmem.battle.api.BattleHomeTMP;
 import com.memastick.backmem.battle.api.BattlePreviewAPI;
 import com.memastick.backmem.battle.api.BattleViewAPI;
 import com.memastick.backmem.battle.component.BattleMapper;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,11 +26,11 @@ public class BattleService {
     private final BattleMapper battleMapper;
     private final OauthData oauthData;
 
-    public BattleHomeAPI home() {
+    public BattleHomeTMP home() {
         Memetick memetick = oauthData.getCurrentMemetick();
         List<Battle> battles = battleRepository.findAllByMemetickId(memetick.getId());
 
-        return new BattleHomeAPI(battles
+        return new BattleHomeTMP(battles
             .stream()
             .sorted(Comparator.comparing(Battle::getUpdating))
             .map(b -> battleMapper.toView(b, memetick))
