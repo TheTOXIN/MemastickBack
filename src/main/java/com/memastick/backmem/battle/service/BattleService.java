@@ -54,8 +54,11 @@ public class BattleService {
     }
 
     public void battleUpdate(BattleStatus status, Battle battle) {
+        if (battle.getPvp() == null && BattleStatus.START.equals(status)) return;
+
         battle.setStatus(status);
         battle.setUpdating(ZonedDateTime.now());
+
         battleRepository.save(battle);
     }
 }

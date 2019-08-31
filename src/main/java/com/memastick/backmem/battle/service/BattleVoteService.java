@@ -11,8 +11,10 @@ import com.memastick.backmem.battle.entity.BattleVote;
 import com.memastick.backmem.battle.repository.BattleMemberRepository;
 import com.memastick.backmem.battle.repository.BattleRepository;
 import com.memastick.backmem.battle.repository.BattleVoteRepository;
+import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.BattleException;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
@@ -58,13 +60,16 @@ public class BattleVoteService {
         BattleMember member = battle.getMember(api.getMemberId());
         if (member == null) throw new BattleException("MEMBER NOT FOUND");
 
+        int cookie = memetickService.getCookie(memetick);
+        if (cookie == 0) throw new BattleException(ErrorCode.BATTLE_COOKIE);
+
         member.setVotes(member.getVotes() + 1);
-        memetick.setCookies(memetick.getCookies() - 1);
+        memetick.setCookies(cookie + 1);
 
         boolean guessed = member.equals(battle.getLeader());
 
         if (guessed) comboCache.merge(memetick.getId(), 1, Math::addExact); else comboCache.put(memetick.getId(), 1);
-        int combo = comboCache.getOrDefault(memetick.getId(), 1);
+        int combo = comboCache.getOrDefault(memetick.getId(), 0);
 
         memetickService.addDna(memetick, combo * BattleConst.DNA_VOTE);
 
@@ -83,7 +88,6 @@ public class BattleVoteService {
 
     private void checkVote(Battle battle, Memetick memetick) {
         if (!BattleStatus.START.equals(battle.getStatus())) throw new BattleException("BATTLE NOT START");
-        if (!memetickService.haveCookie(memetick)) throw new BattleException("NOT HAVE COOKIE");
         if (memetick.getId().equals(battle.getDefender().getMemetickId())) throw new BattleException("VOTE TO SELF");
         if (memetick.getId().equals(battle.getForward().getMemetickId())) throw new BattleException("VOTE TO SELF");
         if (battleVoteRepository.findByBattleAndMemetick(battle, memetick).isPresent()) throw new BattleException("VOTE EXIST");

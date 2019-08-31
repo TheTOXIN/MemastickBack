@@ -47,6 +47,7 @@ public class MemetickService {
     }
 
     public void addDna(Memetick memetick, int dna) {
+        if (dna == 0) return;
         notifyService.sendDNA(dna, memetick);
         memetick.setDna(memetick.getDna() + dna);
         memetickRepository.save(memetick);
@@ -84,9 +85,9 @@ public class MemetickService {
         return memetick;
     }
 
-    public boolean haveCookie(Memetick memetick) {
+    public int getCookie(Memetick memetick) {
         return memetickRepository
             .findCookieByMemetickId(memetick.getId())
-            .orElse(0) > 0;
+            .orElse(0);
     }
 }
