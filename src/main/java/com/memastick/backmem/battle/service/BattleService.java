@@ -32,7 +32,7 @@ public class BattleService {
 
         return new BattleHomeTMP(battles
             .stream()
-            .sorted(Comparator.comparing(Battle::getUpdating))
+            .sorted(Comparator.comparing(Battle::getUpdating).reversed())
             .map(b -> battleMapper.toView(b, memetick))
             .collect(Collectors.groupingBy(BattleViewAPI::getStatus)));
     }

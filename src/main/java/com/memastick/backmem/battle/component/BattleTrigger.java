@@ -36,6 +36,8 @@ public class BattleTrigger {
     private final MemotypeMemetickRepository memotypeMemetickRepository;
     private final NotifyService notifyService;
 
+    // TODO CLEAR DATA
+
     @Transactional
     public void ratingCheck() {
         Map<Integer, BattleRating> rating = battleRatingService.getRating();
