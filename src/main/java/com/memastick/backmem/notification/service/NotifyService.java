@@ -4,6 +4,7 @@ import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memotype.entity.Memotype;
 import com.memastick.backmem.notification.constant.NotifyType;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.impl.NotifyBellService;
@@ -205,11 +206,25 @@ public class NotifyService {
         send(
             Collections.singletonList(userRepository.findByMemetick(memetick)),
             new NotifyDTO(
-                NotifyType.BATTLE_COMLETE,
+                NotifyType.BATTLE_COMPLETE,
                 "Битва завершилась!",
                 "Вы " + (isWin ? "проиграли" : "выиграли") + " битву с меметиком: " + memetick.getNick(),
                 null,
                 LinkConstant.LINK_BATTLE + "/" + battle.getId()
+            )
+        );
+    }
+
+    @Async
+    public void sendBATTLERATING(Memetick memetick, Memotype memotype, int position) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            new NotifyDTO(
+                NotifyType.BATTLE_RATING,
+                "Рейтинг битв: " + position + " место",
+                "Вы выиграли мемотип - " + memotype.getTitle() + ", за " + position + " место в рейтинге битв",
+                null,
+                LinkConstant.LINK_MEMOTYPES
             )
         );
     }

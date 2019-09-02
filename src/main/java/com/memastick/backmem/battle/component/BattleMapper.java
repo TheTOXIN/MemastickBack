@@ -21,7 +21,7 @@ public class BattleMapper {
             battle.getPvp(),
             toMemberView(battle.getForward()),
             toMemberView(battle.getDefender()),
-            battle.getForward().getMemetickId().equals(memetick.getId())
+            memetick.getId().equals(battle.getForward().getMemetickId())
         );
     }
 

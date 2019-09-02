@@ -29,6 +29,6 @@ public class ValidationUtil {
     }
 
     public static boolean checkPVP(int pvp) {
-        return pvp >= 0 && pvp <= BattleConst.MAX_PVP;
+        return pvp >= BattleConst.MIN_PVP && pvp <= BattleConst.MAX_PVP;
     }
 }

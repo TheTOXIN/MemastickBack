@@ -1,5 +1,6 @@
 package com.memastick.backmem.user.controller;
 
+import com.memastick.backmem.battle.component.BattleTrigger;
 import com.memastick.backmem.evolution.service.EvolveNexterService;
 import com.memastick.backmem.evolution.service.EvolveSelecterService;
 import com.memastick.backmem.main.api.IdAPI;
@@ -24,8 +25,10 @@ public class AdminController {
     private final EvolveSelecterService evolveSelecterService;
     private final MigrateService migrateService;
 
+    private final BattleTrigger battleTrigger;
+
     @GetMapping("test")
-    public void test() { }
+    public void test() { battleTrigger.ratingCheck();}
 
     @GetMapping("next-evolve")
     public void nextEvolve() {

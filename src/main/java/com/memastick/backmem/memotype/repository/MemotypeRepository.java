@@ -1,17 +1,27 @@
 package com.memastick.backmem.memotype.repository;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import com.memastick.backmem.memotype.entity.Memotype;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Repository
 public interface MemotypeRepository extends CrudRepository<Memotype, UUID> {
+
+    @Query(
+        value = "SELECT * FROM memotype WHERE rarity = :rarity OFFSET floor(random() * :size) LIMIT 1",
+        nativeQuery = true
+    )
+    Optional<Memotype> randomMemotypeByRarity(@Param("rarity") String rarity, @Param("size") long size);
 
     default Memotype tryFindById(UUID memotypeId) {
         return this

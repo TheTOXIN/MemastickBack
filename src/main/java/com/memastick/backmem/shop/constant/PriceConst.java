@@ -3,7 +3,7 @@ package com.memastick.backmem.shop.constant;
 import lombok.Getter;
 
 public enum  PriceConst {
-    COOKIE(10),
+    COOKIE(5),
     ALLOWANCE(1000),
     RESSURECTION(150),
     NICK(500),

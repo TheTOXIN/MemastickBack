@@ -8,7 +8,8 @@ import java.util.Map;
 public class BattleException extends AbstractException {
 
     private final static Map<ErrorCode, String> MESSAGES = Map.of(
-        ErrorCode.BATTLE_REQUEST_ME, "You cant send request to self meme"
+        ErrorCode.BATTLE_REQUEST_ME, "You cant send request to self meme",
+        ErrorCode.BATTLE_COOKIE, "You dont have memetick cookies"
     );
 
     public BattleException(ErrorCode code) {

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -39,6 +40,7 @@ public class Battle extends AbstractEntity {
     private ZonedDateTime updating;
 
     @Column
+    @Min(BattleConst.MIN_PVP)
     @Max(BattleConst.MAX_PVP)
     private Integer pvp;
 
