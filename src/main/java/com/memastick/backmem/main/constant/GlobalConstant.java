@@ -23,6 +23,7 @@ public class GlobalConstant {
     public static final int BLOCK_DFCLT = 1;
     public static final int MAX_NONCE = 100;
     public static final int PICKAXE_HOURS = 1;
+    public static final int AVATAR_CACHE = 24 * 60 * 60;
 
     @Autowired
     public GlobalConstant(
