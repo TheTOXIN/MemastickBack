@@ -7,28 +7,18 @@ import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
 import com.memastick.backmem.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@RequiredArgsConstructor
 public class RegistrationService {
 
     private final UserRepository userRepository;
     private final UserService userService;
     private final InviteCodeService inviteCodeService;
-
-    @Autowired
-    public RegistrationService(
-        UserRepository userRepository,
-        InviteCodeService inviteCodeService,
-        UserService userService
-    ) {
-        this.userRepository = userRepository;
-        this.inviteCodeService = inviteCodeService;
-        this.userService = userService;
-    }
 
     @Transactional
     public SecurityStatus registration(RegistrationAPI request) {

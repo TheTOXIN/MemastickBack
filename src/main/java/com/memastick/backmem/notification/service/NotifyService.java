@@ -11,6 +11,7 @@ import com.memastick.backmem.notification.impl.NotifyBellService;
 import com.memastick.backmem.notification.impl.NotifyPushService;
 import com.memastick.backmem.notification.impl.NotifyWebService;
 import com.memastick.backmem.notification.util.NotifyUtil;
+import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.setting.service.SettingFollowerService;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.user.entity.User;
@@ -225,6 +226,20 @@ public class NotifyService {
                 "Вы выиграли мемотип - " + memotype.getTitle() + ", за " + position + " место в рейтинге битв",
                 null,
                 LinkConstant.LINK_MEMOTYPES
+            )
+        );
+    }
+
+    @Async
+    public void sendNEWUSER(Memetick memetick) {
+        send(
+            Collections.singletonList(userRepository.findByRole(RoleType.ADMIN).get()),
+            new NotifyDTO(
+                NotifyType.NEW_USER,
+                "Новый пользователь!",
+                "Новый меметик - " + memetick.getNick(),
+                null,
+                LinkConstant.LINK_MEMETICK + "/" + memetick.getId()
             )
         );
     }

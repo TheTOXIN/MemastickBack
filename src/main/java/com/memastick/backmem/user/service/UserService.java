@@ -4,6 +4,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.security.constant.RoleType;
@@ -35,6 +36,7 @@ public class UserService {
     private final OauthData oauthData;
     private final MemetickService memetickService;
     private final TokenWalletService walletService;
+    private final NotifyService notifyService;
 
     @Value("${oauth.client}")
     private String oauthClient;
@@ -58,6 +60,8 @@ public class UserService {
 
         userRepository.save(user);
         generateDependencies(user);
+
+        notifyService.sendNEWUSER(memetick);
 
         return user;
     }

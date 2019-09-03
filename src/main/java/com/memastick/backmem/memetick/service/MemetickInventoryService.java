@@ -10,8 +10,6 @@ import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.view.MemetickInventoryView;
 import com.memastick.backmem.security.component.OauthData;
-import com.memastick.backmem.tokens.entity.TokenWallet;
-import com.memastick.backmem.tokens.repository.TokenWalletRepository;
 import com.memastick.backmem.tokens.service.TokenWalletService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Service;
 public class MemetickInventoryService {
 
     private final MemetickInventoryRepository inventoryRepository;
-    private final TokenWalletRepository tokenWalletRepository;
     private final TokenWalletService tokenWalletService;
     private final OauthData oauthData;
     private final EvolveMemeService evolveMemeService;
@@ -61,12 +58,10 @@ public class MemetickInventoryService {
 
     public void generateInventory(Memetick memetick) {
         MemetickInventory inventory = new MemetickInventory();
-        TokenWallet tokenWallet = new TokenWallet();
 
         inventory.setAllowance(false);
         inventory.setMemetick(memetick);
 
-        tokenWalletRepository.save(tokenWallet);
         inventoryRepository.save(inventory);
     }
 }
