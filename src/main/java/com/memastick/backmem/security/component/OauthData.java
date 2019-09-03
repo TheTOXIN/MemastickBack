@@ -1,5 +1,6 @@
 package com.memastick.backmem.security.component;
 
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
@@ -23,9 +24,9 @@ public class OauthData {
     }
 
     public User getCurrentUser() {
-        return userRepository.tryFindByLoginCache(
-            getCurrentDetails().getUsername()
-        );
+        return userRepository
+            .findByLoginCache(getCurrentDetails().getUsername())
+            .orElseThrow(() -> new EntityNotFoundException(User.class, "current username"));
     }
 
     public Memetick getCurrentMemetick() {

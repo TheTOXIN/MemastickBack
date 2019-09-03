@@ -19,14 +19,17 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
-    Optional<User> findByEmail(String email);
-
+    @EntityGraph(value = "joinedMemetick")
     Optional<User> findByRole(RoleType role);
+
+    @EntityGraph(value = "joinedMemetick")
+    Optional<User> findByEmail(String email);
 
     @EntityGraph(value = "joinedMemetick")
     Optional<User> findByLogin(String login);
 
     @Cacheable(cacheNames = "findUserByLogin")
+    @EntityGraph(value = "joinedMemetick")
     @Query("SELECT u FROM User u WHERE u.login = :login")
     Optional<User> findByLoginCache(@Param("login") String login);
 
@@ -41,12 +44,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Cacheable(cacheNames = "findUserByMemetickIn")
     @EntityGraph(value = "joinedMemetick")
     List<User> findByMemetickIn(List<Memetick> memeticks);
-
-    default User tryFindByLoginCache(String login) {
-        return this
-            .findByLoginCache(login)
-            .orElseThrow(() -> new EntityNotFoundException(User.class, "login"));
-    }
 
     default User tryFindByLogin(String login) {
         return this
