@@ -1,6 +1,5 @@
 package com.memastick.backmem.user.service;
 
-import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
@@ -71,15 +70,9 @@ public class UserService {
     }
 
     public void updatePassword(String login, String password) {
-        User user = findByLogin(login);
+        User user = userRepository.tryFindByLogin(login);
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-    }
-
-    public User findByLogin(String login) {
-        Optional<User> byLogin = userRepository.findByLoginWithCache(login);
-        if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
-        return byLogin.get();
     }
 
     public boolean isOnline(Memetick memetick) {

@@ -4,29 +4,44 @@ import com.memastick.backmem.notification.entity.NotifyPush;
 import com.memastick.backmem.notification.impl.NotifyWebService;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
 import com.memastick.backmem.security.api.LogOutAPI;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.memastick.backmem.user.entity.User;
+import com.memastick.backmem.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SecurityService {
 
     private final NotifyPushRepository pushRepository;
     private final NotifyWebService notifyWebService;
+    private final UserRepository userRepository;
+    private final TokenStore tokenStore;
 
-    @Autowired
-    public SecurityService(
-        NotifyPushRepository pushRepository,
-        NotifyWebService notifyWebService
-    ) {
-        this.pushRepository = pushRepository;
-        this.notifyWebService = notifyWebService;
-    }
+    @Value("${oauth.client}")
+    private String oauthClient;
 
     public void logout(LogOutAPI request) {
         Optional<NotifyPush> byToken = pushRepository.findByToken(request.getDeviceToken());
         byToken.ifPresent(pushRepository::delete);
         notifyWebService.remove();
+    }
+
+    public void ban(String login) {
+        User user = userRepository.tryFindByLogin(login);
+        user.setBan(true);
+        userRepository.save(user);
+        clear(user);
+    }
+
+    private void clear(User user) {
+        tokenStore.findTokensByClientIdAndUserName(oauthClient, user.getLogin()).forEach(t -> {
+            tokenStore.removeAccessToken(t);
+            tokenStore.removeRefreshToken(t.getRefreshToken());
+        });
     }
 }

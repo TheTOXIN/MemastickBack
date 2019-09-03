@@ -1,5 +1,6 @@
 package com.memastick.backmem.user.repository;
 
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.user.entity.User;
@@ -27,7 +28,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Cacheable(cacheNames = "findUserByLogin")
     @Query("SELECT u FROM User u WHERE u.login = :login")
-    Optional<User> findByLoginWithCache(@Param("login") String login);
+    Optional<User> findByLoginCache(@Param("login") String login);
 
     @Cacheable(cacheNames = "findUserByMemetickId")
     @EntityGraph(value = "joinedMemetick")
@@ -40,5 +41,17 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Cacheable(cacheNames = "findUserByMemetickIn")
     @EntityGraph(value = "joinedMemetick")
     List<User> findByMemetickIn(List<Memetick> memeticks);
+
+    default User tryFindByLoginCache(String login) {
+        return this
+            .findByLoginCache(login)
+            .orElseThrow(() -> new EntityNotFoundException(User.class, "login"));
+    }
+
+    default User tryFindByLogin(String login) {
+        return this
+            .findByLogin(login)
+            .orElseThrow(() -> new EntityNotFoundException(User.class, "login"));
+    }
 }
 
