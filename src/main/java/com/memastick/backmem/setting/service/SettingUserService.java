@@ -5,37 +5,34 @@ import com.memastick.backmem.setting.api.SettingAPI;
 import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.repository.SettingUserRepository;
 import com.memastick.backmem.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SettingUserService {
 
     private final SettingUserRepository settingUserRepository;
     private final OauthData oauthData;
-
-    @Autowired
-    public SettingUserService(
-        SettingUserRepository settingUserRepository,
-        OauthData oauthData
-    ) {
-        this.settingUserRepository = settingUserRepository;
-        this.oauthData = oauthData;
-    }
 
     public void generateSetting(User user) {
         settingUserRepository.save(new SettingUser(user));
     }
 
     public SettingAPI mySetting() {
-        User user = oauthData.getCurrentUser();
-        return new SettingAPI(pushWork(user));
+        return new SettingAPI(pushWork(
+            oauthData.getCurrentUser()
+        ));
     }
 
     public boolean pushWork(User user) {
-        return settingUserRepository.findByUserId(user.getId()).isPushWork();
+        return settingUserRepository.findPushWorkByUserId(
+            user.getId()
+        );
     }
 
+    @CacheEvict(value = "pushWork", key = "#user.id")
     public void pushSet(User user, boolean value) {
         SettingUser setting = settingUserRepository.findByUserId(user.getId());
         setting.setPushWork(value);
