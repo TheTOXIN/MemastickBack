@@ -43,7 +43,7 @@ public class TokenWalletService {
     }
 
     public void take(TokenType type, Memetick memetick) {
-        TokenWallet tokenWallet = tokenWalletRepository.findByMemetick(memetick);
+        TokenWallet tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
 
         HashMap<TokenType, Integer> wallet = getWallet(tokenWallet);
         Integer count = wallet.get(type);
@@ -57,7 +57,7 @@ public class TokenWalletService {
 
     public HashMap<TokenType, Integer> wallet(Memetick memetick) {
         return getWallet(
-            tokenWalletRepository.findByMemetick(memetick)
+            tokenWalletRepository.findByMemetickId(memetick.getId())
         );
     }
 
@@ -87,7 +87,7 @@ public class TokenWalletService {
 
     public void generateWallet(Memetick memetick) {
         TokenWallet wallet = new TokenWallet();
-        wallet.setMemetick(memetick);
+        wallet.setMemetickId(memetick.getId());
         tokenWalletRepository.save(wallet);
     }
 }

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
 @Table(name = "memetick_inventories")
@@ -17,11 +16,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedInventoryMemetick", includeAllAttributes = true)
 public class MemetickInventory extends AbstractEntity {
 
     @OneToOne
     @JoinColumn(nullable = false, unique = true)
-    private Memetick memetick; // TODO to id
+    private Memetick memetick;
 
     @Column(nullable = false)
     private boolean allowance = false;

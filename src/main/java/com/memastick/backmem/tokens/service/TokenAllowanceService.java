@@ -35,7 +35,7 @@ public class TokenAllowanceService {
         inventory.setAllowance(false);
 
         var allowance = myAllowance(memetick);
-        var tokenWallet = tokenWalletRepository.findByMemetick(memetick);
+        var tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
 
         var wallet = tokenWalletService.getWallet(tokenWallet);
         var setter = tokenWalletService.setWallet();

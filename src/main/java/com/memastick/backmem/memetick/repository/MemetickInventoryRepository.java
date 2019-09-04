@@ -1,9 +1,9 @@
 package com.memastick.backmem.memetick.repository;
 
-import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.view.MemetickInventoryView;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,10 +15,13 @@ import java.util.UUID;
 @Repository
 public interface MemetickInventoryRepository extends CrudRepository<MemetickInventory, UUID> {
 
+    @EntityGraph(value = "joinedInventoryMemetick")
     MemetickInventory findByMemetick(Memetick memetick);
 
+    @EntityGraph(value = "joinedInventoryMemetick")
     List<MemetickInventory> findByAllowanceFalse();
 
+    @EntityGraph(value = "joinedInventoryMemetick")
     List<MemetickInventory> findByCellNotifyFalse();
 
     @Query(

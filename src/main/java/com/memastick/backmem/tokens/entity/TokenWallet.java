@@ -2,14 +2,17 @@ package com.memastick.backmem.tokens.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.main.constant.GlobalConstant;
-import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Max;
+import java.util.UUID;
 
 @Entity
 @Table(name = "token_wallets")
@@ -19,9 +22,9 @@ import javax.validation.constraints.Max;
 @EqualsAndHashCode(callSuper = true)
 public class TokenWallet extends AbstractEntity {
 
-    @OneToOne
-    @JoinColumn(nullable = false, unique = true)
-    private Memetick memetick;
+    @NaturalId
+    @Column(nullable = false, unique = true)
+    private UUID memetickId;
 
     @Max(GlobalConstant.MAX_TOKEN)
     @Column(nullable = false)
