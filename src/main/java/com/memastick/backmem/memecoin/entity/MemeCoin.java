@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,7 +23,6 @@ public class MemeCoin extends AbstractEntity {
     @Column(nullable = false)
     private Long value;
 
-    @NaturalId
     @Column(nullable = false)
     private UUID memetickId;
 
