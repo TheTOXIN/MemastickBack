@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -23,9 +22,8 @@ public class BattleMember extends AbstractEntity {
     @Column(nullable = false)
     private UUID memetickId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private Meme meme;
+    @Column(nullable = false)
+    private UUID memeId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -35,7 +33,7 @@ public class BattleMember extends AbstractEntity {
     private int votes = 0;
 
     public BattleMember(Meme meme, BattleRole role) {
-        this.meme = meme;
+        this.memeId = meme.getId();
         this.memetickId = meme.getMemetick().getId();
         this.role = role;
     }

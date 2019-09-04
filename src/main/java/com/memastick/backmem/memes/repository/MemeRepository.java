@@ -43,6 +43,9 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
     @Query("SELECT MIN(m.chromosomes) FROM Meme m WHERE m.type = :type")
     Optional<Long> minByCromosome(@Param("type") MemeType type);
 
+    @Query("SELECT m.url FROM Meme m WHERE m.id = :id")
+    String findUrlById(@Param("id") UUID id);
+
     @Query(
         nativeQuery = true,
         value = "SELECT * FROM memes m WHERE m.evolution = :evolution ORDER BY m.chromosomes DESC LIMIT 1"

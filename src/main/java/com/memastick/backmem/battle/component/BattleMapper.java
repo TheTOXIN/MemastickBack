@@ -6,6 +6,7 @@ import com.memastick.backmem.battle.dto.BattleMemberPreviewDTO;
 import com.memastick.backmem.battle.dto.BattleMemberViewDTO;
 import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.battle.entity.BattleMember;
+import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class BattleMapper {
+
+    private final MemeRepository memeRepository;
 
     public BattleViewAPI toView(Battle battle, Memetick memetick) {
         return new BattleViewAPI(
@@ -27,10 +30,10 @@ public class BattleMapper {
 
     private BattleMemberViewDTO toMemberView(BattleMember member) {
         return new BattleMemberViewDTO(
-            member.getId(),
-            member.getMeme().getUrl(),
-            member.getMemetickId(),
             member.getRole(),
+            member.getId(),
+            member.getMemetickId(),
+            member.getMemeId(),
             member.getVotes()
         );
     }
@@ -46,7 +49,7 @@ public class BattleMapper {
     private BattleMemberPreviewDTO toMemberPreview(BattleMember member) {
         return new BattleMemberPreviewDTO(
             member.getId(),
-            member.getMeme().getUrl()
+            memeRepository.findUrlById(member.getMemeId())
         );
     }
 }

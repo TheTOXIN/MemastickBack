@@ -33,6 +33,8 @@ public class BattleChecker {
     @Async
     @Transactional
     public void check(Battle battle) {
+        if (!BattleStatus.START.equals(battle.getStatus())) return;
+
         BattleMember forward = battle.getForward();
         BattleMember defender = battle.getDefender();
 
@@ -51,9 +53,10 @@ public class BattleChecker {
         if (member == null) return;
 
         Memetick memetick = memetickRepository.tryfFndById(member.getMemetickId());
+        Meme meme = memeRepository.tryFindById(member.getMemeId());
 
         if (isWin) processLeader(memetick, battle.getPvp());
-        else processLooser(member.getMeme(), memetick, battle.getPvp());
+        else processLooser(meme, memetick, battle.getPvp());
 
         notifyService.sendBATTLECOMPETE(battle, memetick, isWin);
     }

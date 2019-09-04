@@ -31,11 +31,11 @@ public class BattleService {
 
     public BattleHomeAPI home() {
         Memetick memetick = oauthData.getCurrentMemetick();
-        List<Battle> battles = battleRepository.findAllByMemetickId(memetick.getId());
+        List<Battle> battles = battleRepository.findAllByDefenderMemetickId(memetick.getId());
 
         Map<BattleStatus, List<BattleViewAPI>> mapBattles = battles
             .stream()
-            .sorted(Comparator.comparing(Battle::getUpdating))
+            .sorted(Comparator.comparing(Battle::getUpdating).reversed())
             .map(battle -> battleMapper.toView(battle, memetick))
             .collect(Collectors.groupingBy(BattleViewAPI::getStatus));
 

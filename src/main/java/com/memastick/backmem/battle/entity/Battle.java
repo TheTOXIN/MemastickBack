@@ -2,7 +2,6 @@ package com.memastick.backmem.battle.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.battle.constant.BattleConst;
-import com.memastick.backmem.battle.constant.BattleRole;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@NamedEntityGraph(name = "joinedMembers", includeAllAttributes = true)
+@NamedEntityGraph(name = "joinedBattle", includeAllAttributes = true)
 public class Battle extends AbstractEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
