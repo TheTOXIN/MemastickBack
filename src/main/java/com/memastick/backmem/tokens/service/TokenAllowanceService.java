@@ -5,6 +5,7 @@ import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.notification.service.NotifyCountService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TOKEN;
+import static com.memastick.backmem.notification.constant.NotifyCountAction.MIN;
+import static com.memastick.backmem.notification.constant.NotifyCountType.ITEM;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +29,7 @@ public class TokenAllowanceService {
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
     private final MemeCoinService coinService;
+    private final NotifyCountService notifyCountService;
 
     public TokenWalletAPI take() {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -46,6 +50,7 @@ public class TokenAllowanceService {
         inventoryRepository.save(inventory);
         tokenWalletRepository.save(tokenWallet);
 
+        notifyCountService.ping(ITEM, MIN);
         return new TokenWalletAPI(allowance);
     }
 

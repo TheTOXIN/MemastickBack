@@ -1,4 +1,4 @@
-package com.memastick.backmem.main.api;
+package com.memastick.backmem.notification.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

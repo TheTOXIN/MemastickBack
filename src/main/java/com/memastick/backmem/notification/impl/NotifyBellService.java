@@ -6,9 +6,10 @@ import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.entity.NotifyBell;
 import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyBellRepository;
+import com.memastick.backmem.notification.service.NotifyCountService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -17,20 +18,16 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.memastick.backmem.notification.constant.NotifyCountAction.*;
+import static com.memastick.backmem.notification.constant.NotifyCountType.BELL;
+
 @Service
+@RequiredArgsConstructor
 public class NotifyBellService implements NotifySender {
 
     private final NotifyBellRepository bellRepository;
+    private final NotifyCountService notifyCountService;
     private final OauthData oauthData;
-
-    @Autowired
-    public NotifyBellService(
-        NotifyBellRepository bellRepository,
-        OauthData oauthData
-    ) {
-        this.bellRepository = bellRepository;
-        this.oauthData = oauthData;
-    }
 
     @Override
     public void send(List<User> users, NotifyDTO dto) {
@@ -43,6 +40,7 @@ public class NotifyBellService implements NotifySender {
             dto.getText(),
             dto.getEvent()
         ));
+        notifyCountService.ping(BELL, ADD);
     }
 
     public List<NotifyBellAPI> read() {
@@ -60,6 +58,7 @@ public class NotifyBellService implements NotifySender {
         NotifyBell bell = findById(id);
         bell.setRead(true);
         bellRepository.save(bell);
+        notifyCountService.ping(BELL, MIN);
     }
 
     //TODO optimize
@@ -67,6 +66,7 @@ public class NotifyBellService implements NotifySender {
         User user = oauthData.getCurrentUser();
         List<NotifyBell> bells = bellRepository.findAllByUser(user);
         bellRepository.deleteAll(bells);
+        notifyCountService.ping(BELL, REM);
     }
 
     public void clear(UUID id) {

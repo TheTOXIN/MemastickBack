@@ -10,6 +10,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.notification.service.NotifyCountService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TEXT_LEN;
+import static com.memastick.backmem.notification.constant.NotifyCountAction.MIN;
+import static com.memastick.backmem.notification.constant.NotifyCountType.ITEM;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +39,7 @@ public class MemesCreateService {
     private final EvolveMemeService evolveMemeService;
     private final MemetickInventoryRepository inventoryRepository;
     private final MemeCellService memeCellService;
+    private final NotifyCountService notifyCountService;
 
     @Transactional
     public void create(MemeCreateAPI request) {
@@ -51,6 +55,7 @@ public class MemesCreateService {
         memetickService.addDna(memetick, MathUtil.rand(100, 1000));
 
         notifyService.sendCREATING(memetick, meme);
+        notifyCountService.ping(ITEM, MIN);
     }
 
     public void notification() {

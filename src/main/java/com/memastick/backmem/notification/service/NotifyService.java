@@ -16,7 +16,7 @@ import com.memastick.backmem.setting.service.SettingFollowerService;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class NotifyService {
 
     private final NotifyBellService bellService;
@@ -32,21 +33,6 @@ public class NotifyService {
     private final NotifyWebService webService;
     private final UserRepository userRepository;
     private final SettingFollowerService followerService;
-
-    @Autowired
-    public NotifyService(
-        NotifyBellService bellService,
-        NotifyPushService pushService,
-        NotifyWebService webService,
-        UserRepository userRepository,
-        SettingFollowerService followerService
-    ) {
-        this.bellService = bellService;
-        this.pushService = pushService;
-        this.webService = webService;
-        this.userRepository = userRepository;
-        this.followerService = followerService;
-    }
 
     @Async
     public void sendDNA(int dna, Memetick memetick) {
