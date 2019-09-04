@@ -36,7 +36,8 @@ public class MemeLikeService {
     private final MemeRepository memeRepository;
 
     public MemeLikeStateDTO readStateByMeme(Meme meme) {
-        MemeLike memeLike = findByMemeForCurrentUser(meme);
+        Memetick memetick = oauthData.getCurrentMemetick();
+        MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick).orElse(new MemeLike());
 
         return new MemeLikeStateDTO(
             memeLike.isLike(),

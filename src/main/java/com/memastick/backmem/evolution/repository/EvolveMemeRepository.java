@@ -16,10 +16,13 @@ import java.util.UUID;
 @Repository
 public interface EvolveMemeRepository extends JpaRepository<EvolveMeme, UUID> {
 
+    @EntityGraph("joinedMeme")
     List<EvolveMeme> findByStep(EvolveStep step);
 
+    @EntityGraph("joinedMeme")
     List<EvolveMeme> findByStep(EvolveStep step, Pageable pageable);
 
+    @EntityGraph("joinedMeme")
     @Query("SELECT em FROM EvolveMeme em WHERE em.meme.type = com.memastick.backmem.memes.constant.MemeType.SLCT")
     List<EvolveMeme> findAllSelection();
 

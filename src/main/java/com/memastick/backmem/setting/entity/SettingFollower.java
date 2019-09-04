@@ -16,6 +16,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedSettingMemetick", attributeNodes = {@NamedAttributeNode("memetick")})
+@NamedEntityGraph(name = "joinedSettingFollower", attributeNodes = {@NamedAttributeNode("follower")})
 public class SettingFollower extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

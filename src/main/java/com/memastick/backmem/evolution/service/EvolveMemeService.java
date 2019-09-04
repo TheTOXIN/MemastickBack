@@ -10,7 +10,6 @@ import com.memastick.backmem.main.util.TimeUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
-import com.memastick.backmem.memes.service.MemeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +26,6 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class EvolveMemeService {
 
     private final EvolveMemeRepository evolveMemeRepository;
-    private final MemeService memeService;
     private final MemeRepository memeRepository;
 
     public void startEvolve(Meme meme) {

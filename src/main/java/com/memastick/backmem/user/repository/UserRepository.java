@@ -19,6 +19,10 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
+    @Override
+    @EntityGraph(value = "joinedMemetick")
+    List<User> findAll();
+
     @EntityGraph(value = "joinedMemetick")
     Optional<User> findByRole(RoleType role);
 

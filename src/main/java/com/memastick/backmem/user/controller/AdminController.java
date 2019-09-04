@@ -18,8 +18,10 @@ public class AdminController {
     private final EvolveSelecterService evolveSelecterService;
     private final MigrateService migrateService;
 
-    @GetMapping("test")
-    public void test() { }
+    @GetMapping("test}")
+    public void test() {
+
+    }
 
     @GetMapping("next-evolve")
     public void nextEvolve() {
