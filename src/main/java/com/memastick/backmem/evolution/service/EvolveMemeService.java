@@ -129,7 +129,6 @@ public class EvolveMemeService {
         );
     }
 
-    //TODO optimize
     public Float readChance(UUID memeId) {
         EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
         Meme meme = evolveMeme.getMeme();

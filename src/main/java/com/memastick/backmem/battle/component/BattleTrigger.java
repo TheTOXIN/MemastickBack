@@ -3,10 +3,7 @@ package com.memastick.backmem.battle.component;
 import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.entity.BattleRating;
 import com.memastick.backmem.battle.repository.BattleRatingRepository;
-import com.memastick.backmem.battle.repository.BattleRepository;
 import com.memastick.backmem.battle.service.BattleRatingService;
-import com.memastick.backmem.battle.service.BattleService;
-import com.memastick.backmem.main.util.JpaUtil;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import com.memastick.backmem.memotype.entity.Memotype;
@@ -22,9 +19,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Component
 @AllArgsConstructor
@@ -35,8 +29,6 @@ public class BattleTrigger {
     private final MemotypeRepository memotypeRepository;
     private final MemotypeMemetickRepository memotypeMemetickRepository;
     private final NotifyService notifyService;
-
-    // TODO CLEAR DATA
 
     @Transactional
     public void ratingCheck() {

@@ -11,7 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import java.time.LocalDateTime;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_CHROMOSOME;
+
 
 @Entity
 @Table(
