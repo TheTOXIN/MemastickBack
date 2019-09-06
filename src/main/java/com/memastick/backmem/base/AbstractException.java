@@ -1,4 +1,4 @@
-package com.memastick.backmem.base.entity;
+package com.memastick.backmem.base;
 
 import com.memastick.backmem.errors.api.ResponseErrorAPI;
 import com.memastick.backmem.errors.consts.ErrorCode;
@@ -23,5 +23,4 @@ public abstract class AbstractException extends RuntimeException {
     public AbstractException(ErrorCode code) {
         response.setCode(code);
     }
-
 }

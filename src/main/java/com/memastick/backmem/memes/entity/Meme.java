@@ -1,7 +1,6 @@
 package com.memastick.backmem.memes.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
-import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.constant.MemeType;
@@ -15,6 +14,8 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 
 @Entity
 @Table(name = "memes")
@@ -30,23 +31,26 @@ public class Meme extends AbstractEntity {
     @Column(length = 512, nullable = false, unique = true)
     private String url;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Memetick memetick;
-
-    @Column(nullable = false)
-    private ZonedDateTime creating;
+    @Column
+    @Length(max = MAX_TEXT_LEN)
+    private String text;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 32)
     private MemeType type;
 
     @Column(nullable = false)
+    private ZonedDateTime creating;
+
+    @Column(nullable = false)
+    private int likes = 0;
+
+    @Column(nullable = false)
     private int chromosomes = 0;
 
-    @Column
-    @Length(max = GlobalConstant.MAX_TEXT_LEN)
-    private String text;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Memetick memetick;
 
     // -=[EPI]=-
 

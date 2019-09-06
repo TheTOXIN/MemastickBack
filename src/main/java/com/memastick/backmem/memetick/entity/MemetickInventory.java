@@ -1,8 +1,7 @@
 package com.memastick.backmem.memetick.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.main.constant.TimeConstant;
-import com.memastick.backmem.tokens.entity.TokenWallet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,15 +16,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedInventoryMemetick", includeAllAttributes = true)
 public class MemetickInventory extends AbstractEntity {
 
     @OneToOne
     @JoinColumn(nullable = false, unique = true)
     private Memetick memetick;
-
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private TokenWallet tokenWallet;
 
     @Column(nullable = false)
     private boolean allowance = false;

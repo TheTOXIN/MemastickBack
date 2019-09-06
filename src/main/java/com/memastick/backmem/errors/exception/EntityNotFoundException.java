@@ -1,7 +1,7 @@
 package com.memastick.backmem.errors.exception;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
-import com.memastick.backmem.base.entity.AbstractException;
+import com.memastick.backmem.base.AbstractEntity;
+import com.memastick.backmem.base.AbstractException;
 import com.memastick.backmem.errors.consts.ErrorCode;
 
 public class EntityNotFoundException extends AbstractException {

@@ -6,14 +6,12 @@ import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.dto.EPI;
-import com.memastick.backmem.memecoin.service.MemeCoinService;
+import com.memastick.backmem.main.util.TimeUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
-import com.memastick.backmem.memes.service.MemeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -24,25 +22,11 @@ import java.util.UUID;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
+@AllArgsConstructor
 public class EvolveMemeService {
 
     private final EvolveMemeRepository evolveMemeRepository;
-    private final MemeService memeService;
     private final MemeRepository memeRepository;
-    private final MemeCoinService coinService;
-
-    @Autowired
-    public EvolveMemeService(
-        EvolveMemeRepository evolveMemeRepository,
-        MemeService memeService,
-        MemeRepository memeRepository,
-        MemeCoinService coinService
-    ) {
-        this.evolveMemeRepository = evolveMemeRepository;
-        this.memeService = memeService;
-        this.memeRepository = memeRepository;
-        this.coinService = coinService;
-    }
 
     public void startEvolve(Meme meme) {
         evolveMemeRepository.save(
@@ -87,6 +71,10 @@ public class EvolveMemeService {
         long max = memeRepository.maxByCromosome(MemeType.SLCT).orElse(0L);
         long min = memeRepository.minByCromosome(MemeType.SLCT).orElse(0L);
 
+        return computeChance(meme, max, min);
+    }
+
+    public float computeChance(Meme meme, long max, long min) {
         float onePercent = 100f / (max - min);
         float chance = (meme.getChromosomes() - min) * onePercent;
 
@@ -97,12 +85,10 @@ public class EvolveMemeService {
     }
 
     public LocalTime computeSelectTimer() {
-        LocalTime now = LocalTime.now();
-
-        return LocalTime.MIDNIGHT
-            .minusHours(now.getHour())
-            .minusMinutes(now.getMinute())
-            .minusSeconds(now.getSecond());
+        return TimeUtil.minusTime(
+            LocalTime.MIDNIGHT,
+            LocalTime.now()
+        );
     }
 
     public LocalTime computeNextTimer() {
@@ -113,15 +99,21 @@ public class EvolveMemeService {
             .withMinute(0)
             .withSecond(0);
 
-        return next
-            .minusHours(now.getHour())
-            .minusMinutes(now.getMinute())
-            .minusSeconds(now.getSecond());
+        return TimeUtil.minusTime(next, now);
+    }
+
+    public EvolveStep computeStep(Meme meme) {
+        long currentPop = computePopulation();
+        long memePop = meme.getPopulation();
+
+        int step = (int) (currentPop - memePop);
+
+        return EvolveStep.find(step);
     }
 
     public EvolveMemeAPI readByMeme(UUID memeId) {
-        Meme meme = memeService.findById(memeId);
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
+        Meme meme = evolveMeme.getMeme();
 
         return new EvolveMemeAPI(
             meme.getId(),
@@ -138,24 +130,12 @@ public class EvolveMemeService {
     }
 
     public Float readChance(UUID memeId) {
-        Meme meme = memeService.findById(memeId);
-        if (!meme.getType().equals(MemeType.SLCT)) return null;
-
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
-        if (evolveMeme.isImmunity()) return 100F;
-
-        return computeChance(meme);
-    }
-
-    @Transactional
-    public void resurrectMeme(UUID memeId) {
         EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
         Meme meme = evolveMeme.getMeme();
 
-        if (!MemeType.DEAD.equals(meme.getType())) return;
-        coinService.transaction(meme.getMemetick(), -150);
+        if (!meme.getType().equals(MemeType.SLCT)) return null;
+        if (evolveMeme.isImmunity()) return 100F;
 
-        meme.setType(MemeType.SLCT);
-        memeRepository.save(meme);
+        return computeChance(meme);
     }
 }

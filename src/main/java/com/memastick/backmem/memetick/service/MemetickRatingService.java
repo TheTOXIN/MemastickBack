@@ -1,6 +1,6 @@
 package com.memastick.backmem.memetick.service;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.api.MemetickRatingAPI;

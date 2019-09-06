@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.repository;
 
+import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -22,12 +23,6 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     Optional<Long> countByEvolutionAndPopulation(long evolution, long population);
 
-    @Query("SELECT MAX(m.chromosomes) FROM Meme m WHERE m.type = :type")
-    Optional<Long> maxByCromosome(@Param("type") MemeType type);
-
-    @Query("SELECT MIN(m.chromosomes) FROM Meme m WHERE m.type = :type")
-    Optional<Long> minByCromosome(@Param("type") MemeType type);
-
     @Query("SELECT SUM(m.chromosomes) FROM Meme m WHERE m.memetick.id = :memetickId")
     Optional<Long> sumChromosomeByMemetickId(@Param("memetickId") UUID memetickId);
 
@@ -40,9 +35,26 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     List<Meme> findByMemetick(Memetick memetick, Pageable pageable);
 
+    List<Meme> findByTypeAndMemetick(MemeType type, Memetick memetick, Pageable pageable);
+
+    @Query("SELECT MAX(m.chromosomes) FROM Meme m WHERE m.type = :type")
+    Optional<Long> maxByCromosome(@Param("type") MemeType type);
+
+    @Query("SELECT MIN(m.chromosomes) FROM Meme m WHERE m.type = :type")
+    Optional<Long> minByCromosome(@Param("type") MemeType type);
+
+    @Query("SELECT m.url FROM Meme m WHERE m.id = :id")
+    String findUrlById(@Param("id") UUID id);
+
     @Query(
         nativeQuery = true,
         value = "SELECT * FROM memes m WHERE m.evolution = :evolution ORDER BY m.chromosomes DESC LIMIT 1"
     )
     Meme findSuperMeme(@Param("evolution") long evolution);
+
+    default Meme tryFindById(UUID memeId) {
+        return this
+            .findById(memeId)
+            .orElseThrow(() -> new EntityNotFoundException(Meme.class, "id"));
+    }
 }

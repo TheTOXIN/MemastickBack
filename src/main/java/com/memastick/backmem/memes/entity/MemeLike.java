@@ -1,6 +1,6 @@
 package com.memastick.backmem.memes.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memetick.entity.Memetick;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +11,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import java.time.LocalDateTime;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_CHROMOSOME;
+
 
 @Entity
 @Table(
@@ -24,11 +25,11 @@ import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
 @EqualsAndHashCode(callSuper = true)
 public class MemeLike extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Meme meme;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Memetick memetick;
 
@@ -41,5 +42,4 @@ public class MemeLike extends AbstractEntity {
 
     @Column
     private LocalDateTime likeTime;
-
 }

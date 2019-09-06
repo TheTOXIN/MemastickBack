@@ -7,8 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
+
+import static com.memastick.backmem.main.constant.GlobalConstant.AVATAR_CACHE;
 
 @RestController
 @RequestMapping("memetick-avatars")
@@ -27,7 +30,14 @@ public class MemetickAvatarController {
         value = "/download/{id}",
         produces = MediaType.IMAGE_JPEG_VALUE
     )
-    public byte[] downloadAvatar(@PathVariable("id") UUID id) {
+    public byte[] downloadAvatar(
+        @PathVariable("id") UUID id,
+        HttpServletResponse httpServletResponse
+    ) {
+        httpServletResponse.setHeader(
+            "Cache-Control",
+            "no-transform, public, max-age=" + (AVATAR_CACHE)
+        );
         return memetickAvatarService.download(id);
     }
 

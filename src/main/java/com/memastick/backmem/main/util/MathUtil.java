@@ -13,4 +13,8 @@ public class MathUtil {
     public static boolean randBool() {
         return rand(0, 1) == 0;
     }
+
+    public static int absents(int a, int b) {
+        return Math.abs(a - b);
+    }
 }

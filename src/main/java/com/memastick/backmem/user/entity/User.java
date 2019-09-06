@@ -1,6 +1,6 @@
 package com.memastick.backmem.user.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.constant.RoleType;
 import lombok.AllArgsConstructor;
@@ -17,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedMemetick", includeAllAttributes = true)
 public class User extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
@@ -36,5 +37,7 @@ public class User extends AbstractEntity {
     @JoinColumn(nullable = false)
     private Memetick memetick;
 
+    @Column(nullable = false)
+    private boolean ban = false;
 }
 

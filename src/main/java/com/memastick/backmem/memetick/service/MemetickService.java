@@ -1,10 +1,10 @@
 package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.errors.consts.ErrorCode;
-import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.errors.exception.SettingException;
 import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.util.ValidationUtil;
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -14,15 +14,17 @@ import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.repository.SettingUserRepository;
+import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class MemetickService {
 
     private final NotifyService notifyService;
@@ -30,21 +32,7 @@ public class MemetickService {
     private final OauthData oauthData;
     private final MemetickMapper memetickMapper;
     private final SettingUserRepository settingUserRepository;
-
-    @Autowired
-    public MemetickService(
-        MemetickRepository memetickRepository,
-        OauthData oauthData,
-        MemetickMapper memetickMapper,
-        NotifyService notifyService,
-        SettingUserRepository settingUserRepository
-    ) {
-        this.memetickRepository = memetickRepository;
-        this.oauthData = oauthData;
-        this.memetickMapper = memetickMapper;
-        this.notifyService = notifyService;
-        this.settingUserRepository = settingUserRepository;
-    }
+    private final MemeCoinService coinService;
 
     public MemetickAPI viewByMe() {
         return memetickMapper.toMemetickAPI(
@@ -54,11 +42,12 @@ public class MemetickService {
 
     public MemetickAPI viewById(UUID id) {
         return memetickMapper.toMemetickAPI(
-            this.findById(id)
+            memetickRepository.tryfFndById(id)
         );
     }
 
     public void addDna(Memetick memetick, int dna) {
+        if (dna == 0) return;
         notifyService.sendDNA(dna, memetick);
         memetick.setDna(memetick.getDna() + dna);
         memetickRepository.save(memetick);
@@ -66,12 +55,17 @@ public class MemetickService {
 
     public void changeNick(ChangeNickAPI request) {
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
+        if (memetickRepository.findByNick(request.getNick()).isPresent()) throw new ValidationException(ErrorCode.EXIST_NICK);
 
         User user = oauthData.getCurrentUser();
-        SettingUser setting = settingUserRepository.findByUser(user);
+        SettingUser setting = settingUserRepository.findByUserId(user.getId());
         Memetick memetick = user.getMemetick();
 
-        if (setting.getNickChanged().plusWeeks(1).isAfter(ZonedDateTime.now())) throw new SettingException(ErrorCode.EXPIRE_NICK);
+        if (request.isForce()) {
+            coinService.transaction(memetick, PriceConst.NICK.getValue());
+        } else if (setting.getNickChanged().getMonth().equals(ZonedDateTime.now().getMonth())) {
+            throw new SettingException(ErrorCode.EXPIRE_NICK);
+        }
 
         request.setNick(request.getNick().replaceAll("\\s", ""));
         memetick.setNick(request.getNick());
@@ -79,12 +73,6 @@ public class MemetickService {
 
         settingUserRepository.save(setting);
         memetickRepository.save(memetick);
-    }
-
-    public Memetick findById(UUID id) {
-        Optional<Memetick> byId = memetickRepository.findById(id);
-        if (byId.isEmpty()) throw new EntityNotFoundException(Memetick.class, "id");
-        return byId.get();
     }
 
     public Memetick generateMemetick(String nick) {
@@ -95,5 +83,11 @@ public class MemetickService {
         memetickRepository.save(memetick);
 
         return memetick;
+    }
+
+    public int getCookie(Memetick memetick) {
+        return memetickRepository
+            .findCookieByMemetickId(memetick.getId())
+            .orElse(0);
     }
 }

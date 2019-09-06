@@ -1,17 +1,14 @@
 package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.errors.exception.TokenWalletException;
-import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.entity.MemetickInventory;
-import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
-import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.entity.TokenWallet;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -20,25 +17,12 @@ import java.util.function.BiConsumer;
 
 
 @Service
+@AllArgsConstructor
 public class TokenWalletService {
 
     private final OauthData oauthData;
-    private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
-    private final MemetickService memetickService;
-
-    @Autowired
-    public TokenWalletService(
-        OauthData oauthData,
-        MemetickInventoryRepository inventoryRepository,
-        TokenWalletRepository tokenWalletRepository,
-        MemetickService memetickService
-    ) {
-        this.oauthData = oauthData;
-        this.inventoryRepository = inventoryRepository;
-        this.tokenWalletRepository = tokenWalletRepository;
-        this.memetickService = memetickService;
-    }
+    private final MemetickRepository memetickRepository;
 
     public void have(TokenType type) {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -50,24 +34,16 @@ public class TokenWalletService {
         if (wallet.get(type) <= 0) throw new TokenWalletException();
     }
 
-    public TokenWalletAPI read() {
-        Memetick currentMemetick = oauthData.getCurrentMemetick();
-        return read(currentMemetick);
-    }
-
     public TokenWalletAPI read(UUID memetickId) {
-        Memetick memetick = memetickService.findById(memetickId);
-        return read(memetick);
+        return read(memetickRepository.tryfFndById(memetickId));
     }
 
     public TokenWalletAPI read(Memetick memetick) {
-        HashMap<TokenType, Integer> wallet = wallet(memetick);
-        return new TokenWalletAPI(wallet);
+        return new TokenWalletAPI(wallet(memetick));
     }
 
     public void take(TokenType type, Memetick memetick) {
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
-        TokenWallet tokenWallet = inventory.getTokenWallet();
+        TokenWallet tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
 
         HashMap<TokenType, Integer> wallet = getWallet(tokenWallet);
         Integer count = wallet.get(type);
@@ -80,10 +56,9 @@ public class TokenWalletService {
     }
 
     public HashMap<TokenType, Integer> wallet(Memetick memetick) {
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
-        TokenWallet tokenWallet = inventory.getTokenWallet();
-
-        return getWallet(tokenWallet);
+        return getWallet(
+            tokenWalletRepository.findByMemetickId(memetick.getId())
+        );
     }
 
     public HashMap<TokenType, Integer> getWallet(TokenWallet tokenWallet) {
@@ -108,5 +83,11 @@ public class TokenWalletService {
         setter.put(TokenType.ANTIBIOTIC, TokenWallet::setAntibiotic);
 
         return setter;
+    }
+
+    public void generateWallet(Memetick memetick) {
+        TokenWallet wallet = new TokenWallet();
+        wallet.setMemetickId(memetick.getId());
+        tokenWalletRepository.save(wallet);
     }
 }

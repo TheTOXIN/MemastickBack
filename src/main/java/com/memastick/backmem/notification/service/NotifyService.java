@@ -1,15 +1,17 @@
 package com.memastick.backmem.notification.service;
 
+import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.main.constant.LinkConstant;
-import com.memastick.backmem.memecoin.entity.MemeCoin;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memotype.entity.Memotype;
 import com.memastick.backmem.notification.constant.NotifyType;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.impl.NotifyBellService;
 import com.memastick.backmem.notification.impl.NotifyPushService;
 import com.memastick.backmem.notification.impl.NotifyWebService;
 import com.memastick.backmem.notification.util.NotifyUtil;
+import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.setting.service.SettingFollowerService;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.user.entity.User;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class NotifyService {
@@ -167,6 +170,76 @@ public class NotifyService {
                 "Траназакция мемкойнов на " + value,
                 value > 0 ? ("+" + value) : String.valueOf(value),
                 LinkConstant.LINK_MEMECOINS
+            )
+        );
+    }
+
+    @Async
+    public void sendBATTLEREQUEST(Battle battle, Memetick forward, Memetick defender) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(defender)),
+            new NotifyDTO(
+                NotifyType.BATTLE_REQUEST,
+                "Вас вызвают на битву",
+                "Меметик - " + forward.getNick() + " бросает вам вызов",
+                null,
+                LinkConstant.LINK_BATTLE + "/" + battle.getId()
+            )
+        );
+    }
+
+    @Async
+    public void sendBATTLERESPONSE(Battle battle, UUID forwardId, Memetick defender, boolean isAccept) {
+        send(
+            Collections.singletonList(userRepository.findByMemetickId(forwardId)),
+            new NotifyDTO(
+                NotifyType.BATTLE_RESPONSE,
+                isAccept ? "Ваш вызов прянили!" : "Ваш вызов отклонили!",
+                "Меметик - " + defender.getNick() + (isAccept ? " ПРИНЯЛ " : " ОТКЛОНИЛ ") + "ваш вызов",
+                null,
+                LinkConstant.LINK_BATTLE + "/" + battle.getId()
+            )
+        );
+    }
+
+    @Async
+    public void sendBATTLECOMPETE(Battle battle, Memetick memetick, boolean isWin) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            new NotifyDTO(
+                NotifyType.BATTLE_COMPLETE,
+                "Битва завершилась!",
+                "Вы " + (isWin ? "проиграли" : "выиграли") + " битву с меметиком: " + memetick.getNick(),
+                null,
+                LinkConstant.LINK_BATTLE + "/" + battle.getId()
+            )
+        );
+    }
+
+    @Async
+    public void sendBATTLERATING(Memetick memetick, Memotype memotype, int position) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            new NotifyDTO(
+                NotifyType.BATTLE_RATING,
+                "Рейтинг битв: " + position + " место",
+                "Вы выиграли мемотип - " + memotype.getTitle() + ", за " + position + " место в рейтинге битв",
+                null,
+                LinkConstant.LINK_MEMOTYPES
+            )
+        );
+    }
+
+    @Async
+    public void sendNEWUSER(Memetick memetick) {
+        send(
+            Collections.singletonList(userRepository.findByRole(RoleType.ADMIN).get()),
+            new NotifyDTO(
+                NotifyType.NEW_USER,
+                "Новый пользователь!",
+                "Новый меметик - " + memetick.getNick(),
+                null,
+                LinkConstant.LINK_MEMETICK + "/" + memetick.getId()
             )
         );
     }

@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.dto;
 
 import com.memastick.backmem.evolution.constant.EvolveStep;
+import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.constant.MemeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,9 +18,7 @@ public class MemeAPI {
     private String url;
     private String text;
     private MemeType type;
+    private int likes;
     private int chromosomes;
-    private long indexer;
-
-    private EvolveStep step;
-
+    private EPI epi;
 }

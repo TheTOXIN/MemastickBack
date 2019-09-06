@@ -9,4 +9,5 @@ import java.util.UUID;
 @Repository
 public interface TokenWalletRepository extends CrudRepository<TokenWallet, UUID> {
 
+    TokenWallet findByMemetickId(UUID memetickId);
 }

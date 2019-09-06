@@ -1,6 +1,6 @@
 package com.memastick.backmem.setting.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
@@ -16,13 +16,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedSettingMemetick", attributeNodes = {@NamedAttributeNode("memetick")})
+@NamedEntityGraph(name = "joinedSettingFollower", attributeNodes = {@NamedAttributeNode("follower")})
 public class SettingFollower extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Memetick memetick;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User follower;
 }

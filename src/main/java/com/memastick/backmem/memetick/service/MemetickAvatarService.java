@@ -115,7 +115,7 @@ public class MemetickAvatarService {
         try {
             MemetickAvatar avatar = new MemetickAvatar();
 
-            avatar.setMemetick(memetick);
+            avatar.setMemetickId(memetick.getId());
             avatar.setAvatar(IOUtils.toByteArray(defaultAvatar.getInputStream()));
 
             memetickAvatarRepository.save(avatar);

@@ -34,15 +34,11 @@ public class NotifyBellService implements NotifySender {
 
     @Override
     public void send(List<User> users, NotifyDTO dto) {
-        users.forEach(user -> send(dto, user));
-    }
-
-    public void send(NotifyDTO dto, User user) {
-        bellRepository.save(new NotifyBell(
-            user,
-            dto.getText(),
-            dto.getEvent()
-        ));
+        bellRepository.saveAll(users
+            .stream()
+            .map(u -> new NotifyBell(u, dto.getText(), dto.getEvent()))
+            .collect(Collectors.toList())
+        );
     }
 
     public List<NotifyBellAPI> read() {

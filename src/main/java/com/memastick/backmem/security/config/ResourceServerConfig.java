@@ -23,8 +23,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .mvcMatchers("/test").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/security/ban/**").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/memotype/create").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/memotype-set/create").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/meme-coins/transaction/**").hasAuthority(RoleType.ADMIN.name())
-            .mvcMatchers("/admin-translate").hasAuthority(RoleType.ADMIN.name())
+            .mvcMatchers("/translator/admin").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/next-evolve").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/select-evolve").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/send-allowance").hasAuthority(RoleType.ADMIN.name())

@@ -1,18 +1,19 @@
 package com.memastick.backmem.user.service;
 
-import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.security.constant.RoleType;
 import com.memastick.backmem.setting.service.SettingUserService;
+import com.memastick.backmem.tokens.service.TokenWalletService;
 import com.memastick.backmem.user.api.MeAPI;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -33,30 +35,11 @@ public class UserService {
     private final TokenStore tokenStore;
     private final OauthData oauthData;
     private final MemetickService memetickService;
+    private final TokenWalletService walletService;
+    private final NotifyService notifyService;
 
     @Value("${oauth.client}")
     private String oauthClient;
-
-    @Autowired
-    public UserService(
-        UserRepository userRepository,
-        PasswordEncoder passwordEncoder,
-        MemetickInventoryService inventoryService,
-        MemetickAvatarService avatarService,
-        SettingUserService settingService,
-        TokenStore tokenStore,
-        OauthData oauthData,
-        MemetickService memetickService
-    ) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.inventoryService = inventoryService;
-        this.avatarService = avatarService;
-        this.settingService = settingService;
-        this.tokenStore = tokenStore;
-        this.oauthData = oauthData;
-        this.memetickService = memetickService;
-    }
 
     public User findAdmin() {
         Optional<User> byRole = userRepository.findByRole(RoleType.ADMIN);
@@ -66,6 +49,7 @@ public class UserService {
     @Transactional
     public User generateUser(RegistrationAPI request, String nick) {
         User user = new User();
+
         Memetick memetick = memetickService.generateMemetick(nick);
 
         user.setEmail(request.getEmail());
@@ -75,24 +59,24 @@ public class UserService {
         user.setMemetick(memetick);
 
         userRepository.save(user);
+        generateDependencies(user);
 
-        avatarService.generateAvatar(memetick);
-        inventoryService.generateInventory(memetick);
-        settingService.generateSetting(user);
+        notifyService.sendNEWUSER(memetick);
 
         return user;
     }
 
-    public void updatePassword(String login, String password) {
-        User user = findByLogin(login);
-        user.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user);
+    public void generateDependencies(User user) {
+        settingService.generateSetting(user);
+        avatarService.generateAvatar(user.getMemetick());
+        walletService.generateWallet(user.getMemetick());
+        inventoryService.generateInventory(user.getMemetick());
     }
 
-    public User findByLogin(String login) {
-        Optional<User> byLogin = userRepository.findByLoginWithCache(login);
-        if (byLogin.isEmpty()) throw new EntityNotFoundException(User.class, "login");
-        return byLogin.get();
+    public void updatePassword(String login, String password) {
+        User user = userRepository.tryFindByLogin(login);
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
     }
 
     public boolean isOnline(Memetick memetick) {

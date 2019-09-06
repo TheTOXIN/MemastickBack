@@ -1,6 +1,6 @@
 package com.memastick.backmem.evolution.entity;
 
-import com.memastick.backmem.base.entity.AbstractEntity;
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.memes.entity.Meme;
 import lombok.AllArgsConstructor;
@@ -17,6 +17,7 @@ import javax.validation.constraints.Max;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedMeme", includeAllAttributes = true)
 public class EvolveMeme extends AbstractEntity {
 
     @OneToOne(cascade = CascadeType.ALL)

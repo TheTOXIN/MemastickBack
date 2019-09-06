@@ -1,40 +1,31 @@
 package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.main.util.MathUtil;
+import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.security.component.OauthData;
+import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TOKEN;
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_TOKEN;
 
 @Service
+@AllArgsConstructor
 public class TokenAllowanceService {
 
     private final OauthData oauthData;
     private final TokenWalletService tokenWalletService;
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
-
-    @Autowired
-    public TokenAllowanceService(
-        OauthData oauthData,
-        TokenWalletService tokenWalletService,
-        MemetickInventoryRepository inventoryRepository,
-        TokenWalletRepository tokenWalletRepository
-    ) {
-        this.oauthData = oauthData;
-        this.tokenWalletService = tokenWalletService;
-        this.inventoryRepository = inventoryRepository;
-        this.tokenWalletRepository = tokenWalletRepository;
-    }
+    private final MemeCoinService coinService;
 
     public TokenWalletAPI take() {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -43,8 +34,8 @@ public class TokenAllowanceService {
         if (!inventory.isAllowance()) return new TokenWalletAPI(emptyAllowance());
         inventory.setAllowance(false);
 
-        var tokenWallet = inventory.getTokenWallet();
         var allowance = myAllowance(memetick);
+        var tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
 
         var wallet = tokenWalletService.getWallet(tokenWallet);
         var setter = tokenWalletService.setWallet();
@@ -52,19 +43,29 @@ public class TokenAllowanceService {
         allowance.forEach((type, count) -> wallet.merge(type, count, (a, b) -> Math.min(a + b, MAX_TOKEN)));
         wallet.forEach((type, count) -> setter.get(type).accept(tokenWallet, count));
 
-        tokenWalletRepository.save(tokenWallet);
         inventoryRepository.save(inventory);
+        tokenWalletRepository.save(tokenWallet);
 
         return new TokenWalletAPI(allowance);
     }
 
-    public boolean have() {
+    public void make() {
         Memetick memetick = oauthData.getCurrentMemetick();
-        return have(memetick);
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        coinService.transaction(memetick, PriceConst.ALLOWANCE.getValue());
+        inventory.setAllowance(true);
+        inventoryRepository.save(inventory);
+    }
+
+    public boolean have() {
+        return have(oauthData.getCurrentMemetick());
     }
 
     public boolean have(Memetick memetick) {
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        return have( inventoryRepository.findByMemetick(memetick));
+    }
+
+    public boolean have(MemetickInventory inventory) {
         return inventory.isAllowance();
     }
 

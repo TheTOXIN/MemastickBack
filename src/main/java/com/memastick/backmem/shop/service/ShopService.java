@@ -1,11 +1,10 @@
 package com.memastick.backmem.shop.service;
 
 import com.memastick.backmem.memecoin.service.MemeCoinService;
-import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.component.OauthData;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.memastick.backmem.shop.constant.PriceConst;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +26,10 @@ public class ShopService {
     }
 
     @Transactional
-    public void test(int count) {
+    public void cookies(int count) {
         if (count <= 0) return;
         Memetick memetick = oauthData.getCurrentMemetick();
-        coinService.transaction(memetick, -50 * count);
+        coinService.transaction(memetick, PriceConst.COOKIE.getValue() * count);
         memetick.setCookies(memetick.getCookies() + count);
         memetickRepository.save(memetick);
     }

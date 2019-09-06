@@ -25,27 +25,25 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<User> userOptional;
+        Optional<User> optional;
 
         if (username.contains("@")) {
-            userOptional = userRepository.findByEmail(username);
+            optional = userRepository.findByEmail(username);
         } else {
-            userOptional = userRepository.findByLogin(username);
+            optional = userRepository.findByLogin(username);
         }
 
-        if (userOptional.isPresent()) {
-            return makeUserDetails(userOptional.get());
-        } else {
-            throw new UsernameNotFoundException(String.format("User %s - does not exist!", username));
-        }
+        User user = optional.orElseThrow(() -> new UsernameNotFoundException("User " + username + "does not exist!"));
+
+        return makeUserDetails(user);
     }
 
     private UserDetails makeUserDetails(User user) {
         return new org.springframework.security.core.userdetails.User(
             user.getLogin(),
             user.getPassword(),
+            true, true, true, !user.isBan(),
             Collections.singletonList((new SimpleGrantedAuthority(user.getRole().name())))
         );
     }
-
 }

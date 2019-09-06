@@ -1,4 +1,4 @@
-package com.memastick.backmem.base.entity;
+package com.memastick.backmem.base;
 
 import lombok.Data;
 
@@ -16,5 +16,4 @@ public abstract class AbstractEntity {
     @GeneratedValue
     @Column(nullable = false)
     private UUID id;
-
 }

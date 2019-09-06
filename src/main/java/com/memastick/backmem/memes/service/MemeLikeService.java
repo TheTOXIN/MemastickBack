@@ -6,10 +6,11 @@ import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLike;
 import com.memastick.backmem.memes.repository.MemeLikeRepository;
+import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,57 +22,42 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
-
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_CHROMOSOME;
 
 @Service
+@AllArgsConstructor
 public class MemeLikeService {
 
     private final MemetickService memetickService;
     private final MemeLikeRepository memeLikeRepository;
     private final OauthData oauthData;
-    private final MemeService memeService;
 
-    @Autowired
-    public MemeLikeService(
-        MemeLikeRepository memeLikeRepository,
-        OauthData oauthData,
-        MemetickService memetickService,
-        MemeService memeService
-    ) {
-        this.memeLikeRepository = memeLikeRepository;
-        this.oauthData = oauthData;
-        this.memetickService = memetickService;
-        this.memeService = memeService;
-    }
+    private final MemeRepository memeRepository;
 
     public MemeLikeStateDTO readStateByMeme(Meme meme) {
-        MemeLike memeLike = findByMemeForCurrentUser(meme);
+        Memetick memetick = oauthData.getCurrentMemetick();
+        MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick).orElse(new MemeLike());
 
         return new MemeLikeStateDTO(
-            memeLikeRepository.countByMemeIdAndIsLikeTrue(meme.getId()).orElse(0L),
             memeLike.isLike(),
             memeLike.getChromosome()
         );
     }
 
     public void likeTrigger(UUID id) {
-        Meme meme = memeService.findById(id);
-
+        Meme meme = memeRepository.tryFindById(id);
         MemeLike memeLike = findByMemeForCurrentUser(meme);
+
         memeLike.setLike(!memeLike.isLike());
+        meme.setLikes(meme.getLikes() + (memeLike.isLike() ? 1 : -1));
 
         if (memeLike.isLike()) memeLike.setLikeTime(LocalDateTime.now());
 
         memeLikeRepository.save(memeLike);
     }
 
-    public void chromosomeTrigger(UUID id, int count) {
-        Meme meme = memeService.findById(id);
-        chromosomeTrigger(meme, count);
-    }
-
-    public void chromosomeTrigger(Meme meme, int count) {
+    public void chromosomeTrigger(UUID memeId, int count) {
+        Meme meme = memeRepository.tryFindById(memeId);
         MemeLike memeLike = findByMemeForCurrentUser(meme);
 
         if (MemeType.DEAD.equals(meme.getType())) return;
