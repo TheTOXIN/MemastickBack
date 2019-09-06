@@ -8,7 +8,7 @@ VALUES (uuid_generate_v4(),
 --CLASSIC
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*C1.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/C1.png',
         1,
         'CLASSIC',
         'сколько лаб не писано, говнокода написано',
@@ -16,7 +16,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*C2.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/C2.png',
         2,
         'CLASSIC',
         'обладатель премии самые крепкие нервы 2077',
@@ -24,7 +24,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*C3.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/C3.png',
         3,
         'CLASSIC',
         'так сказать доброе блувээээ.. утро',
@@ -32,7 +32,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*C4.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/C4.png',
         4,
         'CLASSIC',
         'незнаю чо вам аниме не нравится, я вот смотрю и мне норм',
@@ -40,7 +40,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*C5.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/C5.png',
         5,
         'CLASSIC',
         'алооо етаа палицая, у меня украли мой хебокс',
@@ -50,7 +50,7 @@ VALUES (uuid_generate_v4(),
 -- RARE
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*R1.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/R1.png',
         1,
         'RARE',
         'ну вы поняли... это типо такая шутОЧКА',
@@ -58,7 +58,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*R2.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/R2.png',
         2,
         'RARE',
         'скидываемся на губозакаточную машину',
@@ -66,7 +66,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*R3.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/R3.png',
         3,
         'RARE',
         'парашочек в роточек, и нету почек...',
@@ -74,7 +74,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*R4.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/R4.png',
         4,
         'RARE',
         'серега, серега, опухший немного',
@@ -83,7 +83,7 @@ VALUES (uuid_generate_v4(),
 -- EPIC
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*E1.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/E1.png',
         1,
         'EPIC',
         'жава жава всегда была, есть, и будет',
@@ -91,7 +91,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*E2.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/E2.png',
         2,
         'EPIC',
         'ля какая бульмешичка, не епите её позязя',
@@ -99,7 +99,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*E3.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/E3.png',
         3,
         'EPIC',
         'а мы тут так сказать любим арееешки, да?',
@@ -109,7 +109,7 @@ VALUES (uuid_generate_v4(),
 -- LEGENDARY
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*L1.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/L1.png',
         1,
         'LEGENDARY',
         'денастия блевавусовых на этом не заканчивается',
@@ -117,7 +117,7 @@ VALUES (uuid_generate_v4(),
         (SELECT ms.id FROM memotype_set ms WHERE ms.name = 'ДОЛБОЕБИКИ'));
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*L2.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/L2.png',
         2,
         'LEGENDARY',
         'спасите не пасите, вкусшняшкой угостите',
@@ -127,7 +127,7 @@ VALUES (uuid_generate_v4(),
 -- INCREDIBLE
 INSERT INTO memotype (id, image, number, rarity, text, title, set_id)
 VALUES (uuid_generate_v4(),
-        '*I1.png',
+        'https://www.memastick.ru/assets/images/memotypes/dolboebiks/I1.png',
         1,
         'INCREDIBLE',
         'ававававававававававаавававвававававававававававаавава ТЫ ШО ПЁС?',
