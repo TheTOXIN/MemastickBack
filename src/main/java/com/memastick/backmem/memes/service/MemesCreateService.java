@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TEXT_LEN;
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 
 @Service
 @AllArgsConstructor

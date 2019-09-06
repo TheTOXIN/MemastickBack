@@ -22,8 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_CHROMOSOME;
-
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_CHROMOSOME;
 
 @Service
 @AllArgsConstructor

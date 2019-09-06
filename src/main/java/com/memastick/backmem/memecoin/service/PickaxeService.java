@@ -4,9 +4,9 @@ import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.BlockCoinException;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.util.TimeUtil;
+import com.memastick.backmem.memecoin.api.PickaxeAPI;
 import com.memastick.backmem.memecoin.entity.Pickaxe;
 import com.memastick.backmem.memecoin.repository.PickaxeRepository;
-import com.memastick.backmem.memecoin.api.PickaxeAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
@@ -63,7 +63,7 @@ public class PickaxeService {
     }
 
     public void checkate(int nonce) {
-        if (nonce > GlobalConstant.MAX_NONCE) {
+        if (nonce > GlobalConstant.BLOCK_NONCE) {
             throw new BlockCoinException(ErrorCode.MINE_END);
         }
     }

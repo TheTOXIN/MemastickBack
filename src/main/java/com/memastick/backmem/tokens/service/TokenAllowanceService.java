@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_TOKEN;
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_TOKEN;
 
 @Service
 @AllArgsConstructor
