@@ -24,12 +24,12 @@
         <sqlFile path="scripts/05_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="06_0.5" author="toxin">
-        <sqlFile path="scripts/06_0.5.sql" relativeToChangelogFile="true"/>
-    </changeSet>
+<!--    <changeSet id="06_0.5" author="toxin">-->
+<!--        <sqlFile path="scripts/06_0.5.sql" relativeToChangelogFile="true"/>-->
+<!--    </changeSet>-->
 
-    <changeSet id="07_0.5" author="toxin">
-        <sqlFile path="scripts/07_0.5.sql" relativeToChangelogFile="true"/>
-    </changeSet>
+<!--    <changeSet id="07_0.5" author="toxin">-->
+<!--        <sqlFile path="scripts/07_0.5.sql" relativeToChangelogFile="true"/>-->
+<!--    </changeSet>-->
 
 </databaseChangeLog>
