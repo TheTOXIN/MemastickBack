@@ -2,6 +2,7 @@ package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
+import com.memastick.backmem.memecoin.service.PickaxeService;
 import com.memastick.backmem.memes.service.MemeCellService;
 import com.memastick.backmem.memetick.api.CellAPI;
 import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
@@ -24,6 +25,7 @@ public class MemetickInventoryService {
     private final EvolveMemeService evolveMemeService;
     private final MemeCoinService coinService;
     private final MemeCellService cellService;
+    private final PickaxeService pickaxeService;
 
     public MemetickInventoryAPI readAll() {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -34,6 +36,7 @@ public class MemetickInventoryService {
             memetick.getCookies(),
             cellService.checkState(inventory),
             inventory.isAllowance(),
+            pickaxeService.have(memetick),
             tokenWalletService.wallet(memetick)
         );
     }
@@ -52,6 +55,7 @@ public class MemetickInventoryService {
 
         if (view.isAllowance()) count++;
         if (cellService.checkState(view)) count++;
+        if (pickaxeService.have(memetick)) count++;
 
         return count;
     }

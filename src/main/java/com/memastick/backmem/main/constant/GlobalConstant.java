@@ -17,7 +17,7 @@ public class GlobalConstant {
     public static final int CELL_GROWTH = 24;
     public static final int CELL_SIZE = 100;
     public static final int BLOCK_DFCLT = 1;
-    public static final int BLOCK_NONCE = 100;
+    public static final int BLOCK_NONCE = 300;
     public static final int PICKAXE_HOURS = 1;
     public static final int AVATAR_CACHE = 24 * 60 * 60;
 

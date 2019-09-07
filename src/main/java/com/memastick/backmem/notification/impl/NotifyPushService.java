@@ -95,8 +95,6 @@ public class NotifyPushService implements NotifySender {
             .findByToken(token)
             .orElse(new NotifyPush(token));
 
-        settingUserService.pushSet(user, true);
-
         if (user.equals(notifyPush.getUser())) return;
 
         notifyPush.setUser(user);

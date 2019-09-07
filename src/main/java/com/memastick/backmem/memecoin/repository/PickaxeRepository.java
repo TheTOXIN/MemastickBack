@@ -21,7 +21,7 @@ public interface PickaxeRepository extends CrudRepository<Pickaxe, UUID> {
             .orElseThrow(() -> new EntityNotFoundException(Pickaxe.class, "by token"));
     }
 
-    default Pickaxe findByMemetick(Memetick memetick) {
+    default Pickaxe tryFindByMemetick(Memetick memetick) {
         return this
             .findByMemetickId(memetick.getId())
             .orElse(new Pickaxe(memetick.getId()));

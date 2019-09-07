@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.memastick.backmem.main.constant.GlobalConstant.PICKAXE_HOURS;
@@ -26,7 +27,7 @@ public class PickaxeService {
 
     public PickaxeAPI generate() {
         Memetick memetick = oauthData.getCurrentMemetick();
-        Pickaxe pickaxe = pickaxeRepository.findByMemetick(memetick);
+        Pickaxe pickaxe = pickaxeRepository.tryFindByMemetick(memetick);
 
         PickaxeAPI response = new PickaxeAPI();
 
@@ -66,5 +67,12 @@ public class PickaxeService {
         if (nonce > GlobalConstant.BLOCK_NONCE) {
             throw new BlockCoinException(ErrorCode.MINE_END);
         }
+    }
+
+    public boolean have(Memetick memetick) {
+        Optional<Pickaxe> optional = pickaxeRepository.findByMemetickId(memetick.getId());
+        if (optional.isEmpty()) return false;
+        Pickaxe pickaxe = optional.get();
+        return TimeUtil.isExpire(pickaxe.getCreating().plusHours(PICKAXE_HOURS));
     }
 }

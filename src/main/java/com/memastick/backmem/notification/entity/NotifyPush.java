@@ -17,7 +17,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 public class NotifyPush extends AbstractEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private User user;
 

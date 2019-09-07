@@ -18,6 +18,7 @@ public class MemetickInventoryAPI {
 
     private boolean cell;
     private boolean allowance;
+    private boolean pickaxe;
 
     private Map<TokenType, Integer> wallet = new HashMap<>();
 }
