@@ -41,8 +41,8 @@ public class BattleMemberService {
         Memetick forwardMemetick = fromMeme.getMemetick();
         Memetick defenderMemetick = toMeme.getMemetick();
 
-        if (!forwardMemetick.equals(currentMemetick)) throw new BattleException("NOT MY FROM");
-        if (defenderMemetick.equals(currentMemetick)) throw new BattleException(ErrorCode.BATTLE_REQUEST_ME);
+        if (!forwardMemetick.getId().equals(currentMemetick.getId())) throw new BattleException("NOT MY FROM");
+        if (defenderMemetick.getId().equals(currentMemetick.getId())) throw new BattleException(ErrorCode.BATTLE_REQUEST_ME);
 
         Battle battle = new Battle(
             new BattleMember(fromMeme, BattleRole.FORWARD),

@@ -68,7 +68,9 @@ public class BattleRatingService {
     public Map<Integer, BattleRating> getRating() {
         List<BattleRating> top = battleRatingRepository
             .findAll(JpaUtil.ratingPage())
-            .getContent();
+            .stream()
+            .filter(br -> br.getScore() > 0)
+            .collect(Collectors.toList());
 
         return IntStream.range(0, top.size())
             .boxed()
@@ -80,7 +82,8 @@ public class BattleRatingService {
             .findByMemetick(memetick)
             .orElse(new BattleRating(memetick));
 
-        rating.setScore(rating.getScore() + pvp);
+        int score = Math.max(0, rating.getScore() + pvp);
+        rating.setScore(score);
 
         battleRatingRepository.save(rating);
     }

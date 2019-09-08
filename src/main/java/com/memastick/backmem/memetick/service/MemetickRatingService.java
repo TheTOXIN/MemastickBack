@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class MemetickRatingService {
 
-    private Map<MemetickRatingFilter, Pair<LocalDate, MemetickRatingAPI>> cacheFilter = new HashMap<>();
     private Map<MemetickRatingFilter, Function<Memetick, Long>> mapFilter = new HashMap<>();
 
     private final MemetickRepository memetickRepository;
@@ -46,8 +45,6 @@ public class MemetickRatingService {
     }
 
     public MemetickRatingAPI rating(MemetickRatingFilter filter) {
-        if (checkCache(filter)) return cacheFilter.get(filter).getSecond();
-
         List<Memetick> memeticks = memetickRepository.findAll();
 
         Map<UUID, Long> rateMap = memeticks
@@ -73,19 +70,7 @@ public class MemetickRatingService {
             .map(m -> memetickMapper.toRatingDTO(m, rateMap.get(m.getId()), posMap.get(m.getId())))
             .collect(Collectors.toList());
 
-        MemetickRatingAPI ratingAPI = new MemetickRatingAPI(top, me);
-
-        cacheFilter.put(filter, Pair.of(LocalDate.now(), ratingAPI));
-
-        return ratingAPI;
-    }
-
-    private boolean checkCache(MemetickRatingFilter filter) {
-        Pair<LocalDate, MemetickRatingAPI> cache = cacheFilter.get(filter);
-
-        if (cache == null) return false;
-
-        return cache.getFirst().plusDays(1).isAfter(LocalDate.now());
+        return new MemetickRatingAPI(top, me);
     }
 
     private void initFilter() {
