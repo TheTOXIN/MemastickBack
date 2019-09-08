@@ -36,7 +36,7 @@ public class TokenAcceptService {
         Meme meme = memeRepository.tryFindById(memeId);
         Memetick memetick = oauthData.getCurrentMemetick();
 
-        if (meme.getMemetick().equals(memetick)) throw new TokenAcceptException(TOKEN_SELF);
+        if (meme.getMemetick().getId().equals(memetick.getId())) throw new TokenAcceptException(TOKEN_SELF);
 
         tokenWalletService.have(token, memetick);
         EvolveMeme evolve = evolveMemeRepository.findByMeme(meme);
