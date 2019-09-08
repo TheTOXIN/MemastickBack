@@ -27,7 +27,7 @@ public class PickaxeService {
 
     public PickaxeAPI generate() {
         Memetick memetick = oauthData.getCurrentMemetick();
-        Pickaxe pickaxe = pickaxeRepository.tryFindByMemetick(memetick);
+        Pickaxe pickaxe = pickaxeRepository.generateFindByMemetick(memetick);
 
         PickaxeAPI response = new PickaxeAPI();
 
@@ -71,7 +71,7 @@ public class PickaxeService {
 
     public boolean have(Memetick memetick) {
         Optional<Pickaxe> optional = pickaxeRepository.findByMemetickId(memetick.getId());
-        if (optional.isEmpty()) return false;
+        if (optional.isEmpty()) return true;
         Pickaxe pickaxe = optional.get();
         return TimeUtil.isExpire(pickaxe.getCreating().plusHours(PICKAXE_HOURS));
     }
