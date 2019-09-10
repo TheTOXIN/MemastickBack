@@ -1,5 +1,6 @@
 package com.memastick.backmem.user.controller;
 
+import com.memastick.backmem.battle.repository.BattleVoteRepository;
 import com.memastick.backmem.evolution.service.EvolveNexterService;
 import com.memastick.backmem.evolution.service.EvolveSelecterService;
 import com.memastick.backmem.main.service.MigrateService;
@@ -19,6 +20,7 @@ public class AdminController {
     private final EvolveSelecterService evolveSelecterService;
     private final MigrateService migrateService;
     private final TranslatorPublishService publishService;
+    private final BattleVoteRepository battleVoteRepository;
 
     @GetMapping("test}")
     public void test() {
@@ -28,6 +30,11 @@ public class AdminController {
     @GetMapping("day-publish")
     public void dayPublish() {
         publishService.publish();
+    }
+
+    @GetMapping("clear-votes")
+    public void clearVotes() {
+        battleVoteRepository.deleteAll();
     }
 
     @GetMapping("next-evolve")
