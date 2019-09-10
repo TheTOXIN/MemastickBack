@@ -4,9 +4,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="01_0.5" author="toxin">
-        <sqlFile path="scripts/01_0.5.sql" relativeToChangelogFile="true"/>
-    </changeSet>
+    <!--<changeSet id="01_0.5" author="toxin" failOnError="false">-->
+        <!--<sqlFile path="scripts/01_0.5.sql" relativeToChangelogFile="true"/>-->
+    <!--</changeSet>-->
 
     <changeSet id="02_0.5" author="toxin">
         <sqlFile path="scripts/02_0.5.sql" relativeToChangelogFile="true"/>
@@ -20,13 +20,13 @@
         <sqlFile path="scripts/04_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="05_0.5" author="toxin">
-        <sqlFile path="scripts/05_0.5.sql" relativeToChangelogFile="true"/>
-    </changeSet>
+    <!--<changeSet id="05_0.5" author="toxin">-->
+        <!--<sqlFile path="scripts/05_0.5.sql" relativeToChangelogFile="true"/>-->
+    <!--</changeSet>-->
 
-    <changeSet id="06_0.5" author="toxin">
-        <sqlFile path="scripts/06_0.5.sql" relativeToChangelogFile="true"/>
-    </changeSet>
+    <!--<changeSet id="06_0.5" author="toxin">-->
+        <!--<sqlFile path="scripts/06_0.5.sql" relativeToChangelogFile="true"/>-->
+    <!--</changeSet>-->
 
     <changeSet id="07_0.5" author="toxin">
         <sqlFile path="scripts/07_0.5.sql" relativeToChangelogFile="true"/>

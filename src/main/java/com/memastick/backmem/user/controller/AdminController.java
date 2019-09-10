@@ -5,6 +5,7 @@ import com.memastick.backmem.evolution.service.EvolveSelecterService;
 import com.memastick.backmem.main.service.MigrateService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.tokens.service.TokenAllowanceSendService;
+import com.memastick.backmem.translator.serivce.TranslatorPublishService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,16 @@ public class AdminController {
     private final NotifyService notifyService;
     private final EvolveSelecterService evolveSelecterService;
     private final MigrateService migrateService;
+    private final TranslatorPublishService publishService;
 
     @GetMapping("test}")
     public void test() {
 
+    }
+
+    @GetMapping("day-publish")
+    public void dayPublish() {
+        publishService.publish();
     }
 
     @GetMapping("next-evolve")
