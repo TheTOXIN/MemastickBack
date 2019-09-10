@@ -29,7 +29,7 @@ public class SettingFollowerService {
         User follower = oauthData.getCurrentUser();
         Memetick memetick = memetickRepository.tryfFndById(memetickId);
 
-        if (follower.getMemetick().equals(memetick)) return;
+        if (follower.getMemetick().getId().equals(memetick.getId())) return;
 
         Optional<SettingFollower> optional = settingFollowerRepository.findByMemetickAndFollower(memetick, follower);
 

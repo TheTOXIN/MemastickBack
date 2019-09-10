@@ -66,7 +66,7 @@ public class BattleVoteService {
         member.setVotes(member.getVotes() + 1);
         memetick.setCookies(cookie + 1);
 
-        boolean guessed = member.equals(battle.getLeader());
+        boolean guessed = member.getRole().equals(battle.getLeader().getRole());
 
         if (guessed) comboCache.merge(memetick.getId(), 1, Math::addExact); else comboCache.put(memetick.getId(), 0);
         int combo = comboCache.getOrDefault(memetick.getId(), 0);
