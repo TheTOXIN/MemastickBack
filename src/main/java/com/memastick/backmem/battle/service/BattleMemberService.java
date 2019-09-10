@@ -50,7 +50,7 @@ public class BattleMemberService {
         );
 
         battleService.battleUpdate(BattleStatus.WAIT, battle);
-        notifyService.sendBATTLEREQUEST(battle, forwardMemetick, defenderMemetick);
+        notifyService.sendBATTLEREQUEST(battle, forwardMemetick.getNick(), defenderMemetick);
     }
 
     public void response(BattleResponseAPI api) {
@@ -66,6 +66,6 @@ public class BattleMemberService {
         if (BattleStatus.START.equals(status)) battle.setPvp(api.getPvp());
 
         battleService.battleUpdate(status, battle);
-        notifyService.sendBATTLERESPONSE(battle, battle.getForward().getMemetickId(), memetick, api.isAccept());
+        notifyService.sendBATTLERESPONSE(battle, battle.getForward().getMemetickId(), memetick.getNick(), api.isAccept());
     }
 }
