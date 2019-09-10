@@ -209,7 +209,7 @@ public class NotifyService {
             new NotifyDTO(
                 NotifyType.BATTLE_COMPLETE,
                 "Битва завершилась!",
-                "Вы " + (isWin ? "проиграли" : "выиграли") + " битву с меметиком: " + memetick.getNick(),
+                "Вы " + (isWin ? "выиграли" : "проиграли") + " битву с PVP: " + battle.getPvp(),
                 null,
                 LinkConstant.LINK_BATTLE + "/" + battle.getId()
             )
