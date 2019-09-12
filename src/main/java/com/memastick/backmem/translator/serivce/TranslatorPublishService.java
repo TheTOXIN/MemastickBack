@@ -8,16 +8,19 @@ import com.memastick.backmem.translator.component.TranslatorDownloader;
 import com.memastick.backmem.translator.dto.TranslatorDTO;
 import com.memastick.backmem.translator.iface.Translator;
 import com.memastick.backmem.translator.util.TranslatorUtil;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TranslatorPublishService {
 
     private static final Logger log = LoggerFactory.getLogger(TranslatorPublishService.class);
@@ -28,22 +31,8 @@ public class TranslatorPublishService {
     private final TranslatorDownloader translatorDownloader;
     private final NotifyService notifyService;
 
-    @Autowired
-    public TranslatorPublishService(
-        List<Translator> translators,
-        EvolveMemeService evolveMemeService,
-        MemeRepository memeRepository,
-        TranslatorDownloader translatorDownloader,
-        NotifyService notifyService
-    ) {
-        this.translators = translators;
-        this.evolveMemeService = evolveMemeService;
-        this.memeRepository = memeRepository;
-        this.translatorDownloader = translatorDownloader;
-        this.notifyService = notifyService;
-    }
-
-    @Scheduled(cron = "0 0 6 * * *", zone = "UTC")
+    @Transactional
+    @Scheduled(cron = "0 0 7 * * *", zone = "UTC")
     public void publish() {
         log.info("START TRANSLATE PUBLISH");
 
@@ -55,7 +44,8 @@ public class TranslatorPublishService {
         File file = translatorDownloader.download(meme);
         if (file == null) return;
 
-        TranslatorDTO dto = new TranslatorDTO(meme, file, TranslatorUtil.prepareText(meme));
+        String text = TranslatorUtil.prepareText(meme, meme.getMemetick());
+        TranslatorDTO dto = new TranslatorDTO(meme, file, text);
 
         translators.forEach(t -> t.translate(dto));
         notifyService.sendMEMEDAY(meme);
