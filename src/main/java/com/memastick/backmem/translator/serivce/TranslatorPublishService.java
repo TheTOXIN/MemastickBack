@@ -11,7 +11,6 @@ import com.memastick.backmem.translator.util.TranslatorUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +31,7 @@ public class TranslatorPublishService {
     private final NotifyService notifyService;
 
     @Transactional
-    @Scheduled(cron = "0 0 7 * * *", zone = "UTC")
+    @Scheduled(cron = "0 0 3 * * *", zone = "UTC")
     public void publish() {
         log.info("START TRANSLATE PUBLISH");
 
