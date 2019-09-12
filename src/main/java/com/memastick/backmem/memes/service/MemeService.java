@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
@@ -125,6 +126,17 @@ public class MemeService {
         memeCoinService.transaction(meme.getMemetick(), PriceConst.RESSURECTION.getValue());
 
         meme.setType(MemeType.SLCT);
+        memeRepository.save(meme);
+    }
+
+    @Transactional
+    public void ban(UUID memeId) {
+        Meme meme = memeRepository.tryFindById(memeId);
+
+        meme.setType(MemeType.BAAN);
+        meme.setUrl(LinkConstant.LINK_MEME_BAN);
+        meme.setText("МЕМ ЗАБАНЕН");
+
         memeRepository.save(meme);
     }
 }

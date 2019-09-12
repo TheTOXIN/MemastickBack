@@ -71,4 +71,9 @@ public class MemeController {
     public void resurrectMeme(@PathVariable("memeId") UUID memeId) {
         memeService.resurrect(memeId);
     }
+
+    @PatchMapping("/ban/{memeId}")
+    public void banMeme(@PathVariable("memeId") UUID memeId) {
+        memeService.ban(memeId);
+    }
 }

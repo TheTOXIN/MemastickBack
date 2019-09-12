@@ -22,4 +22,6 @@ public class LinkConstant {
     public static final String LINK_MEMETICK = URL + "/home/memetick";
 
     public static final String LINK_ICON = URL + "/assets/images/title-logo.png";
+
+    public static final String LINK_MEME_BAN = URL +"/assets/images/other/meme_ban.jpg";
 }
