@@ -27,16 +27,10 @@ public class StatisticsService {
     }
 
     public StatisticsAPI global() {
-        long evolveDay = evolveMemeService.computeEvolution();
-
-        StatisticsAPI stats = globalCache.get(evolveDay);
-
-        if (stats == null) {
-            stats = parse(statisticsFacade.global());
-            globalCache.put(evolveDay, stats);
-        }
-
-        return stats;
+        return globalCache.computeIfAbsent(
+            evolveMemeService.computeEvolution(),
+            p -> parse(statisticsFacade.global())
+        );
     }
 
     private StatisticsAPI parse(List<BigDecimal> result) {
