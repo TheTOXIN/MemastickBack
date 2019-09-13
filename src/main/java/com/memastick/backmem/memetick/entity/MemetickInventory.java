@@ -24,7 +24,7 @@ public class MemetickInventory extends AbstractEntity {
     private Memetick memetick;
 
     @Column(nullable = false)
-    private boolean allowance = false;
+    private boolean allowance = true;
 
     @Column(nullable = false)
     private LocalDateTime cellCreating = TimeConstant.START_LOCAL_TIME;
