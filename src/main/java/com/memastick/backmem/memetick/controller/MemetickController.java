@@ -7,10 +7,12 @@ import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.service.MemetickRatingService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("memeticks")
@@ -39,8 +41,10 @@ public class MemetickController {
     }
 
     @GetMapping("/rating/{filter}")
-    public MemetickRatingAPI rating(@PathVariable("filter") MemetickRatingFilter filter) {
-        return ratingService.rating(filter);
+    public ResponseEntity<MemetickRatingAPI> rating(@PathVariable("filter") MemetickRatingFilter filter) {
+        return ResponseEntity.ok()
+            .cacheControl(CacheControl.maxAge(1, TimeUnit.DAYS))
+            .body(ratingService.rating(filter));
     }
 
     @PutMapping("/nick/change")
