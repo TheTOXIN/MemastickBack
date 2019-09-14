@@ -1,5 +1,6 @@
 package com.memastick.backmem.sender.service;
 
+import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.sender.component.EmailHtmlSender;
 import com.memastick.backmem.sender.dto.EmailStatus;
@@ -44,6 +45,7 @@ public class SenderInviteCodeService {
 
         context.setVariable("code", inviteCode.getCode());
         context.setVariable("nick", inviteCode.getNick());
+        context.setVariable("link", LinkConstant.LINK_REG_INVITE + inviteCode.getCode());
 
         return context;
     }

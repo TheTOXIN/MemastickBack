@@ -25,6 +25,9 @@
            box-shadow: 0 0 100px 5px rgba(255,255,255,1);">
         <p style="border: 10px">ТВОЙ ИНВАЙТ КОД</p>
         <p style="color: darkorange;" th:text="${code}">code</p>
+        <span style="font-size: 16px; color: white">введи его при регистрации, или перейди сразу по ссылке:</span>
+        <br/>
+        <a th:href="${link}" th:text="${link}" target="_blank" style="font-size: 14px">link</a>
     </div>
     <div style="margin: 30px;
             font-size: 16px;">
