@@ -17,7 +17,8 @@ import java.util.UUID;
 public interface EvolveMemeRepository extends JpaRepository<EvolveMeme, UUID> {
 
     @EntityGraph("joinedMeme")
-    List<EvolveMeme> findByStep(EvolveStep step);
+    @Query("SELECT em FROM EvolveMeme em WHERE em.step = :step AND em.meme.type = com.memastick.backmem.memes.constant.MemeType.EVLV")
+    List<EvolveMeme> findEvolveByStep(@Param("step") EvolveStep step);
 
     @EntityGraph("joinedMeme")
     List<EvolveMeme> findByStep(EvolveStep step, Pageable pageable);

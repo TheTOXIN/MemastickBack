@@ -45,7 +45,7 @@ public class EvolveNexterService {
         List<EvolveMeme> evolve = new ArrayList<>();
 
         Arrays.stream(EvolveStep.values()).forEach(step -> {
-            List<EvolveMeme> evolveMemes = evolveMemeRepository.findByStep(step);
+            List<EvolveMeme> evolveMemes = evolveMemeRepository.findEvolveByStep(step);
 
             evolveHandler.pullEvolve(step).evolution(evolveMemes);
             evolveMemeService.nextStep(evolveMemes);
