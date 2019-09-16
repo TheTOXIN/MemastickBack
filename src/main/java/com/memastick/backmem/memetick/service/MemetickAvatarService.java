@@ -19,13 +19,14 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 
 @Service
 public class MemetickAvatarService {
-
-    private final Map<UUID, byte[]> cache = new HashMap<>();
 
     private final static long MIN_SIZE_BYTE = (long) Math.pow(2, 10);
     private final static long MAX_SIZE_BYTE = (long) Math.pow(2, 20);
@@ -54,11 +55,9 @@ public class MemetickAvatarService {
     }
 
     @Transactional
-    public byte[] download(UUID memetickId) {
-        return cache.computeIfAbsent(
-            memetickId,
-            id -> memetickAvatarRepository.findByMemetickId(id).getAvatar()
-        );
+    public byte[] download(UUID id) {
+        MemetickAvatar memetickAvatar = memetickAvatarRepository.findByMemetickId(id);
+        return memetickAvatar.getAvatar();
     }
 
     @Transactional
@@ -77,7 +76,6 @@ public class MemetickAvatarService {
 
         memetickAvatar.setAvatar(photoBytes);
 
-        cache.put(memetick.getId(), memetickAvatar.getAvatar());
         memetickAvatarRepository.save(memetickAvatar);
     }
 
