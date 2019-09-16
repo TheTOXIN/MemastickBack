@@ -63,7 +63,7 @@ public class BattleVoteService {
         if (cookie == 0) throw new BattleException(ErrorCode.BATTLE_COOKIE);
 
         member.setVotes(member.getVotes() + 1);
-        memetick.setCookies(cookie + 1);
+        memetick.setCookies(cookie - 1);
 
         BattleMember leader = battle.getLeader();
         boolean guessed = leader != null && member.getRole().equals(leader.getRole());
