@@ -222,7 +222,7 @@ public class NotifyService {
             Collections.singletonList(userRepository.findByMemetick(memetick)),
             new NotifyDTO(
                 NotifyType.BATTLE_RATING,
-                "Рейтинг битв: " + position + " место",
+                "Рейтинг битв: " + (position + 1) + " место",
                 "Вы выиграли мемотип - " + memotype.getTitle() + ", за " + position + " место в рейтинге битв",
                 null,
                 LinkConstant.LINK_MEMOTYPES

@@ -56,20 +56,21 @@ public class BattleChecker {
         Meme meme = memeRepository.tryFindById(member.getMemeId());
 
         if (isWin) processLeader(memetick, battle.getPvp());
-        else processLooser(meme, memetick, battle.getPvp());
+        else processLooser(meme);
 
+        Integer pvpRating = isWin ? battle.getPvp() : battle.getPvp() * -1;
+
+        battleRatingService.generate(memetick, pvpRating);
         notifyService.sendBATTLECOMPETE(battle, memetick, isWin);
     }
 
     private void processLeader(Memetick memetick, int pvp) {
         int coins = pvp * BattleConst.MEMCOIN_PRESENT;
         coinService.transaction(memetick, coins);
-        battleRatingService.generate(memetick, pvp);
     }
 
-    private void processLooser(Meme meme, Memetick memetick, int pvp) {
+    private void processLooser(Meme meme) {
         meme.setType(MemeType.DEAD);
         memeRepository.save(meme);
-        battleRatingService.generate(memetick, pvp * -1);
     }
 }

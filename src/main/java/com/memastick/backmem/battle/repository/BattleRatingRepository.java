@@ -25,6 +25,6 @@ public interface BattleRatingRepository extends PagingAndSortingRepository<Battl
     Page<BattleRating> findAll(Pageable pageable);
 
     @EntityGraph("joinedRatingMemetick")
-    @Query("SELECT br FROM BattleRating br WHERE br.date < :date")
+    @Query("SELECT br FROM BattleRating br WHERE br.date <= :date")
     List<BattleRating> findAllExpire(@Param("date") LocalDate date);
 }

@@ -14,7 +14,6 @@ import com.memastick.backmem.battle.repository.BattleVoteRepository;
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.BattleException;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
@@ -66,7 +65,8 @@ public class BattleVoteService {
         member.setVotes(member.getVotes() + 1);
         memetick.setCookies(cookie + 1);
 
-        boolean guessed = member.getRole().equals(battle.getLeader().getRole());
+        BattleMember leader = battle.getLeader();
+        boolean guessed = leader != null && member.getRole().equals(leader.getRole());
 
         if (guessed) comboCache.merge(memetick.getId(), 1, Math::addExact); else comboCache.put(memetick.getId(), 0);
         int combo = comboCache.getOrDefault(memetick.getId(), 0);

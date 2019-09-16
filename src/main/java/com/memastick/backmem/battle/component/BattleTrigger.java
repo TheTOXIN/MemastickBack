@@ -3,6 +3,7 @@ package com.memastick.backmem.battle.component;
 import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.entity.BattleRating;
 import com.memastick.backmem.battle.repository.BattleRatingRepository;
+import com.memastick.backmem.battle.repository.BattleVoteRepository;
 import com.memastick.backmem.battle.service.BattleRatingService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
@@ -29,6 +30,7 @@ public class BattleTrigger {
     private final MemotypeRepository memotypeRepository;
     private final MemotypeMemetickRepository memotypeMemetickRepository;
     private final NotifyService notifyService;
+    private final BattleVoteRepository battleVoteRepository;
 
     @Transactional
     public void ratingCheck() {
@@ -55,5 +57,6 @@ public class BattleTrigger {
         });
 
         battleRatingRepository.deleteAll(expire);
+        battleVoteRepository.deleteAll();
     }
 }
