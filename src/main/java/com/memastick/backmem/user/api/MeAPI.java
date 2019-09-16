@@ -15,4 +15,5 @@ public class MeAPI {
     private UUID id;
     private String login;
     private RoleType role;
+    private UUID memetickId;
 }

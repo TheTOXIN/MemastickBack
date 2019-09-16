@@ -28,5 +28,4 @@ public class MemetickAvatar extends AbstractEntity {
     @Lob
     @Column(nullable = false)
     private byte[] avatar;
-
 }

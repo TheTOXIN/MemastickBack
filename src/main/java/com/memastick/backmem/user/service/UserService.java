@@ -88,11 +88,13 @@ public class UserService {
 
     public MeAPI me() {
         User user = oauthData.getCurrentUser();
+        Memetick memetick = user.getMemetick();
 
         return new MeAPI(
             user.getId(),
             user.getLogin(),
-            user.getRole()
+            user.getRole(),
+            memetick.getId()
         );
     }
 }
