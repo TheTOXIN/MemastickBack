@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.controller;
 
+import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.memetick.service.MemetickAvatarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class MemetickAvatarController {
     )
     public byte[] downloadAvatar(
         @PathVariable("memetickId") UUID memetickId,
-        @RequestParam(name = "cache", required = false) Integer cache,
+        @RequestParam(name = "cache", required = false, defaultValue = "true") boolean cache,
         HttpServletResponse response
     ) {
         checkCache(cache, response);
@@ -40,11 +41,11 @@ public class MemetickAvatarController {
         return ResponseEntity.ok().build();
     }
 
-    private void checkCache(Integer cache, HttpServletResponse response) {
-        if (cache != null) {
+    private void checkCache(boolean cache, HttpServletResponse response) {
+        if (cache) {
             response.setHeader(
                 "Cache-Control",
-                "no-transform, public, max-age=" + cache
+                "no-transform, public, max-age=" + GlobalConstant.AVATAR_CACHE
             );
         }
     }
