@@ -3,7 +3,6 @@ package com.memastick.backmem.battle.service;
 import com.memastick.backmem.battle.api.BattleResultAPI;
 import com.memastick.backmem.battle.api.BattleVoteAPI;
 import com.memastick.backmem.battle.component.BattleChecker;
-import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.constant.BattleStatus;
 import com.memastick.backmem.battle.entity.Battle;
 import com.memastick.backmem.battle.entity.BattleMember;
@@ -13,6 +12,7 @@ import com.memastick.backmem.battle.repository.BattleRepository;
 import com.memastick.backmem.battle.repository.BattleVoteRepository;
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.BattleException;
+import com.memastick.backmem.main.constant.DnaCount;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.security.component.OauthData;
@@ -71,7 +71,7 @@ public class BattleVoteService {
         if (guessed) comboCache.merge(memetick.getId(), 1, Math::addExact); else comboCache.put(memetick.getId(), 0);
         int combo = comboCache.getOrDefault(memetick.getId(), 0);
 
-        memetickService.addDna(memetick, combo * BattleConst.DNA_VOTE);
+        memetickService.addDna(memetick, combo * DnaCount.BATTLE_VOTE);
 
         battleVoteRepository.save(new BattleVote(battle, memetick));
         battleMemberRepository.save(member);

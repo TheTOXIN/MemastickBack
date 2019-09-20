@@ -2,6 +2,7 @@ package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.main.constant.DnaCount;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.entity.Meme;
@@ -21,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.memastick.backmem.main.constant.DnaCount.CELL_MAX;
+import static com.memastick.backmem.main.constant.DnaCount.CELL_MIN;
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 
 @Service
@@ -48,7 +51,7 @@ public class MemesCreateService {
         evolveMemeService.startEvolve(meme);
 
         memeCellService.updateCell(memetick);
-        memetickService.addDna(memetick, MathUtil.rand(100, 1000));
+        memetickService.addDna(memetick, MathUtil.rand(CELL_MIN, CELL_MAX));
 
         notifyService.sendCREATING(memetick, meme);
     }

@@ -3,6 +3,7 @@ package com.memastick.backmem.tokens.service;
 import com.memastick.backmem.errors.exception.TokenAcceptException;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
+import com.memastick.backmem.main.constant.DnaCount;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
@@ -51,8 +52,10 @@ public class TokenAcceptService {
             case ANTIBIOTIC: selection(evolve); break;
         }
 
+        int dna = DnaCount.TOKEN * (token.getStep().getNumber() + 1);
+
         tokenWalletService.take(token, memetick);
-        memetickService.addDna(memetick, MathUtil.rand(10, 100));
+        memetickService.addDna(memetick, dna);
         notifyService.sendTOKEN(token, meme);
     }
 

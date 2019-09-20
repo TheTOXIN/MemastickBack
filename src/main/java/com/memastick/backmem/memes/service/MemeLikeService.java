@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.memastick.backmem.main.constant.DnaCount.CHROMOSOME;
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_CHROMOSOME;
 
 @Service
@@ -63,7 +64,7 @@ public class MemeLikeService {
         if (MemeType.DEAD.equals(meme.getType())) return;
         if (memeLike.getChromosome() >= MAX_CHROMOSOME) return;
 
-        if (memeLike.getChromosome() == 0) memetickService.addDna(memeLike.getMemetick(), MathUtil.rand(1, 10));
+        if (memeLike.getChromosome() == 0) memetickService.addDna(memeLike.getMemetick(), MathUtil.rand(0, CHROMOSOME));
 
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
         int allChromosome = meme.getChromosomes() + (chromosome - memeLike.getChromosome());
