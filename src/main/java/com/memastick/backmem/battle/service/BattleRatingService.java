@@ -4,15 +4,12 @@ import com.memastick.backmem.battle.api.BattleRatingAPI;
 import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.entity.BattleRating;
 import com.memastick.backmem.battle.repository.BattleRatingRepository;
-import com.memastick.backmem.battle.view.BattleMyRatingView;
 import com.memastick.backmem.main.util.JpaUtil;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

@@ -1,7 +1,6 @@
 package com.memastick.backmem.battle.repository;
 
 import com.memastick.backmem.battle.entity.BattleRating;
-import com.memastick.backmem.battle.view.BattleMyRatingView;
 import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

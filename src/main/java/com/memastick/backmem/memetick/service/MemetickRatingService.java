@@ -1,6 +1,7 @@
 package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.base.AbstractEntity;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.api.MemetickRatingAPI;
@@ -66,7 +67,7 @@ public class MemetickRatingService {
 
         List<MemetickRatingDTO> top = memeticks
             .stream()
-            .limit(10)
+            .limit(GlobalConstant.MEMETICK_RATING)
             .map(m -> memetickMapper.toRatingDTO(m, rateMap.get(m.getId()), posMap.get(m.getId())))
             .collect(Collectors.toList());
 
