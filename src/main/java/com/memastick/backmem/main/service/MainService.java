@@ -3,7 +3,7 @@ package com.memastick.backmem.main.service;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.main.api.NotifyCountAPI;
-import com.memastick.backmem.main.component.HelloMessageGenerate;
+import com.memastick.backmem.main.component.HomeMessageGenerator;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
@@ -22,7 +22,7 @@ public class MainService {
     private final MemeRepository memeRepository;
     private final MemetickInventoryService inventoryService;
     private final NotifyBellService notifyBellService;
-    private final HelloMessageGenerate messageGenerate;
+    private final HomeMessageGenerator messageGenerate;
 
     public HomeAPI home() {
         return new HomeAPI(

@@ -110,7 +110,7 @@ public class NotifyService {
             userRepository.findAll(),
             new NotifyDTO(
                 NotifyType.ADMIN,
-                "Сообщения администратора",
+                "Сообщения от администратора",
                 message,
                 null,
                 ""

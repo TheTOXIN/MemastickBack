@@ -3,8 +3,14 @@ package com.memastick.backmem.main.component;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.IntStream;
+
 @Component
-public class HelloMessageGenerate {
+public class HomeMessageGenerator {
+
+    private Map<Integer, String> adminMessages = new HashMap<>();
 
     private String[] messages = {
         "Мемастик в процессе разработки, не ругайте нас",
@@ -27,14 +33,26 @@ public class HelloMessageGenerate {
 
     private final EvolveMemeService evolveMemeService;
 
-    public HelloMessageGenerate(EvolveMemeService evolveMemeService) {
+    public HomeMessageGenerator(EvolveMemeService evolveMemeService) {
         this.evolveMemeService = evolveMemeService;
     }
 
     public String getMessage() {
         int day = (int) evolveMemeService.computeEvolution();
+
+        if (adminMessages.containsKey(day)) return adminMessages.get(day);
+
         int len = this.messages.length;
 
         return messages[day % len];
+    }
+
+    public void adminMessage(int days, String message) {
+        int evolution = (int) evolveMemeService.computeEvolution();
+
+        IntStream.range(0, days).forEach(i -> {
+            int day = i + evolution;
+            adminMessages.put(day, message);
+        });
     }
 }

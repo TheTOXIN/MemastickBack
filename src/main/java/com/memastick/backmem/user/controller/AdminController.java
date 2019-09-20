@@ -3,6 +3,7 @@ package com.memastick.backmem.user.controller;
 import com.memastick.backmem.battle.repository.BattleVoteRepository;
 import com.memastick.backmem.evolution.service.EvolveNexterService;
 import com.memastick.backmem.evolution.service.EvolveSelecterService;
+import com.memastick.backmem.main.component.HomeMessageGenerator;
 import com.memastick.backmem.main.service.MigrateService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.tokens.service.TokenAllowanceSendService;
@@ -21,10 +22,16 @@ public class AdminController {
     private final MigrateService migrateService;
     private final TranslatorPublishService publishService;
     private final BattleVoteRepository battleVoteRepository;
+    private final HomeMessageGenerator homeMessageGenerator;
 
     @GetMapping("test}")
     public void test() {
 
+    }
+
+    @PostMapping("migrate")
+    public void migrate() {
+        migrateService.migrate();
     }
 
     @GetMapping("day-publish")
@@ -52,13 +59,16 @@ public class AdminController {
         allowanceSendService.allowance();
     }
 
-    @PatchMapping("admin-message")
-    public void message(@RequestBody String message) {
-        notifyService.sendADMIN(message);
+    @PatchMapping("admin-notify")
+    public void notify(@RequestBody String text) {
+        notifyService.sendADMIN(text);
     }
 
-    @PostMapping("migrate")
-    public void migrate() {
-        migrateService.migrate();
+    @PatchMapping("admin-message/{days}")
+    public void message(
+        @PathVariable("days") int days,
+        @RequestBody String message
+    ) {
+        homeMessageGenerator.adminMessage(days, message);
     }
 }
