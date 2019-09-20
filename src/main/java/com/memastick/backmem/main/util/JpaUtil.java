@@ -22,12 +22,4 @@ public class JpaUtil {
             Sort.by(Sort.Order.desc(("score")))
         );
     }
-
-    public static Pageable randomPage() {
-        return PageRequest.of(
-            0,
-            BattleConst.RATING_SIZE,
-            Sort.by(Sort.Order.desc(("score")))
-        );
-    }
 }

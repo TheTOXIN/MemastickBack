@@ -4,6 +4,7 @@ import com.memastick.backmem.battle.api.BattleRatingAPI;
 import com.memastick.backmem.battle.constant.BattleConst;
 import com.memastick.backmem.battle.entity.BattleRating;
 import com.memastick.backmem.battle.repository.BattleRatingRepository;
+import com.memastick.backmem.battle.view.BattleMyRatingView;
 import com.memastick.backmem.main.util.JpaUtil;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
@@ -57,6 +58,9 @@ public class BattleRatingService {
         result.setMemetick(memetickMapper.toPreviewDTO(memetick));
 
         battleRatingRepository.findByMemetick(memetick).ifPresent((r) -> {
+            int position = battleRatingRepository.findMyPosition(memetick.getId()) - 1;
+
+            result.setPosition(position);
             result.setScore(r.getScore());
             result.setDays(r.leftDays());
             result.setExist(true);
@@ -69,7 +73,7 @@ public class BattleRatingService {
         List<BattleRating> top = battleRatingRepository
             .findAll(JpaUtil.ratingPage())
             .stream()
-            .filter(br -> br.getScore() > 0)
+            .filter(br -> br.getScore() >= 0)
             .collect(Collectors.toList());
 
         return IntStream.range(0, top.size())
