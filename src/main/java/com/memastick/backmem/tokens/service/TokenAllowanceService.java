@@ -71,11 +71,11 @@ public class TokenAllowanceService {
 
     private Map<TokenType, Integer> myAllowance(Memetick memetick) {
         return Map.of(
-            TokenType.TUBE, MathUtil.rand(TokenType.TUBE.getStep().getNumber() + 1) == 0 ? 1 : 0,
-            TokenType.SCOPE, MathUtil.rand(TokenType.SCOPE.getStep().getNumber() + 1) == 0 ? 1 : 0,
-            TokenType.MUTAGEN, MathUtil.rand(TokenType.MUTAGEN.getStep().getNumber() + 1) == 0 ? 1 : 0,
-            TokenType.CROSSOVER, MathUtil.rand(TokenType.CROSSOVER.getStep().getNumber() + 1) == 0 ? 1 : 0,
-            TokenType.ANTIBIOTIC,  MathUtil.rand(TokenType.ANTIBIOTIC.getStep().getNumber() + 1) == 0 ? 1 : 0
+            TokenType.TUBE, MathUtil.rand(0, 1),
+            TokenType.SCOPE, MathUtil.rand(0, 1),
+            TokenType.MUTAGEN, MathUtil.rand(0, 1),
+            TokenType.CROSSOVER, MathUtil.rand(0, 1),
+            TokenType.ANTIBIOTIC, MathUtil.rand(0, 1)
         );
     }
 
