@@ -4,6 +4,8 @@ import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class NotifyWebService implements NotifySender {
 
     private Map<String, String> cache = new HashMap<>();
@@ -21,20 +24,14 @@ public class NotifyWebService implements NotifySender {
     private final SimpMessagingTemplate template;
     private final OauthData oauthData;
 
-    public NotifyWebService(
-        SimpMessagingTemplate template,
-        OauthData oauthData
-    ) {
-        this.template = template;
-        this.oauthData = oauthData;
-    }
-
     @Override
     public void send(List<User> users, NotifyDTO dto) {
-        users.forEach(user -> send(dto, cache.get(user.getLogin())));
+        users.forEach(user -> sender(dto, user.getLogin(), "/queue/notify"));
     }
 
-    private void send(NotifyDTO dto, String sessionId) {
+    public void sender(Object data, String username, String path) {
+        String sessionId = cache.get(username);
+
         if (sessionId == null) return;
 
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
@@ -42,7 +39,7 @@ public class NotifyWebService implements NotifySender {
         headerAccessor.setSessionId(sessionId);
         headerAccessor.setLeaveMutable(true);
 
-        template.convertAndSendToUser(sessionId, "/queue/notify", dto, headerAccessor.getMessageHeaders());
+        template.convertAndSendToUser(sessionId, path, data, headerAccessor.getMessageHeaders());
     }
 
     public void register(String sessionId) {

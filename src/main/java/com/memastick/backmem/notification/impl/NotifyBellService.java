@@ -8,7 +8,7 @@ import com.memastick.backmem.notification.iface.NotifySender;
 import com.memastick.backmem.notification.repository.NotifyBellRepository;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -18,24 +18,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class NotifyBellService implements NotifySender {
 
     private final NotifyBellRepository bellRepository;
+    private final NotifyWebService notifyWebService;
     private final OauthData oauthData;
-
-    @Autowired
-    public NotifyBellService(
-        NotifyBellRepository bellRepository,
-        OauthData oauthData
-    ) {
-        this.bellRepository = bellRepository;
-        this.oauthData = oauthData;
-    }
 
     @Override
     public void send(List<User> users, NotifyDTO dto) {
         bellRepository.saveAll(users
             .stream()
+            .peek(this::notifyCount)
             .map(u -> new NotifyBell(u, dto.getText(), dto.getEvent()))
             .collect(Collectors.toList())
         );
@@ -85,6 +79,14 @@ public class NotifyBellService implements NotifySender {
             bell.getText(),
             bell.getLink(),
             bell.isRead()
+        );
+    }
+
+    private void notifyCount(User user) {
+        notifyWebService.sender(
+            "PING",
+            user.getLogin(),
+            "/queue/count"
         );
     }
 }
