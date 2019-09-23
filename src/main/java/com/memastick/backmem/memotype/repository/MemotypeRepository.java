@@ -18,10 +18,14 @@ import java.util.stream.StreamSupport;
 public interface MemotypeRepository extends CrudRepository<Memotype, UUID> {
 
     @Query(
-        value = "SELECT * FROM memotype WHERE rarity = :rarity OFFSET floor(random() * :size) LIMIT 1",
+        value = "SELECT * FROM memotype WHERE rarity = :rarity OFFSET floor(" +
+            "random() * (SELECT count(*) from memotype WHERE rarity = :rarity)" +
+            ") LIMIT 1",
         nativeQuery = true
     )
-    Optional<Memotype> randomMemotypeByRarity(@Param("rarity") String rarity, @Param("size") long size);
+    Optional<Memotype> randomMemotypeByRarity(@Param("rarity") String rarity);
+
+    Optional<Long> countByRarity(MemotypeRarity rarity);
 
     default Memotype tryFindById(UUID memotypeId) {
         return this

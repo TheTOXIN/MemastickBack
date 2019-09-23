@@ -40,13 +40,11 @@ public class BattleTrigger {
             LocalDate.now().minusDays(BattleConst.RATING_DAY)
         );
 
-        long memotypeCount = memotypeRepository.count();
-
         rating.entrySet().stream().filter(e -> expire.contains(e.getValue())).forEach(r -> {
-            MemotypeRarity rarity = MemotypeRarity.findByPositino(r.getKey());
+            MemotypeRarity rarity = MemotypeRarity.findByPosition(r.getKey());
             if (rarity == null) return;
 
-            Optional<Memotype> optional = memotypeRepository.randomMemotypeByRarity(rarity.name(), memotypeCount);
+            Optional<Memotype> optional = memotypeRepository.randomMemotypeByRarity(rarity.name());
             if (optional.isEmpty()) return;
 
             Memotype memotype = optional.get();

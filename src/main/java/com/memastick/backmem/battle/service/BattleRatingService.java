@@ -12,7 +12,10 @@ import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -33,7 +36,7 @@ public class BattleRatingService {
             BattleRatingAPI api = new BattleRatingAPI();
 
             api.setPosition(i);
-            api.setPresent(MemotypeRarity.findByPositino(i));
+            api.setPresent(MemotypeRarity.findByPosition(i));
 
             Optional.ofNullable(rating.get(i)).ifPresent(r -> {
                 api.setMemetick(memetickMapper.toPreviewDTO(r.getMemetick()));
