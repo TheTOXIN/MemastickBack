@@ -1,0 +1,1 @@
+update memeticks set nick = replace(nick, ' ', '');
