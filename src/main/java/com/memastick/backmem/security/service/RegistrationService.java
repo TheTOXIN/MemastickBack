@@ -25,12 +25,9 @@ public class RegistrationService {
         SecurityStatus status = validateRegistration(request);
 
         if (!status.equals(SecurityStatus.SUCCESSFUL)) return status;
-
-        InviteCode inviteCode = inviteCodeService.findByCode(request.getInvite());
-        User user = userService.generateUser(request, inviteCode.getNick());
+        User user = userService.generateUser(request);
 
         if (userRepository.findById(user.getId()).isEmpty()) return SecurityStatus.ERROR;
-
         inviteCodeService.take(request.getInvite());
 
         return status;

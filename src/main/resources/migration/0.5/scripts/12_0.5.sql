@@ -1,0 +1,1 @@
+ALTER TABLE invite_codes DROP COLUMN nick;

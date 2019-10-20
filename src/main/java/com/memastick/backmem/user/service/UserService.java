@@ -47,10 +47,10 @@ public class UserService {
     }
 
     @Transactional
-    public User generateUser(RegistrationAPI request, String nick) {
+    public User generateUser(RegistrationAPI request) {
         User user = new User();
 
-        Memetick memetick = memetickService.generateMemetick(nick);
+        Memetick memetick = memetickService.generateMemetick(request.getLogin());
 
         user.setEmail(request.getEmail());
         user.setLogin(request.getLogin());

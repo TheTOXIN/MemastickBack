@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 public class InviteCodeAPI {
 
     private String email;
-    private String nick;
 }

@@ -28,11 +28,6 @@ public class InviteCode extends AbstractEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotEmpty
-    @Size(min = 4, max = 24)
-    @Column(nullable = false)
-    private String nick;
-
     @Column(nullable = false)
     private String code;
 

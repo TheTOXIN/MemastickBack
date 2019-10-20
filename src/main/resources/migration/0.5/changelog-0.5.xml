@@ -48,4 +48,8 @@
         <sqlFile path="scripts/11_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="12_0.5" author="toxin">
+        <sqlFile path="scripts/12_0.5.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

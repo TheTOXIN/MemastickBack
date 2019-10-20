@@ -44,7 +44,6 @@ public class SenderInviteCodeService {
         Context context = new Context();
 
         context.setVariable("code", inviteCode.getCode());
-        context.setVariable("nick", inviteCode.getNick());
         context.setVariable("link", LinkConstant.LINK_REG_INVITE + inviteCode.getCode());
 
         return context;

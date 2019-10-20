@@ -50,8 +50,6 @@ public class InviteCodeService {
             .findByEmail(request.getEmail())
             .orElseGet(() -> generateInvite(request));
 
-        invite.setNick(request.getNick());
-
         if (autoInvite) {
             if (invite.getDateSend().plusHours(1).isAfter(LocalDateTime.now())) throw new TimeInException("INVITE WAITE SEND");
             EmailStatus status = send(invite);
@@ -90,10 +88,7 @@ public class InviteCodeService {
         LocalDateTime create = LocalDateTime.now();
         String code = UUID.randomUUID().toString().substring(0, CODE_SIZE);
 
-        if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
-
         inviteCode.setEmail(request.getEmail());
-        inviteCode.setNick(request.getNick());
         inviteCode.setCode(code);
         inviteCode.setDateCreate(create);
         inviteCode.setDateSend(TimeConstant.START_LOCAL_TIME);
