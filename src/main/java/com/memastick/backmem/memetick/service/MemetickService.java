@@ -19,6 +19,7 @@ import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -53,6 +54,7 @@ public class MemetickService {
         memetickRepository.save(memetick);
     }
 
+    @Transactional
     public void changeNick(ChangeNickAPI request) {
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
         if (memetickRepository.findByNick(request.getNick()).isPresent()) throw new ValidationException(ErrorCode.EXIST_NICK);
@@ -67,7 +69,7 @@ public class MemetickService {
             throw new SettingException(ErrorCode.EXPIRE_NICK);
         }
 
-        request.setNick(request.getNick().replaceAll("\\s", ""));
+        request.setNick(request.getNick().replaceAll("\\s", "_"));
         memetick.setNick(request.getNick());
         setting.setNickChanged(ZonedDateTime.now());
 
