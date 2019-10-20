@@ -61,6 +61,7 @@ public class MemetickService {
 
         User user = oauthData.getCurrentUser();
         SettingUser setting = settingUserRepository.findByUserId(user.getId());
+
         Memetick memetick = user.getMemetick();
 
         if (request.isForce()) {
@@ -69,12 +70,18 @@ public class MemetickService {
             throw new SettingException(ErrorCode.EXPIRE_NICK);
         }
 
-        request.setNick(request.getNick().replaceAll("\\s", "_"));
+        request.setNick(request.getNick().replaceAll("\\s", "-"));
+        request.setNick(request.getNick().replaceAll("[^0-9A-Za-zА-Яа-я]", ""));
+
         memetick.setNick(request.getNick());
         setting.setNickChanged(ZonedDateTime.now());
 
         settingUserRepository.save(setting);
         memetickRepository.save(memetick);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("TEST-123&$^&@".replaceAll("", ""));
     }
 
     public Memetick generateMemetick(String nick) {
