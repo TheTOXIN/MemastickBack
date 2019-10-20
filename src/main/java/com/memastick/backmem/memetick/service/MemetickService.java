@@ -17,7 +17,6 @@ import com.memastick.backmem.setting.repository.SettingUserRepository;
 import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,8 +55,10 @@ public class MemetickService {
 
     @Transactional
     public void changeNick(ChangeNickAPI request) {
+        nickFilter(request);
+
         if (!ValidationUtil.checkNick(request.getNick())) throw new ValidationException(ErrorCode.INVALID_NICK);
-        if (memetickRepository.findByNick(request.getNick()).isPresent()) throw new ValidationException(ErrorCode.EXIST_NICK);
+        if (!request.isForce() && nickExist(request.getNick())) throw new ValidationException(ErrorCode.EXIST_NICK);
 
         User user = oauthData.getCurrentUser();
         SettingUser setting = settingUserRepository.findByUserId(user.getId());
@@ -70,14 +71,23 @@ public class MemetickService {
             throw new SettingException(ErrorCode.EXPIRE_NICK);
         }
 
-        request.setNick(request.getNick().replaceAll("\\s", "-"));
-        request.setNick(request.getNick().replaceAll("[^0-9A-Za-zА-Яа-я]", ""));
-
         memetick.setNick(request.getNick());
         setting.setNickChanged(ZonedDateTime.now());
 
         settingUserRepository.save(setting);
         memetickRepository.save(memetick);
+    }
+
+    private void nickFilter(ChangeNickAPI request) {
+        request.setNick(request.getNick().trim());
+        request.setNick(request.getNick().replaceAll("\\s", "-"));
+        request.setNick(request.getNick().replaceAll("[^0-9A-Za-zА-Яа-я\\-]", ""));
+    }
+
+    private boolean nickExist(String nick) {
+        return memetickRepository
+            .findByNick(nick)
+            .isPresent();
     }
 
     public static void main(String[] args) {
