@@ -49,7 +49,7 @@ public class TranslatorDownloader {
 
         Graphics2D w = (Graphics2D) watermarked.getGraphics();
         w.drawImage(image, 0, 0, null);
-        AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.33f);
+        AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f);
         w.setComposite(alphaChannel);
 
         int centerX = MathUtil.rand(image.getWidth() - size);
