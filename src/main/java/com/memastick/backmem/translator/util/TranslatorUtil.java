@@ -11,12 +11,13 @@ public class TranslatorUtil {
 
         builder
             .append("МЕМ ДНЯ ❗️" + "\n")
+            .append("#мемдня@memastick" + "\n")
             .append("\uD83C\uDF0E Эволюция №" + meme.getEvolution() + "\n")
             .append("\uD83D\uDE0E Меметик - " + memetick.getNick() + "\n")
             .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
             .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");
 
-        if (meme.getText() != null) builder.append("\"" + meme.getText() + "\"");
+        if (meme.getText() != null) builder.append(meme.getText());
 
         return builder.toString();
     }
@@ -27,8 +28,9 @@ public class TranslatorUtil {
         builder
             .append("МЕМ ОТ АДМИНА \uD83D\uDC99" + "\n")
             .append("Автор - " + meme.getMemetick().getNick() + "\n")
-            .append(String.format("ЭПИ: %d/%d/%d", meme.getEvolution(), meme.getPopulation(), meme.getIndividuation()) + "\n")
             .append(LinkConstant.LINK_MEME + "/" + meme.getId());
+
+        if (meme.getText() != null) builder.append(meme.getText());
 
         return builder.toString();
     }
@@ -40,7 +42,7 @@ public class TranslatorUtil {
             .append("ПУБЛИКАЦИЯ МЕМЕТИКА\n")
             .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");
 
-        if (meme.getText() != null) builder.append("\"" + meme.getText() + "\"");
+        if (meme.getText() != null) builder.append(meme.getText());
 
         return builder.toString();
     }
