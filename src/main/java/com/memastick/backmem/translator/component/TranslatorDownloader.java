@@ -18,6 +18,7 @@ import java.net.URL;
 @Component
 public class TranslatorDownloader {
 
+    private static final float SIZE_RATE = 0.1f;
     private static final String IMAGE_FORMAT = "jpeg";
     private static final String FILE_NAME = "translator." + IMAGE_FORMAT;
 
@@ -42,14 +43,14 @@ public class TranslatorDownloader {
     private void watermark(InputStream watermark, File file) throws IOException {
         BufferedImage image = ImageIO.read(file);
 
-        int size = Math.max(image.getWidth(), image.getHeight()) / 5;
+        int size = (int)((image.getWidth() + image.getHeight() / 2) * SIZE_RATE);
 
         BufferedImage overlay = resize(ImageIO.read(watermark), size);
         BufferedImage watermarked = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         Graphics2D w = (Graphics2D) watermarked.getGraphics();
         w.drawImage(image, 0, 0, null);
-        AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f);
+        AlphaComposite alphaChannel = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f);
         w.setComposite(alphaChannel);
 
         int centerX = MathUtil.rand(image.getWidth() - size);
