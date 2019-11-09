@@ -10,8 +10,7 @@ public class TranslatorUtil {
         StringBuilder builder = new StringBuilder();
 
         builder
-            .append("МЕМ ДНЯ ❗️ ")
-            .append("#мемдня@memastick" + "\n")
+            .append("МЕМ ДНЯ ❗"  + "\n")
             .append("\uD83C\uDF0E Эволюция №" + meme.getEvolution() + "\n")
             .append("\uD83D\uDE0E Меметик - " + memetick.getNick() + "\n")
             .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
