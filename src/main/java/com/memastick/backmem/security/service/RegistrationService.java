@@ -4,6 +4,7 @@ import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.SecurityStatus;
 import com.memastick.backmem.security.entity.InviteCode;
+import com.memastick.backmem.security.repository.InviteCodeRepository;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
 import com.memastick.backmem.user.service.UserService;
@@ -16,34 +17,33 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RegistrationService {
 
-    private final UserRepository userRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
     private final InviteCodeService inviteCodeService;
+    private final InviteCodeRepository inviteCodeRepository;
 
     @Transactional
     public SecurityStatus registration(RegistrationAPI request) {
         SecurityStatus status = validateRegistration(request);
-
         if (!status.equals(SecurityStatus.SUCCESSFUL)) return status;
-        User user = userService.generateUser(request);
 
+        InviteCode invite = inviteCodeRepository.findByCode(request.getInvite()).orElse(null);
+        if (invite == null) return SecurityStatus.INVITE;
+
+        User user = userService.generateUser(request, invite);
         if (userRepository.findById(user.getId()).isEmpty()) return SecurityStatus.ERROR;
-        inviteCodeService.take(request.getInvite());
+
+        inviteCodeService.take(invite);
 
         return status;
     }
 
     private SecurityStatus validateRegistration(RegistrationAPI request) {
         if (userRepository.findByLogin(request.getLogin()).isPresent()) return SecurityStatus.LOGIN_EXIST;
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) return SecurityStatus.EMAIL_EXIST;
-
         if (!ValidationUtil.checkLogin(request.getLogin())) return SecurityStatus.LOGIN_INVALID;
-        if (!ValidationUtil.checkEmail(request.getEmail())) return SecurityStatus.EMAIL_INVALID;
 
         if (!ValidationUtil.checkPassword(request.getPassword())) return SecurityStatus.PASSWORD_WEAK;
         if (!request.getPassword().equals(request.getPasswordRepeat())) return SecurityStatus.PASSWORD_REPEAT;
-
-        if (!inviteCodeService.validInvite(request.getEmail(), request.getInvite())) return SecurityStatus.INVITE;
 
         return SecurityStatus.SUCCESSFUL;
     }

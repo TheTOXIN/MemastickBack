@@ -14,5 +14,4 @@ public interface InviteCodeRepository extends JpaRepository<InviteCode, UUID> {
     Optional<InviteCode> findByCode(String code);
 
     Optional<InviteCode> findByEmail(String email);
-
 }

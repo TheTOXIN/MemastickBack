@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RegistrationAPI {
 
-    private String email;
+    private String invite;
     private String login;
     private String password;
     private String passwordRepeat;
-    private String invite;
 }

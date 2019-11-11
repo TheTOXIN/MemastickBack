@@ -46,6 +46,8 @@ public class InviteCodeService {
     }
 
     public void register(InviteCodeAPI request) {
+        if (!ValidationUtil.checkEmail(request.getEmail())) throw new ValidationException(ErrorCode.EMAIL_INVALID);
+
         InviteCode invite = inviteCodeRepository
             .findByEmail(request.getEmail())
             .orElseGet(() -> generateInvite(request));
@@ -78,6 +80,10 @@ public class InviteCodeService {
 
     public void take(String code) {
         InviteCode inviteCode = findByCode(code);
+        take(inviteCode);
+    }
+
+    public void take(InviteCode inviteCode) {
         inviteCode.setTake(true);
         inviteCodeRepository.save(inviteCode);
     }
@@ -104,12 +110,5 @@ public class InviteCodeService {
         Optional<InviteCode> byCode = inviteCodeRepository.findByCode(code);
         if (byCode.isEmpty()) throw new EntityNotFoundException(InviteCode.class, "code");
         return byCode.get();
-    }
-
-    public boolean validInvite(String email, String invite) {
-        Optional<InviteCode> byEmail = inviteCodeRepository.findByEmail(email);
-        if (byEmail.isEmpty()) return false;
-        InviteCode inviteCode = byEmail.get();
-        return inviteCode.getCode().equals(invite);
     }
 }

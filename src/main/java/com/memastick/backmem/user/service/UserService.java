@@ -8,6 +8,7 @@ import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.security.constant.RoleType;
+import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.tokens.service.TokenWalletService;
 import com.memastick.backmem.user.api.MeAPI;
@@ -47,12 +48,12 @@ public class UserService {
     }
 
     @Transactional
-    public User generateUser(RegistrationAPI request) {
+    public User generateUser(RegistrationAPI request, InviteCode invite) {
         User user = new User();
 
         Memetick memetick = memetickService.generateMemetick(request.getLogin());
 
-        user.setEmail(request.getEmail());
+        user.setEmail(invite.getEmail());
         user.setLogin(request.getLogin());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(RoleType.USER);
