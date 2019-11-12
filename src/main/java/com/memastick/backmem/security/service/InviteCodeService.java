@@ -46,6 +46,8 @@ public class InviteCodeService {
     }
 
     public void register(InviteCodeAPI request) {
+        request.setEmail(request.getEmail().toLowerCase());
+
         if (!ValidationUtil.checkEmail(request.getEmail())) throw new ValidationException(ErrorCode.EMAIL_INVALID);
 
         InviteCode invite = inviteCodeRepository

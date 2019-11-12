@@ -9,10 +9,10 @@
 <body>
 <div style="color: white;
             text-align: center;
-            background-image: linear-gradient(#5f57ea, #9647db);">
+            background: #5f57ea linear-gradient(#5f57ea, #9647db);">
     <img style="width: 70%; height: 70%"
          src="http://memastick-front.herokuapp.com/assets/images/mem-logo.png">
-    <div style="margin: 25px; font-size: 16px;">
+    <div style="margin: 25px; font-size: 20px;">
         <p>Добро к нам пожаловать :)</p>
     </div>
     <div style="font-size: 32px;
@@ -27,8 +27,7 @@
            box-shadow: 0 0 100px 5px rgba(255,255,255,1);">
         <p style="border: 10px">ТВОЙ ИНВАЙТ КОД</p>
         <p style="color: darkorange;" th:text="${code}">code</p>
-        <span style="font-size: 16px; color: white">введи его при регистрации, или перейди сразу по ссылке:</span>
-        <br/>
+        <div style="font-size: 16px; color: white">введи его при регистрации, или перейди сразу по ссылке:</div>
         <a th:href="${link}" th:text="${link}" target="_blank" style="
         background-color: #f8f9fa;
         border-radius: 15px;
@@ -37,10 +36,10 @@
         color: #0062cc;">link</a>
     </div>
     <div>
-        <p style="margin-top: 25px; font-size: 16px">Вместе мы сделаем контент лучше!</p>
+        <p style="margin-top: 25px; font-size: 20px">Вместе мы сделаем контент лучше!</p>
         <img style="width: 50%; height: 50%"
              src="http://memastick-front.herokuapp.com/assets/images/super_evolution.png">
-        <p style="font-size: 14px;">© 2019 Copyright by Memastick Powered by Toxin</p>
+        <p style="font-size: 16px; color: black">© 2019 Copyright by Memastick Powered by Toxin</p>
     </div>
 </div>
 </body>
