@@ -1,5 +1,7 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.evolution.entity.EvolveMeme;
+import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.api.MemeImgAPI;
@@ -35,6 +37,7 @@ public class MemeService {
     private final MemePoolService memePoolService;
     private final MemeCoinService memeCoinService;
     private final MemetickRepository memetickRepository;
+    private final EvolveMemeRepository evolveMemeRepository;
 
     @Autowired
     public MemeService(
@@ -44,7 +47,8 @@ public class MemeService {
         @Lazy MemeLikeService memeLikeService,
         @Lazy MemePoolService memePoolService,
         MemeCoinService memeCoinService,
-        MemetickRepository memetickRepository
+        MemetickRepository memetickRepository,
+        EvolveMemeRepository evolveMemeRepository
     ) {
         this.oauthData = oauthData;
         this.memeRepository = memeRepository;
@@ -53,6 +57,7 @@ public class MemeService {
         this.memePoolService = memePoolService;
         this.memeCoinService = memeCoinService;
         this.memetickRepository = memetickRepository;
+        this.evolveMemeRepository = evolveMemeRepository;
     }
 
     public List<MemeAPI> read(MemeReadDTO readDTO, Pageable pageable) {
@@ -136,8 +141,15 @@ public class MemeService {
         meme.setType(MemeType.BAAN);
         meme.setUrl(LinkConstant.LINK_MEME_BAN);
         meme.setText("МЕМ ЗАБАНЕН");
+        meme.setChromosomes(0);
 
         memeRepository.save(meme);
+
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMeme(meme);
+
+        evolveMeme.setStep(null);
+
+        evolveMemeRepository.save(evolveMeme);
     }
 }
 

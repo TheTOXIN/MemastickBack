@@ -1,6 +1,7 @@
 package com.memastick.backmem.memetick.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,5 +26,5 @@ public class Memetick extends AbstractEntity {
     private long dna = 0L;
 
     @Column(nullable = false)
-    private int cookies = 0;
+    private int cookies = GlobalConstant.DEFAULT_COOKIES;
 }

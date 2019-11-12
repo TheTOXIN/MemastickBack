@@ -3,6 +3,7 @@ package com.memastick.backmem.memetick.service;
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.SettingException;
 import com.memastick.backmem.errors.exception.ValidationException;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
@@ -100,6 +101,8 @@ public class MemetickService {
         memetick.setNick(nick);
 
         memetickRepository.save(memetick);
+
+        coinService.transaction(memetick, GlobalConstant.DEFAULT_MEMCOINS);
 
         return memetick;
     }

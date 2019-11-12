@@ -21,6 +21,8 @@ public class GlobalConstant {
     public static final int BLOCK_NONCE = 300;
     public static final int PICKAXE_HOURS = 1;
     public static final int AVATAR_CACHE = 24 * 60 * 60;
+    public static final int DEFAULT_COOKIES = 10;
+    public static final int DEFAULT_MEMCOINS = 100;
 
     @Autowired
     public GlobalConstant(
