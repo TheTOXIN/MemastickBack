@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,6 +46,7 @@ public class MemeLikeService {
         );
     }
 
+    @Transactional
     public void likeTrigger(UUID id) {
         Meme meme = memeRepository.tryFindById(id);
         MemeLike memeLike = findByMemeForCurrentUser(meme);
@@ -57,6 +59,7 @@ public class MemeLikeService {
         memeLikeRepository.save(memeLike);
     }
 
+    @Transactional
     public void chromosomeTrigger(UUID memeId, int count) {
         Meme meme = memeRepository.tryFindById(memeId);
         MemeLike memeLike = findByMemeForCurrentUser(meme);
