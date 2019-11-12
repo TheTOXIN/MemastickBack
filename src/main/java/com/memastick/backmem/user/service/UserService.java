@@ -12,6 +12,7 @@ import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.tokens.service.TokenWalletService;
 import com.memastick.backmem.user.api.MeAPI;
+import com.memastick.backmem.user.api.UserDataAPI;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -96,6 +97,15 @@ public class UserService {
             user.getLogin(),
             user.getRole(),
             memetick.getId()
+        );
+    }
+
+    public UserDataAPI data() {
+        User user = oauthData.getCurrentUser();
+
+        return new UserDataAPI(
+            user.getLogin(),
+            user.getEmail()
         );
     }
 }

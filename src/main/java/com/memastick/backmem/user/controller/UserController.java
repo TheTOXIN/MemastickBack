@@ -1,6 +1,7 @@
 package com.memastick.backmem.user.controller;
 
 import com.memastick.backmem.user.api.MeAPI;
+import com.memastick.backmem.user.api.UserDataAPI;
 import com.memastick.backmem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,5 +22,10 @@ public class UserController {
     @GetMapping("me")
     public MeAPI me() {
         return userService.me();
+    }
+
+    @GetMapping("data")
+    public UserDataAPI userData() {
+        return userService.data();
     }
 }
