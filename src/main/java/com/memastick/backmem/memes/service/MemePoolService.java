@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,12 +34,11 @@ public class MemePoolService {
 
     private final MemeRepository memeRepository;
     private final EvolveMemeRepository evolveMemeRepository;
-    private final EvolveMemeService evolveMemeService;
 
     public List<Meme> generate(EvolveStep step, Pageable pageable) {
         if (step == null) {
-            return memeRepository.findByEvolution(
-                evolveMemeService.computeEvolution(),
+            return memeRepository.findByTypeIn(
+                Arrays.asList(MemeType.EVLV, MemeType.SLCT),
                 JpaUtil.makePage(pageable, SORT_EVOLVE)
             );
         } else {

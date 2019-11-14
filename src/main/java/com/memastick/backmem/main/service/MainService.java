@@ -13,6 +13,8 @@ import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 @Service
 @AllArgsConstructor
 public class MainService {
@@ -29,7 +31,7 @@ public class MainService {
             oauthData.getCurrentMemetick().getNick(),
             messageGenerate.getMessage(),
             evolveMemeService.computeEvolution(),
-            memeRepository.countByType(MemeType.EVLV).orElse(0L),
+            memeRepository.countByTypeIn(Arrays.asList(MemeType.EVLV, MemeType.SLCT)).orElse(0L),
             evolveMemeService.computeSelectTimer()
         );
     }
