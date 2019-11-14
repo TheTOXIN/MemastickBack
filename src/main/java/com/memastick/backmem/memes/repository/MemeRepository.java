@@ -33,6 +33,8 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     List<Meme> findByType(MemeType type, Pageable pageable);
 
+    List<Meme> findByEvolution(long evolution, Pageable pageable);
+
     List<Meme> findByMemetick(Memetick memetick, Pageable pageable);
 
     List<Meme> findByTypeAndMemetick(MemeType type, Memetick memetick, Pageable pageable);

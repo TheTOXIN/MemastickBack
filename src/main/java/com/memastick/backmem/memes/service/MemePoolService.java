@@ -3,10 +3,12 @@ package com.memastick.backmem.memes.service;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
+import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.util.JpaUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MemePoolService {
 
     private final static Sort SORT_EVOLVE = Sort.by(
@@ -30,20 +33,12 @@ public class MemePoolService {
 
     private final MemeRepository memeRepository;
     private final EvolveMemeRepository evolveMemeRepository;
-
-    @Autowired
-    public MemePoolService(
-        MemeRepository memeRepository,
-        EvolveMemeRepository evolveMemeRepository
-    ) {
-        this.memeRepository = memeRepository;
-        this.evolveMemeRepository = evolveMemeRepository;
-    }
+    private final EvolveMemeService evolveMemeService;
 
     public List<Meme> generate(EvolveStep step, Pageable pageable) {
         if (step == null) {
-            return memeRepository.findByType(
-                MemeType.EVLV,
+            return memeRepository.findByEvolution(
+                evolveMemeService.computeEvolution(),
                 JpaUtil.makePage(pageable, SORT_EVOLVE)
             );
         } else {
