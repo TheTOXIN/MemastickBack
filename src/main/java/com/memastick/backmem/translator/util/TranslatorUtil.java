@@ -16,7 +16,7 @@ public class TranslatorUtil {
             .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
             .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");
 
-        if (meme.getText() != null) builder.append(meme.getText());
+        if (meme.getText() != null) builder.append(String.format("\"%s\"", meme.getText()));
 
         return builder.toString();
     }
@@ -29,7 +29,7 @@ public class TranslatorUtil {
             .append("\uD83E\uDD13 Автор - " + meme.getMemetick().getNick() + "\n")
             .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");
 
-        if (meme.getText() != null) builder.append(meme.getText());
+        if (meme.getText() != null) builder.append(String.format("\"%s\"", meme.getText()));
 
         return builder.toString();
     }
@@ -41,7 +41,7 @@ public class TranslatorUtil {
             .append("ПУБЛИКАЦИЯ МЕМЕТИКА\n")
             .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");
 
-        if (meme.getText() != null) builder.append(meme.getText());
+        if (meme.getText() != null) builder.append(String.format("\"%s\"", meme.getText()));
 
         return builder.toString();
     }
