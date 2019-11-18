@@ -2,7 +2,6 @@ package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.errors.exception.TokenWalletException;
 import com.memastick.backmem.memetick.entity.Memetick;
-import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
@@ -22,7 +21,6 @@ public class TokenWalletService {
 
     private final OauthData oauthData;
     private final TokenWalletRepository tokenWalletRepository;
-    private final MemetickRepository memetickRepository;
 
     public void have(TokenType type) {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -32,14 +30,6 @@ public class TokenWalletService {
     public void have(TokenType type, Memetick memetick) {
         HashMap<TokenType, Integer> wallet = wallet(memetick);
         if (wallet.get(type) <= 0) throw new TokenWalletException();
-    }
-
-    public TokenWalletAPI read(UUID memetickId) {
-        return read(memetickRepository.tryfFndById(memetickId));
-    }
-
-    public TokenWalletAPI read(Memetick memetick) {
-        return new TokenWalletAPI(wallet(memetick));
     }
 
     public void take(TokenType type, Memetick memetick) {
@@ -55,10 +45,20 @@ public class TokenWalletService {
         tokenWalletRepository.save(tokenWallet);
     }
 
+    public TokenWalletAPI read(Memetick memetick) {
+        return read(memetick.getId());
+    }
+
+    public TokenWalletAPI read(UUID memetickId) {
+        return new TokenWalletAPI(wallet(memetickId));
+    }
+
     public HashMap<TokenType, Integer> wallet(Memetick memetick) {
-        return getWallet(
-            tokenWalletRepository.findByMemetickId(memetick.getId())
-        );
+        return wallet(memetick.getId());
+    }
+
+    public HashMap<TokenType, Integer> wallet(UUID memetickId) {
+        return getWallet(tokenWalletRepository.findByMemetickId(memetickId));
     }
 
     public HashMap<TokenType, Integer> getWallet(TokenWallet tokenWallet) {
