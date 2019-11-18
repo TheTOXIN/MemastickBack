@@ -11,6 +11,8 @@ import com.memastick.backmem.translator.serivce.TranslatorPublishService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @AllArgsConstructor
 public class AdminController {
@@ -62,6 +64,14 @@ public class AdminController {
     @PatchMapping("admin-notify")
     public void notify(@RequestBody String text) {
         notifyService.sendADMIN(text);
+    }
+
+    @PatchMapping("user-notify/{memetickId}")
+    public void notifyUser(
+        @PathVariable("memetickId") UUID memetickId,
+        @RequestBody String text
+    ) {
+        notifyService.sendADMIN(memetickId, text);
     }
 
     @PatchMapping("admin-message/{days}")

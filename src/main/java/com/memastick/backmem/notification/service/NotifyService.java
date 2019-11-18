@@ -119,6 +119,20 @@ public class NotifyService {
     }
 
     @Async
+    public void sendADMIN(UUID memetickId, String message) {
+        send(
+            Collections.singletonList(userRepository.findByMemetickId(memetickId)),
+            new NotifyDTO(
+                NotifyType.ADMIN,
+                "Сообщения от администратора",
+                message,
+                null,
+                ""
+            )
+        );
+    }
+
+    @Async
     public void sendCREATING(Memetick memetick, Meme meme) {
         send(
             followerService.findFollowers(memetick),
