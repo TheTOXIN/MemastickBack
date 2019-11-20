@@ -13,6 +13,7 @@ public class EmailDTO {
     private String to;
     private String subject;
     private String content;
+    private String person;
 
     @Override
     public String toString() {

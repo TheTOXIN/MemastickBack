@@ -50,7 +50,7 @@ public class EmailSender {
     private MimeMessagePreparator prepareMail(EmailDTO email, Boolean isHtml) {
         return mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom(email.getFrom());
+            messageHelper.setFrom(email.getFrom(), email.getPerson());
             messageHelper.setTo(email.getTo());
             messageHelper.setSubject(email.getSubject());
             messageHelper.setText(email.getContent(), isHtml);

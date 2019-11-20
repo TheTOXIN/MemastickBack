@@ -11,6 +11,8 @@ import org.thymeleaf.context.Context;
 @Component
 public class EmailHtmlSender {
 
+    private final static String PERSON = "Мемастик";
+
     private final EmailSender emailSender;
     private final TemplateEngine templateEngine;
 
@@ -32,7 +34,7 @@ public class EmailHtmlSender {
     ) {
         String body = templateEngine.process(templateName, context);
         return emailSender.sendHtml(
-            new EmailDTO(from, to, subject, body)
+            new EmailDTO(from, to, subject, body, PERSON)
         );
     }
 
