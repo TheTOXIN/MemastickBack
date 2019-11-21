@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +52,7 @@ public class NotifyPushService implements NotifySender {
     public void send(List<User> users, NotifyDTO dto) {
         users
             .stream()
+            .filter(Objects::nonNull)
             .filter(settingUserService::pushWork)
             .forEach(u -> send(dto, notifyPushRepository.findAllByUser(u)
                 .stream()

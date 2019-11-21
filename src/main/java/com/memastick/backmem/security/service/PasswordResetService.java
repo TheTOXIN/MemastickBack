@@ -69,7 +69,7 @@ public class PasswordResetService {
         PasswordReset passwordReset = byCode.get();
         checkTimeReset(passwordReset, ErrorCode.TIME_OUT);
 
-        if (!ValidationUtil.checkPassword(request.getPassword())) return SecurityStatus.PASSWORD_WEAK;
+        if (!ValidationUtil.checkPassword(request.getPassword())) return SecurityStatus.PASSWORD_INVALID;
         if (!request.getPassword().equals(request.getPasswordRepeat())) return SecurityStatus.PASSWORD_REPEAT;
 
         userService.updatePassword(passwordReset.getLogin(), request.getPassword());

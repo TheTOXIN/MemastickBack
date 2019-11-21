@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,10 @@ public class NotifyWebService implements NotifySender {
 
     @Override
     public void send(List<User> users, NotifyDTO dto) {
-        users.forEach(user -> sender(dto, user.getLogin(), "/queue/notify"));
+        users
+            .stream()
+            .filter(Objects::nonNull)
+            .forEach(user -> sender(dto, user.getLogin(), "/queue/notify"));
     }
 
     public void sender(Object data, String username, String path) {

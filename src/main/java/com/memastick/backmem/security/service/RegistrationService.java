@@ -42,7 +42,7 @@ public class RegistrationService {
         if (userRepository.findByLogin(request.getLogin()).isPresent()) return SecurityStatus.LOGIN_EXIST;
         if (!ValidationUtil.checkLogin(request.getLogin())) return SecurityStatus.LOGIN_INVALID;
 
-        if (!ValidationUtil.checkPassword(request.getPassword())) return SecurityStatus.PASSWORD_WEAK;
+        if (!ValidationUtil.checkPassword(request.getPassword())) return SecurityStatus.PASSWORD_INVALID;
         if (!request.getPassword().equals(request.getPasswordRepeat())) return SecurityStatus.PASSWORD_REPEAT;
 
         return SecurityStatus.SUCCESSFUL;

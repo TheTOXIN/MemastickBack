@@ -11,10 +11,7 @@ import com.memastick.backmem.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +26,7 @@ public class NotifyBellService implements NotifySender {
     public void send(List<User> users, NotifyDTO dto) {
         bellRepository.saveAll(users
             .stream()
+            .filter(Objects::nonNull)
             .peek(this::notifyCount)
             .map(u -> new NotifyBell(u, dto.getText(), dto.getEvent()))
             .collect(Collectors.toList())
