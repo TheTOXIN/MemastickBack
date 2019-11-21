@@ -14,7 +14,7 @@ import org.thymeleaf.context.Context;
 public class SenderInviteCodeService {
 
     private final static String PATH_TEMPLATE = "invite-code";
-    private final static String SUBJECT_TITLE = "МЕМАСТИК ИНВАЙТ КОД";
+    private final static String SUBJECT_TITLE = "ИНВАЙТ КОД";
 
     private final EmailHtmlSender emailHtmlSender;
 
