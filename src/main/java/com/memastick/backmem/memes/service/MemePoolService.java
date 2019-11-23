@@ -38,7 +38,7 @@ public class MemePoolService {
     public List<Meme> generate(EvolveStep step, Pageable pageable) {
         if (step == null) {
             return memeRepository.findByTypeIn(
-                Arrays.asList(MemeType.EVLV, MemeType.SLCT),
+                Arrays.asList(MemeType.EVLV, MemeType.SLCT, MemeType.INDV),//TODO SUKA BLYAT
                 JpaUtil.makePage(pageable, SORT_EVOLVE)
             );
         } else {
