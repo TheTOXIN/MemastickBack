@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "donater_ratings")
@@ -15,6 +16,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class DonaterRating extends DonaterAbstract {
+
+    @Column(nullable = false)
+    private String avatar;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)

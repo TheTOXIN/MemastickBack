@@ -5,9 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "donater_messages")
@@ -16,6 +15,9 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class DonaterMessage extends DonaterAbstract {
+
+    @Column(nullable = false, unique = true)
+    private Long number;
 
     @Column(nullable = false)
     private String message;
