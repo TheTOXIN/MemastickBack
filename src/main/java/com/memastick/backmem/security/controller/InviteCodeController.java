@@ -5,7 +5,7 @@ import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.security.repository.InviteCodeRepository;
 import com.memastick.backmem.security.service.InviteCodeService;
 import com.memastick.backmem.sender.dto.EmailStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,19 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class InviteCodeController {
 
     private final InviteCodeService inviteCodeService;
     private final InviteCodeRepository inviteCodeRepository;
-
-    @Autowired
-    public InviteCodeController(
-        InviteCodeService inviteCodeService,
-        InviteCodeRepository inviteCodeRepository
-    ) {
-        this.inviteCodeService = inviteCodeService;
-        this.inviteCodeRepository = inviteCodeRepository;
-    }
 
     @PostMapping("invite/registration")
     public ResponseEntity register(@RequestBody InviteCodeAPI request) {
