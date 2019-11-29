@@ -1,7 +1,8 @@
 package com.memastick.backmem.main.service;
 
+import com.memastick.backmem.donaters.entity.DonaterMessage;
 import com.memastick.backmem.donaters.entity.DonaterRating;
-import com.memastick.backmem.donaters.repository.DonaterRatingRepository;
+import com.memastick.backmem.donaters.service.DonaterService;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,21 +11,25 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MigrateService {
 
-    private final DonaterRatingRepository donaterRatingRepository;
+    private final DonaterService donaterService;
 
     public void migrate() {
-        if (donaterRatingRepository.count() == 0) {
-            for (MemotypeRarity rarity: MemotypeRarity.values()) {
-                for (int i = 1; i <= 6 - rarity.getLvl(); i++) {
-                    DonaterRating rating = new DonaterRating();
+        for (MemotypeRarity rarity : MemotypeRarity.values()) {
+            for (int i = 1; i <= 6 - rarity.getLvl(); i++) {
+                DonaterRating rating = new DonaterRating();
 
-                    rating.setRarity(rarity);
-                    rating.setAvatar("https://iupac.org/wp-content/uploads/2018/05/default-avatar.png");
-                    rating.setName("TEST_" + i);
+                rating.setRarity(rarity);
+                rating.setName("МЕСТО СВОБОДНО");
 
-                    donaterRatingRepository.save(rating);
-                }
+                donaterService.createRating(rating);
             }
         }
+
+        DonaterMessage message = new DonaterMessage();
+
+        message.setName("Юрий Белоусов");
+        message.setMessage("Не хочешь срать? Не мучай жопу!");
+
+        donaterService.createMessage(message);
     }
 }
