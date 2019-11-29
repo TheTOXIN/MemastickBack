@@ -63,7 +63,6 @@ public class MemetickInventoryService {
     public void generateInventory(Memetick memetick) {
         MemetickInventory inventory = new MemetickInventory();
 
-        inventory.setAllowance(false);
         inventory.setMemetick(memetick);
 
         inventoryRepository.save(inventory);
