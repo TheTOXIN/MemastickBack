@@ -3,6 +3,7 @@ package com.memastick.backmem.main.service;
 import com.memastick.backmem.donaters.entity.DonaterMessage;
 import com.memastick.backmem.donaters.entity.DonaterRating;
 import com.memastick.backmem.donaters.service.DonaterService;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class MigrateService {
                 DonaterRating rating = new DonaterRating();
 
                 rating.setRarity(rarity);
-                rating.setName("МЕСТО СВОБОДНО");
+                rating.setName(GlobalConstant.DEFAULT_DONATER);
 
                 donaterService.createRating(rating);
             }

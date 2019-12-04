@@ -4,18 +4,18 @@ import com.memastick.backmem.donaters.entity.DonaterMessage;
 import com.memastick.backmem.donaters.entity.DonaterRating;
 import com.memastick.backmem.donaters.repository.DonaterMessageRepository;
 import com.memastick.backmem.donaters.repository.DonaterRatingRepository;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +25,20 @@ public class DonaterService {
     private final DonaterRatingRepository ratingRepository;
 
     public void createMessage(DonaterMessage donater) {
-        donater.setNumber(messageRepository.count() + 1);
+        if (donater.getAvatar() == null) donater.setAvatar(LinkConstant.NETRAL_AVATAR);
+
+        long count = messageRepository.count();
+        donater.setNumber(count + 1);
+
         messageRepository.save(donater);
     }
 
     public void createRating(DonaterRating donater) {
         if (donater.getAvatar() == null) donater.setAvatar(LinkConstant.NETRAL_AVATAR);
+
+        Optional<DonaterRating> optional = ratingRepository.findFirstByName(GlobalConstant.DEFAULT_DONATER);
+        optional.ifPresent(ratingRepository::delete);
+
         ratingRepository.save(donater);
     }
 
@@ -43,6 +51,7 @@ public class DonaterService {
     public Map<MemotypeRarity, List<DonaterRating>> readRating() {
         return StreamSupport
             .stream(ratingRepository.findAll().spliterator(), false)
-            .collect(Collectors.groupingBy(DonaterRating::getRarity));
+            .sorted(Comparator.comparing(DonaterRating::getTime).reversed())
+            .collect(Collectors.groupingBy(DonaterRating::getRarity, LinkedHashMap::new, toList()));
     }
 }

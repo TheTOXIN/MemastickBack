@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "donater_ratings")
@@ -17,10 +17,10 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class DonaterRating extends DonaterAbstract {
 
-    @Column(nullable = false)
-    private String avatar;
-
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
     private MemotypeRarity rarity;
+
+    @Column(nullable = false)
+    private LocalDateTime time = LocalDateTime.now();
 }

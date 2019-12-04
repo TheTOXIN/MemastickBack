@@ -24,6 +24,8 @@ public class GlobalConstant {
     public static final int DEFAULT_COOKIES = 10;
     public static final int DEFAULT_MEMCOINS = 100;
 
+    public static final String DEFAULT_DONATER = "ПРИМЕР ДОНАТА";
+
     @Autowired
     public GlobalConstant(
         @Value("${memastick.front.url}") String url,
