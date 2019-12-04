@@ -4,8 +4,6 @@ import com.memastick.backmem.donaters.entity.DonaterMessage;
 import com.memastick.backmem.donaters.entity.DonaterRating;
 import com.memastick.backmem.donaters.repository.DonaterMessageRepository;
 import com.memastick.backmem.donaters.repository.DonaterRatingRepository;
-import com.memastick.backmem.main.constant.GlobalConstant;
-import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +13,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.DEFAULT_DONATER;
+import static com.memastick.backmem.main.constant.LinkConstant.NETRAL_AVATAR;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -25,7 +25,7 @@ public class DonaterService {
     private final DonaterRatingRepository ratingRepository;
 
     public void createMessage(DonaterMessage donater) {
-        if (donater.getAvatar() == null) donater.setAvatar(LinkConstant.NETRAL_AVATAR);
+        if (donater.getAvatar() == null) donater.setAvatar(NETRAL_AVATAR);
 
         long count = messageRepository.count();
         donater.setNumber(count);
@@ -34,9 +34,9 @@ public class DonaterService {
     }
 
     public void createRating(DonaterRating donater) {
-        if (donater.getAvatar() == null) donater.setAvatar(LinkConstant.NETRAL_AVATAR);
+        if (donater.getAvatar() == null) donater.setAvatar(NETRAL_AVATAR);
 
-        Optional<DonaterRating> optional = ratingRepository.findFirstByName(GlobalConstant.DEFAULT_DONATER);
+        Optional<DonaterRating> optional = ratingRepository.findFirstByNameAndRarity(DEFAULT_DONATER, donater.getRarity());
         optional.ifPresent(ratingRepository::delete);
 
         ratingRepository.save(donater);
