@@ -1,7 +1,6 @@
 package com.memastick.backmem.donaters.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
-import com.memastick.backmem.main.constant.LinkConstant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,5 +16,5 @@ public abstract class DonaterAbstract extends AbstractEntity {
     private String name;
 
     @Column(nullable = false)
-    private String avatar = LinkConstant.NETRAL_AVATAR;
+    private String avatar;
 }
