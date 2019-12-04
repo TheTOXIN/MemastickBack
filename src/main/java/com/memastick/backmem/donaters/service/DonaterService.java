@@ -28,7 +28,7 @@ public class DonaterService {
         if (donater.getAvatar() == null) donater.setAvatar(LinkConstant.NETRAL_AVATAR);
 
         long count = messageRepository.count();
-        donater.setNumber(count + 1);
+        donater.setNumber(count);
 
         messageRepository.save(donater);
     }
@@ -45,7 +45,8 @@ public class DonaterService {
     public DonaterMessage readRandom() {
         List<DonaterMessage> messages = new ArrayList<>();
         messageRepository.findAll().forEach(messages::add);
-        return messages.isEmpty() ? null : messages.get(MathUtil.rand(messages.size() - 1));
+        int index = MathUtil.rand(messages.size() - 1);
+        return messages.isEmpty() ? null : messages.get(index);
     }
 
     public Map<MemotypeRarity, List<DonaterRating>> readRating() {
