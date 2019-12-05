@@ -37,7 +37,7 @@ public class MigrateService {
 
         message.setName("Юрий Белоусов");
         message.setMessage("Не хочешь срать? Не мучай жопу!");
-        message.setAvatar(LinkConstant.NETRAL_AVATAR);
+        message.setAvatar("https://firebasestorage.googleapis.com/v0/b/memastick-d525f.appspot.com/o/avatars%2Fphoto_2018-10-05_16-12-46.jpg?alt=media&token=9db022b0-c0c8-4f6d-a86c-621bc51348fa");
         message.setNumber(0L);
 
         messageRepository.save(message);
