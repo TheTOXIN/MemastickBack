@@ -19,7 +19,7 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     Optional<Long> countByMemetickIdAndType(UUID memetickId, MemeType type);
 
-    Optional<Long> countByTypeIn(List<MemeType> list);
+    Optional<Long> countByEvolution(long evolution);
 
     Optional<Long> countByEvolutionAndPopulation(long evolution, long population);
 
@@ -32,8 +32,6 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
     Optional<Meme> findByEvolutionAndPopulationAndIndividuation(long evolution, long population, long individuation);
 
     List<Meme> findByType(MemeType type, Pageable pageable);
-
-    List<Meme> findByTypeIn(List<MemeType> list, Pageable page);
 
     List<Meme> findByEvolution(long evolution, Pageable pageable);
 

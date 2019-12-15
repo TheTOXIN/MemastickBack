@@ -138,4 +138,10 @@ public class EvolveMemeService {
 
         return computeChance(meme);
     }
+
+    public long countNewEvolves() {
+        return memeRepository
+            .countByEvolution(this.computeEvolution())
+            .orElse(0L);
+    }
 }

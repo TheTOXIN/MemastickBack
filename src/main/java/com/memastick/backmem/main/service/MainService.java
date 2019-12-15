@@ -4,7 +4,6 @@ import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.main.api.NotifyCountAPI;
 import com.memastick.backmem.main.component.HomeMessageGenerator;
-import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.notification.impl.NotifyBellService;
@@ -13,15 +12,12 @@ import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-
 @Service
 @AllArgsConstructor
 public class MainService {
 
     private final OauthData oauthData;
     private final EvolveMemeService evolveMemeService;
-    private final MemeRepository memeRepository;
     private final MemetickInventoryService inventoryService;
     private final NotifyBellService notifyBellService;
     private final HomeMessageGenerator messageGenerate;
@@ -31,7 +27,7 @@ public class MainService {
             oauthData.getCurrentMemetick().getNick(),
             messageGenerate.getMessage(),
             evolveMemeService.computeEvolution(),
-            memeRepository.countByTypeIn(Arrays.asList(MemeType.EVLV, MemeType.SLCT)).orElse(0L),
+            evolveMemeService.countNewEvolves(),
             evolveMemeService.computeSelectTimer()
         );
     }

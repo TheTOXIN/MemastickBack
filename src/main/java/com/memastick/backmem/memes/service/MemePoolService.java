@@ -37,14 +37,12 @@ public class MemePoolService {
 
     public List<Meme> generate(EvolveStep step, Pageable pageable) {
         if (step == null) {
-            return memeRepository.findByTypeIn(
-                Arrays.asList(MemeType.EVLV, MemeType.SLCT, MemeType.INDV),//TODO SUKA BLYAT
+            return memeRepository.findAll(
                 JpaUtil.makePage(pageable, SORT_EVOLVE)
-            );
+            ).getContent();
         } else {
             return evolveMemeRepository.findByStep(
-                step,
-                JpaUtil.makePage(pageable, SORT_STEP)
+                step, JpaUtil.makePage(pageable, SORT_STEP)
             ).stream().map(EvolveMeme::getMeme).collect(Collectors.toList());
         }
     }
