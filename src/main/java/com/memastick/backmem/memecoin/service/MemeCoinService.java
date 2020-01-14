@@ -5,24 +5,18 @@ import com.memastick.backmem.memecoin.entity.MemeCoin;
 import com.memastick.backmem.memecoin.repository.MemeCoinRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.notification.service.NotifyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class MemeCoinService {
 
     private final MemeCoinRepository coinRepository;
     private final NotifyService notifyService;
-
-    public MemeCoinService(
-        MemeCoinRepository coinRepository,
-        NotifyService notifyService
-    ) {
-        this.coinRepository = coinRepository;
-        this.notifyService = notifyService;
-    }
 
     @Transactional
     public void transaction(Memetick memetick, long value) {
