@@ -125,10 +125,11 @@ public class MemeService {
 
     @Transactional
     public void resurrect(UUID memeId) {
+        Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = memeRepository.tryFindById(memeId);
 
         if (!MemeType.DEAD.equals(meme.getType())) return;
-        memeCoinService.transaction(meme.getMemetick(), PriceConst.RESSURECTION.getValue());
+        memeCoinService.transaction(memetick, PriceConst.RESSURECTION.getValue());
 
         meme.setType(MemeType.SLCT);
         memeRepository.save(meme);
