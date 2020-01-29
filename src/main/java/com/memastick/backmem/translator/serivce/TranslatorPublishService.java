@@ -31,7 +31,7 @@ public class TranslatorPublishService {
     private final NotifyService notifyService;
 
     @Transactional
-    @Scheduled(cron = "0 0 3 * * *", zone = "UTC")
+    @Scheduled(cron = "0 0 15 * * *", zone = "UTC")
     public void publish() {
         log.info("START TRANSLATE PUBLISH");
 
