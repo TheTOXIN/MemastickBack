@@ -50,7 +50,6 @@ public class MemeCellService {
     }
 
     public int stateCell(LocalDateTime cellCreating) {
-
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime end = cellCreating.plusHours(CELL_GROWTH);
 

@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.service;
 
+import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memecoin.service.PickaxeService;
@@ -46,6 +47,12 @@ public class MemetickInventoryService {
             cellService.stateCell(),
             evolveMemeService.computeEPI()
         );
+    }
+
+    public void checkHaveCell() {
+        if (!cellService.checkState()) {
+            throw new CellSmallException();
+        }
     }
 
     public long countItems(Memetick memetick) {
