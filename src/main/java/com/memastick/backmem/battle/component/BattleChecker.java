@@ -52,7 +52,7 @@ public class BattleChecker {
     private void processMember(Battle battle, BattleMember member, boolean isWin) {
         if (member == null) return;
 
-        Memetick memetick = memetickRepository.tryfFndById(member.getMemetickId());
+        Memetick memetick = memetickRepository.tryFindById(member.getMemetickId());
         Meme meme = memeRepository.tryFindById(member.getMemeId());
 
         if (isWin) processLeader(memetick, battle.getPvp());

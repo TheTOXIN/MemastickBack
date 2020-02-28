@@ -27,7 +27,7 @@ public class SettingFollowerService {
 
     public void trigger(UUID memetickId) {
         User follower = oauthData.getCurrentUser();
-        Memetick memetick = memetickRepository.tryfFndById(memetickId);
+        Memetick memetick = memetickRepository.tryFindById(memetickId);
 
         if (follower.getMemetick().getId().equals(memetick.getId())) return;
 

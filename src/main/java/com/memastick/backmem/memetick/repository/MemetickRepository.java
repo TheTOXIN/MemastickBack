@@ -24,7 +24,7 @@ public interface MemetickRepository extends JpaRepository<Memetick, UUID> {
     @Query("SELECT m.cookies FROM Memetick m WHERE m.id = :memetickId")
     Optional<Integer> findCookieByMemetickId(@Param("memetickId") UUID memetickId);
 
-    default Memetick tryfFndById(UUID memtickId) {
+    default Memetick tryFindById(UUID memtickId) {
         return this
             .findById(memtickId)
             .orElseThrow(() -> new EntityNotFoundException(Memetick.class, "id"));

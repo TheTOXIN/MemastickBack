@@ -6,6 +6,8 @@ import com.memastick.backmem.main.api.NotifyCountAPI;
 import com.memastick.backmem.main.component.HomeMessageGenerator;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
+import com.memastick.backmem.memetick.service.MemetickRankService;
+import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.notification.impl.NotifyBellService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
@@ -21,10 +23,13 @@ public class MainService {
     private final MemetickInventoryService inventoryService;
     private final NotifyBellService notifyBellService;
     private final HomeMessageGenerator messageGenerate;
+    private final MemetickRankService memetickRankService;
+    private final MemetickService memetickService;
 
     public HomeAPI home() {
         return new HomeAPI(
-            oauthData.getCurrentMemetick().getNick(),
+            memetickService.previewByMe(),
+            memetickRankService.myRank(),
             messageGenerate.getMessage(),
             evolveMemeService.computeEvolution(),
             evolveMemeService.countNewEvolves(),

@@ -8,6 +8,7 @@ import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
@@ -43,7 +44,13 @@ public class MemetickService {
 
     public MemetickAPI viewById(UUID id) {
         return memetickMapper.toMemetickAPI(
-            memetickRepository.tryfFndById(id)
+            memetickRepository.tryFindById(id)
+        );
+    }
+
+    public MemetickPreviewAPI previewByMe() {
+        return memetickMapper.toPreviewDTO(
+            oauthData.getCurrentMemetick()
         );
     }
 
@@ -89,10 +96,6 @@ public class MemetickService {
         return memetickRepository
             .findByNick(nick)
             .isPresent();
-    }
-
-    public static void main(String[] args) {
-        System.out.println("TEST-123&$^&@".replaceAll("", ""));
     }
 
     public Memetick generateMemetick(String nick) {
