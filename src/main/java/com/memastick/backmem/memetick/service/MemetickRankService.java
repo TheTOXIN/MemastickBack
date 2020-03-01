@@ -35,6 +35,10 @@ public class MemetickRankService {
     }
 
     private int computeLvl(long dna) {
-        return (int) Math.sqrt(dna) / LVL_COF;
+        return (int) (Math.sqrt(dna) / LVL_COF);
+    }
+
+    private int computeDna(long lvl) {
+        return (int) (Math.pow(LVL_COF, 2) * Math.pow(lvl, 2));
     }
 }
