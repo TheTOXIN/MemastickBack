@@ -10,6 +10,12 @@ import lombok.NoArgsConstructor;
 public class MemetickRankDTO {
 
     private int lvl;
+
     private long dna;
+    private long next;
+    private long left;
+
+    private int percent;
+
     private String name;
 }
