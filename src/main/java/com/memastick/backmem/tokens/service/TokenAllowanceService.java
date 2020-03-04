@@ -1,10 +1,11 @@
 package com.memastick.backmem.tokens.service;
 
-import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
+import com.memastick.backmem.memetick.dto.MemetickRankDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.memetick.service.MemetickRankService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
@@ -13,6 +14,8 @@ import com.memastick.backmem.tokens.repository.TokenWalletRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_TOKEN;
@@ -26,6 +29,7 @@ public class TokenAllowanceService {
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
     private final MemeCoinService coinService;
+    private final MemetickRankService rankService;
 
     public TokenWalletAPI take() {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -70,13 +74,24 @@ public class TokenAllowanceService {
     }
 
     private Map<TokenType, Integer> myAllowance(Memetick memetick) {
-        return Map.of(
-            TokenType.TUBE, MathUtil.rand(0, 1),
-            TokenType.SCOPE, MathUtil.rand(0, 1),
-            TokenType.MUTAGEN, MathUtil.rand(0, 1),
-            TokenType.CROSSOVER, MathUtil.rand(0, 1),
-            TokenType.ANTIBIOTIC, MathUtil.rand(0, 1)
-        );
+        var result = new HashMap<TokenType, Integer>();
+
+        MemetickRankDTO dto = rankService.rank(memetick);
+
+        int lvl = dto.getLvl();
+        int rare = lvl / MAX_TOKEN;
+
+        Arrays.asList(TokenType.values()).forEach(token -> {
+            if (token.ordinal() == rare) {
+                result.put(token, lvl % MAX_TOKEN + 1);
+            } else if (token.ordinal() < rare) {
+                result.put(token, MAX_TOKEN);
+            } else {
+                result.put(token, 0);
+            }
+        });
+
+        return result;
     }
 
     private Map<TokenType, Integer> emptyAllowance() {

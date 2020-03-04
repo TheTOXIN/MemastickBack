@@ -22,10 +22,14 @@ public class MemetickRankService {
 
     private final OauthData oauthData;
 
-    public MemetickRankDTO myRank() {
-        if (rankMap.isEmpty()) rankMap = MemetickRankType.getRankMap();
+    public MemetickRankDTO rank() {
+        return rank(
+            oauthData.getCurrentMemetick()
+        );
+    }
 
-        Memetick memetick = oauthData.getCurrentMemetick();
+    public MemetickRankDTO rank(Memetick memetick) {
+        if (rankMap.isEmpty()) rankMap = MemetickRankType.getRankMap();
 
         long dna = memetick.getDna();
         int lvl = computeLvl(dna);

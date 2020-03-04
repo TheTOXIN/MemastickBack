@@ -4,7 +4,6 @@ import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.main.api.NotifyCountAPI;
 import com.memastick.backmem.main.component.HomeMessageGenerator;
-import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickRankService;
 import com.memastick.backmem.memetick.service.MemetickService;
@@ -29,7 +28,7 @@ public class MainService {
     public HomeAPI home() {
         return new HomeAPI(
             memetickService.previewByMe(),
-            memetickRankService.myRank(),
+            memetickRankService.rank(),
             messageGenerate.getMessage(),
             evolveMemeService.computeEvolution(),
             evolveMemeService.countNewEvolves(),
