@@ -1,6 +1,7 @@
 package com.memastick.backmem.main.component;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 @Component
+@RequiredArgsConstructor
 public class HomeMessageGenerator {
 
     private Map<Integer, String> adminMessages = new HashMap<>();
@@ -19,22 +21,15 @@ public class HomeMessageGenerator {
         "Новый день! Новый мем!",
         "Вы не создаете мемы на свой страх и риск!",
         "Мемы спасут мир от войны",
-        "Много хромосом, это хорошо или плохо?",
         "Мем мне в печень, и я счастлив вечен",
         "Помните и уважайте пожилые мемы",
         "Надейся на лучшие, расчитывай на мемы",
-        "7 раз лайкни, 1 раз орни",
-        "Ну чо погнали еп***го в рот!!!",
         "Вместе мы сделаем контент лучше!",
         "Без труда не сделаешь и мем никогда.",
         "МУТАГЕН->КРОССОВЕР->МИКРОСКОП->АНТИБИОТИК->ПРОБИРКА"
     };
 
     private final EvolveMemeService evolveMemeService;
-
-    public HomeMessageGenerator(EvolveMemeService evolveMemeService) {
-        this.evolveMemeService = evolveMemeService;
-    }
 
     public String getMessage() {
         int day = (int) evolveMemeService.computeEvolution();
