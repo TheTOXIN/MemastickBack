@@ -7,6 +7,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.memastick.backmem.memetick.constant.MemetickRankConst.MAX_LVL;
+
 public enum MemetickRankType {
 
     RANK_0(0, "Нуб"),
@@ -20,7 +22,7 @@ public enum MemetickRankType {
     RANK_8(40, "Магистр"),
     RANK_9(45, "Доктор"),
 
-    RANK_SUPER(50, "Сверх-разум");
+    RANK_SUPER(MAX_LVL, "Сверх-разум");
 
     @Getter
     private int lvl;

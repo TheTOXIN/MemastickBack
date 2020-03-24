@@ -1,7 +1,6 @@
 package com.memastick.backmem.tokens.service;
 
 import com.memastick.backmem.memecoin.service.MemeCoinService;
-import com.memastick.backmem.memetick.dto.MemetickRankDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
@@ -38,7 +37,7 @@ public class TokenAllowanceService {
         if (!inventory.isAllowance()) return new TokenWalletAPI(emptyAllowance());
         inventory.setAllowance(false);
 
-        var allowance = myAllowance(memetick);
+        var allowance = compute(rankService.rank(memetick).getLvl());
         var tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
 
         var wallet = tokenWalletService.getWallet(tokenWallet);
@@ -73,12 +72,9 @@ public class TokenAllowanceService {
         return inventory.isAllowance();
     }
 
-    private Map<TokenType, Integer> myAllowance(Memetick memetick) {
+    public Map<TokenType, Integer> compute(int lvl) {
         var result = new HashMap<TokenType, Integer>();
 
-        MemetickRankDTO dto = rankService.rank(memetick);
-
-        int lvl = dto.getLvl();
         int rare = lvl / MAX_TOKEN;
 
         Arrays.asList(TokenType.values()).forEach(token -> {
