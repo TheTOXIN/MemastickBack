@@ -2,8 +2,10 @@ package com.memastick.backmem.main.component;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -12,7 +14,7 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class HomeMessageGenerator {
 
-    private Map<Integer, String> adminMessages = new HashMap<>();
+    private Pair<LocalDateTime, String> messageCache;
 
     private String[] messages = {
         "Мемастик в процессе разработки, не ругайте нас",
@@ -32,21 +34,38 @@ public class HomeMessageGenerator {
     private final EvolveMemeService evolveMemeService;
 
     public String getMessage() {
+        if (checkMessageCache()) return this.messageCache.getSecond();
+
         int day = (int) evolveMemeService.computeEvolution();
-
-        if (adminMessages.containsKey(day)) return adminMessages.get(day);
-
         int len = this.messages.length;
 
         return messages[day % len];
     }
 
     public void adminMessage(int days, String message) {
-        int evolution = (int) evolveMemeService.computeEvolution();
+        this.messageCache = Pair.of(
+            LocalDateTime.now().plusDays(days),
+            message
+        );
+    }
 
-        IntStream.range(0, days).forEach(i -> {
-            int day = i + evolution;
-            adminMessages.put(day, message);
-        });
+    public void memetickMessage(String name) {
+        this.messageCache = Pair.of(
+            LocalDateTime.now().plusHours(1),
+            "Приветствуем нового меметика - " + name + " \uD83D\uDE0E"
+        );
+    }
+
+    private boolean checkMessageCache() {
+        if (messageCache == null) return false;
+
+        LocalDateTime expire = messageCache.getFirst();
+
+        if (expire.isBefore(LocalDateTime.now())) {
+            this.messageCache = null;
+            return false;
+        }
+
+        return true;
     }
 }

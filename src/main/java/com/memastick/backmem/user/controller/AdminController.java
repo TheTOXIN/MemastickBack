@@ -66,7 +66,7 @@ public class AdminController {
         notifyService.sendADMIN(text);
     }
 
-    @PatchMapping("user-notify/{memetickId}")
+    @PatchMapping("admin-notify/{memetickId}")
     public void notifyUser(
         @PathVariable("memetickId") UUID memetickId,
         @RequestBody String text
