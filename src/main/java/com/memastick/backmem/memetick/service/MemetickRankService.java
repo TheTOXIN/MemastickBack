@@ -37,7 +37,7 @@ public class MemetickRankService {
         int lvl = computeLvl(dna);
         long next = computeDna(lvl + 1);
         long left = next - dna;
-        int percent = (int) (100 * dna / left);
+        int percent = (int) (100 * dna / next);
 
         MemetickRankType rank = rankMap.getOrDefault(lvl, RANK_SUPER);
 
