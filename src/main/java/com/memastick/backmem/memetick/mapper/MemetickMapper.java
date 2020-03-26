@@ -5,8 +5,11 @@ import com.memastick.backmem.memetick.api.MemetickAPI;
 import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.service.MemetickRankService;
+import com.memastick.backmem.security.service.SecurityService;
 import com.memastick.backmem.setting.service.SettingFollowerService;
 import com.memastick.backmem.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -15,18 +18,21 @@ import org.springframework.stereotype.Service;
 public class MemetickMapper {
 
     private final SettingFollowerService settingFollowerService;
-    private final UserService userService;
+    private final SecurityService securityService;
     private final MemeCoinService memeCoinService;
+    private final MemetickRankService memetickRankService;
 
     @Autowired
     public MemetickMapper(
         @Lazy SettingFollowerService settingFollowerService,
-        @Lazy UserService userService,
-        @Lazy MemeCoinService memeCoinService
+        SecurityService securityService,
+        @Lazy MemeCoinService memeCoinService,
+        MemetickRankService memetickRankService
     ) {
         this.settingFollowerService = settingFollowerService;
-        this.userService = userService;
+        this.securityService = securityService;
         this.memeCoinService = memeCoinService;
+        this.memetickRankService = memetickRankService;
     }
 
     public MemetickPreviewAPI toPreviewDTO(Memetick memetick) {
@@ -41,9 +47,10 @@ public class MemetickMapper {
             memetick.getId(),
             memetick.getNick(),
             settingFollowerService.follow(memetick),
-            userService.isOnline(memetick),
+            securityService.isOnline(memetick),
             memeCoinService.balance(memetick),
-            memetick.getCookies()
+            memetick.getCookies(),
+            memetickRankService.rank(memetick)
         );
     }
 

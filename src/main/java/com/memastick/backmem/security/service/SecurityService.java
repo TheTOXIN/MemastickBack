@@ -1,9 +1,11 @@
 package com.memastick.backmem.security.service;
 
+import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.notification.entity.NotifyPush;
 import com.memastick.backmem.notification.impl.NotifyWebService;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
 import com.memastick.backmem.security.api.LogOutAPI;
+import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class SecurityService {
     private final NotifyWebService notifyWebService;
     private final UserRepository userRepository;
     private final TokenStore tokenStore;
+    private final OauthData oauthData;
 
     @Value("${oauth.client}")
     private String oauthClient;
@@ -43,5 +46,16 @@ public class SecurityService {
             tokenStore.removeAccessToken(t);
             tokenStore.removeRefreshToken(t.getRefreshToken());
         });
+    }
+
+    public boolean isOnline(Memetick memetick) {
+        Memetick currentMemetick = oauthData.getCurrentMemetick();
+
+        if (memetick.getId().equals(currentMemetick.getId())) return true;
+
+        var user = userRepository.findByMemetick(memetick);
+        var tokens = tokenStore.findTokensByClientIdAndUserName(oauthClient, user.getLogin());
+
+        return tokens.stream().anyMatch(token -> !token.isExpired());
     }
 }

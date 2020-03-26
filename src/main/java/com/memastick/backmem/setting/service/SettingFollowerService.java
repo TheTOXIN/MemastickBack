@@ -42,6 +42,9 @@ public class SettingFollowerService {
 
     public boolean follow(Memetick memetick) {
         User follower = oauthData.getCurrentUser();
+        Memetick followerMemetick = follower.getMemetick();
+
+        if (followerMemetick.getId().equals(memetick.getId())) return false;
         Optional<SettingFollower> optional = settingFollowerRepository.findByMemetickAndFollower(memetick, follower);
 
         return optional.isPresent();
