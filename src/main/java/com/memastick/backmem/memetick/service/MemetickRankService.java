@@ -31,15 +31,13 @@ public class MemetickRankService {
     }
 
     public MemetickRankDTO rank(Memetick memetick) {
-        if (rankMap.isEmpty()) rankMap = MemetickRankType.getRankMap();
-
         long dna = memetick.getDna();
         int lvl = computeLvl(dna);
         long next = computeDna(lvl + 1);
         long left = next - dna;
         int percent = (int) (100 * dna / next);
 
-        MemetickRankType rank = rankMap.getOrDefault(lvl, RANK_SUPER);
+        MemetickRankType rank = getRank(lvl);
 
         return new MemetickRankDTO(lvl, dna, next, left, percent, rank.getName());
     }
@@ -50,5 +48,10 @@ public class MemetickRankService {
 
     long computeDna(int lvl) {
         return (long) (Math.pow(LVL_COF, 2) * Math.pow(lvl, 2));
+    }
+
+    MemetickRankType getRank(int lvl) {
+        if (rankMap.isEmpty()) rankMap = MemetickRankType.getRankMap();
+        return rankMap.getOrDefault(lvl, RANK_SUPER);
     }
 }

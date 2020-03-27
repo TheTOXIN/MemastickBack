@@ -25,17 +25,9 @@ public class MemetickRankInfoService {
 
     @Cacheable(value = "rankTypes")
     public List<RankTypeAPI> getRankTypes() {
-        return Arrays.stream(MemetickRankType.values())
-            .map(this::getRankType)
+        return IntStream.range(0, MAX_LVL + 1)
+            .mapToObj(this::getRankType)
             .collect(Collectors.toList());
-    }
-
-    private RankTypeAPI getRankType(MemetickRankType type) {
-        return new RankTypeAPI(
-            type.getLvl(),
-            memetickRankService.computeDna(type.getLvl()),
-            type.getName()
-        );
     }
 
     @Cacheable(value = "rankTokens")
@@ -43,6 +35,14 @@ public class MemetickRankInfoService {
          return IntStream.range(0, MAX_LVL)
              .mapToObj(this::getRankToken)
              .collect(Collectors.toList());
+    }
+
+    private RankTypeAPI getRankType(int lvl) {
+        return new RankTypeAPI(
+            lvl,
+            memetickRankService.computeDna(lvl),
+            memetickRankService.getRank(lvl).getName()
+        );
     }
 
     private RankTokenAPI getRankToken(int lvl) {
