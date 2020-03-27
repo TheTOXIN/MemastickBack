@@ -38,7 +38,8 @@ public class MemetickMapper {
     public MemetickPreviewAPI toPreviewDTO(Memetick memetick) {
         return new MemetickPreviewAPI(
             memetick.getId(),
-            memetick.getNick()
+            memetick.getNick(),
+            memetickRankService.computeLvl(memetick.getDna())
         );
     }
 
