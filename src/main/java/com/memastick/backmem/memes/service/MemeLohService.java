@@ -2,6 +2,7 @@ package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityExistException;
 import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.main.projection.MemeLohSum;
 import com.memastick.backmem.memes.dto.MemeLohDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLoh;
@@ -27,11 +28,11 @@ public class MemeLohService {
     public MemeLohDTO readByMeme(UUID memeId) {
         MemeLohDTO res = new MemeLohDTO();
 
-        memeLohRepository.findAllByMemeId(memeId).forEach(loh -> {
-            res.setLol(res.getLol() + loh.getLol());
-            res.setOmg(res.getOmg() + loh.getOmg());
-            res.setHmm(res.getHmm() + loh.getHmm());
-        });
+        MemeLohSum sum = memeLohRepository.sumByMemeId(memeId);
+
+        res.setLol(sum.getLol() != null ? sum.getLol(): 0);
+        res.setOmg(sum.getOmg() != null ? sum.getOmg(): 0);
+        res.setHmm(sum.getHmm() != null ? sum.getHmm(): 0);
 
         return res;
     }
