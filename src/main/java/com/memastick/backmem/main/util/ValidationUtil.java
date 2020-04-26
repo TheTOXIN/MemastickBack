@@ -32,6 +32,6 @@ public class ValidationUtil {
     }
 
     public static boolean validLoh(MemeLohDTO loh) {
-        return (loh.getLol() + loh.getOmg() + loh.getHmm()) <= MAX_LOH;
+        return (loh.getLol() + loh.getOmg() + loh.getHmm()) == MAX_LOH;
     }
 }
