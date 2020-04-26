@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TokenAcceptAPI {
 
-    private MemeLohDTO loh = new MemeLohDTO();
+    private MemeLohDTO loh;
 }
