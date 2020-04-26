@@ -1,10 +1,13 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.EntityExistException;
+import com.memastick.backmem.errors.exception.ValidationException;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.constant.ValidConstant;
 import com.memastick.backmem.main.projection.MemeLohSum;
 import com.memastick.backmem.main.util.MathUtil;
+import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memes.dto.MemeLohDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLoh;
@@ -42,6 +45,8 @@ public class MemeLohService {
     }
 
     public void saveByMeme(UUID memeId, MemeLohDTO dto) {
+        if (!ValidationUtil.validLoh(dto)) throw new ValidationException(ErrorCode.MEME_LOH);
+
         Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = memeRepository.tryFindById(memeId);
 

@@ -1,9 +1,9 @@
 package com.memastick.backmem.main.util;
 
 import com.memastick.backmem.battle.constant.BattleConst;
+import com.memastick.backmem.memes.dto.MemeLohDTO;
 
-import static com.memastick.backmem.main.constant.ValidConstant.MAX_LEN_NCK;
-import static com.memastick.backmem.main.constant.ValidConstant.MIN_LEN_NCK;
+import static com.memastick.backmem.main.constant.ValidConstant.*;
 
 public class ValidationUtil {
 
@@ -29,5 +29,9 @@ public class ValidationUtil {
 
     public static boolean checkPVP(int pvp) {
         return pvp >= BattleConst.MIN_PVP && pvp <= BattleConst.MAX_PVP;
+    }
+
+    public static boolean validLoh(MemeLohDTO loh) {
+        return (loh.getLol() + loh.getOmg() + loh.getHmm()) <= MAX_LOH;
     }
 }
