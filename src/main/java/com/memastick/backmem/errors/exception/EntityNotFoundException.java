@@ -13,5 +13,4 @@ public class EntityNotFoundException extends AbstractException {
             String.format("By: %s", filed)
         );
     }
-
 }

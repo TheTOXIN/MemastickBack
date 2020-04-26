@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND),
+    ENTITY_EXIST(HttpStatus.UNPROCESSABLE_ENTITY),
     TIME_IN(HttpStatus.GATEWAY_TIMEOUT),
     TIME_OUT(HttpStatus.GATEWAY_TIMEOUT),
     IMAGE_FORMAT(HttpStatus.UNPROCESSABLE_ENTITY),

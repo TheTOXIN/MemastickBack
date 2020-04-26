@@ -5,7 +5,7 @@ import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeFilter;
-import com.memastick.backmem.memes.dto.MemeAPI;
+import com.memastick.backmem.memes.api.MemeAPI;
 import com.memastick.backmem.memes.dto.MemeReadDTO;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memes.service.MemesCreateService;

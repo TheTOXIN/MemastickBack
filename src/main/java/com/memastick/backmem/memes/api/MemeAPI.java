@@ -1,4 +1,4 @@
-package com.memastick.backmem.memes.dto;
+package com.memastick.backmem.memes.api;
 
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.main.dto.EPI;

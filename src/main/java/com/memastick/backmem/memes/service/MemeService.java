@@ -7,7 +7,7 @@ import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeType;
-import com.memastick.backmem.memes.dto.MemeAPI;
+import com.memastick.backmem.memes.api.MemeAPI;
 import com.memastick.backmem.memes.dto.MemeReadDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
