@@ -7,14 +7,17 @@ import com.memastick.backmem.main.constant.DnaCount;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.memes.service.MemeLohService;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.component.OauthData;
+import com.memastick.backmem.tokens.api.TokenAcceptAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -32,8 +35,10 @@ public class TokenAcceptService {
     private final MemetickService memetickService;
     private final NotifyService notifyService;
     private final MemeService memeService;
+    private final MemeLohService memeLohService;
 
-    public void accept(TokenType token, UUID memeId) {
+    @Transactional
+    public void accept(TokenType token, UUID memeId, TokenAcceptAPI request) {
         Meme meme = memeRepository.tryFindById(memeId);
         Memetick memetick = oauthData.getCurrentMemetick();
 
@@ -46,7 +51,7 @@ public class TokenAcceptService {
 
         switch (token) {
             case TUBE: adaptation(evolve); break;
-            case SCOPE: break;
+            case SCOPE: fitness(meme, request); break;
             case MUTAGEN: break;
             case CROSSOVER: break;
             case ANTIBIOTIC: selection(evolve); break;
@@ -63,6 +68,13 @@ public class TokenAcceptService {
         evolve.setAdaptation(evolve.getAdaptation() + 1);
         memeService.moveIndex(evolve.getMeme());
         evolveMemeRepository.save(evolve);
+    }
+
+    private void fitness(Meme meme, TokenAcceptAPI request) {
+        memeLohService.saveByMeme(
+            meme.getId(),
+            request.getLoh()
+        );
     }
 
     private void selection(EvolveMeme evolve) {

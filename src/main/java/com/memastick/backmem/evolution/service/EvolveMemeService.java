@@ -117,11 +117,7 @@ public class EvolveMemeService {
 
         return new EvolveMemeAPI(
             meme.getId(),
-            new EPI(
-              meme.getEvolution(),
-              meme.getPopulation(),
-              meme.getIndividuation()
-            ),
+            toEPI(meme),
             evolveMeme.getStep(),
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation(),
@@ -143,5 +139,13 @@ public class EvolveMemeService {
         return memeRepository
             .countByEvolution(this.computeEvolution())
             .orElse(0L);
+    }
+
+    private EPI toEPI(Meme meme) {
+        return new EPI(
+            meme.getEvolution(),
+            meme.getPopulation(),
+            meme.getIndividuation()
+        );
     }
 }
