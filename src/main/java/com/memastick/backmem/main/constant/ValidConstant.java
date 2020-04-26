@@ -2,6 +2,8 @@ package com.memastick.backmem.main.constant;
 
 public class ValidConstant {
 
+    public static final int MIN_LOH = 1;
+    public static final int MAX_LOH = 10;
     public static final int MAX_TOKEN = 10;
     public static final int MIN_LEN_NCK = 3;
     public static final int MAX_LEN_NCK = 16;

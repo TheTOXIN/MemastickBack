@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_LOH;
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_LOH;
+import static com.memastick.backmem.main.constant.ValidConstant.MIN_LOH;
 
 @Entity
 @Table(
@@ -33,14 +35,17 @@ public class MemeLoh extends AbstractEntity {
     @JoinColumn(nullable = false)
     private Memetick memetick;
 
+    @Min(MIN_LOH)
     @Max(MAX_LOH)
     @Column(nullable = false)
     private int lol = 0;
 
+    @Min(MIN_LOH)
     @Max(MAX_LOH)
     @Column(nullable = false)
     private int omg = 0;
 
+    @Min(MIN_LOH)
     @Max(MAX_LOH)
     @Column(nullable = false)
     private int hmm = 0;

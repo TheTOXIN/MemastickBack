@@ -17,4 +17,8 @@ public class MathUtil {
     public static int absents(int a, int b) {
         return Math.abs(a - b);
     }
+
+    public static int limit(int value, int max, int min) {
+        return Math.min(Math.max(value, min), max);
+    }
 }

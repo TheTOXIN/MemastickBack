@@ -2,7 +2,9 @@ package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.EntityExistException;
 import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.main.constant.ValidConstant;
 import com.memastick.backmem.main.projection.MemeLohSum;
+import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.dto.MemeLohDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeLoh;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.MAX_LOH;
+import static com.memastick.backmem.main.constant.ValidConstant.MAX_LOH;
+import static com.memastick.backmem.main.constant.ValidConstant.MIN_LOH;
+import static com.memastick.backmem.main.util.MathUtil.limit;
 
 @Service
 @RequiredArgsConstructor
@@ -46,9 +50,9 @@ public class MemeLohService {
 
         MemeLoh loh = new MemeLoh(meme, memetick);
 
-        loh.setLol(Math.min(dto.getLol(), MAX_LOH));
-        loh.setOmg(Math.min(dto.getOmg(), MAX_LOH));
-        loh.setHmm(Math.min(dto.getHmm(), MAX_LOH));
+        loh.setLol(limit(dto.getLol(), MAX_LOH, MIN_LOH));
+        loh.setOmg(limit(dto.getOmg(), MAX_LOH, MIN_LOH));
+        loh.setHmm(limit(dto.getHmm(), MAX_LOH, MIN_LOH));
 
         memeLohRepository.save(loh);
     }
