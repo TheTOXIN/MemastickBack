@@ -12,6 +12,6 @@ public class EvolveFitnessService implements Evolution {
 
     @Override
     public void evolution(List<EvolveMeme> evolveMemes) {
-        //LOGIC
+        // TODO LOGIC
     }
 }

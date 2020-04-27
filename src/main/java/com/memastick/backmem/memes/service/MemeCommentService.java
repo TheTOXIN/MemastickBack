@@ -31,6 +31,22 @@ public class MemeCommentService {
     private final MemeCommentRepository commentRepository;
     private final MemeCommentVoteRepository voteRepository;
 
+    @Transactional
+    public void createComment(UUID memeId, String comment) {
+        Memetick memetick = oauthData.getCurrentMemetick();
+        Meme meme = memeRepository.tryFindById(memeId);
+
+        if (commentRepository.existsByMemeAndMemetick(meme, memetick)) {
+            throw new EntityExistException(MemeComment.class);
+        }
+
+        MemeComment memeComment = new MemeComment(
+            meme, memetick, comment
+        );
+
+        commentRepository.save(memeComment);
+    }
+
     @Transactional(readOnly = true)
     public List<MemeCommentAPI> readComments(UUID memeId, Pageable pageable) {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -52,31 +68,23 @@ public class MemeCommentService {
         Memetick memetick = oauthData.getCurrentMemetick();
         MemeComment comment = commentRepository.tryFindById(commentId);
 
-        Optional<MemeCommentVote> optionalVote = voteRepository.findByCommentAndMemetick(comment, memetick);
-        MemeCommentVote vote = optionalVote.orElse(new MemeCommentVote(comment, memetick));
+        MemeCommentVote vote = voteRepository
+            .findByCommentAndMemetick(comment, memetick)
+            .orElse(new MemeCommentVote(comment, memetick));
 
-        if (optionalVote.isPresent() && vote.isVote() == voteValue) return;
-
-        comment.setPoint(comment.getPoint() + (voteValue ? +1 : -1));
         vote.setVote(voteValue);
-
-        commentRepository.save(comment);
         voteRepository.save(vote);
+
+        computePoint(comment);
     }
 
-    @Transactional
-    public void createComment(UUID memeId, String comment) {
-        Memetick memetick = oauthData.getCurrentMemetick();
-        Meme meme = memeRepository.tryFindById(memeId);
+    private void computePoint(MemeComment comment) {
+        Long approve = voteRepository.countByCommentAndVote(comment, true).orElse(0L);
+        Long disapprove = voteRepository.countByCommentAndVote(comment, false).orElse(0L);
 
-        if (commentRepository.existsByMemeAndMemetick(meme, memetick)) {
-            throw new EntityExistException(MemeComment.class);
-        }
+        int point = (int) (approve + (disapprove * -1));
+        comment.setPoint(point);
 
-        MemeComment memeComment = new MemeComment(
-            meme, memetick, comment
-        );
-
-        commentRepository.save(memeComment);
+        commentRepository.save(comment);
     }
 }

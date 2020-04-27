@@ -21,4 +21,6 @@ public interface MemeCommentVoteRepository extends JpaRepository<MemeCommentVote
     List<MemeCommentVote> findByCommentInAndMemetick(List<MemeComment> comments, Memetick memetick);
 
     Optional<MemeCommentVote> findByCommentAndMemetick(MemeComment comment, Memetick memetick);
+
+    Optional<Long> countByCommentAndVote(MemeComment comment, boolean vote);
 }

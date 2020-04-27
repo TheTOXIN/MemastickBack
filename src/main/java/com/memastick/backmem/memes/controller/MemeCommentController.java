@@ -19,6 +19,16 @@ public class MemeCommentController {
 
     private final MemeCommentService memeCommentService;
 
+    @PostMapping("/meme/{memeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity createByMeme(
+        @PathVariable("memeId") UUID memeId,
+        @RequestBody String comment
+    ) {
+        memeCommentService.createComment(memeId, comment);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/meme/{memeId}")
     public List<MemeCommentAPI> readByMeme(
         @PathVariable("memeId") UUID memeId,
@@ -33,16 +43,6 @@ public class MemeCommentController {
         @RequestBody String vote
     ) {
         memeCommentService.voteComment(commentId, Boolean.valueOf(vote));
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/meme/{memeId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity createByMeme(
-        @PathVariable("memeId") UUID memeId,
-        @RequestBody String comment
-    ) {
-        memeCommentService.createComment(memeId, comment);
         return ResponseEntity.ok().build();
     }
 }
