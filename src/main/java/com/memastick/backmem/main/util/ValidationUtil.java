@@ -1,6 +1,8 @@
 package com.memastick.backmem.main.util;
 
 import com.memastick.backmem.battle.constant.BattleConst;
+import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.main.constant.ValidConstant;
 import com.memastick.backmem.memes.dto.MemeLohDTO;
 
 import static com.memastick.backmem.main.constant.ValidConstant.*;
@@ -33,5 +35,9 @@ public class ValidationUtil {
 
     public static boolean validLoh(MemeLohDTO loh) {
         return (loh.getLol() + loh.getOmg() + loh.getHmm()) == MAX_LOH;
+    }
+
+    public static boolean validText(String text) {
+        return text != null && !text.equals("") && text.length() <= MAX_TEXT_LEN;
     }
 }

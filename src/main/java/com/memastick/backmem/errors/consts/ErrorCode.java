@@ -28,7 +28,8 @@ public enum ErrorCode {
     BATTLE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR),
     BATTLE_REQUEST_ME(HttpStatus.UNPROCESSABLE_ENTITY),
     BATTLE_COOKIE(HttpStatus.UNPROCESSABLE_ENTITY),
-    MEME_LOH(HttpStatus.UNPROCESSABLE_ENTITY);
+    MEME_LOH(HttpStatus.UNPROCESSABLE_ENTITY),
+    MEME_COMMENT(HttpStatus.UNPROCESSABLE_ENTITY);
 
     @Getter
     private HttpStatus status;

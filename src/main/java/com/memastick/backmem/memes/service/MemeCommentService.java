@@ -1,7 +1,10 @@
 package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.base.AbstractEntity;
+import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.EntityExistException;
+import com.memastick.backmem.errors.exception.ValidationException;
+import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memes.api.MemeCommentAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeComment;
@@ -36,14 +39,13 @@ public class MemeCommentService {
         Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = memeRepository.tryFindById(memeId);
 
-        if (commentRepository.existsByMemeAndMemetick(meme, memetick)) {
-            throw new EntityExistException(MemeComment.class);
-        }
+        boolean invalid = !ValidationUtil.validText(comment);
+        if (invalid) throw new ValidationException(ErrorCode.MEME_COMMENT);
 
-        MemeComment memeComment = new MemeComment(
-            meme, memetick, comment
-        );
+        boolean exists = commentRepository.existsByMemeAndMemetick(meme, memetick);
+        if (exists) throw new EntityExistException(MemeComment.class);
 
+        MemeComment memeComment = new MemeComment(meme, memetick, comment);
         commentRepository.save(memeComment);
     }
 
