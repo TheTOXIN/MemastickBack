@@ -34,6 +34,7 @@ public class EvolveMeme extends AbstractEntity {
     @Column(nullable = false)
     private int adaptation = 0;
 
+    // TODO Hmm...
     @Column
     @Max(101)
     private float chance;
