@@ -8,9 +8,12 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -26,4 +29,10 @@ public interface MemeCommentRepository extends JpaRepository<MemeComment, UUID> 
     }
 
     boolean existsByMemeAndMemetick(Meme meme, Memetick memetick);
+
+    @Query(
+        value = "SELECT * FROM memes_comment WHERE meme_id = :memeId ORDER BY point DESC, creating LIMIT 1",
+        nativeQuery = true
+    )
+    MemeComment findBestComment(@Param("memeId") UUID memeId);
 }

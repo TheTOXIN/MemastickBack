@@ -20,5 +20,6 @@ public class MemeAPI {
     private MemeType type;
     private int likes;
     private int chromosomes;
+    private String comment;
     private EPI epi;
 }
