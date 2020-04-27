@@ -7,6 +7,7 @@ import com.memastick.backmem.main.constant.DnaCount;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.memes.service.MemeCommentService;
 import com.memastick.backmem.memes.service.MemeLohService;
 import com.memastick.backmem.memes.service.MemeService;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -36,6 +37,7 @@ public class TokenAcceptService {
     private final NotifyService notifyService;
     private final MemeService memeService;
     private final MemeLohService memeLohService;
+    private final MemeCommentService memeCommentService;
 
     @Transactional
     public void accept(TokenType token, UUID memeId, TokenAcceptAPI request) {
@@ -52,7 +54,7 @@ public class TokenAcceptService {
         switch (token) {
             case TUBE: adaptation(evolve); break;
             case SCOPE: fitness(meme, request); break;
-            case MUTAGEN: break;
+            case MUTAGEN: mutation(meme, request); break;
             case CROSSOVER: break;
             case ANTIBIOTIC: selection(evolve); break;
         }
@@ -74,6 +76,13 @@ public class TokenAcceptService {
         memeLohService.saveByMeme(
             meme.getId(),
             request.getLoh()
+        );
+    }
+
+    private void mutation(Meme meme, TokenAcceptAPI request) {
+        memeCommentService.createComment(
+            meme.getId(),
+            request.getComment()
         );
     }
 

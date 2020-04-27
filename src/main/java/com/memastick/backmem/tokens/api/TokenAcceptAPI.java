@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class TokenAcceptAPI {
 
     private MemeLohDTO loh;
+    private String comment;
 }
