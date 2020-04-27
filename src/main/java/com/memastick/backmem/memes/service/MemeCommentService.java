@@ -68,9 +68,10 @@ public class MemeCommentService {
         Memetick memetick = oauthData.getCurrentMemetick();
         MemeComment comment = commentRepository.tryFindById(commentId);
 
-        MemeCommentVote vote = voteRepository
-            .findByCommentAndMemetick(comment, memetick)
-            .orElse(new MemeCommentVote(comment, memetick));
+        Optional<MemeCommentVote> optionalVote = voteRepository.findByCommentAndMemetick(comment, memetick);
+        MemeCommentVote vote = optionalVote.orElse(new MemeCommentVote(comment, memetick));
+
+        if (optionalVote.isPresent() && vote.isVote() == voteValue) return;
 
         vote.setVote(voteValue);
         voteRepository.save(vote);
