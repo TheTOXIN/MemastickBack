@@ -20,6 +20,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedComment", attributeNodes = {@NamedAttributeNode("comment")})
 public class MemeCommentVote extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

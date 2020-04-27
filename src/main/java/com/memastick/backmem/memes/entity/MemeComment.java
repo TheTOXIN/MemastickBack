@@ -23,6 +23,7 @@ import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@NamedEntityGraph(name = "joinedCommentMemetick", attributeNodes = {@NamedAttributeNode("memetick")})
 public class MemeComment extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

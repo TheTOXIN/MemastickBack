@@ -3,9 +3,10 @@ package com.memastick.backmem.memes.repository;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeComment;
-import com.memastick.backmem.memes.entity.MemeCommentVote;
 import com.memastick.backmem.memetick.entity.Memetick;
+
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Repository
 public interface MemeCommentRepository extends JpaRepository<MemeComment, UUID> {
 
+    @EntityGraph(value = "joinedCommentMemetick")
     List<MemeComment> findAllByMemeId(UUID memeId, Pageable pageable);
 
     default MemeComment tryFindById(UUID commentId) {
