@@ -79,18 +79,9 @@ public class MemeCommentService {
         if (optionalVote.isPresent() && vote.isVote() == voteValue) return;
 
         vote.setVote(voteValue);
+        comment.setPoint(comment.getPoint() + (voteValue ? 1 : -1));
+
         voteRepository.save(vote);
-
-        computePoint(comment);
-    }
-
-    private void computePoint(MemeComment comment) {
-        Long approve = voteRepository.countByCommentAndVote(comment, true).orElse(0L);
-        Long disapprove = voteRepository.countByCommentAndVote(comment, false).orElse(0L);
-
-        int point = (int) (approve + (disapprove * -1));
-        comment.setPoint(point);
-
         commentRepository.save(comment);
     }
 }
