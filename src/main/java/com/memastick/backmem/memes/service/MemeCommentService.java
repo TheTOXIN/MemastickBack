@@ -4,6 +4,7 @@ import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.EntityExistException;
 import com.memastick.backmem.errors.exception.ValidationException;
+import com.memastick.backmem.main.util.TextUtil;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memes.api.MemeCommentAPI;
 import com.memastick.backmem.memes.entity.Meme;
@@ -25,6 +26,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.memastick.backmem.main.util.TextUtil.clearSpaces;
+
 @Service
 @RequiredArgsConstructor
 public class MemeCommentService {
@@ -45,7 +48,7 @@ public class MemeCommentService {
         boolean exists = commentRepository.existsByMemeAndMemetick(meme, memetick);
         if (exists) throw new EntityExistException(MemeComment.class);
 
-        MemeComment memeComment = new MemeComment(meme, memetick, comment);
+        MemeComment memeComment = new MemeComment(meme, memetick, clearSpaces(comment));
         commentRepository.save(memeComment);
     }
 
