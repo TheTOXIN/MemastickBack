@@ -15,6 +15,7 @@ import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.service.TokenWalletService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +29,7 @@ public class MemetickInventoryService {
     private final MemeCellService cellService;
     private final PickaxeService pickaxeService;
 
+    @Transactional
     public MemetickInventoryAPI readAll() {
         Memetick memetick = oauthData.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
