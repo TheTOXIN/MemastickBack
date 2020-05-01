@@ -21,7 +21,7 @@ public class MemeCoinService {
     private final NotifyService notifyService;
 
     @Transactional
-    @CacheEvict(value = "inventoryMemetick", key = "#memetick.id")
+    @CacheEvict(value = "balanceMemeCoins", key = "#memetick.id")
     public void transaction(Memetick memetick, long value) {
         if (value == 0) return;
         if (value < 0 && (balance(memetick) + value) < 0) throw new MemeCoinNotEnoughException();
@@ -35,7 +35,7 @@ public class MemeCoinService {
         notifyService.sendMEMECOIN(memetick, value);
     }
 
-    @Cacheable(value = "inventoryMemetick", key = "#memetick.id")
+    @Cacheable(value = "balanceMemeCoins", key = "#memetick.id")
     public long balance(Memetick memetick) {
         return coinRepository
             .sumValueByMemetick(memetick.getId())
