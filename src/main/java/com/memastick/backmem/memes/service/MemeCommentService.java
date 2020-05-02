@@ -58,9 +58,9 @@ public class MemeCommentService {
 
         List<MemeComment> comments = commentRepository.findAllByMemeId(memeId, pageable);
 
-        Map<UUID, Boolean> myVotes = voteRepository.findByCommentInAndMemetick(comments, memetick)
+        Map<UUID, Boolean> myVotes = voteRepository.findByCommentsAndMemetick(comments, memetick)
             .stream()
-            .collect(Collectors.toMap(v -> v.getComment().getId(), MemeCommentVote::isVote));
+            .collect(Collectors.toMap(MemeCommentVote::getCommentId, MemeCommentVote::isVote, (c1, c2) -> c1));
 
         return comments
             .stream()

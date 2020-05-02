@@ -12,30 +12,26 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(
-    name = "memes_comment_vote",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"comment_id", "memetick_id"})
-)
+@Table(name = "memes_comment_vote")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@NamedEntityGraph(name = "joinedComment", attributeNodes = {@NamedAttributeNode("comment")})
 public class MemeCommentVote extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private MemeComment comment;
+    @NaturalId
+    @Column(nullable = false)
+    private UUID commentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private Memetick memetick;
+    @NaturalId
+    @Column(nullable = false)
+    private UUID memetickId;
 
     @Column(nullable = false)
     private boolean vote;
 
     public MemeCommentVote(MemeComment comment, Memetick memetick) {
-        this.comment = comment;
-        this.memetick = memetick;
+        this.commentId = comment.getId();
+        this.memetickId = memetick.getId();
     }
 }

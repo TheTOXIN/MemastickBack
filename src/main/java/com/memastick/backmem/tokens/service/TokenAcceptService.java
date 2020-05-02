@@ -16,14 +16,15 @@ import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.api.TokenAcceptAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
+import com.memastick.backmem.tokens.entity.TokenAccept;
+import com.memastick.backmem.tokens.repository.TokenAcceptRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.memastick.backmem.errors.consts.ErrorCode.NOT_ACCEPTABLE;
-import static com.memastick.backmem.errors.consts.ErrorCode.TOKEN_SELF;
+import static com.memastick.backmem.errors.consts.ErrorCode.*;
 
 @Service
 @AllArgsConstructor
@@ -38,6 +39,7 @@ public class TokenAcceptService {
     private final MemeService memeService;
     private final MemeLohService memeLohService;
     private final MemeCommentService memeCommentService;
+    private final TokenAcceptRepository tokenAcceptRepository;
 
     @Transactional
     public void accept(TokenType token, UUID memeId, TokenAcceptAPI request) {
@@ -45,6 +47,9 @@ public class TokenAcceptService {
         Memetick memetick = oauthData.getCurrentMemetick();
 
         if (meme.getMemetick().getId().equals(memetick.getId())) throw new TokenAcceptException(TOKEN_SELF);
+
+        boolean tokenAcceptExist = tokenAcceptRepository.existsByMemetickAndMeme(memetick, meme);
+        if (tokenAcceptExist) throw new TokenAcceptException(TOKEN_EXIST);
 
         tokenWalletService.have(token, memetick);
         EvolveMeme evolve = evolveMemeRepository.findByMeme(meme);
@@ -61,9 +66,15 @@ public class TokenAcceptService {
 
         int dna = DnaCount.TOKEN * (token.getStep().getNumber() + 1);
 
+        tokenAcceptRepository.create(meme, memetick);
         tokenWalletService.take(token, memetick);
         memetickService.addDna(memetick, dna);
         notifyService.sendTOKEN(token, meme);
+    }
+
+    public boolean canAccpent(Memetick memetick, Meme meme) {
+        return !memetick.getId().equals(meme.getMemetick().getId()) &&
+            !tokenAcceptRepository.existsByMemetickAndMeme(memetick, meme);
     }
 
     private void adaptation(EvolveMeme evolve) {

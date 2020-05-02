@@ -17,10 +17,21 @@ import java.util.stream.Collectors;
 @Repository
 public interface MemeCommentVoteRepository extends JpaRepository<MemeCommentVote, UUID> {
 
-    @EntityGraph("joinedComment")
-    List<MemeCommentVote> findByCommentInAndMemetick(List<MemeComment> comments, Memetick memetick);
+    default List<MemeCommentVote> findByCommentsAndMemetick(List<MemeComment> comments, Memetick memetick) {
+        return this.findByCommentIdInAndMemetickId(
+            comments.stream().map(AbstractEntity::getId).collect(Collectors.toList()),
+            memetick.getId()
+        );
+    }
 
-    Optional<MemeCommentVote> findByCommentAndMemetick(MemeComment comment, Memetick memetick);
+    List<MemeCommentVote> findByCommentIdInAndMemetickId(List<UUID> commentIds, UUID memetickId);
 
-    Optional<Long> countByCommentAndVote(MemeComment comment, boolean vote);
+    default Optional<MemeCommentVote> findByCommentAndMemetick(MemeComment comment, Memetick memetick) {
+        return this.findByCommentIdAndMemetickId(
+            comment.getId(),
+            memetick.getId()
+        );
+    }
+
+    Optional<MemeCommentVote> findByCommentIdAndMemetickId(UUID commentId, UUID memetickId);
 }
