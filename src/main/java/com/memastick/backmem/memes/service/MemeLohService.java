@@ -28,7 +28,6 @@ import static com.memastick.backmem.main.util.MathUtil.limit;
 @RequiredArgsConstructor
 public class MemeLohService {
 
-    private final MemeRepository memeRepository;
     private final MemeLohRepository memeLohRepository;
     private final OauthData oauthData;
 
@@ -44,14 +43,10 @@ public class MemeLohService {
         return res;
     }
 
-    public void saveByMeme(UUID memeId, MemeLohDTO dto) {
+    public void saveByMeme(Meme meme, MemeLohDTO dto) {
         if (!ValidationUtil.validLoh(dto)) throw new ValidationException(ErrorCode.MEME_LOH);
 
         Memetick memetick = oauthData.getCurrentMemetick();
-        Meme meme = memeRepository.tryFindById(memeId);
-
-        boolean alreadyExist = memeLohRepository.existsByMemeAndMemetick(meme, memetick);
-        if (alreadyExist) throw new EntityExistException(MemeLoh.class);
 
         MemeLoh loh = new MemeLoh(meme, memetick);
 

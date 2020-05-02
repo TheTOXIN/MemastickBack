@@ -47,7 +47,7 @@ public class TokenAllowanceService {
         wallet.forEach((type, count) -> setter.get(type).accept(tokenWallet, count));
 
         inventoryRepository.save(inventory);
-        tokenWalletRepository.save(tokenWallet);
+        tokenWalletRepository.save(tokenWallet, memetick);
 
         return new TokenWalletAPI(allowance);
     }

@@ -123,7 +123,7 @@ public class EvolveMemeService {
         Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = evolveMeme.getMeme();
 
-        boolean canApplyToken = tokenAcceptService.canAccpent(memetick, meme);
+        boolean canApplyToken = tokenAcceptService.canAccept(memetick, meme);
 
         return new EvolveMemeAPI(
             meme.getId(),

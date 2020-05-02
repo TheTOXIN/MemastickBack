@@ -24,17 +24,30 @@ public class TokenWalletService {
 
     public void have(TokenType type) {
         Memetick memetick = oauthData.getCurrentMemetick();
-        have(type, memetick);
+        this.have(type, memetick);
     }
 
     public void have(TokenType type, Memetick memetick) {
-        HashMap<TokenType, Integer> wallet = wallet(memetick);
+        TokenWallet tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
+        this.have(type, tokenWallet);
+    }
+
+    public void have(TokenType type, TokenWallet tokenWallet) {
+        HashMap<TokenType, Integer> wallet = getWallet(tokenWallet);
         if (wallet.get(type) <= 0) throw new TokenWalletException();
+    }
+
+    public void take(TokenType type) {
+        Memetick memetick = oauthData.getCurrentMemetick();
+        this.take(type, memetick);
     }
 
     public void take(TokenType type, Memetick memetick) {
         TokenWallet tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
+        this.take(type, tokenWallet);
+    }
 
+    public void take(TokenType type, TokenWallet tokenWallet) {
         HashMap<TokenType, Integer> wallet = getWallet(tokenWallet);
         Integer count = wallet.get(type);
 

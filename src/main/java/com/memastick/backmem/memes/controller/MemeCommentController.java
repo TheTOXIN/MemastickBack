@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.controller;
 
 import com.memastick.backmem.memes.api.MemeCommentAPI;
+import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memes.service.MemeCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class MemeCommentController {
 
     private final MemeCommentService memeCommentService;
+    private final MemeRepository memeRepository;
 
     @PostMapping("/meme/{memeId}")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -25,7 +27,11 @@ public class MemeCommentController {
         @PathVariable("memeId") UUID memeId,
         @RequestBody String comment
     ) {
-        memeCommentService.createComment(memeId, comment);
+        memeCommentService.createComment(
+            memeRepository.tryFindById(memeId),
+            comment
+        );
+
         return ResponseEntity.ok().build();
     }
 

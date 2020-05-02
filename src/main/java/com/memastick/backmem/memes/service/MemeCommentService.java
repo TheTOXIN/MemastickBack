@@ -33,14 +33,12 @@ import static com.memastick.backmem.main.util.TextUtil.clearSpaces;
 public class MemeCommentService {
 
     private final OauthData oauthData;
-    private final MemeRepository memeRepository;
     private final MemeCommentRepository commentRepository;
     private final MemeCommentVoteRepository voteRepository;
 
     @Transactional
-    public void createComment(UUID memeId, String comment) {
+    public void createComment(Meme meme, String comment) {
         Memetick memetick = oauthData.getCurrentMemetick();
-        Meme meme = memeRepository.tryFindById(memeId);
 
         boolean invalid = !ValidationUtil.validText(comment);
         if (invalid) throw new ValidationException(ErrorCode.MEME_COMMENT);

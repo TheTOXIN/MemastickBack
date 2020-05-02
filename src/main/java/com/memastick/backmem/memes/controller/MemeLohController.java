@@ -2,6 +2,8 @@ package com.memastick.backmem.memes.controller;
 
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memes.dto.MemeLohDTO;
+import com.memastick.backmem.memes.repository.MemeLohRepository;
+import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memes.service.MemeLohService;
 import com.memastick.backmem.security.constant.RoleType;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import static com.memastick.backmem.main.util.ValidationUtil.validLoh;
 public class MemeLohController {
 
     private final MemeLohService memeLohService;
+    private final MemeRepository memeRepository;
 
     @GetMapping("/meme/{memeId}")
     public ResponseEntity<MemeLohDTO> readByMeme(@PathVariable("memeId") UUID memeId) {
@@ -32,7 +35,11 @@ public class MemeLohController {
         @PathVariable("memeId") UUID memeId,
         @RequestBody MemeLohDTO dto
     ) {
-        memeLohService.saveByMeme(memeId, dto);
+        memeLohService.saveByMeme(
+            memeRepository.tryFindById(memeId),
+            dto
+        );
+
         return ResponseEntity.ok().build();
     }
 }
