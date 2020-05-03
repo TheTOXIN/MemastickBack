@@ -27,4 +27,7 @@ public class Memetick extends AbstractEntity {
 
     @Column(nullable = false)
     private int cookies = GlobalConstant.DEFAULT_COOKIES;
+
+    @Column(nullable = false)
+    private boolean creed = false;
 }

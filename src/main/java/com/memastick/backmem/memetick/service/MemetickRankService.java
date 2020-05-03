@@ -22,14 +22,6 @@ public class MemetickRankService {
 
     private Map<Integer, MemetickRankType> rankMap = new HashMap<>();
 
-    private final OauthData oauthData;
-
-    public MemetickRankDTO rank() {
-        return rank(
-            oauthData.getCurrentMemetick()
-        );
-    }
-
     public MemetickRankDTO rank(Memetick memetick) {
         long dna = memetick.getDna();
         int lvl = computeLvl(dna);

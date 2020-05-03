@@ -23,4 +23,6 @@ public class HomeAPI {
     private long memes;
 
     private LocalTime selectTimer;
+
+    private boolean creedAgree;
 }

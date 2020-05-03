@@ -45,4 +45,10 @@ public class MemetickController {
         memetickService.changeNick(request);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/creed/agree")
+    public ResponseEntity creedAgree() {
+        memetickService.creedAgree();
+        return ResponseEntity.ok().build();
+    }
 }

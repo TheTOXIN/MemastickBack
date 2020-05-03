@@ -13,6 +13,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.notification.service.NotifyService;
+import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.repository.SettingUserRepository;
@@ -48,9 +49,9 @@ public class MemetickService {
         );
     }
 
-    public MemetickPreviewAPI previewByMe() {
+    public MemetickPreviewAPI preview(Memetick memetick) {
         return memetickMapper.toPreviewDTO(
-            oauthData.getCurrentMemetick()
+            memetick
         );
     }
 
@@ -98,13 +99,13 @@ public class MemetickService {
             .isPresent();
     }
 
-    public Memetick generateMemetick(String nick) {
+    public Memetick generateMemetick(RegistrationAPI request) {
         Memetick memetick = new Memetick();
 
-        memetick.setNick(nick);
+        memetick.setNick(request.getLogin());
+        memetick.setCreed(request.isCreedAgree());
 
         memetickRepository.save(memetick);
-
         coinService.transaction(memetick, GlobalConstant.DEFAULT_MEMCOINS);
 
         return memetick;
@@ -114,5 +115,11 @@ public class MemetickService {
         return memetickRepository
             .findCookieByMemetickId(memetick.getId())
             .orElse(0);
+    }
+
+    public void creedAgree() {
+        Memetick memetick = oauthData.getCurrentMemetick();
+        memetick.setCreed(true);
+        memetickRepository.save(memetick);
     }
 }

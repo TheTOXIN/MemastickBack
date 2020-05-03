@@ -51,7 +51,7 @@ public class UserService {
     public User generateUser(RegistrationAPI request, InviteCode invite) {
         User user = new User();
 
-        Memetick memetick = memetickService.generateMemetick(request.getLogin());
+        Memetick memetick = memetickService.generateMemetick(request);
 
         user.setEmail(invite.getEmail());
         user.setLogin(request.getLogin());
@@ -61,7 +61,6 @@ public class UserService {
 
         userRepository.save(user);
         generateDependencies(user);
-
         notifyService.sendNEWUSER(memetick);
 
         return user;
