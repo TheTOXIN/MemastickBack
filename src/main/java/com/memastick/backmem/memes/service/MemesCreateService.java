@@ -11,6 +11,8 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
+import com.memastick.backmem.memetick.view.CellInventoryView;
+import com.memastick.backmem.memetick.view.MemetickInventoryView;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
@@ -22,8 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.memastick.backmem.main.constant.DnaCount.CELL_MAX;
-import static com.memastick.backmem.main.constant.DnaCount.CELL_MIN;
+import static com.memastick.backmem.main.constant.DnaCount.*;
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 
 @Service
@@ -42,16 +43,20 @@ public class MemesCreateService {
 
     @Transactional
     public void create(MemeCreateAPI request) {
-        if (!memeCellService.checkState()) throw new CellSmallException();
-
         Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = make(request, memetick);
+
+        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
+        if (!memeCellService.checkState(inventory)) throw new CellSmallException();
 
         memeRepository.saveAndFlush(meme);
         evolveMemeService.startEvolve(meme);
 
-        memeCellService.updateCell(memetick);
-        memetickService.addDna(memetick, MathUtil.rand(CELL_MIN, CELL_MAX));
+        int dnaCombo = inventory.getCellCombo();
+        memeCellService.updateCell(inventory);
+
+        if (inventory.getCellCombo() == MIN_CREATE) dnaCombo = MIN_CREATE;
+        memetickService.addDna(memetick, dnaCombo * COF_CREATE);
 
         notifyService.sendCREATING(memetick, meme);
     }

@@ -15,4 +15,11 @@
         <sqlFile path="scripts/02_0.6.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="03_0.6" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="memetick_inventories" columnName="cell_combo"/></not>
+        </preConditions>
+        <sqlFile path="scripts/03_0.6.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

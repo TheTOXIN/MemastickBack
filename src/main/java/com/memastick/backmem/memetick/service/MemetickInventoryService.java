@@ -10,6 +10,7 @@ import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.memetick.view.CellInventoryView;
 import com.memastick.backmem.memetick.view.MemetickInventoryView;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.service.TokenWalletService;
@@ -45,8 +46,12 @@ public class MemetickInventoryService {
     }
 
     public CellAPI readStateCell() {
+        Memetick memetick = oauthData.getCurrentMemetick();
+        CellInventoryView inventory = inventoryRepository.findCellInventoryView(memetick);
+
         return new CellAPI(
-            cellService.stateCell(),
+            cellService.stateCell(inventory),
+            cellService.currentCombo(inventory),
             evolveMemeService.computeEPI()
         );
     }

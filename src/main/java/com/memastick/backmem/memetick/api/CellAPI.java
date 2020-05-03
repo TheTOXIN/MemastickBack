@@ -11,5 +11,7 @@ import lombok.NoArgsConstructor;
 public class CellAPI {
 
     private int state;
+    private int combo;
+
     private EPI epi;
 }
