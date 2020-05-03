@@ -67,7 +67,7 @@ public class MemeLikeService {
         if (MemeType.DEAD.equals(meme.getType())) return;
         if (memeLike.getChromosome() >= MAX_CHROMOSOME) return;
 
-        if (memeLike.getChromosome() == 0) {
+        if (memeLike.getChromosome() == 0 && meme.getType().equals(MemeType.EVLV)) {
             int dna = MathUtil.rand(0, count);
             memetickService.addDna(memeLike.getMemetick(), dna);
         }
