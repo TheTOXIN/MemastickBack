@@ -7,6 +7,8 @@ import com.memastick.backmem.donaters.repository.DonaterRatingRepository;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -43,8 +45,7 @@ public class DonaterService {
     }
 
     public DonaterMessage readRandom() {
-        List<DonaterMessage> messages = new ArrayList<>();
-        messageRepository.findAll().forEach(messages::add);
+        List<DonaterMessage> messages = messageRepository.findAll();
         int index = MathUtil.rand(messages.size() - 1);
         return messages.isEmpty() ? null : messages.get(index);
     }
@@ -54,5 +55,11 @@ public class DonaterService {
             .stream(ratingRepository.findAll().spliterator(), false)
             .sorted(Comparator.comparing(DonaterRating::getTime).reversed())
             .collect(Collectors.groupingBy(DonaterRating::getRarity, LinkedHashMap::new, toList()));
+    }
+
+    public List<DonaterMessage> readAll() {
+        return messageRepository.findAll(
+            Sort.by(Sort.Order.desc("number"))
+        );
     }
 }
