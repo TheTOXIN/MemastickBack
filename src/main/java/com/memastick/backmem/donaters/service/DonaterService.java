@@ -11,11 +11,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
 
-import static com.memastick.backmem.main.constant.GlobalConstant.DEFAULT_DONATER;
 import static com.memastick.backmem.main.constant.LinkConstant.NETRAL_AVATAR;
 import static java.util.stream.Collectors.toList;
 
@@ -27,20 +28,17 @@ public class DonaterService {
     private final DonaterRatingRepository ratingRepository;
 
     public void createMessage(DonaterMessage donater) {
-        if (donater.getAvatar() == null) donater.setAvatar(NETRAL_AVATAR);
-
-        long count = messageRepository.count();
-        donater.setNumber(count);
-
+        donater.setNumber(messageRepository.count());
         messageRepository.save(donater);
     }
 
+    public List<DonaterMessage> readAll() {
+        return messageRepository.findAll(
+            Sort.by(Sort.Order.desc("number"))
+        );
+    }
+
     public void createRating(DonaterRating donater) {
-        if (donater.getAvatar() == null) donater.setAvatar(NETRAL_AVATAR);
-
-        Optional<DonaterRating> optional = ratingRepository.findFirstByNameAndRarity(DEFAULT_DONATER, donater.getRarity());
-        optional.ifPresent(ratingRepository::delete);
-
         ratingRepository.save(donater);
     }
 
@@ -51,15 +49,42 @@ public class DonaterService {
     }
 
     public Map<MemotypeRarity, List<DonaterRating>> readRating() {
-        return StreamSupport
-            .stream(ratingRepository.findAll().spliterator(), false)
+        List<DonaterRating> ratings = new ArrayList<>();
+        ratingRepository.findAll().forEach(ratings::add);
+        fillRating(ratings);
+
+        return ratings
+            .stream()
             .sorted(Comparator.comparing(DonaterRating::getTime).reversed())
             .collect(Collectors.groupingBy(DonaterRating::getRarity, LinkedHashMap::new, toList()));
     }
 
-    public List<DonaterMessage> readAll() {
-        return messageRepository.findAll(
-            Sort.by(Sort.Order.desc("number"))
-        );
+    private void fillRating(List<DonaterRating> ratings) {
+        if (ratings.size() >= 15) return; // TODO REMOVE
+
+        Map<MemotypeRarity, List<DonaterRating>> ratingsByRarity = ratings
+            .stream()
+            .collect(Collectors.groupingBy(DonaterRating::getRarity));
+
+        MemotypeRarity[] rarities = MemotypeRarity.values();
+
+        Arrays.stream(rarities).forEach(rarity -> {
+            List<DonaterRating> ratingsOfRarity = ratingsByRarity.getOrDefault(rarity, new ArrayList<>());
+
+            int countRarity = rarities.length - rarity.getLvl() + 1;
+            int countEmpties = countRarity - ratingsOfRarity.size();
+
+            if (ratingsOfRarity.size() >= countRarity) return;
+
+            IntStream.range(0, countEmpties).forEach(i -> {
+                DonaterRating rating = new DonaterRating();
+
+                rating.setName("ПРИМЕР ДОНАТА");
+                rating.setAvatar(NETRAL_AVATAR);
+                rating.setRarity(rarity);
+
+                ratings.add(rating);
+            });
+        });
     }
 }
