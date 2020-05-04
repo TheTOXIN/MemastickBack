@@ -11,4 +11,5 @@ public class MemeLikeStateDTO {
 
     private boolean myLike;
     private int myChromosomes;
+    private boolean firstChromosome;
 }

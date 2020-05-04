@@ -40,9 +40,12 @@ public class MemeLikeService {
         Memetick memetick = oauthData.getCurrentMemetick();
         MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick).orElse(new MemeLike());
 
+        boolean firstChromosome = memeLike.getChromosome() == 0 && meme.getType().equals(MemeType.EVLV);
+
         return new MemeLikeStateDTO(
             memeLike.isLike(),
-            memeLike.getChromosome()
+            memeLike.getChromosome(),
+            firstChromosome
         );
     }
 
