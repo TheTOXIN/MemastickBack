@@ -25,8 +25,8 @@ public class DonaterMessageController {
         return donaterService.readRandom();
     }
 
-    @GetMapping("read-all")
-    public List<DonaterMessage> readAll() {
+    @GetMapping("read")
+    public List<DonaterMessage> read() {
         return donaterService.readAll();
     }
 }
