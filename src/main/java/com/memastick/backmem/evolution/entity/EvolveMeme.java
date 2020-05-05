@@ -41,6 +41,6 @@ public class EvolveMeme extends AbstractEntity {
 
     public EvolveMeme(Meme meme) {
         this.meme = meme;
-        this.step = EvolveStep.find(0);
+        this.step = EvolveStep.find(1);
     }
 }

@@ -112,7 +112,7 @@ public class EvolveMemeService {
         long currentPop = computePopulation();
         long memePop = meme.getPopulation();
 
-        int step = (int) (currentPop - memePop);
+        int step = (int) (currentPop - memePop) + 1;
 
         return EvolveStep.find(step);
     }
