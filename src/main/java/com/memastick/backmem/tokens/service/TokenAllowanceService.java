@@ -27,7 +27,6 @@ public class TokenAllowanceService {
     private final TokenWalletService tokenWalletService;
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletRepository tokenWalletRepository;
-    private final MemeCoinService coinService;
     private final MemetickRankService rankService;
 
     public TokenWalletAPI take() {
@@ -50,14 +49,6 @@ public class TokenAllowanceService {
         tokenWalletRepository.save(tokenWallet, memetick);
 
         return new TokenWalletAPI(allowance);
-    }
-
-    public void make() {
-        Memetick memetick = oauthData.getCurrentMemetick();
-        MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
-        coinService.transaction(memetick, PriceConst.ALLOWANCE.getValue());
-        inventory.setAllowance(true);
-        inventoryRepository.save(inventory);
     }
 
     public boolean have() {

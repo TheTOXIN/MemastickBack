@@ -30,9 +30,4 @@ public class TokenAllowanceController {
     public TokenWalletAPI takeAllowance() {
         return allowanceService.take();
     }
-
-    @PutMapping("make")
-    public void makeAllowance() {
-        allowanceService.make();
-    }
 }
