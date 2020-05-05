@@ -45,7 +45,7 @@ public class MemotypeMemetickService {
 
         memeCoinService.transaction(
             memetick,
-            memotype.getRarity().getLvl() * PriceConst.MEMOTYPE.getValue()
+            memotype.getRarity().getLvl() * PriceConst.MEMOTYPE.getPrice()
         );
 
         memotypeMemetickRepository.save(new MemotypeMemetick(

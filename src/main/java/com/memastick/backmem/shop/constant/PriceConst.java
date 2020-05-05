@@ -11,9 +11,9 @@ public enum PriceConst {
     MEMOTYPE(100);
 
     @Getter
-    private int value;
+    private int price;
 
-    PriceConst(int value) {
-        this.value =  value * -1;
+    PriceConst(int price) {
+        this.price =  price * -1;
     }
 }

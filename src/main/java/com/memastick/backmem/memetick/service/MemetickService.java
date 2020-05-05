@@ -75,7 +75,7 @@ public class MemetickService {
         Memetick memetick = user.getMemetick();
 
         if (request.isForce()) {
-            coinService.transaction(memetick, PriceConst.NICK.getValue());
+            coinService.transaction(memetick, PriceConst.NICK.getPrice());
         } else if (setting.getNickChanged().getMonth().equals(ZonedDateTime.now().getMonth())) {
             throw new SettingException(ErrorCode.EXPIRE_NICK);
         }

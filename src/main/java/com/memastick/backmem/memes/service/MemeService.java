@@ -129,7 +129,7 @@ public class MemeService {
         Meme meme = memeRepository.tryFindById(memeId);
 
         if (!MemeType.DEAD.equals(meme.getType())) return;
-        memeCoinService.transaction(memetick, PriceConst.RESSURECTION.getValue());
+        memeCoinService.transaction(memetick, PriceConst.RESSURECTION.getPrice());
 
         meme.setType(MemeType.SLCT);
         memeRepository.save(meme);

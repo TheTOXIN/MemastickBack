@@ -5,16 +5,20 @@ import lombok.Getter;
 
 public enum TokenType {
 
-    TUBE(EvolveStep.ADAPTATION),
-    SCOPE(EvolveStep.FITNESS),
-    MUTAGEN(EvolveStep.MUTATION),
-    CROSSOVER(EvolveStep.CROSSING),
-    ANTIBIOTIC(EvolveStep.SURVIVAL);
+    TUBE(EvolveStep.ADAPTATION, 1),
+    SCOPE(EvolveStep.FITNESS, 2),
+    MUTAGEN(EvolveStep.MUTATION, 3),
+    CROSSOVER(EvolveStep.CROSSING, 4),
+    ANTIBIOTIC(EvolveStep.SURVIVAL, 5);
 
     @Getter
     private EvolveStep step;
 
-    TokenType(EvolveStep step) {
+    @Getter
+    private int lvl;
+
+    TokenType(EvolveStep step, int lvl) {
         this.step = step;
+        this.lvl = lvl;
     }
 }

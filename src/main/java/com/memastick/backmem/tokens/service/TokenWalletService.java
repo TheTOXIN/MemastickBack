@@ -66,6 +66,10 @@ public class TokenWalletService {
         return new TokenWalletAPI(wallet(memetickId));
     }
 
+    public HashMap<TokenType, Integer> wallet(TokenWallet tokenWallet) {
+        return getWallet(tokenWallet);
+    }
+
     public HashMap<TokenType, Integer> wallet(Memetick memetick) {
         return wallet(memetick.getId());
     }
