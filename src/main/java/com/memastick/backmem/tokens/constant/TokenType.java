@@ -3,6 +3,8 @@ package com.memastick.backmem.tokens.constant;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 public enum TokenType {
 
     TUBE(EvolveStep.ADAPTATION, 1),
@@ -20,5 +22,13 @@ public enum TokenType {
     TokenType(EvolveStep step, int lvl) {
         this.step = step;
         this.lvl = lvl;
+    }
+
+    public static TokenType find(EvolveStep step) {
+        return Arrays
+            .stream(TokenType.values())
+            .filter(e -> e.getStep().equals(step))
+            .findFirst()
+            .orElse(null);
     }
 }

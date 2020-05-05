@@ -54,7 +54,7 @@ public class TokenAcceptService {
         if (meme.getMemetick().getId().equals(memetick.getId())) throw new TokenAcceptException(TOKEN_SELF);
         if (!evolve.getStep().equals(token.getStep())) throw new TokenAcceptException(NOT_ACCEPTABLE);
 
-        boolean tokenAcceptExist = tokenAcceptRepository.existsByMemetickAndMeme(memetick, meme);
+        boolean tokenAcceptExist = tokenAcceptRepository.checkExist(memetick, meme, token);
         if (tokenAcceptExist) throw new TokenAcceptException(TOKEN_EXIST);
 
         TokenWallet tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
@@ -70,7 +70,7 @@ public class TokenAcceptService {
 
         int dna = DnaCount.TOKEN * (token.getStep().getNumber() + 1);
 
-        tokenAcceptRepository.create(meme, memetick);
+        tokenAcceptRepository.create(meme, memetick, token);
         tokenWalletService.take(token, tokenWallet);
         memetickService.addDna(memetick, dna);
         notifyService.sendTOKEN(token, meme);
@@ -102,8 +102,13 @@ public class TokenAcceptService {
         evolveMemeRepository.save(evolve);
     }
 
-    public boolean canAccept(Memetick memetick, Meme meme) {
-        return !memetick.getId().equals(meme.getMemetick().getId()) &&
-            !tokenAcceptRepository.existsByMemetickAndMeme(memetick, meme);
+    public boolean canAccept(Memetick memetick, EvolveMeme evolveMeme) {
+        Meme meme = evolveMeme.getMeme();
+        TokenType token = TokenType.find(evolveMeme.getStep());
+
+        boolean myMeme = memetick.getId().equals(meme.getMemetick().getId());
+        boolean exist = tokenAcceptRepository.checkExist(memetick, meme, token);
+
+        return !myMeme && !exist;
     }
 }
