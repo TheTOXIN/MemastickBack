@@ -26,7 +26,7 @@ public class AdminController {
     private final BattleVoteRepository battleVoteRepository;
     private final HomeMessageGenerator homeMessageGenerator;
 
-    @GetMapping("test}")
+    @GetMapping("test")
     public void test() {
 
     }
