@@ -114,7 +114,7 @@ public class MemeService {
             case INDV: memes = memeRepository.findByType(MemeType.INDV, pageable); break;
             case DEAD: memes = memeRepository.findByTypeAndMemetick(MemeType.DEAD, memetick, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
-            case MYID: memes = memeRepository.findByTypeAndMemetick(MemeType.INDV, memetick, pageable); break;
+            case BATL: memes = memeRepository.findByTypeAndMemetick(MemeType.INDV, memetick, pageable); break;
             case USER: memes = memeRepository.findByMemetick(memetickRepository.tryFindById(readDTO.getMemetickId()), pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
             case POOL: memes = memePoolService.generate(readDTO.getStep(), pageable); break;
