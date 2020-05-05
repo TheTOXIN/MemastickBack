@@ -29,21 +29,21 @@ public class TokenWallet extends AbstractEntity {
 
     @Max(MAX_TOKEN)
     @Column(nullable = false)
-    private Integer tube = 0;
+    private Integer tube = 1;
 
     @Max(MAX_TOKEN)
     @Column(nullable = false)
-    private Integer scope = 0;
+    private Integer scope = 1;
 
     @Max(MAX_TOKEN)
     @Column(nullable = false)
-    private Integer mutagen = 0;
+    private Integer mutagen = 1;
 
     @Max(MAX_TOKEN)
     @Column(nullable = false)
-    private Integer crossover = 0;
+    private Integer crossover = 1;
 
     @Max(MAX_TOKEN)
     @Column(nullable = false)
-    private Integer antibiotic = 0;
+    private Integer antibiotic = 1;
 }

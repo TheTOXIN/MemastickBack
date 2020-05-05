@@ -103,6 +103,8 @@ public class TokenAcceptService {
     }
 
     public boolean canAccept(Memetick memetick, EvolveMeme evolveMeme) {
+        if (evolveMeme.getStep() == null) return false;
+
         Meme meme = evolveMeme.getMeme();
         TokenType token = evolveMeme.getStep().getToken();
 

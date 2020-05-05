@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
-import javax.management.openmbean.TabularType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -30,6 +29,7 @@ public class TokenAccept extends AbstractEntity {
     @Column(nullable = false)
     private UUID memeId;
 
+    @NaturalId
     @Column(nullable = false)
     private TokenType token;
 }
