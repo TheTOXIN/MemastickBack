@@ -6,6 +6,7 @@ import com.memastick.backmem.memetick.api.MemetickRatingAPI;
 import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.service.MemetickRatingService;
 import com.memastick.backmem.memetick.service.MemetickService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +16,12 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("memeticks")
 public class MemetickController {
 
     private final MemetickService memetickService;
     private final MemetickRatingService ratingService;
-
-    @Autowired
-    public MemetickController(
-        MemetickService memetickService,
-        MemetickRatingService ratingService
-    ) {
-        this.memetickService = memetickService;
-        this.ratingService = ratingService;
-    }
 
     @GetMapping("view/me")
     public MemetickAPI viewMe() {
@@ -50,6 +43,12 @@ public class MemetickController {
     @PutMapping("/nick/change")
     public ResponseEntity changeNick(@RequestBody ChangeNickAPI request) {
         memetickService.changeNick(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/creed/agree")
+    public ResponseEntity creedAgree() {
+        memetickService.creedAgree();
         return ResponseEntity.ok().build();
     }
 }

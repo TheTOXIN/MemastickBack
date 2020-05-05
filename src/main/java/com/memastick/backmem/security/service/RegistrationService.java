@@ -1,5 +1,6 @@
 package com.memastick.backmem.security.service;
 
+import com.memastick.backmem.main.component.HomeMessageGenerator;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.constant.SecurityStatus;
@@ -21,6 +22,7 @@ public class RegistrationService {
     private final UserRepository userRepository;
     private final InviteCodeService inviteCodeService;
     private final InviteCodeRepository inviteCodeRepository;
+    private final HomeMessageGenerator homeMessageGenerator;
 
     @Transactional
     public SecurityStatus registration(RegistrationAPI request) {
@@ -34,6 +36,7 @@ public class RegistrationService {
         if (userRepository.findById(user.getId()).isEmpty()) return SecurityStatus.ERROR;
 
         inviteCodeService.take(invite);
+        homeMessageGenerator.memetickMessage(user.getLogin());
 
         return status;
     }

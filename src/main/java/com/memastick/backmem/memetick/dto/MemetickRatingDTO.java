@@ -13,5 +13,4 @@ public class MemetickRatingDTO {
     private MemetickPreviewAPI preview;
     private long rate;
     private int pos;
-
 }

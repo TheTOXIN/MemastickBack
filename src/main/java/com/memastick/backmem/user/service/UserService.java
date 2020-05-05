@@ -34,7 +34,6 @@ public class UserService {
     private final MemetickInventoryService inventoryService;
     private final MemetickAvatarService avatarService;
     private final SettingUserService settingService;
-    private final TokenStore tokenStore;
     private final OauthData oauthData;
     private final MemetickService memetickService;
     private final TokenWalletService walletService;
@@ -52,7 +51,7 @@ public class UserService {
     public User generateUser(RegistrationAPI request, InviteCode invite) {
         User user = new User();
 
-        Memetick memetick = memetickService.generateMemetick(request.getLogin());
+        Memetick memetick = memetickService.generateMemetick(request);
 
         user.setEmail(invite.getEmail());
         user.setLogin(request.getLogin());
@@ -62,7 +61,6 @@ public class UserService {
 
         userRepository.save(user);
         generateDependencies(user);
-
         notifyService.sendNEWUSER(memetick);
 
         return user;
@@ -79,13 +77,6 @@ public class UserService {
         User user = userRepository.tryFindByLogin(login);
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
-    }
-
-    public boolean isOnline(Memetick memetick) {
-        var user = userRepository.findByMemetick(memetick);
-        var tokens = tokenStore.findTokensByClientIdAndUserName(oauthClient, user.getLogin());
-
-        return tokens.stream().anyMatch(token -> !token.isExpired());
     }
 
     public MeAPI me() {

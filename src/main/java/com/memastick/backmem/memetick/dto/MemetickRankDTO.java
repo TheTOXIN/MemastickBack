@@ -1,0 +1,21 @@
+package com.memastick.backmem.memetick.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class MemetickRankDTO {
+
+    private int lvl;
+
+    private long dna;
+    private long next;
+    private long left;
+
+    private int percent;
+
+    private String name;
+}

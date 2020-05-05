@@ -1,0 +1,1 @@
+DELETE FROM notify_push WHERE TRUE;

@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.service;
 
+import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memecoin.service.PickaxeService;
@@ -9,11 +10,13 @@ import com.memastick.backmem.memetick.api.MemetickInventoryAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
+import com.memastick.backmem.memetick.view.CellInventoryView;
 import com.memastick.backmem.memetick.view.MemetickInventoryView;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.service.TokenWalletService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +30,7 @@ public class MemetickInventoryService {
     private final MemeCellService cellService;
     private final PickaxeService pickaxeService;
 
+    @Transactional
     public MemetickInventoryAPI readAll() {
         Memetick memetick = oauthData.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
@@ -42,10 +46,20 @@ public class MemetickInventoryService {
     }
 
     public CellAPI readStateCell() {
+        Memetick memetick = oauthData.getCurrentMemetick();
+        CellInventoryView inventory = inventoryRepository.findCellInventoryView(memetick);
+
         return new CellAPI(
-            cellService.stateCell(),
+            cellService.stateCell(inventory),
+            cellService.currentCombo(inventory),
             evolveMemeService.computeEPI()
         );
+    }
+
+    public void checkHaveCell() {
+        if (!cellService.checkState()) {
+            throw new CellSmallException();
+        }
     }
 
     public long countItems(Memetick memetick) {

@@ -8,10 +8,12 @@ import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.notification.service.NotifyService;
+import com.memastick.backmem.security.api.RegistrationAPI;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.entity.SettingUser;
 import com.memastick.backmem.setting.repository.SettingUserRepository;
@@ -43,7 +45,13 @@ public class MemetickService {
 
     public MemetickAPI viewById(UUID id) {
         return memetickMapper.toMemetickAPI(
-            memetickRepository.tryfFndById(id)
+            memetickRepository.tryFindById(id)
+        );
+    }
+
+    public MemetickPreviewAPI preview(Memetick memetick) {
+        return memetickMapper.toPreviewDTO(
+            memetick
         );
     }
 
@@ -67,7 +75,7 @@ public class MemetickService {
         Memetick memetick = user.getMemetick();
 
         if (request.isForce()) {
-            coinService.transaction(memetick, PriceConst.NICK.getValue());
+            coinService.transaction(memetick, PriceConst.NICK.getPrice());
         } else if (setting.getNickChanged().getMonth().equals(ZonedDateTime.now().getMonth())) {
             throw new SettingException(ErrorCode.EXPIRE_NICK);
         }
@@ -91,17 +99,13 @@ public class MemetickService {
             .isPresent();
     }
 
-    public static void main(String[] args) {
-        System.out.println("TEST-123&$^&@".replaceAll("", ""));
-    }
-
-    public Memetick generateMemetick(String nick) {
+    public Memetick generateMemetick(RegistrationAPI request) {
         Memetick memetick = new Memetick();
 
-        memetick.setNick(nick);
+        memetick.setNick(request.getLogin());
+        memetick.setCreed(request.isCreedAgree());
 
         memetickRepository.save(memetick);
-
         coinService.transaction(memetick, GlobalConstant.DEFAULT_MEMCOINS);
 
         return memetick;
@@ -111,5 +115,11 @@ public class MemetickService {
         return memetickRepository
             .findCookieByMemetickId(memetick.getId())
             .orElse(0);
+    }
+
+    public void creedAgree() {
+        Memetick memetick = oauthData.getCurrentMemetick();
+        memetick.setCreed(true);
+        memetickRepository.save(memetick);
     }
 }

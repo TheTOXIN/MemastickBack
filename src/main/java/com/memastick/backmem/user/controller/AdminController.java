@@ -26,7 +26,7 @@ public class AdminController {
     private final BattleVoteRepository battleVoteRepository;
     private final HomeMessageGenerator homeMessageGenerator;
 
-    @GetMapping("test}")
+    @GetMapping("test")
     public void test() {
 
     }
@@ -66,7 +66,7 @@ public class AdminController {
         notifyService.sendADMIN(text);
     }
 
-    @PatchMapping("user-notify/{memetickId}")
+    @PatchMapping("admin-notify/{memetickId}")
     public void notifyUser(
         @PathVariable("memetickId") UUID memetickId,
         @RequestBody String text

@@ -34,12 +34,13 @@ public class EvolveMeme extends AbstractEntity {
     @Column(nullable = false)
     private int adaptation = 0;
 
+    // TODO Hmm...
     @Column
     @Max(101)
     private float chance;
 
     public EvolveMeme(Meme meme) {
         this.meme = meme;
-        this.step = EvolveStep.find(0);
+        this.step = EvolveStep.find(1);
     }
 }

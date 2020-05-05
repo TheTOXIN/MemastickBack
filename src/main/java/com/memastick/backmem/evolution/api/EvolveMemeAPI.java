@@ -19,6 +19,8 @@ public class EvolveMemeAPI {
     private EPI epi;
 
     private EvolveStep step;
+
+    private boolean canApplyToken;
     private boolean immunity;
     private int adaptation;
 

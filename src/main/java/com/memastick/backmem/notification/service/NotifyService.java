@@ -5,6 +5,7 @@ import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memotype.entity.Memotype;
+import com.memastick.backmem.notification.constant.NotifyText;
 import com.memastick.backmem.notification.constant.NotifyType;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.impl.NotifyBellService;
@@ -16,6 +17,7 @@ import com.memastick.backmem.setting.service.SettingFollowerService;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class NotifyService {
 
     private final NotifyBellService bellService;
@@ -30,21 +33,6 @@ public class NotifyService {
     private final NotifyWebService webService;
     private final UserRepository userRepository;
     private final SettingFollowerService followerService;
-
-    @Autowired
-    public NotifyService(
-        NotifyBellService bellService,
-        NotifyPushService pushService,
-        NotifyWebService webService,
-        UserRepository userRepository,
-        SettingFollowerService followerService
-    ) {
-        this.bellService = bellService;
-        this.pushService = pushService;
-        this.webService = webService;
-        this.userRepository = userRepository;
-        this.followerService = followerService;
-    }
 
     @Async
     public void sendDNA(int dna, Memetick memetick) {
@@ -94,10 +82,10 @@ public class NotifyService {
             Collections.singletonList(userRepository.findByMemetick(meme.getMemetick())),
             new NotifyDTO(
                 NotifyType.TOKEN,
-                "Вашему мему дали токен",
-                "Мему эволюции №" + meme.getEvolution() + " дали токен: " + NotifyUtil.tokenToStr(token),
+                NotifyText.TOKEN_TEXT.get(token),
+                "На меме эволюции №" + meme.getEvolution() + " применили токен: " + NotifyUtil.tokenToStr(token),
                 token.name(),
-                LinkConstant.LINK_MEME + "/" + meme.getId()
+                LinkConstant.LINK_RESEARCH + "/" + meme.getId()
             )
         );
     }

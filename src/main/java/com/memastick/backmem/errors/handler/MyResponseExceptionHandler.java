@@ -17,7 +17,7 @@ public class MyResponseExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {AbstractException.class})
     public ResponseEntity<ResponseErrorAPI> handleConflict(AbstractException ex) {
         ResponseErrorAPI response = ex.getResponse();
-        logger.error(String.format("%s: %s - %s", response.getCode(), response.getMessage(), response.getCause()));
+        logger.debug(String.format("%s: %s - %s", response.getCode(), response.getMessage(), response.getCause()));
         return ResponseEntity.status(response.getCode().getStatus()).body(response);
     }
 }

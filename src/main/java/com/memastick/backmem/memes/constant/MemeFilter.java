@@ -7,7 +7,7 @@ public enum MemeFilter {
     DEAD,
     LIKE,
     SELF,
-    MYID,
+    BATL,
     USER,
     POOL
 }

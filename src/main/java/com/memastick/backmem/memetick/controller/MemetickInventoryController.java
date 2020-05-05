@@ -18,9 +18,14 @@ public class MemetickInventoryController {
         this.inventoryService = inventoryService;
     }
 
-    @GetMapping("cell")
+    @GetMapping("cell/state")
     public CellAPI stateCell() {
         return inventoryService.readStateCell();
+    }
+
+    @GetMapping("cell/have")
+    public void haveCell() {
+        inventoryService.checkHaveCell();
     }
 
     @GetMapping("all")

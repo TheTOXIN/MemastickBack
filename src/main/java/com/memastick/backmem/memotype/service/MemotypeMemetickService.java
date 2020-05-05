@@ -45,7 +45,7 @@ public class MemotypeMemetickService {
 
         memeCoinService.transaction(
             memetick,
-            memotype.getRarity().getLvl() * PriceConst.MEMOTYPE.getValue()
+            memotype.getRarity().getLvl() * PriceConst.MEMOTYPE.getPrice()
         );
 
         memotypeMemetickRepository.save(new MemotypeMemetick(
@@ -55,7 +55,7 @@ public class MemotypeMemetickService {
     }
 
     public MemotypeMemetickAPI read(UUID memetickId) {
-        Memetick memetick = memetickRepository.tryfFndById(memetickId);
+        Memetick memetick = memetickRepository.tryFindById(memetickId);
 
         List<Memotype> memotypesMy = memotypeMemetickRepository.findMemotypesIdByMemetickId(memetick.getId());
         Map<UUID, MemotypeSet> setById = memotypeSetService.allSetById();

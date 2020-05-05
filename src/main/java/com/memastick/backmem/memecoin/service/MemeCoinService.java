@@ -6,6 +6,8 @@ import com.memastick.backmem.memecoin.repository.MemeCoinRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.notification.service.NotifyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ public class MemeCoinService {
     private final NotifyService notifyService;
 
     @Transactional
+    @CacheEvict(value = "balanceMemeCoins", key = "#memetick.id")
     public void transaction(Memetick memetick, long value) {
         if (value == 0) return;
         if (value < 0 && (balance(memetick) + value) < 0) throw new MemeCoinNotEnoughException();
@@ -32,6 +35,7 @@ public class MemeCoinService {
         notifyService.sendMEMECOIN(memetick, value);
     }
 
+    @Cacheable(value = "balanceMemeCoins", key = "#memetick.id")
     public long balance(Memetick memetick) {
         return coinRepository
             .sumValueByMemetick(memetick.getId())

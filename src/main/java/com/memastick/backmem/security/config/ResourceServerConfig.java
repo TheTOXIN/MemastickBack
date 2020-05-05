@@ -23,7 +23,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .mvcMatchers("/test").hasAuthority(RoleType.ADMIN.name())
-            .mvcMatchers("/donater**").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/memes/ban/**").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/day-publish/**").hasAuthority(RoleType.ADMIN.name())
             .mvcMatchers("/clear-votes/**").hasAuthority(RoleType.ADMIN.name())
@@ -47,6 +46,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .mvcMatchers("/password-reset/take").anonymous()
             .mvcMatchers("/socket/**").anonymous()
             .mvcMatchers("/donater-ratings/read").anonymous()
+            .mvcMatchers("/donater-messages/read").anonymous()
             .mvcMatchers("/**").authenticated();
     }
 }

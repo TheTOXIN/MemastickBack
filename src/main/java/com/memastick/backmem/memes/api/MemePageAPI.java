@@ -1,7 +1,6 @@
 package com.memastick.backmem.memes.api;
 
 import com.memastick.backmem.evolution.constant.EvolveStep;
-import com.memastick.backmem.memes.dto.MemeAPI;
 import com.memastick.backmem.memes.dto.MemeLikeStateDTO;
 import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import lombok.AllArgsConstructor;

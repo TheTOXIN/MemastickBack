@@ -10,6 +10,10 @@ import com.memastick.backmem.main.util.TimeUtil;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.security.component.OauthData;
+import com.memastick.backmem.tokens.repository.TokenAcceptRepository;
+import com.memastick.backmem.tokens.service.TokenAcceptService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +30,9 @@ import static java.time.temporal.ChronoUnit.DAYS;
 public class EvolveMemeService {
 
     private final EvolveMemeRepository evolveMemeRepository;
+    private final TokenAcceptService tokenAcceptService;
     private final MemeRepository memeRepository;
+    private final OauthData oauthData;
 
     public void startEvolve(Meme meme) {
         evolveMemeRepository.save(
@@ -106,23 +112,24 @@ public class EvolveMemeService {
         long currentPop = computePopulation();
         long memePop = meme.getPopulation();
 
-        int step = (int) (currentPop - memePop);
+        int step = (int) (currentPop - memePop) + 1;
 
         return EvolveStep.find(step);
     }
 
     public EvolveMemeAPI readByMeme(UUID memeId) {
         EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
+
+        Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = evolveMeme.getMeme();
+
+        boolean canApplyToken = tokenAcceptService.canAccept(memetick, evolveMeme);
 
         return new EvolveMemeAPI(
             meme.getId(),
-            new EPI(
-              meme.getEvolution(),
-              meme.getPopulation(),
-              meme.getIndividuation()
-            ),
+            toEPI(meme),
             evolveMeme.getStep(),
+            canApplyToken,
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation(),
             computeNextTimer()
@@ -143,5 +150,13 @@ public class EvolveMemeService {
         return memeRepository
             .countByEvolution(this.computeEvolution())
             .orElse(0L);
+    }
+
+    private EPI toEPI(Meme meme) {
+        return new EPI(
+            meme.getEvolution(),
+            meme.getPopulation(),
+            meme.getIndividuation()
+        );
     }
 }

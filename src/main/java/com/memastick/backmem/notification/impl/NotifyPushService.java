@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,8 +99,17 @@ public class NotifyPushService implements NotifySender {
             .orElse(new NotifyPush(token));
 
         if (user.equals(notifyPush.getUser())) return;
-
         notifyPush.setUser(user);
+
+        notifyPushRepository.save(notifyPush);
+    }
+
+    public void refresher(String oldToken, String newToken) {
+        Optional<NotifyPush> optional = notifyPushRepository.findByToken(oldToken);
+
+        if (optional.isEmpty()) return;
+        NotifyPush notifyPush = optional.get();
+        notifyPush.setToken(newToken);
 
         notifyPushRepository.save(notifyPush);
     }

@@ -70,8 +70,8 @@ public class Initializer {
         Memetick memetick = new Memetick();
 
         memetick.setNick(ADMIN_NICK);
-        memetickRepository.save(memetick);
+        memetick.setCreed(true);
 
-        return memetick;
+        return memetickRepository.save(memetick);
     }
 }

@@ -36,7 +36,7 @@ public class MemeCoinController {
         @RequestBody UUID memetickId
     ) {
         memeCoinService.transaction(
-            memetickRepository.tryfFndById(memetickId),
+            memetickRepository.tryFindById(memetickId),
             value
         );
     }

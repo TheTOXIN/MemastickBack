@@ -1,5 +1,6 @@
 package com.memastick.backmem.memetick.api;
 
+import com.memastick.backmem.memetick.dto.MemetickRankDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,12 @@ public class MemetickAPI {
 
     private UUID id;
     private String nick;
+
     private boolean follow;
     private boolean online;
+
     private long memecoins;
     private int cookies;
+
+    private MemetickRankDTO rank;
 }

@@ -35,7 +35,7 @@ public class TranslatorUserService {
         Meme meme = memeRepository.tryFindById(memeId);
 
         if (!memetick.getId().equals(meme.getMemetick().getId())) throw new TranslatorException();
-        coinService.transaction(memetick, PriceConst.PUBLISH.getValue());
+        coinService.transaction(memetick, PriceConst.PUBLISH.getPrice());
 
         File file = translatorDownloader.download(meme);
         String text = TranslatorUtil.prepareUserText(meme);

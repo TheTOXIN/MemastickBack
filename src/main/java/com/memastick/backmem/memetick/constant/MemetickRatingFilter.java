@@ -5,5 +5,4 @@ public enum MemetickRatingFilter {
     DNA,
     IND,
     CHR
-
 }

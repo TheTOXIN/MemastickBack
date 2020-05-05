@@ -40,9 +40,12 @@ public class MemeLikeService {
         Memetick memetick = oauthData.getCurrentMemetick();
         MemeLike memeLike = memeLikeRepository.findByMemeAndMemetick(meme, memetick).orElse(new MemeLike());
 
+        boolean firstChromosome = memeLike.getChromosome() == 0 && meme.getType().equals(MemeType.EVLV);
+
         return new MemeLikeStateDTO(
             memeLike.isLike(),
-            memeLike.getChromosome()
+            memeLike.getChromosome(),
+            firstChromosome
         );
     }
 
@@ -67,7 +70,10 @@ public class MemeLikeService {
         if (MemeType.DEAD.equals(meme.getType())) return;
         if (memeLike.getChromosome() >= MAX_CHROMOSOME) return;
 
-        if (memeLike.getChromosome() == 0) memetickService.addDna(memeLike.getMemetick(), MathUtil.rand(0, CHROMOSOME));
+        if (memeLike.getChromosome() == 0 && meme.getType().equals(MemeType.EVLV)) {
+            int dna = MathUtil.rand(0, count);
+            memetickService.addDna(memeLike.getMemetick(), dna);
+        }
 
         int chromosome = Math.min(memeLike.getChromosome() + count, MAX_CHROMOSOME);
         int allChromosome = meme.getChromosomes() + (chromosome - memeLike.getChromosome());

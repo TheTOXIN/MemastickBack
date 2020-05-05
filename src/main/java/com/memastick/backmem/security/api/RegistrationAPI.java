@@ -13,4 +13,6 @@ public class RegistrationAPI {
     private String login;
     private String password;
     private String passwordRepeat;
+
+    private boolean creedAgree;
 }

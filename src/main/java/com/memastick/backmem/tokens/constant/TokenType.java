@@ -3,18 +3,20 @@ package com.memastick.backmem.tokens.constant;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 public enum TokenType {
 
-    TUBE(EvolveStep.ADAPTATION),
-    SCOPE(EvolveStep.FITNESS),
-    MUTAGEN(EvolveStep.MUTATION),
-    CROSSOVER(EvolveStep.CROSSING),
-    ANTIBIOTIC(EvolveStep.SURVIVAL);
+    TUBE(1),
+    SCOPE(2),
+    MUTAGEN(3),
+    CROSSOVER(4),
+    ANTIBIOTIC(5);
 
     @Getter
-    private EvolveStep step;
+    private int lvl;
 
-    TokenType(EvolveStep step) {
-        this.step = step;
+    TokenType(int lvl) {
+        this.lvl = lvl;
     }
 }
