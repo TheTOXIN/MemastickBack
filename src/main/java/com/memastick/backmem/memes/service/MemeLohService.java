@@ -18,6 +18,7 @@ import com.memastick.backmem.security.component.OauthData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_LOH;

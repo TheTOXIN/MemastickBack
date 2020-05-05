@@ -23,7 +23,7 @@ public class EvolveFitnessService implements Evolution {
             Meme meme = e.getMeme();
 
             MemeLohSum lohSum = memeLohRepository.sumByMemeId(meme.getId());
-            int lohAvg = (lohSum.getLol() + lohSum.getOmg() + lohSum.getHmm()) / 3;
+            int lohAvg = lohSum.computeAvg();
 
             meme.setChromosomes(meme.getChromosomes() + lohAvg);
         });
