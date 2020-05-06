@@ -58,6 +58,7 @@ public class MemotypeSetService {
         Map<String, List<MemotypeAPI>> memotypesBySet = memotypesAll
             .stream()
             .sorted(Comparator.comparing(m -> m.getRarity().getLvl()))
+            .sorted(Comparator.comparing(Memotype::getNumber))
             .map(m -> memotypeMapper.toAPI(m, setById.get(m.getSetId()).getName()))
             .peek(m -> m.setCount(memotypeByCount.getOrDefault(m.getId(), 0)))
             .collect(Collectors.groupingBy(MemotypeAPI::getSet));
