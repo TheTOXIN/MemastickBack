@@ -27,6 +27,8 @@ public interface MemotypeRepository extends CrudRepository<Memotype, UUID> {
 
     Optional<Long> countByRarity(MemotypeRarity rarity);
 
+    List<Memotype> findAllBySetId(UUID setId);
+
     default Memotype tryFindById(UUID memotypeId) {
         return this
             .findById(memotypeId)
