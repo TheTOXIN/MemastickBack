@@ -20,7 +20,7 @@ public class MainController {
 
     @GetMapping("hello")
     public String hello() {
-        return "Hello, i'm MEMASTICK server!!! ver: " + GlobalConstant.VER;
+        return GlobalConstant.VER;
     }
 
     @GetMapping("home")
