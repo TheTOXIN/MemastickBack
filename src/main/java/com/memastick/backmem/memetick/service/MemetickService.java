@@ -24,7 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -121,5 +123,12 @@ public class MemetickService {
         Memetick memetick = oauthData.getCurrentMemetick();
         memetick.setCreed(true);
         memetickRepository.save(memetick);
+    }
+
+    public List<MemetickPreviewAPI> list() {
+        return memetickRepository.findAll()
+            .stream()
+            .map(memetickMapper::toPreviewDTO)
+            .collect(Collectors.toList());
     }
 }

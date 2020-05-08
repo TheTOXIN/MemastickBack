@@ -2,6 +2,7 @@ package com.memastick.backmem.memetick.controller;
 
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
 import com.memastick.backmem.memetick.api.MemetickAPI;
+import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.api.MemetickRatingAPI;
 import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.service.MemetickRatingService;
@@ -12,6 +13,7 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +33,11 @@ public class MemetickController {
     @GetMapping("view/{id}")
     public MemetickAPI view(@PathVariable("id") UUID id) {
         return memetickService.viewById(id);
+    }
+
+    @GetMapping("list")
+    public List<MemetickPreviewAPI> list() {
+        return memetickService.list();
     }
 
     @GetMapping("/rating/{filter}")
