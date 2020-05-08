@@ -12,11 +12,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class MemeCommentDTO {
 
+    private UUID memeId;
     private UUID memetickId;
     private String comment;
     private int point;
 
     public MemeCommentDTO(MemeComment comment) {
+        this.memeId = comment.getMemeId();
         this.memetickId = comment.getMemetickId();
         this.comment = comment.getComment();
         this.point = comment.getPoint();
