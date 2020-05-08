@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -49,8 +50,7 @@ public class Meme extends AbstractEntity {
     private int chromosomes = 0;
 
     @Column
-    @Length(max = MAX_TEXT_LEN)
-    private String comment;
+    private UUID commentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)

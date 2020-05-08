@@ -3,6 +3,7 @@ package com.memastick.backmem.memes.api;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.constant.MemeType;
+import com.memastick.backmem.memes.dto.MemeCommentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,14 @@ import java.util.UUID;
 public class MemeAPI {
 
     private UUID id;
+
     private String url;
     private String text;
+
     private MemeType type;
+
     private int likes;
     private int chromosomes;
-    private String comment;
+
     private EPI epi;
 }

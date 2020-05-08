@@ -1,6 +1,7 @@
 package com.memastick.backmem.memes.repository;
 
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
+import com.memastick.backmem.memes.dto.MemeCommentDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.entity.MemeComment;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -18,6 +19,12 @@ import java.util.UUID;
 
 @Repository
 public interface MemeCommentRepository extends JpaRepository<MemeComment, UUID> {
+
+    default MemeCommentDTO findCommentForMeme(UUID commentId) {
+        if (commentId == null) return null;
+        MemeComment comment = this.tryFindById(commentId);
+        return new MemeCommentDTO(comment);
+    }
 
     List<MemeComment> findAllByMemeId(UUID memeId, Pageable pageable);
 

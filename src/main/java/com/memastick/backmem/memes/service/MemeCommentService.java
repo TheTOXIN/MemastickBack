@@ -1,10 +1,8 @@
 package com.memastick.backmem.memes.service;
 
-import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.EntityExistException;
 import com.memastick.backmem.errors.exception.ValidationException;
-import com.memastick.backmem.main.util.TextUtil;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memes.api.MemeCommentAPI;
 import com.memastick.backmem.memes.entity.Meme;
@@ -36,6 +34,8 @@ public class MemeCommentService {
     private final MemeRepository memeRepository;
     private final MemeCommentRepository commentRepository;
     private final MemeCommentVoteRepository voteRepository;
+
+    // TODO Удаление коментов для админа
 
     @Transactional
     public void createComment(Meme meme, String comment) {
@@ -84,6 +84,6 @@ public class MemeCommentService {
         commentRepository.save(comment);
 
         MemeComment bestComment = commentRepository.findBestComment(comment.getMemeId());
-//        memeRepository.updateSetComment(bestComment);
+        memeRepository.updateSetComment(bestComment.getId());
     }
 }

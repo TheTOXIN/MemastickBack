@@ -3,9 +3,11 @@ package com.memastick.backmem.memes.repository;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
+import com.memastick.backmem.memes.entity.MemeComment;
 import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -59,4 +61,8 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
             .findById(memeId)
             .orElseThrow(() -> new EntityNotFoundException(Meme.class, "id"));
     }
+
+    @Modifying
+    @Query("UPDATE Meme m SET m.commentId = :commentId")
+    void updateSetComment(@Param("commentId") UUID commentId);
 }

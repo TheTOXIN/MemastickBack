@@ -26,4 +26,11 @@
         <sqlFile path="scripts/04_0.6.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="05_0.6" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="memes" columnName="comment"/>
+        </preConditions>
+        <sqlFile path="scripts/05_0.6.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>
