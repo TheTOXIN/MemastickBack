@@ -42,6 +42,8 @@ public interface MemeCommentRepository extends JpaRepository<MemeComment, UUID> 
 
     boolean existsByMemeIdAndMemetickId(UUID memeId, UUID memetickId);
 
+    Optional<Long> countByMemeId(UUID memeId);
+
     @Query(
         value = "SELECT * FROM memes_comment WHERE meme_id = :memeId ORDER BY point DESC, creating LIMIT 1",
         nativeQuery = true
