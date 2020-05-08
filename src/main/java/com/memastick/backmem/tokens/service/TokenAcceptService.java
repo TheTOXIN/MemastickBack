@@ -102,14 +102,14 @@ public class TokenAcceptService {
         evolveMemeRepository.save(evolve);
     }
 
-    public boolean canAccept(Memetick memetick, EvolveMeme evolveMeme) {
+    public boolean canAccept(Memetick currentMemetick, Memetick memeMemetick, EvolveMeme evolveMeme) {
         if (evolveMeme.getStep() == null) return false;
 
         Meme meme = evolveMeme.getMeme();
         TokenType token = evolveMeme.getStep().getToken();
 
-        boolean myMeme = memetick.getId().equals(meme.getMemetick().getId());
-        boolean exist = tokenAcceptRepository.checkExist(memetick, meme, token);
+        boolean myMeme = currentMemetick.getId().equals(memeMemetick.getId());
+        boolean exist = tokenAcceptRepository.checkExist(currentMemetick, meme, token);
 
         return !myMeme && !exist;
     }

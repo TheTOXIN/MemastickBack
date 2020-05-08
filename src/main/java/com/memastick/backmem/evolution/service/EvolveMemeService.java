@@ -118,18 +118,21 @@ public class EvolveMemeService {
     }
 
     public EvolveMemeAPI readByMeme(UUID memeId) {
+        Memetick currentMemetick = oauthData.getCurrentMemetick();
         EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
 
-        Memetick memetick = oauthData.getCurrentMemetick();
         Meme meme = evolveMeme.getMeme();
+        Memetick memeMemetick = meme.getMemetick();
 
-        boolean canApplyToken = tokenAcceptService.canAccept(memetick, evolveMeme);
+        boolean myMeme = currentMemetick.getId().equals(memeMemetick.getId());
+        boolean canAccept = tokenAcceptService.canAccept(currentMemetick, memeMemetick, evolveMeme);
 
         return new EvolveMemeAPI(
             meme.getId(),
             toEPI(meme),
             evolveMeme.getStep(),
-            canApplyToken,
+            myMeme,
+            canAccept,
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation(),
             computeNextTimer()

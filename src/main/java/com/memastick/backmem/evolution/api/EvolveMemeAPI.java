@@ -20,8 +20,10 @@ public class EvolveMemeAPI {
 
     private EvolveStep step;
 
+    private boolean myMeme;
     private boolean canApplyToken;
     private boolean immunity;
+
     private int adaptation;
 
     private LocalTime nextTimer;
