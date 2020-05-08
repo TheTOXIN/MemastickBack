@@ -33,6 +33,7 @@ import static com.memastick.backmem.main.util.TextUtil.clearSpaces;
 public class MemeCommentService {
 
     private final OauthData oauthData;
+    private final MemeRepository memeRepository;
     private final MemeCommentRepository commentRepository;
     private final MemeCommentVoteRepository voteRepository;
 
@@ -81,5 +82,8 @@ public class MemeCommentService {
 
         voteRepository.save(vote);
         commentRepository.save(comment);
+
+        MemeComment bestComment = commentRepository.findBestComment(comment.getMemeId());
+//        memeRepository.updateSetComment(bestComment);
     }
 }

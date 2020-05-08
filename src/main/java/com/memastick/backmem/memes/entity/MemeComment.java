@@ -6,33 +6,29 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 
 @Entity
-@Table(
-    name = "memes_comment",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"meme_id", "memetick_id"})
-)
+@Table(name = "memes_comment")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@NamedEntityGraph(name = "joinedCommentMemetick", attributeNodes = {@NamedAttributeNode("memetick")})
 public class MemeComment extends AbstractEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private Meme meme;
+    @NaturalId
+    private UUID memeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
-    private Memetick memetick;
+    @NaturalId
+    private UUID memetickId;
 
     @Column(nullable = false)
     @Length(max = MAX_TEXT_LEN)
@@ -45,8 +41,8 @@ public class MemeComment extends AbstractEntity {
     private int point;
 
     public MemeComment(Meme meme, Memetick memetick, String comment) {
-        this.meme = meme;
-        this.memetick = memetick;
+        this.memeId = meme.getId();
+        this.memetickId = memetick.getId();
         this.comment = comment;
 
         this.creating = ZonedDateTime.now();

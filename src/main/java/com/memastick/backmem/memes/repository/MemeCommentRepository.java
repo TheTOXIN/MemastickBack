@@ -19,7 +19,6 @@ import java.util.UUID;
 @Repository
 public interface MemeCommentRepository extends JpaRepository<MemeComment, UUID> {
 
-    @EntityGraph(value = "joinedCommentMemetick")
     List<MemeComment> findAllByMemeId(UUID memeId, Pageable pageable);
 
     default MemeComment tryFindById(UUID commentId) {
@@ -28,7 +27,13 @@ public interface MemeCommentRepository extends JpaRepository<MemeComment, UUID> 
             .orElseThrow(() -> new EntityNotFoundException(MemeComment.class, "id"));
     }
 
-    boolean existsByMemeAndMemetick(Meme meme, Memetick memetick);
+    default boolean existsByMemeAndMemetick(Meme meme, Memetick memetick) {
+        return this.existsByMemeIdAndMemetickId(
+            meme.getId(), memetick.getId()
+        );
+    }
+
+    boolean existsByMemeIdAndMemetickId(UUID memeId, UUID memetickId);
 
     @Query(
         value = "SELECT * FROM memes_comment WHERE meme_id = :memeId ORDER BY point DESC, creating LIMIT 1",

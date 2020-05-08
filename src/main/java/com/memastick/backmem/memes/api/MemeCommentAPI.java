@@ -13,6 +13,8 @@ import java.util.UUID;
 public class MemeCommentAPI {
 
     private UUID commentId;
+
+    private UUID memeId;
     private UUID memetickId;
 
     private String comment;
@@ -22,7 +24,9 @@ public class MemeCommentAPI {
 
     public MemeCommentAPI(MemeComment entity, Boolean vote) {
         this.commentId = entity.getId();
-        this.memetickId = entity.getMemetick().getId();
+
+        this.memeId = entity.getMemeId();
+        this.memetickId = entity.getMemetickId();
 
         this.comment = entity.getComment();
         this.point = entity.getPoint();
