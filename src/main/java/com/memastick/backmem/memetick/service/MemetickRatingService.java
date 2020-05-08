@@ -11,40 +11,40 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.mapper.MemetickMapper;
 import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.component.OauthData;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.memastick.backmem.memes.constant.MemeType.INDV;
+import static com.memastick.backmem.memetick.constant.MemetickRatingFilter.*;
+
 @Service
+@RequiredArgsConstructor
 public class MemetickRatingService {
 
-    private Map<MemetickRatingFilter, Function<Memetick, Long>> mapFilter = new HashMap<>();
+    private final Map<MemetickRatingFilter, Function<Memetick, Long>> mapFilter = new HashMap<>();
 
     private final MemetickRepository memetickRepository;
-    private final OauthData oauthData;
     private final MemetickMapper memetickMapper;
     private final MemeRepository memeRepository;
+    private final OauthData oauthData;
 
-    @Autowired
-    public MemetickRatingService(
-        MemetickRepository memetickRepository,
-        OauthData oauthData,
-        MemetickMapper memetickMapper,
-        MemeRepository memeRepository
-    ) {
-        this.memetickRepository = memetickRepository;
-        this.oauthData = oauthData;
-        this.memetickMapper = memetickMapper;
-        this.memeRepository = memeRepository;
-
-        this.initFilter();
+    @PostConstruct
+    public void initFilter() {
+        mapFilter.put(DNA, Memetick::getDna);
+        mapFilter.put(CHR, m -> memeRepository.sumChromosomeByMemetickId(m.getId()).orElse(0L));
+        mapFilter.put(IND, m -> memeRepository.countByMemetickIdAndType(m.getId(), INDV).orElse(0L));
     }
 
+    @Transactional(readOnly = true)
     public MemetickRatingAPI rating(MemetickRatingFilter filter) {
         List<Memetick> memeticks = memetickRepository.findAll();
 
@@ -72,11 +72,5 @@ public class MemetickRatingService {
             .collect(Collectors.toList());
 
         return new MemetickRatingAPI(top, me);
-    }
-
-    private void initFilter() {
-        this.mapFilter.put(MemetickRatingFilter.DNA, Memetick::getDna);
-        this.mapFilter.put(MemetickRatingFilter.IND, m -> memeRepository.countByMemetickIdAndType(m.getId(), MemeType.INDV).orElse(0L));
-        this.mapFilter.put(MemetickRatingFilter.CHR, m -> memeRepository.sumChromosomeByMemetickId(m.getId()).orElse(0L));
     }
 }
