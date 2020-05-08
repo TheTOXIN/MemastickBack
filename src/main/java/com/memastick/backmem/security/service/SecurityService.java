@@ -29,13 +29,9 @@ public class SecurityService {
     private String oauthClient;
 
     public void logout(LogOutAPI request) {
-        User user = oauthData.getCurrentUser();
-
         Optional<NotifyPush> byToken = pushRepository.findByToken(request.getDeviceToken());
         byToken.ifPresent(pushRepository::delete);
         notifyWebService.remove();
-
-        clear(user);
     }
 
     public void ban(String login) {
