@@ -83,7 +83,7 @@ public class MemeCommentService {
         voteRepository.save(vote);
         commentRepository.save(comment);
 
-        if (voteValue) {
+        if (comment.getPoint() > 0) {
             MemeComment bestComment = commentRepository.findBestComment(comment.getMemeId());
             memeRepository.updateSetComment(bestComment.getId(), bestComment.getMemeId());
         }
