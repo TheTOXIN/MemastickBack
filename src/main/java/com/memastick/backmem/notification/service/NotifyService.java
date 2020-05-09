@@ -252,7 +252,7 @@ public class NotifyService {
         webService.sendAll(new NotifyDTO(
             NotifyType.NEXT_EVOLVE,
             "Новый этап эволюции!",
-            "Наступил следующий этап эволюции",
+            "Мемы переходят на следующий на этап эволюции",
             "п:" + evolveService.computePopulation(),
             LinkConstant.LINK_MEMES
         ));
