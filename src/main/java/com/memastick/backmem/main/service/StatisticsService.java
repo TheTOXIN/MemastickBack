@@ -1,6 +1,7 @@
 package com.memastick.backmem.main.service;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.main.api.StatisticsAPI;
 import com.memastick.backmem.main.facade.StatisticsFacade;
 import lombok.AllArgsConstructor;
@@ -17,8 +18,8 @@ public class StatisticsService {
 
     private Map<Long, StatisticsAPI> globalCache;
 
-    private final EvolveMemeService evolveMemeService;
     private final StatisticsFacade statisticsFacade;
+    private final EvolveService evolveService;
 
     public StatisticsAPI byMemetick(UUID memetickId) {
         return parse(
@@ -28,7 +29,7 @@ public class StatisticsService {
 
     public StatisticsAPI global() {
         return globalCache.computeIfAbsent(
-            evolveMemeService.computeEvolution(),
+            evolveService.computeEvolution(),
             p -> parse(statisticsFacade.global())
         );
     }

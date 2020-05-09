@@ -8,5 +8,4 @@ import java.util.List;
 public interface NotifySender {
 
     void send(List<User> users, NotifyDTO dto);
-
 }

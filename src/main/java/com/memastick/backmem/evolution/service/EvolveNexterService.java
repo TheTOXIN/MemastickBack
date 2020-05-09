@@ -5,6 +5,7 @@ import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.handler.EvolveHandler;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.memes.service.MemesCreateService;
+import com.memastick.backmem.notification.service.NotifyService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,11 +26,13 @@ public class EvolveNexterService {
     private final EvolveHandler evolveHandler;
     private final EvolveMemeRepository evolveMemeRepository;
     private final EvolveMemeService evolveMemeService;
+    private final EvolveService evolveService;
     private final MemesCreateService memesCreateService;
+    private final NotifyService notifyService;
 
     @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
     public void next() {
-        log.info("START NEXT EVOLVE - {}", evolveMemeService.computePopulation());
+        log.info("START NEXT EVOLVE - {}", evolveService.computePopulation());
 
         List<EvolveMeme> evolve = new ArrayList<>();
 
@@ -44,8 +47,9 @@ public class EvolveNexterService {
 
         evolveMemeRepository.saveAll(evolve);
 
-        log.info("END NEXT EVOLVE - {}", evolveMemeService.computePopulation());
+        log.info("END NEXT EVOLVE - {}", evolveService.computePopulation());
 
+        notifyService.sendNEXTEVOLVE();
         memesCreateService.notification();
     }
 }

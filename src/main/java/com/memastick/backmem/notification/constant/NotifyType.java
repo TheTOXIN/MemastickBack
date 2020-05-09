@@ -19,7 +19,8 @@ public enum NotifyType {
     BATTLE_RESPONSE(true, false, true),
     BATTLE_COMPLETE(true, true, true),
     BATTLE_RATING(true, false, false),
-    NEW_USER(true, false, false);
+    NEW_USER(true, false, false),
+    NEXT_EVOLVE(false, false, true);
 
     @Getter boolean bell;
     @Getter boolean push;

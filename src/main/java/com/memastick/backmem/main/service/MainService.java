@@ -1,6 +1,7 @@
 package com.memastick.backmem.main.service;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.main.api.HomeAPI;
 import com.memastick.backmem.main.api.NotifyCountAPI;
 import com.memastick.backmem.main.component.HomeMessageGenerator;
@@ -20,6 +21,7 @@ public class MainService {
 
     private final OauthData oauthData;
     private final EvolveMemeService evolveMemeService;
+    private final EvolveService evolveService;
     private final MemetickInventoryService inventoryService;
     private final NotifyBellService notifyBellService;
     private final HomeMessageGenerator messageGenerate;
@@ -33,7 +35,7 @@ public class MainService {
             memetickService.preview(memetick),
             memetickRankService.rank(memetick),
             messageGenerate.getMessage(),
-            evolveMemeService.computeEvolution(),
+            evolveService.computeEvolution(),
             evolveMemeService.countNewEvolves(),
             evolveMemeService.computeSelectTimer(),
             memetick.isCreed()

@@ -11,6 +11,7 @@ public class LinkConstant {
     public static final String LINK_BATTLE = URL + "/battle/view";
     public static final String LINK_CREATING = URL + "/memes/create";
     public static final String LINK_MEME = URL + "/memes/share";
+    public static final String LINK_MEMES = URL + "/memes";
     public static final String LINK_RESEARCH = URL + "/memes/research";
     public static final String LINK_MEMOTYPES = URL + "/memotype/collection";
     public static final String LINK_MEMETICK = URL + "/home/memetick";

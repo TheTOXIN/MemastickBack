@@ -1,6 +1,8 @@
 package com.memastick.backmem.notification.service;
 
 import com.memastick.backmem.battle.entity.Battle;
+import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -28,9 +30,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class NotifyService {
 
+    private final NotifyWebService webService;
+    private final EvolveService evolveService;
     private final NotifyBellService bellService;
     private final NotifyPushService pushService;
-    private final NotifyWebService webService;
     private final UserRepository userRepository;
     private final SettingFollowerService followerService;
 
@@ -242,6 +245,17 @@ public class NotifyService {
                 LinkConstant.LINK_MEMETICK + "/" + memetick.getId()
             )
         );
+    }
+
+    @Async
+    public void sendNEXTEVOLVE() {
+        webService.sendAll(new NotifyDTO(
+            NotifyType.NEXT_EVOLVE,
+            "Новый этап эволюции!",
+            "Наступил следующий этап эволюции",
+            "п:" + evolveService.computePopulation(),
+            LinkConstant.LINK_MEMES
+        ));
     }
 
     private void send(List<User> users, NotifyDTO dto) {

@@ -2,6 +2,7 @@ package com.memastick.backmem.memes.service;
 
 import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.main.constant.DnaCount;
 import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
@@ -38,6 +39,7 @@ public class MemesCreateService {
     private final MemeRepository memeRepository;
     private final MemetickService memetickService;
     private final EvolveMemeService evolveMemeService;
+    private final EvolveService evolveService;
     private final MemetickInventoryRepository inventoryRepository;
     private final MemeCellService memeCellService;
 
@@ -85,7 +87,7 @@ public class MemesCreateService {
         return new Meme(
             request,
             memetick,
-            evolveMemeService.computeEPI()
+            evolveService.computeEPI()
         );
     }
 }

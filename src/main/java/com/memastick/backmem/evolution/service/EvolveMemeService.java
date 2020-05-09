@@ -32,6 +32,7 @@ public class EvolveMemeService {
     private final EvolveMemeRepository evolveMemeRepository;
     private final TokenAcceptService tokenAcceptService;
     private final MemeRepository memeRepository;
+    private final EvolveService evolveService;
     private final OauthData oauthData;
 
     public void startEvolve(Meme meme) {
@@ -53,24 +54,38 @@ public class EvolveMemeService {
         });
     }
 
-    public EPI computeEPI() {
-        return new EPI(
-            this.computeEvolution(),
-            this.computePopulation(),
-            this.computeIndividuation()
+    public EvolveMemeAPI readByMeme(UUID memeId) {
+        Memetick currentMemetick = oauthData.getCurrentMemetick();
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
+
+        Meme meme = evolveMeme.getMeme();
+        Memetick memeMemetick = meme.getMemetick();
+
+        boolean myMeme = currentMemetick.getId().equals(memeMemetick.getId());
+        boolean canAccept = tokenAcceptService.canAccept(currentMemetick, memeMemetick, evolveMeme);
+
+        EPI epi = evolveService.toEPI(meme);
+
+        return new EvolveMemeAPI(
+            meme.getId(),
+            epi,
+            evolveMeme.getStep(),
+            myMeme,
+            canAccept,
+            evolveMeme.isImmunity(),
+            evolveMeme.getAdaptation(),
+            computeNextTimer()
         );
     }
 
-    public long computeEvolution() {
-        return DAYS.between(GlobalConstant.START_EVOLVE, LocalDate.now(ZoneOffset.UTC));
-    }
+    public Float readChance(UUID memeId) {
+        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
+        Meme meme = evolveMeme.getMeme();
 
-    public long computePopulation() {
-        return LocalTime.now(ZoneOffset.UTC).getHour() + 1;
-    }
+        if (!meme.getType().equals(MemeType.SLCT)) return null;
+        if (evolveMeme.isImmunity()) return 100F;
 
-    public long computeIndividuation() {
-        return memeRepository.countByEvolutionAndPopulation(computeEvolution(), computePopulation()).orElse(0L);
+        return computeChance(meme);
     }
 
     public float computeChance(Meme meme) {
@@ -109,7 +124,7 @@ public class EvolveMemeService {
     }
 
     public EvolveStep computeStep(Meme meme) {
-        long currentPop = computePopulation();
+        long currentPop = evolveService.computePopulation();
         long memePop = meme.getPopulation();
 
         int step = (int) (currentPop - memePop) + 1;
@@ -117,49 +132,9 @@ public class EvolveMemeService {
         return EvolveStep.find(step);
     }
 
-    public EvolveMemeAPI readByMeme(UUID memeId) {
-        Memetick currentMemetick = oauthData.getCurrentMemetick();
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
-
-        Meme meme = evolveMeme.getMeme();
-        Memetick memeMemetick = meme.getMemetick();
-
-        boolean myMeme = currentMemetick.getId().equals(memeMemetick.getId());
-        boolean canAccept = tokenAcceptService.canAccept(currentMemetick, memeMemetick, evolveMeme);
-
-        return new EvolveMemeAPI(
-            meme.getId(),
-            toEPI(meme),
-            evolveMeme.getStep(),
-            myMeme,
-            canAccept,
-            evolveMeme.isImmunity(),
-            evolveMeme.getAdaptation(),
-            computeNextTimer()
-        );
-    }
-
-    public Float readChance(UUID memeId) {
-        EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
-        Meme meme = evolveMeme.getMeme();
-
-        if (!meme.getType().equals(MemeType.SLCT)) return null;
-        if (evolveMeme.isImmunity()) return 100F;
-
-        return computeChance(meme);
-    }
-
     public long countNewEvolves() {
         return memeRepository
-            .countByEvolution(this.computeEvolution())
+            .countByEvolution(evolveService.computeEvolution())
             .orElse(0L);
-    }
-
-    private EPI toEPI(Meme meme) {
-        return new EPI(
-            meme.getEvolution(),
-            meme.getPopulation(),
-            meme.getIndividuation()
-        );
     }
 }

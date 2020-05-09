@@ -1,6 +1,7 @@
 package com.memastick.backmem.main.component;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.service.EvolveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
@@ -31,12 +32,12 @@ public class HomeMessageGenerator {
         "МУТАГЕН->КРОССОВЕР->МИКРОСКОП->АНТИБИОТИК->ПРОБИРКА"
     };
 
-    private final EvolveMemeService evolveMemeService;
+    private final EvolveService evolveService;
 
     public String getMessage() {
         if (checkMessageCache()) return this.messageCache.getSecond();
 
-        int day = (int) evolveMemeService.computeEvolution();
+        int day = (int) evolveService.computeEvolution();
         int len = this.messages.length;
 
         return messages[day % len];

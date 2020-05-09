@@ -27,13 +27,14 @@ public class EvolveSelecterService {
 
     private final EvolveMemeRepository evolveMemeRepository;
     private final EvolveMemeService evolveMemeService;
+    private final EvolveService evolveService;
     private final NotifyService notifyService;
     private final MemeRepository memeRepository;
     private final BattleTrigger battleTrigger;
 
     @Scheduled(cron = "0 0 0 * * *", zone = "UTC")
     public void select() {
-        log.info("START SELECT EVOLVE - {}", evolveMemeService.computeEvolution());
+        log.info("START SELECT EVOLVE - {}", evolveService.computeEvolution());
 
         long max = memeRepository.maxByCromosome(MemeType.SLCT).orElse(0L);
         long min = memeRepository.minByCromosome(MemeType.SLCT).orElse(0L);
@@ -59,7 +60,7 @@ public class EvolveSelecterService {
 
         evolveMemeRepository.saveAll(evolveMemes);
 
-        log.info("END SELECT EVOLVE - {}", evolveMemeService.computeEvolution());
+        log.info("END SELECT EVOLVE - {}", evolveService.computeEvolution());
 
         battleTrigger.ratingCheck();
     }

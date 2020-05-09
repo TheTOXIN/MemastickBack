@@ -1,6 +1,7 @@
 package com.memastick.backmem.translator.serivce;
 
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.notification.service.NotifyService;
@@ -25,7 +26,7 @@ public class TranslatorPublishService {
     private static final Logger log = LoggerFactory.getLogger(TranslatorPublishService.class);
 
     private final List<Translator> translators;
-    private final EvolveMemeService evolveMemeService;
+    private final EvolveService evolveService;
     private final MemeRepository memeRepository;
     private final TranslatorDownloader translatorDownloader;
     private final NotifyService notifyService;
@@ -35,7 +36,7 @@ public class TranslatorPublishService {
     public void publish() {
         log.info("START TRANSLATE PUBLISH");
 
-        long evolution = evolveMemeService.computeEvolution() - 1;
+        long evolution = evolveService.computeEvolution() - 1;
 
         Meme meme = memeRepository.findSuperMeme(evolution);
         if (meme == null) return;

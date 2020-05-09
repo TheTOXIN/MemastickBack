@@ -2,6 +2,7 @@ package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
+import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memecoin.service.PickaxeService;
 import com.memastick.backmem.memes.service.MemeCellService;
@@ -25,10 +26,10 @@ public class MemetickInventoryService {
     private final MemetickInventoryRepository inventoryRepository;
     private final TokenWalletService tokenWalletService;
     private final OauthData oauthData;
-    private final EvolveMemeService evolveMemeService;
     private final MemeCoinService coinService;
     private final MemeCellService cellService;
     private final PickaxeService pickaxeService;
+    private final EvolveService evolveService;
 
     @Transactional
     public MemetickInventoryAPI readAll() {
@@ -52,7 +53,7 @@ public class MemetickInventoryService {
         return new CellAPI(
             cellService.stateCell(inventory),
             cellService.currentCombo(inventory),
-            evolveMemeService.computeEPI()
+            evolveService.computeEPI()
         );
     }
 
