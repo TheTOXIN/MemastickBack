@@ -85,7 +85,7 @@ public class MemeCommentService {
 
         if (voteValue) {
             MemeComment bestComment = commentRepository.findBestComment(comment.getMemeId());
-            memeRepository.updateSetComment(bestComment.getId());
+            memeRepository.updateSetComment(bestComment.getId(), bestComment.getMemeId());
         }
     }
 }

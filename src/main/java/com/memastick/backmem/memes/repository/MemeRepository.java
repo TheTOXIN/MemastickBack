@@ -63,6 +63,9 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
     }
 
     @Modifying
-    @Query("UPDATE Meme m SET m.commentId = :commentId")
-    void updateSetComment(@Param("commentId") UUID commentId);
+    @Query("UPDATE Meme m SET m.commentId = :commentId WHERE m.id = :memeId")
+    void updateSetComment(
+        @Param("commentId") UUID commentId,
+        @Param("memeId") UUID memeId
+    );
 }
