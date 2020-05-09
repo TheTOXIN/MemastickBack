@@ -258,6 +258,19 @@ public class NotifyService {
         ));
     }
 
+    @Async
+    public void sendDNALVL(Memetick memetick, int lvl) {
+        send(
+            Collections.singletonList(userRepository.findByMemetick(memetick)),
+            new NotifyDTO(
+                NotifyType.DNA_LVL,
+                "Вы повысили уровень",
+                "Ваш уровнь повысился до: " + lvl + " lvl",
+                lvl + " lvl" ,
+                LinkConstant.LINK_MEMETICK + "/" + memetick.getId()
+            ));
+    }
+
     private void send(List<User> users, NotifyDTO dto) {
         if (dto.getType().isWeb()) webService.send(users, dto);
         if (dto.getType().isPush()) pushService.send(users, dto);

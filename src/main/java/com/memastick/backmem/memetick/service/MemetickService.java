@@ -38,6 +38,7 @@ public class MemetickService {
     private final MemetickMapper memetickMapper;
     private final SettingUserRepository settingUserRepository;
     private final MemeCoinService coinService;
+    private final MemetickRankService rankService;
 
     public MemetickAPI viewByMe() {
         return memetickMapper.toMemetickAPI(
@@ -57,10 +58,22 @@ public class MemetickService {
         );
     }
 
+    @Transactional
     public void addDna(Memetick memetick, int dna) {
         if (dna == 0) return;
-        notifyService.sendDNA(dna, memetick);
-        memetick.setDna(memetick.getDna() + dna);
+
+        long resultDna = memetick.getDna() + dna;
+
+        int oldLvl = rankService.computeLvl(memetick.getDna());
+        int newLvl = rankService.computeLvl(resultDna);
+
+        if (newLvl > oldLvl) {
+            notifyService.sendDNALVL(memetick, newLvl);
+        } else {
+            notifyService.sendDNA(dna, memetick);
+        }
+
+        memetick.setDna(resultDna);
         memetickRepository.save(memetick);
     }
 
