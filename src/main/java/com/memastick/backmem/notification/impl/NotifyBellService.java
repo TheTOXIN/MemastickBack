@@ -10,6 +10,7 @@ import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,6 +49,7 @@ public class NotifyBellService implements NotifySender {
         bellRepository.save(bell);
     }
 
+    @Transactional
     public void clear() {
         User user = oauthData.getCurrentUser();
         List<NotifyBell> bells = bellRepository.findAllByUser(user);

@@ -131,10 +131,4 @@ public class EvolveMemeService {
 
         return EvolveStep.find(step);
     }
-
-    public long countNewEvolves() {
-        return memeRepository
-            .countByEvolution(evolveService.computeEvolution())
-            .orElse(0L);
-    }
 }

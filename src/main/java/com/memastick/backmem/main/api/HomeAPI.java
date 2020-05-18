@@ -20,7 +20,6 @@ public class HomeAPI {
     private String message;
 
     private long day;
-    private long memes;
 
     private LocalTime selectTimer;
 

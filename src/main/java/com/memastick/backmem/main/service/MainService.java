@@ -36,7 +36,6 @@ public class MainService {
             memetickRankService.rank(memetick),
             messageGenerate.getMessage(),
             evolveService.computeEvolution(),
-            evolveMemeService.countNewEvolves(),
             evolveMemeService.computeSelectTimer(),
             memetick.isCreed()
         );
