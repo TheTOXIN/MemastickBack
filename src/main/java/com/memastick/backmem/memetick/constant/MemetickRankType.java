@@ -11,7 +11,7 @@ import static com.memastick.backmem.memetick.constant.MemetickRankConst.MAX_LVL;
 
 public enum MemetickRankType {
 
-    RANK_0(0, "Нуб"),
+    RANK_0(0, "Новичок"),
     RANK_1(5, "Ученик"),
     RANK_2(10, "Студент"),
     RANK_3(15, "Ассистент"),
