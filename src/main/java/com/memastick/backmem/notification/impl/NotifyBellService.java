@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class NotifyBellService implements NotifySender {
 
     private final NotifyBellRepository bellRepository;
-    private final NotifyWebService notifyWebService;
     private final OauthData oauthData;
 
     @Override
@@ -27,7 +26,6 @@ public class NotifyBellService implements NotifySender {
         bellRepository.saveAll(users
             .stream()
             .filter(Objects::nonNull)
-            .peek(this::notifyCount)
             .map(u -> new NotifyBell(u, dto.getText(), dto.getEvent()))
             .collect(Collectors.toList())
         );
@@ -77,14 +75,6 @@ public class NotifyBellService implements NotifySender {
             bell.getText(),
             bell.getLink(),
             bell.isRead()
-        );
-    }
-
-    private void notifyCount(User user) {
-        notifyWebService.sender(
-            "PING",
-            user.getLogin(),
-            "/queue/count"
         );
     }
 }

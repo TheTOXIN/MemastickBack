@@ -20,7 +20,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class NotifyWebService implements NotifySender {
 
-    private final static String PATH = "/queue/notify";
     private final static Map<String, String> CACHE = new HashMap<>();
 
     private final SimpMessagingTemplate template;
@@ -31,16 +30,16 @@ public class NotifyWebService implements NotifySender {
         users
             .stream()
             .filter(Objects::nonNull)
-            .forEach(user -> sender(dto, user.getLogin(), PATH));
+            .forEach(user -> sender(dto, user.getLogin()));
     }
 
     public void sendAll(NotifyDTO dto) {
         CACHE.keySet().forEach(name ->
-            sender(dto, name, PATH)
+            sender(dto, name)
         );
     }
 
-    public void sender(Object data, String username, String path) {
+    private void sender(Object data, String username) {
         String sessionId = CACHE.get(username);
 
         if (sessionId == null) return;
@@ -50,7 +49,7 @@ public class NotifyWebService implements NotifySender {
         headerAccessor.setSessionId(sessionId);
         headerAccessor.setLeaveMutable(true);
 
-        template.convertAndSendToUser(sessionId, path, data, headerAccessor.getMessageHeaders());
+        template.convertAndSendToUser(sessionId, "/queue/notify", data, headerAccessor.getMessageHeaders());
     }
 
     public void register(String sessionId) {
