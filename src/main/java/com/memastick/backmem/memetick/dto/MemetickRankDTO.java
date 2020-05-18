@@ -13,7 +13,6 @@ public class MemetickRankDTO {
 
     private long dna;
     private long next;
-    private long left;
 
     private int percent;
 

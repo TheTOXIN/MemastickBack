@@ -1,6 +1,5 @@
 package com.memastick.backmem.memetick.constant;
 
-import lombok.Data;
 import lombok.Getter;
 
 import java.util.*;

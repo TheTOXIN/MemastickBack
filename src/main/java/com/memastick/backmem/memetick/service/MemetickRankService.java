@@ -25,13 +25,19 @@ public class MemetickRankService {
     public MemetickRankDTO rank(Memetick memetick) {
         long dna = memetick.getDna();
         int lvl = computeLvl(dna);
+
         long next = computeDna(lvl + 1);
+        long curr = computeDna(lvl);
+
+        long have = dna - curr;
         long left = next - dna;
-        int percent = (int) (100 * dna / next);
+        long need = have + left;
+
+        int percent = (int) (100 * have / need);
 
         MemetickRankType rank = getRank(lvl);
 
-        return new MemetickRankDTO(lvl, dna, next, left, percent, rank.getName());
+        return new MemetickRankDTO(lvl, dna, next, percent, rank.getName());
     }
 
     public int computeLvl(long dna) {
