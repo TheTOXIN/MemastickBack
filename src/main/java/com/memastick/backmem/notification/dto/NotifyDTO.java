@@ -16,4 +16,16 @@ public class NotifyDTO {
     private String text;
     private String data;
     private String event;
+
+    private boolean isBell = false;
+
+    public NotifyDTO(NotifyType type, String title, String text, String data, String event) {
+        this.type = type;
+        this.title = title;
+        this.text = text;
+        this.data = data;
+        this.event = event;
+
+        this.isBell = type.isBell();
+    }
 }
