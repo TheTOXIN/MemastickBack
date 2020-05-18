@@ -35,8 +35,6 @@ public class MemeCommentService {
     private final MemeCommentRepository commentRepository;
     private final MemeCommentVoteRepository voteRepository;
 
-    // TODO Удаление коментов для админа
-
     @Transactional
     public void createComment(Meme meme, String comment) {
         Memetick memetick = oauthData.getCurrentMemetick();
