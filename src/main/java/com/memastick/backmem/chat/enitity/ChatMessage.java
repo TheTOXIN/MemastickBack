@@ -6,15 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "chat_messages")
@@ -24,6 +22,7 @@ import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 public class ChatMessage {
 
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(nullable = false)
     private Long number;
 
@@ -48,4 +47,7 @@ public class ChatMessage {
 
     @Column(nullable = false)
     private ZonedDateTime creating;
+
+    @Transient
+    private boolean my;
 }
