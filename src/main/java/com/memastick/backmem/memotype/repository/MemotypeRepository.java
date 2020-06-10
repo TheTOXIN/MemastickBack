@@ -25,6 +25,9 @@ public interface MemotypeRepository extends CrudRepository<Memotype, UUID> {
     )
     Optional<Memotype> randomMemotypeByRarity(@Param("rarity") String rarity);
 
+    @Query("SELECT m.image FROM Memotype m WHERE m.id = :memotypeId")
+    Optional<String> findImageByMemotypeId(@Param("memotypeId") UUID memotypeId);
+
     Optional<Long> countByRarity(MemotypeRarity rarity);
 
     List<Memotype> findAllBySetId(UUID setId);
