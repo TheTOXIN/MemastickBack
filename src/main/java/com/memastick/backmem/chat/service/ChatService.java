@@ -18,7 +18,6 @@ import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.memastick.backmem.chat.validation.ChatMessageValidation.*;
 
@@ -29,7 +28,6 @@ public class ChatService {
     private final MemetickRepository memetickRepository;
     private final MemotypeRepository memotypeRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final OauthData oauthData;
 
     @Transactional
     public void save(ChatMessage message) {
@@ -54,12 +52,7 @@ public class ChatService {
     }
 
     public List<ChatMessage> read(Pageable pageable) {
-        Memetick memetick = oauthData.getCurrentMemetick();
-
-        return chatMessageRepository.findAll(pageable).getContent()
-            .stream()
-            .peek(message -> message.setMy(memetick.getId().equals(message.getMemetickId())))
-            .collect(Collectors.toList());
+        return chatMessageRepository.findAll(pageable).getContent();
     }
 
     public void delete(Long number) {

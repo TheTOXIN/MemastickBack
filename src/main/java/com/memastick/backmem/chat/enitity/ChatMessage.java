@@ -47,7 +47,4 @@ public class ChatMessage {
 
     @Column(nullable = false)
     private ZonedDateTime creating;
-
-    @Transient
-    private boolean my;
 }
