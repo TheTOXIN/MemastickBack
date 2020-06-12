@@ -48,4 +48,13 @@ public class MemotypeService {
 
         return memotypeMemetickMapper.toAPI(setById, memotypesBySet);
     }
+
+    public MemotypeAPI read(UUID memotypeId) {
+        Memotype memotype = memotypeRepository.tryFindById(memotypeId);
+        String setName = memotypeSetRepository.findNameById(memotype.getSetId());
+
+        return this.memotypeMapper.toAPI(
+            memotype, setName
+        );
+    }
 }
