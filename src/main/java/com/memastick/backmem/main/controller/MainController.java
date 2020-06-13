@@ -1,11 +1,10 @@
 package com.memastick.backmem.main.controller;
 
 import com.memastick.backmem.main.api.HomeAPI;
-import com.memastick.backmem.main.api.NotifyCountAPI;
+import com.memastick.backmem.main.api.InitAPI;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.service.MainService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +16,7 @@ public class MainController {
 
     @GetMapping("hello")
     public String hello() {
-        return GlobalConstant.VER;
+        return "Hello, i'm MEMASTICK server!!! ver: " + GlobalConstant.VER;
     }
 
     @GetMapping("home")
@@ -25,8 +24,8 @@ public class MainController {
         return mainService.home();
     }
 
-    @GetMapping("notify-count")
-    public NotifyCountAPI notifyCount() {
-        return mainService.notifyCount();
+    @GetMapping("init")
+    public InitAPI init() {
+        return mainService.init();
     }
 }

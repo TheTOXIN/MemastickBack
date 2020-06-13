@@ -3,8 +3,10 @@ package com.memastick.backmem.main.service;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.main.api.HomeAPI;
+import com.memastick.backmem.main.api.InitAPI;
 import com.memastick.backmem.main.api.NotifyCountAPI;
 import com.memastick.backmem.main.component.HomeMessageGenerator;
+import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickRankService;
@@ -41,12 +43,15 @@ public class MainService {
         );
     }
 
-    public NotifyCountAPI notifyCount() {
+    public InitAPI init() {
         User user = oauthData.getCurrentUser();
 
-        return new NotifyCountAPI(
-            inventoryService.countItems(user.getMemetick()),
-            notifyBellService.count(user)
+        return new InitAPI(
+            GlobalConstant.VER,
+            new NotifyCountAPI(
+                inventoryService.countItems(user.getMemetick()),
+                notifyBellService.count(user)
+            )
         );
     }
 }
