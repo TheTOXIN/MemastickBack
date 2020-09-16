@@ -49,7 +49,11 @@ public class MemeCommentService {
         if (exists) throw new EntityExistException(MemeComment.class);
 
         MemeComment memeComment = new MemeComment(meme, memetick, clearSpaces(comment));
-        commentRepository.save(memeComment);
+        MemeComment saveComment = commentRepository.save(memeComment);
+
+        if (meme.getCommentId() == null) {
+            memeRepository.updateSetComment(saveComment.getId(), meme.getId());
+        }
     }
 
     @Transactional(readOnly = true)
@@ -98,9 +102,7 @@ public class MemeCommentService {
         voteRepository.save(vote);
         commentRepository.save(comment);
 
-        if (comment.getPoint() > 0) {
-            MemeComment bestComment = commentRepository.findBestComment(comment.getMemeId());
-            memeRepository.updateSetComment(bestComment.getId(), bestComment.getMemeId());
-        }
+        MemeComment bestComment = commentRepository.findBestComment(comment.getMemeId());
+        memeRepository.updateSetComment(bestComment.getId(), bestComment.getMemeId());
     }
 }
