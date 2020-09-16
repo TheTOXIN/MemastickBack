@@ -36,6 +36,7 @@ public class MemeLohService {
         MemeLohDTO res = new MemeLohDTO();
 
         MemeLohSum sum = memeLohRepository.sumByMemeId(memeId);
+        if (sum == null) return null;
 
         res.setLol(sum.getLol() != null ? sum.getLol(): 0);
         res.setOmg(sum.getOmg() != null ? sum.getOmg(): 0);

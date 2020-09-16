@@ -7,15 +7,23 @@ import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.main.util.TimeUtil;
+import com.memastick.backmem.memes.api.MemeCommentAPI;
 import com.memastick.backmem.memes.constant.MemeType;
+import com.memastick.backmem.memes.dto.MemeCommentDTO;
+import com.memastick.backmem.memes.dto.MemeLohDTO;
 import com.memastick.backmem.memes.entity.Meme;
+import com.memastick.backmem.memes.repository.MemeCommentRepository;
 import com.memastick.backmem.memes.repository.MemeRepository;
+import com.memastick.backmem.memes.service.MemeCommentService;
+import com.memastick.backmem.memes.service.MemeLohService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.tokens.repository.TokenAcceptRepository;
 import com.memastick.backmem.tokens.service.TokenAcceptService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -31,9 +39,12 @@ public class EvolveMemeService {
 
     private final EvolveMemeRepository evolveMemeRepository;
     private final TokenAcceptService tokenAcceptService;
+    private final MemeLohService memeLohService;
     private final MemeRepository memeRepository;
     private final EvolveService evolveService;
     private final OauthData oauthData;
+
+    private final MemeCommentRepository memeCommentRepository;
 
     public void startEvolve(Meme meme) {
         evolveMemeRepository.save(
@@ -54,6 +65,7 @@ public class EvolveMemeService {
         });
     }
 
+    @Transactional(readOnly = true)
     public EvolveMemeAPI readByMeme(UUID memeId) {
         Memetick currentMemetick = oauthData.getCurrentMemetick();
         EvolveMeme evolveMeme = evolveMemeRepository.findByMemeId(memeId);
@@ -61,20 +73,28 @@ public class EvolveMemeService {
         Meme meme = evolveMeme.getMeme();
         Memetick memeMemetick = meme.getMemetick();
 
+        boolean individual = MemeType.INDV.equals(meme.getType());
         boolean myMeme = currentMemetick.getId().equals(memeMemetick.getId());
         boolean canAccept = tokenAcceptService.canAccept(currentMemetick, memeMemetick, evolveMeme);
 
         EPI epi = evolveService.toEPI(meme);
 
+        MemeLohDTO loh = individual ? memeLohService.readByMeme(memeId) : null;
+        MemeCommentDTO comment = individual ? memeCommentRepository.findCommentForMeme(meme.getCommentId()) : null;
+
+        LocalTime nextTimer = computeNextTimer();
+
         return new EvolveMemeAPI(
             meme.getId(),
-            epi,
             evolveMeme.getStep(),
-            myMeme,
-            canAccept,
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation(),
-            computeNextTimer()
+            myMeme,
+            canAccept,
+            epi,
+            loh,
+            comment,
+            nextTimer
         );
     }
 
