@@ -17,20 +17,22 @@ public class MemeCommentAPI {
     private UUID memeId;
     private UUID memetickId;
 
+    private String nick;
     private String comment;
-    private int point;
 
+    private int point;
     private Boolean vote;
 
-    public MemeCommentAPI(MemeComment entity, Boolean vote) {
+    public MemeCommentAPI(MemeComment entity, Boolean vote, String nick) {
         this.commentId = entity.getId();
 
         this.memeId = entity.getMemeId();
         this.memetickId = entity.getMemetickId();
 
+        this.nick = nick;
         this.comment = entity.getComment();
-        this.point = entity.getPoint();
 
+        this.point = entity.getPoint();
         this.vote = vote;
     }
 }

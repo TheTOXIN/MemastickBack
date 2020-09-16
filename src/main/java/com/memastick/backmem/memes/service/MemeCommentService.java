@@ -1,5 +1,6 @@
 package com.memastick.backmem.memes.service;
 
+import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.errors.consts.ErrorCode;
 import com.memastick.backmem.errors.exception.EntityExistException;
 import com.memastick.backmem.errors.exception.ValidationException;
@@ -12,6 +13,7 @@ import com.memastick.backmem.memes.repository.MemeCommentRepository;
 import com.memastick.backmem.memes.repository.MemeCommentVoteRepository;
 import com.memastick.backmem.memes.repository.MemeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.repository.MemetickRepository;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,7 @@ public class MemeCommentService {
 
     private final OauthData oauthData;
     private final MemeRepository memeRepository;
+    private final MemetickRepository memetickRepository;
     private final MemeCommentRepository commentRepository;
     private final MemeCommentVoteRepository voteRepository;
 
@@ -59,9 +62,23 @@ public class MemeCommentService {
             .stream()
             .collect(Collectors.toMap(MemeCommentVote::getCommentId, MemeCommentVote::isVote, (c1, c2) -> c1));
 
+        List<UUID> memetickIds = comments
+            .stream()
+            .map(MemeComment::getMemetickId)
+            .collect(Collectors.toList());
+
+        Map<UUID, String> nickMap = memetickRepository.findAllById(memetickIds).stream().collect(Collectors.toMap(
+            AbstractEntity::getId,
+            Memetick::getNick
+        ));
+
         return comments
             .stream()
-            .map(c -> new MemeCommentAPI(c, myVotes.get(c.getId())))
+            .map(comment -> new MemeCommentAPI(
+                comment,
+                myVotes.get(comment.getId()),
+                nickMap.get(comment.getMemetickId()))
+            )
             .collect(Collectors.toList());
     }
 
