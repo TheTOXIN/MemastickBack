@@ -1,5 +1,6 @@
 package com.memastick.backmem.evolution.service;
 
+import com.memastick.backmem.chat.service.ChatService;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.handler.EvolveHandler;
@@ -29,6 +30,7 @@ public class EvolveNexterService {
     private final EvolveService evolveService;
     private final MemesCreateService memesCreateService;
     private final NotifyService notifyService;
+    private final ChatService chatService;
 
     @Scheduled(cron = "0 0 */1 * * *", zone = "UTC")
     public void next() {
@@ -51,5 +53,6 @@ public class EvolveNexterService {
 
         notifyService.sendNEXTEVOLVE();
         memesCreateService.notification();
+        chatService.clearing();
     }
 }

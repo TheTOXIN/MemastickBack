@@ -10,6 +10,8 @@ import com.memastick.backmem.memotype.repository.MemotypeRepository;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,5 +59,14 @@ public class ChatService {
 
     public void delete(Long number) {
         chatMessageRepository.deleteById(number);
+    }
+
+    @Transactional
+    public void clearing() {
+        chatMessageRepository.deleteAll(
+            chatMessageRepository.findBeforeCreating(
+                ZonedDateTime.now().minusMonths(1)
+            )
+        );
     }
 }
