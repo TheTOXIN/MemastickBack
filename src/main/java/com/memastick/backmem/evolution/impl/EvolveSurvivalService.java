@@ -22,9 +22,9 @@ public class EvolveSurvivalService implements Evolution {
         evolveMemes.forEach(e -> {
             Meme meme = e.getMeme();
 
-            if (e.isImmunity()) {
-                meme.setChromosomes(meme.getChromosomes() / 2);
-            }
+//            if (e.isImmunity()) {
+//                meme.setChromosomes(meme.getChromosomes() / 2);
+//            } TODO ПРИДУМАТЬ ДРУГОЕ НАКАЗАНИЕ
 
             meme.setType(MemeType.SLCT);
         });
