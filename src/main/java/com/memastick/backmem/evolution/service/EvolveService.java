@@ -19,14 +19,6 @@ public class EvolveService {
 
     private final MemeRepository memeRepository;
 
-    public EPI toEPI(Meme meme) {
-        return new EPI(
-            meme.getEvolution(),
-            meme.getPopulation(),
-            meme.getIndividuation()
-        );
-    }
-
     public EPI computeEPI() {
         return new EPI(
             this.computeEvolution(),

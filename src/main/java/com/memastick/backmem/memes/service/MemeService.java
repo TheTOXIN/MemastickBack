@@ -3,6 +3,7 @@ package com.memastick.backmem.memes.service;
 import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.LinkConstant;
+import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
@@ -85,19 +86,21 @@ public class MemeService {
     }
 
     public void moveIndex(Meme meme) {
-        long newIndex = meme.getIndividuation() + 1;
-        long oldIndex = meme.getIndividuation();
+        EPI epi = meme.getEpi();
+
+        long newIndex = epi.getIndividuation() + 1;
+        long oldIndex = epi.getIndividuation();
 
         Meme prevMeme = memeRepository.findByEvolutionAndPopulationAndIndividuation(
-            meme.getEvolution(),
-            meme.getPopulation(),
+            epi.getEvolution(),
+            epi.getPopulation(),
             newIndex
         ).orElse(null);
 
         if (prevMeme == null) return;
 
-        meme.setIndividuation(newIndex);
-        prevMeme.setIndividuation(oldIndex);
+        epi.setIndividuation(newIndex);
+        epi.setIndividuation(oldIndex);
 
         memeRepository.save(meme);
         memeRepository.save(prevMeme);

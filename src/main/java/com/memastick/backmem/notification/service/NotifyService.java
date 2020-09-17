@@ -72,8 +72,8 @@ public class NotifyService {
             new NotifyDTO(
                 NotifyType.MEME,
                 "Ваш мем " + NotifyUtil.typeToStr(meme),
-                "Ваш мем эволюции №" + meme.getEvolution() + " " + NotifyUtil.typeToStr(meme),
-                String.valueOf(meme.getEvolution()),
+                "Ваш мем эволюции №" + meme.getEpi().getEvolution() + " " + NotifyUtil.typeToStr(meme),
+                String.valueOf(meme.getEpi().getEvolution()),
                 LinkConstant.LINK_MEME + "/" + meme.getId()
             )
         );
@@ -86,7 +86,7 @@ public class NotifyService {
             new NotifyDTO(
                 NotifyType.TOKEN,
                 NotifyText.TOKEN_TEXT.get(token),
-                "На меме эволюции №" + meme.getEvolution() + " применили токен: " + NotifyUtil.tokenToStr(token),
+                "На меме эволюции №" + meme.getEpi().getEvolution() + " применили токен: " + NotifyUtil.tokenToStr(token),
                 token.name(),
                 LinkConstant.LINK_RESEARCH + "/" + meme.getId()
             )
@@ -156,7 +156,7 @@ public class NotifyService {
             new NotifyDTO(
                 NotifyType.MEME_DAY,
                 "МЕМ ДНЯ",
-                "Ваша особь лучший мем, " + meme.getEvolution() + " дня эволюции",
+                "Ваша особь лучший мем, " + meme.getEpi().getEvolution() + " дня эволюции",
                 null,
                 LinkConstant.LINK_MEME + "/" + meme.getId()
             )

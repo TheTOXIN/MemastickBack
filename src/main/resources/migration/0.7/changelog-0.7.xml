@@ -4,9 +4,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <include file="0.4/changelog-0.4.xml" relativeToChangelogFile="true"/>
-    <include file="0.5/changelog-0.5.xml" relativeToChangelogFile="true"/>
-    <include file="0.6/changelog-0.6.xml" relativeToChangelogFile="true"/>
-    <include file="0.7/changelog-0.7.xml" relativeToChangelogFile="true"/>
+    <changeSet id="01_0.7" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="memes" columnName="epi"/></not>
+        </preConditions>
+        <sqlFile path="scripts/01_0.7.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 
 </databaseChangeLog>

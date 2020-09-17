@@ -5,11 +5,14 @@ import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -56,16 +59,9 @@ public class Meme extends AbstractEntity {
     @JoinColumn(nullable = false)
     private Memetick memetick;
 
-    // -=[EPI]=-
-
-    @Column(nullable = false)
-    private long evolution;
-
-    @Column(nullable = false)
-    private long population;
-
-    @Column(nullable = false)
-    private long individuation;
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb", nullable = false)
+    private EPI epi;
 
     public Meme(MemeCreateAPI api, Memetick memetick, EPI epi) {
         this.fireId = api.getFireId();
@@ -76,8 +72,6 @@ public class Meme extends AbstractEntity {
         this.creating = ZonedDateTime.now();
         this.type = MemeType.EVLV;
 
-        this.evolution = epi.getEvolution();
-        this.population = epi.getPopulation();
-        this.individuation = epi.getIndividuation();
+        this.epi = epi;
     }
 }

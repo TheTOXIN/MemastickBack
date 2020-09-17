@@ -77,8 +77,6 @@ public class EvolveMemeService {
         boolean myMeme = currentMemetick.getId().equals(memeMemetick.getId());
         boolean canAccept = tokenAcceptService.canAccept(currentMemetick, memeMemetick, evolveMeme);
 
-        EPI epi = evolveService.toEPI(meme);
-
         MemeLohDTO loh = individual ? memeLohService.readByMeme(memeId) : null;
         MemeCommentDTO comment = individual ? memeCommentRepository.findCommentForMeme(meme.getCommentId()) : null;
 
@@ -86,12 +84,12 @@ public class EvolveMemeService {
 
         return new EvolveMemeAPI(
             meme.getId(),
+            meme.getEpi(),
             evolveMeme.getStep(),
             evolveMeme.isImmunity(),
             evolveMeme.getAdaptation(),
             myMeme,
             canAccept,
-            epi,
             loh,
             comment,
             nextTimer
@@ -145,7 +143,7 @@ public class EvolveMemeService {
 
     public EvolveStep computeStep(Meme meme) {
         long currentPop = evolveService.computePopulation();
-        long memePop = meme.getPopulation();
+        long memePop = meme.getEpi().getPopulation();
 
         int step = (int) (currentPop - memePop) + 1;
 

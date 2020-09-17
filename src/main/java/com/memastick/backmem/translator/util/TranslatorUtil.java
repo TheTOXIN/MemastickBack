@@ -11,7 +11,7 @@ public class TranslatorUtil {
 
         builder
             .append("МЕМ ДНЯ ❗️" + "\n")
-            .append("\uD83C\uDF0E Эволюция №" + meme.getEvolution() + "\n")
+            .append("\uD83C\uDF0E Эволюция №" + meme.getEpi().getEvolution() + "\n")
             .append("\uD83D\uDE0E Меметик - " + memetick.getNick() + "\n")
             .append("☘️ Хромосом: " + meme.getChromosomes() + "\n")
             .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");

@@ -17,6 +17,7 @@ import java.util.UUID;
 public class EvolveMemeAPI {
 
     private UUID memeId;
+    private EPI epi;
 
     private EvolveStep step;
     private boolean immunity;
@@ -24,8 +25,6 @@ public class EvolveMemeAPI {
 
     private boolean myMeme;
     private boolean canApplyToken;
-
-    private EPI epi;
 
     private MemeLohDTO loh;
     private MemeCommentDTO comment;

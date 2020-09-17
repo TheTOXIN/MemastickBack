@@ -38,11 +38,7 @@ public class MemeMapper {
             meme.getType(),
             meme.getLikes(),
             meme.getChromosomes(),
-            new EPI(
-                meme.getEvolution(),
-                meme.getPopulation(),
-                meme.getIndividuation()
-            )
+            meme.getEpi()
         );
     }
 }
