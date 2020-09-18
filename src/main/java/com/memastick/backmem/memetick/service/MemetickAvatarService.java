@@ -7,6 +7,7 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickAvatar;
 import com.memastick.backmem.memetick.repository.MemetickAvatarRepository;
 import com.memastick.backmem.security.component.OauthData;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,11 +27,10 @@ import java.util.UUID;
 
 
 @Service
+@RequiredArgsConstructor
 public class MemetickAvatarService {
 
-    private final static long MIN_SIZE_BYTE = (long) Math.pow(2, 10);
-    private final static long MAX_SIZE_BYTE = (long) Math.pow(2, 20);
-
+    private final static long MAX_SIZE_BYTE = 5242880;
     private final static int PHOTO_SIZE_PIX = 128;
 
     private final Set<String> validContent = new HashSet<>(Arrays.asList(
@@ -44,15 +44,6 @@ public class MemetickAvatarService {
 
     @Value("classpath:images/avatar.png")
     private Resource defaultAvatar;
-
-    @Autowired
-    public MemetickAvatarService(
-        OauthData oauthData,
-        MemetickAvatarRepository memetickAvatarRepository
-    ) {
-        this.oauthData = oauthData;
-        this.memetickAvatarRepository = memetickAvatarRepository;
-    }
 
     @Transactional
     public byte[] download(UUID id) {
@@ -89,14 +80,14 @@ public class MemetickAvatarService {
         if (!validContent.contains(image.getContentType())) {
             throw new ValidationException(
                 ErrorCode.IMAGE_FORMAT,
-                "Only PNG || JPG format"
+                "Only PNG or JPG format"
             );
         }
 
-        if (image.getSize() <= MIN_SIZE_BYTE || image.getSize() >= MAX_SIZE_BYTE) {
+        if (image.getSize() >= MAX_SIZE_BYTE) {
             throw new ValidationException(
                 ErrorCode.IMAGE_FORMAT,
-                "Size: max = 1mb, min = 1kb"
+                "Size: max = 5mb"
             );
         }
     }
