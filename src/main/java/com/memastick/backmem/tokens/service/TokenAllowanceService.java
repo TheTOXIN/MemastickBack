@@ -1,12 +1,10 @@
 package com.memastick.backmem.tokens.service;
 
-import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickRankService;
 import com.memastick.backmem.security.component.OauthData;
-import com.memastick.backmem.shop.constant.PriceConst;
 import com.memastick.backmem.tokens.api.TokenWalletAPI;
 import com.memastick.backmem.tokens.constant.TokenType;
 import com.memastick.backmem.tokens.repository.TokenWalletRepository;
@@ -18,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_TOKEN;
+import static com.memastick.backmem.main.util.MathUtil.rand;
 
 @Service
 @AllArgsConstructor
@@ -67,14 +66,17 @@ public class TokenAllowanceService {
         var result = new HashMap<TokenType, Integer>();
 
         int rare = lvl / MAX_TOKEN;
-
         Arrays.asList(TokenType.values()).forEach(token -> {
+            int chance = 0;
+
             if (token.ordinal() == rare) {
-                result.put(token, lvl % MAX_TOKEN + 1);
+                chance = lvl % MAX_TOKEN + 1;
             } else if (token.ordinal() < rare) {
-                result.put(token, MAX_TOKEN);
-            } else {
-                result.put(token, 0);
+                chance =  MAX_TOKEN;
+            }
+
+            if (chance > 0) {
+                result.put(token, rand(1, chance));
             }
         });
 
