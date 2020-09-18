@@ -6,6 +6,11 @@ import java.awt.image.BufferedImage;
 public class ImageUtil {
 
     public static BufferedImage resizeImage(BufferedImage originalImage, int size) {
+        int height = originalImage.getHeight();
+        int width = originalImage.getWidth();
+
+        if (height == size && width == size) return originalImage;
+
         BufferedImage resizedImage = new BufferedImage(size, size, originalImage.getType());
         Graphics2D graphics = resizedImage.createGraphics();
 
