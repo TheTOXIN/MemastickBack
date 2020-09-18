@@ -35,7 +35,7 @@ public class TokenAllowanceService {
         if (!inventory.isAllowance()) return new TokenWalletAPI(emptyAllowance());
         inventory.setAllowance(false);
 
-        var allowance = compute(rankService.rank(memetick).getLvl());
+        var allowance = compute(rankService.rank(memetick).getLvl(), true);
         var tokenWallet = tokenWalletRepository.findByMemetickId(memetick.getId());
 
         var wallet = tokenWalletService.getWallet(tokenWallet);
@@ -50,37 +50,41 @@ public class TokenAllowanceService {
         return new TokenWalletAPI(allowance);
     }
 
-    public boolean have() {
-        return have(oauthData.getCurrentMemetick());
-    }
-
-    public boolean have(Memetick memetick) {
-        return have( inventoryRepository.findByMemetick(memetick));
-    }
-
-    public boolean have(MemetickInventory inventory) {
-        return inventory.isAllowance();
-    }
-
-    public Map<TokenType, Integer> compute(int lvl) {
+    public Map<TokenType, Integer> compute(int lvl, boolean random) {
         var result = new HashMap<TokenType, Integer>();
 
         int rare = lvl / MAX_TOKEN;
         Arrays.asList(TokenType.values()).forEach(token -> {
             int chance = 0;
-
             if (token.ordinal() == rare) {
                 chance = lvl % MAX_TOKEN + 1;
             } else if (token.ordinal() < rare) {
                 chance =  MAX_TOKEN;
             }
 
-            if (chance > 0) {
-                result.put(token, rand(1, chance));
+            int count;
+            if (random && chance > 0) {
+                count = rand(1, chance);
+            } else {
+                count = chance;
             }
+
+            result.put(token, count);
         });
 
         return result;
+    }
+
+    public boolean have() {
+        return have(oauthData.getCurrentMemetick());
+    }
+
+    public boolean have(Memetick memetick) {
+        return have(inventoryRepository.findByMemetick(memetick));
+    }
+
+    public boolean have(MemetickInventory inventory) {
+        return inventory.isAllowance();
     }
 
     private Map<TokenType, Integer> emptyAllowance() {
