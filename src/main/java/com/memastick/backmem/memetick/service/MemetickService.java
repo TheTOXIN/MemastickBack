@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.springframework.util.CollectionUtils.isEmpty;
+
 @Service
 @AllArgsConstructor
 public class MemetickService {
@@ -138,8 +140,12 @@ public class MemetickService {
         memetickRepository.save(memetick);
     }
 
-    public List<MemetickPreviewAPI> list() {
-        return memetickRepository.findAll()
+    public List<MemetickPreviewAPI> list(List<UUID> memetickIds) {
+        List<Memetick> memeticks = !isEmpty(memetickIds) ?
+            memetickRepository.findAllById(memetickIds) :
+            memetickRepository.findAll();
+
+        return memeticks
             .stream()
             .map(memetickMapper::toPreviewDTO)
             .collect(Collectors.toList());

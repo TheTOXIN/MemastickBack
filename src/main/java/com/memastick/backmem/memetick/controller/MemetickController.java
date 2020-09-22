@@ -8,7 +8,6 @@ import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.service.MemetickRatingService;
 import com.memastick.backmem.memetick.service.MemetickService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +34,9 @@ public class MemetickController {
         return memetickService.viewById(id);
     }
 
-    @GetMapping("list")
-    public List<MemetickPreviewAPI> list() {
-        return memetickService.list();
+    @PostMapping("list")
+    public List<MemetickPreviewAPI> list(@RequestBody List<UUID> memetickIds) {
+        return memetickService.list(memetickIds);
     }
 
     @GetMapping("/rating/{filter}")
