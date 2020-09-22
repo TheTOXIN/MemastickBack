@@ -1,29 +1,24 @@
 package com.memastick.backmem.notification.impl;
 
+import com.memastick.backmem.main.component.SocketSessionStorage;
 import com.memastick.backmem.notification.dto.NotifyDTO;
 import com.memastick.backmem.notification.iface.NotifySender;
-import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class NotifyWebService implements NotifySender {
 
-    private final static Map<String, String> CACHE = new HashMap<>();
-
+    private final SocketSessionStorage socketSessionStorage;
     private final SimpMessagingTemplate template;
-    private final OauthData oauthData;
 
     @Override
     public void send(List<User> users, NotifyDTO dto) {
@@ -34,14 +29,13 @@ public class NotifyWebService implements NotifySender {
     }
 
     public void sendAll(NotifyDTO dto) {
-        CACHE.keySet().forEach(name ->
+        socketSessionStorage.allSessionId().forEach(name ->
             sender(dto, name)
         );
     }
 
     private void sender(Object data, String username) {
-        String sessionId = CACHE.get(username);
-
+        String sessionId = socketSessionStorage.getSessionId(username);
         if (sessionId == null) return;
 
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
@@ -50,13 +44,5 @@ public class NotifyWebService implements NotifySender {
         headerAccessor.setLeaveMutable(true);
 
         template.convertAndSendToUser(sessionId, "/queue/notify", data, headerAccessor.getMessageHeaders());
-    }
-
-    public void register(String sessionId) {
-        CACHE.put(oauthData.getCurrentDetails().getUsername(), sessionId);
-    }
-
-    public void remove() {
-        CACHE.remove(oauthData.getCurrentDetails().getUsername());
     }
 }

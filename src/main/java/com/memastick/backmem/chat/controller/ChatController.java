@@ -1,23 +1,21 @@
 package com.memastick.backmem.chat.controller;
 
-import com.memastick.backmem.chat.enitity.ChatMessage;
+import com.memastick.backmem.chat.api.ChatConnectAPI;
 import com.memastick.backmem.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("chat")
 public class ChatController {
 
     private final ChatService chatService;
 
-    @MessageMapping("/chat/send")
-    @SendTo("/chat/main")
-    public ChatMessage sendMessage(@Payload ChatMessage message) {
-        chatService.save(message);
-        return message;
+    @GetMapping("connect")
+    public ChatConnectAPI connect() {
+        return chatService.connect();
     }
 }

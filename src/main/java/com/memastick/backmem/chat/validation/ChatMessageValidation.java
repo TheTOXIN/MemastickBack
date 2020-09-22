@@ -11,6 +11,8 @@ public class ChatMessageValidation {
         switch (msg.getMode()) {
             case TEXT: return !isBlank(msg.getText()) && msg.getText().length() < MAX_TEXT_LEN;
             case STICKER: return !isBlank(msg.getSticker()) && msg.getMemotypeId() != null;
+            case CONNECT:
+            case DISCONNECT:
             default: return false;
         }
     }

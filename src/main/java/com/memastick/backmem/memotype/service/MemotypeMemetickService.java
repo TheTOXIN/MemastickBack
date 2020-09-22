@@ -55,8 +55,12 @@ public class MemotypeMemetickService {
     }
 
     public MemotypeMemetickAPI read(UUID memetickId) {
-        Memetick memetick = memetickRepository.tryFindById(memetickId);
+        return this.read(
+            memetickRepository.tryFindById(memetickId)
+        );
+    }
 
+    public MemotypeMemetickAPI read(Memetick memetick) {
         List<Memotype> memotypesMy = memotypeMemetickRepository.findMemotypesIdByMemetickId(memetick.getId());
         Map<UUID, MemotypeSet> setById = memotypeSetService.allSetById();
 

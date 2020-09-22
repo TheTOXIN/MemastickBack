@@ -47,6 +47,7 @@ public class MainService {
         User user = oauthData.getCurrentUser();
 
         return new InitAPI(
+            user.getLogin(),
             GlobalConstant.VER,
             new NotifyCountAPI(
                 inventoryService.countItems(user.getMemetick()),

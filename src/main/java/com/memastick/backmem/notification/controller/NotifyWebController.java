@@ -1,8 +1,7 @@
 package com.memastick.backmem.notification.controller;
 
-import com.memastick.backmem.notification.impl.NotifyWebService;
+import com.memastick.backmem.main.component.SocketSessionStorage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/notify/web")
 public class NotifyWebController {
 
-    private final NotifyWebService webService;
+    private final SocketSessionStorage socketSessionStorage;
 
-    @PutMapping("/register")
+    @PutMapping("/register") // TODO NOT HERE
     public void registerWeb(@RequestBody String sessionId) {
-        webService.register(sessionId);
+        socketSessionStorage.register(sessionId);
     }
 }

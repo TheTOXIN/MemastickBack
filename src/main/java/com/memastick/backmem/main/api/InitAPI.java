@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InitAPI {
 
+    private String login;
     private String version;
     private NotifyCountAPI notifyCount;
 }

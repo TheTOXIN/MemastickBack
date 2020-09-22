@@ -1,8 +1,8 @@
 package com.memastick.backmem.security.service;
 
+import com.memastick.backmem.main.component.SocketSessionStorage;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.notification.entity.NotifyPush;
-import com.memastick.backmem.notification.impl.NotifyWebService;
 import com.memastick.backmem.notification.repository.NotifyPushRepository;
 import com.memastick.backmem.security.api.LogOutAPI;
 import com.memastick.backmem.security.component.OauthData;
@@ -19,8 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SecurityService {
 
+    private final SocketSessionStorage socketSessionStorage;
     private final NotifyPushRepository pushRepository;
-    private final NotifyWebService notifyWebService;
     private final UserRepository userRepository;
     private final TokenStore tokenStore;
     private final OauthData oauthData;
@@ -31,7 +31,7 @@ public class SecurityService {
     public void logout(LogOutAPI request) {
         Optional<NotifyPush> byToken = pushRepository.findByToken(request.getDeviceToken());
         byToken.ifPresent(pushRepository::delete);
-        notifyWebService.remove();
+        socketSessionStorage.remove();
     }
 
     public void ban(String login) {
