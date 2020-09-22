@@ -1,13 +1,12 @@
 package com.memastick.backmem.memes.api;
 
-import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.constant.MemeType;
-import com.memastick.backmem.memes.dto.MemeCommentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Data
@@ -24,6 +23,8 @@ public class MemeAPI {
 
     private int likes;
     private int chromosomes;
+
+    private ZonedDateTime creating;
 
     private EPI epi;
 }
