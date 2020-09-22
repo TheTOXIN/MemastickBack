@@ -2,9 +2,9 @@ package com.memastick.backmem.sender.component;
 
 import com.memastick.backmem.sender.dto.EmailDTO;
 import com.memastick.backmem.sender.dto.EmailStatus;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,18 +13,12 @@ import org.springframework.stereotype.Component;
 
 
 @Component
+@RequiredArgsConstructor
 public class EmailSender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
     private final JavaMailSender javaMailSender;
-
-    @Autowired
-    public EmailSender(
-        JavaMailSender javaMailSender
-    ) {
-        this.javaMailSender = javaMailSender;
-    }
 
     public EmailStatus sendPlainText(EmailDTO email) {
         return sendMessage(email, false);

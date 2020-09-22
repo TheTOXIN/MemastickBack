@@ -5,22 +5,19 @@ import com.memastick.backmem.security.api.PasswordResetTakeAPI;
 import com.memastick.backmem.security.constant.SecurityStatus;
 import com.memastick.backmem.security.service.PasswordResetService;
 import com.memastick.backmem.sender.dto.EmailStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("password-reset")
 public class PasswordResetController {
 
     private final PasswordResetService passwordResetService;
-
-    @Autowired
-    public PasswordResetController(
-        PasswordResetService passwordResetService
-    ) {
-        this.passwordResetService = passwordResetService;
-    }
 
     @PatchMapping("send")
     public ResponseEntity passwordReset(@RequestBody PasswordResetSendAPI request) {
@@ -35,5 +32,4 @@ public class PasswordResetController {
         if (status.equals(SecurityStatus.SUCCESSFUL)) return ResponseEntity.ok(status);
         return ResponseEntity.unprocessableEntity().body(status);
     }
-
 }

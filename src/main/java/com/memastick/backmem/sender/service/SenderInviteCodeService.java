@@ -4,13 +4,14 @@ import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.security.entity.InviteCode;
 import com.memastick.backmem.sender.component.EmailHtmlSender;
 import com.memastick.backmem.sender.dto.EmailStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
 
 @Service
+@RequiredArgsConstructor
 public class SenderInviteCodeService {
 
     private final static String PATH_TEMPLATE = "invite-code";
@@ -20,13 +21,6 @@ public class SenderInviteCodeService {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
-
-    @Autowired
-    public SenderInviteCodeService(
-        EmailHtmlSender emailHtmlSender
-    ) {
-        this.emailHtmlSender = emailHtmlSender;
-    }
 
     public EmailStatus send(InviteCode inviteCode) {
         Context context = makeContext(inviteCode);

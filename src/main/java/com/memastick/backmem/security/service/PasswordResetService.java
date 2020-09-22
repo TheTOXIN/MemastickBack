@@ -14,54 +14,41 @@ import com.memastick.backmem.sender.service.SenderPasswordResetService;
 import com.memastick.backmem.user.entity.User;
 import com.memastick.backmem.user.repository.UserRepository;
 import com.memastick.backmem.user.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-
 @Service
+@RequiredArgsConstructor
 public class PasswordResetService {
 
+    private final SenderPasswordResetService senderPasswordResetService;
     private final PasswordResetRepository passwordResetRepository;
     private final UserRepository userRepository;
-    private final SenderPasswordResetService senderPasswordResetService;
     private final UserService userService;
 
-    @Autowired
-    public PasswordResetService(
-        PasswordResetRepository passwordResetRepository,
-        UserRepository userRepository,
-        SenderPasswordResetService senderPasswordResetService,
-        UserService userService
-    ) {
-        this.passwordResetRepository = passwordResetRepository;
-        this.userRepository = userRepository;
-        this.senderPasswordResetService = senderPasswordResetService;
-        this.userService = userService;
-    }
-
+    @Transactional
     public EmailStatus send(String email) {
-        Optional<User> byEmail = userRepository.findByEmail(email);
-        if (byEmail.isEmpty()) throw new EntityNotFoundException(User.class, "email");
-        User user = byEmail.get();
+        User user = userRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new EntityNotFoundException(User.class, "email"));
 
-        Optional<PasswordReset> byLogin = passwordResetRepository.findByLogin(user.getLogin());
-        PasswordReset passwordReset;
+        Optional<PasswordReset> optionalReset = passwordResetRepository.findByLogin(user.getLogin());
+        PasswordReset passwordReset = optionalReset.orElse(generateReset(user));
 
-        if (byLogin.isPresent()) {
-            passwordReset = byLogin.get();
+        if (optionalReset.isPresent()) {
             checkTimeReset(passwordReset, ErrorCode.TIME_IN);
             updateCode(passwordReset);
-        } else {
-            passwordReset = generateReset(user);
         }
 
         return senderPasswordResetService.send(passwordReset, email);
     }
 
+    @Transactional
     public SecurityStatus take(PasswordResetTakeAPI request) {
         Optional<PasswordReset> byCode = passwordResetRepository.findByCode(request.getCode());
         if (byCode.isEmpty()) return SecurityStatus.INVITE;
@@ -115,5 +102,4 @@ public class PasswordResetService {
     private LocalDateTime makeTimeCode() {
         return LocalDateTime.now().plusDays(1);
     }
-
 }

@@ -1,29 +1,22 @@
 package com.memastick.backmem.sender.component;
 
+import com.memastick.backmem.errors.exception.EmailNotSendException;
 import com.memastick.backmem.sender.dto.EmailDTO;
 import com.memastick.backmem.sender.dto.EmailStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 
 @Component
+@RequiredArgsConstructor
 public class EmailHtmlSender {
 
     private final static String PERSON = "Мемастик";
 
     private final EmailSender emailSender;
     private final TemplateEngine templateEngine;
-
-    @Autowired
-    public EmailHtmlSender(
-        EmailSender emailSender,
-        TemplateEngine templateEngine
-    ) {
-        this.emailSender = emailSender;
-        this.templateEngine = templateEngine;
-    }
 
     public EmailStatus send(
         String from,
@@ -32,10 +25,11 @@ public class EmailHtmlSender {
         String templateName,
         Context context
     ) {
+        if (from == null || to == null) throw new EmailNotSendException("NULL");
         String body = templateEngine.process(templateName, context);
+
         return emailSender.sendHtml(
             new EmailDTO(from, to, subject, body, PERSON)
         );
     }
-
 }

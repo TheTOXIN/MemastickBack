@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 public class PasswordResetSendAPI {
 
     private String email;
-
 }

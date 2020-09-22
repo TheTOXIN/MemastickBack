@@ -12,5 +12,4 @@ public class PasswordResetTakeAPI {
     private String code;
     private String password;
     private String passwordRepeat;
-
 }
