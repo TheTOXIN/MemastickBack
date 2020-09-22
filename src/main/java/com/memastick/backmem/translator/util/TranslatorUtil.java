@@ -25,8 +25,9 @@ public class TranslatorUtil {
         StringBuilder builder = new StringBuilder();
 
         builder
-            .append("\uD83D\uDC99 МЕМ ОТ АДМИНА" + "\n")
-            .append("\uD83E\uDD13 Автор - " + meme.getMemetick().getNick() + "\n")
+            .append("МЕМ ЧАСА \uD83D\uDC9A" + "\n")
+            .append("\uD83E\uDDFF Популяция: " + meme.getPopulation() + "\n")
+            .append("\uD83E\uDD13 Меметик - " + meme.getMemetick().getNick() + "\n")
             .append(LinkConstant.LINK_MEME + "/" + meme.getId() + "\n");
 
         if (meme.getText() != null) builder.append(String.format("\"%s\"", meme.getText()));
