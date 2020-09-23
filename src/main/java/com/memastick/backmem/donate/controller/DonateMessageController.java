@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("donate-messages")
 @RequiredArgsConstructor
+@RequestMapping("donate-messages")
 public class DonateMessageController {
 
     private final DonateService donateService;
@@ -26,6 +26,6 @@ public class DonateMessageController {
 
     @GetMapping("read")
     public List<DonateMessage> read() {
-        return donateService.readAll();
+        return donateService.readMessages();
     }
 }

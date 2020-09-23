@@ -3,16 +3,14 @@ package com.memastick.backmem.donate.controller;
 
 import com.memastick.backmem.donate.entity.DonateRating;
 import com.memastick.backmem.donate.service.DonateService;
-import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping("donate-ratings")
 @RequiredArgsConstructor
+@RequestMapping("donate-ratings")
 public class DonateRatingController {
 
     private final DonateService donateService;
@@ -23,7 +21,7 @@ public class DonateRatingController {
     }
 
     @GetMapping("read")
-    public Map<MemotypeRarity, List<DonateRating>> readRating() {
-        return donateService.readRating();
+    public List<DonateRating> readRating() {
+        return donateService.readRatings();
     }
 }

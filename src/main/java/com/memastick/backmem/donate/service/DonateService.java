@@ -1,5 +1,6 @@
 package com.memastick.backmem.donate.service;
 
+import com.memastick.backmem.donate.api.DonateAPI;
 import com.memastick.backmem.donate.entity.DonateMessage;
 import com.memastick.backmem.donate.entity.DonateRating;
 import com.memastick.backmem.donate.repository.DonateMessageRepository;
@@ -9,6 +10,7 @@ import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,19 +26,12 @@ public class DonateService {
     private final DonateMessageRepository messageRepository;
     private final DonateRatingRepository ratingRepository;
 
-    public void createMessage(DonateMessage donate) {
-        donate.setNumber(messageRepository.count());
-        messageRepository.save(donate);
-    }
-
-    public List<DonateMessage> readAll() {
-        return messageRepository.findAll(
-            Sort.by(Sort.Order.desc("number"))
+    @Transactional(readOnly = true)
+    public DonateAPI read() {
+        return new DonateAPI(
+            readRandom(),
+            stateRating()
         );
-    }
-
-    public void createRating(DonateRating donate) {
-        ratingRepository.save(donate);
     }
 
     public DonateMessage readRandom() {
@@ -45,7 +40,7 @@ public class DonateService {
         return messages.isEmpty() ? null : messages.get(index);
     }
 
-    public Map<MemotypeRarity, List<DonateRating>> readRating() {
+    private Map<MemotypeRarity, List<DonateRating>> stateRating() {
         List<DonateRating> ratings = new ArrayList<>();
         ratingRepository.findAll().forEach(ratings::add);
         fillRating(ratings);
@@ -83,5 +78,26 @@ public class DonateService {
                 ratings.add(rating);
             });
         });
+    }
+
+    public void createMessage(DonateMessage donate) {
+        donate.setNumber(messageRepository.count());
+        messageRepository.save(donate);
+    }
+
+    public void createRating(DonateRating donate) {
+        ratingRepository.save(donate);
+    }
+
+    public List<DonateMessage> readMessages() {
+        return messageRepository.findAll(
+            Sort.by(Sort.Order.desc("number"))
+        );
+    }
+
+    public List<DonateRating> readRatings() {
+        return ratingRepository.findAll(
+            Sort.by(Sort.Order.desc("time"))
+        );
     }
 }
