@@ -7,6 +7,7 @@ import com.memastick.backmem.main.api.InitAPI;
 import com.memastick.backmem.main.api.NotifyCountAPI;
 import com.memastick.backmem.main.component.HomeMessageGenerator;
 import com.memastick.backmem.main.constant.GlobalConstant;
+import com.memastick.backmem.memes.service.MemeCellService;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.service.MemetickInventoryService;
 import com.memastick.backmem.memetick.service.MemetickRankService;
@@ -29,6 +30,7 @@ public class MainService {
     private final HomeMessageGenerator messageGenerate;
     private final MemetickRankService memetickRankService;
     private final MemetickService memetickService;
+    private final MemeCellService memeCellService;
 
     public HomeAPI home() {
         Memetick memetick = oauthData.getCurrentMemetick();
@@ -39,6 +41,7 @@ public class MainService {
             messageGenerate.getMessage(),
             evolveService.computeEvolution(),
             evolveMemeService.computeSelectTimer(),
+            memeCellService.stateCell(memetick),
             memetick.isCreed()
         );
     }

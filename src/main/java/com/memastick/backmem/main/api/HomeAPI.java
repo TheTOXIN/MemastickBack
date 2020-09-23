@@ -15,6 +15,7 @@ import java.time.LocalTime;
 public class HomeAPI {
 
     private MemetickPreviewAPI memetick;
+
     private MemetickRankDTO rank;
 
     private String message;
@@ -22,6 +23,8 @@ public class HomeAPI {
     private long day;
 
     private LocalTime selectTimer;
+
+    private int cellState;
 
     private boolean creedAgree;
 }

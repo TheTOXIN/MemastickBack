@@ -1,7 +1,5 @@
 package com.memastick.backmem.memes.service;
 
-import com.memastick.backmem.main.constant.DnaCount;
-import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
@@ -9,7 +7,6 @@ import com.memastick.backmem.memetick.view.CellInventoryView;
 import com.memastick.backmem.memetick.view.MemetickInventoryView;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
-import org.joda.time.Hours;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,9 +37,13 @@ public class MemeCellService {
     }
 
     public int stateCell() {
-        Memetick memetick = oauthData.getCurrentMemetick();
-        CellInventoryView inventoryView = inventoryRepository.findCellInventoryView(memetick);
+        return this.stateCell(
+            oauthData.getCurrentMemetick()
+        );
+    }
 
+    public int stateCell(Memetick memetick) {
+        CellInventoryView inventoryView = inventoryRepository.findCellInventoryView(memetick);
         return stateCell(inventoryView.getCellCreating());
     }
 
@@ -59,9 +60,9 @@ public class MemeCellService {
         if (end.isBefore(now)) return CELL_SIZE;
 
         long full = ChronoUnit.MINUTES.between(cellCreating, end);
-        long lift = ChronoUnit.MINUTES.between(now, end);
+        long left = ChronoUnit.MINUTES.between(now, end);
 
-        return CELL_SIZE - Math.min((int) (100f / full * lift), CELL_SIZE);
+        return CELL_SIZE - Math.min((int) (100f / full * left), CELL_SIZE);
     }
 
     public void updateCell(MemetickInventory inventory) {
