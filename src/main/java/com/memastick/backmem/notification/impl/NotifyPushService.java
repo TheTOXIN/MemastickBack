@@ -1,7 +1,5 @@
 package com.memastick.backmem.notification.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -23,13 +21,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.nio.charset.Charset.defaultCharset;
 
 @Service
 public class NotifyPushService implements NotifySender {
@@ -42,13 +40,14 @@ public class NotifyPushService implements NotifySender {
 
     @Autowired
     public NotifyPushService(
+        @Value("${memastick.prod}") boolean isProd,
+        @Value("${fcm.push.json}") String fcmJson,
         @Value("${fcm.push.file}") String fcmPath,
-        @Value("${fcm.push.id}") String privateId,
         NotifyPushRepository notifyPushRepository,
         SettingUserService settingUserService,
         OauthData oauthData
     ) {
-        this.init(new ClassPathResource(fcmPath), privateId);
+        this.init(isProd, fcmJson, new ClassPathResource(fcmPath));
 
         this.notifyPushRepository = notifyPushRepository;
         this.settingUserService = settingUserService;
@@ -120,22 +119,18 @@ public class NotifyPushService implements NotifySender {
         notifyPushRepository.save(notifyPush);
     }
 
-    private void init(Resource fcmFile, String privateId) {
+    private void init(boolean isProd, String fcmJson, Resource fcmFile) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-
-            ObjectNode json = (ObjectNode) mapper.readTree(fcmFile.getInputStream());
-            json.put("private_key_id", privateId);
-            String string = mapper.writeValueAsString(json);
-
-            InputStream stream = IOUtils.toInputStream(string, Charset.defaultCharset());
+            InputStream stream = isProd ?
+                IOUtils.toInputStream(fcmJson, defaultCharset()) :
+                fcmFile.getInputStream();
 
             FirebaseApp.initializeApp(
                 new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(stream))
                     .build()
             );
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("PUSH NOTIFICATION NOT INIT");
             e.printStackTrace();
         }
