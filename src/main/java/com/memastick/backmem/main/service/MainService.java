@@ -17,6 +17,7 @@ import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +33,7 @@ public class MainService {
     private final MemetickService memetickService;
     private final MemeCellService memeCellService;
 
+    @Transactional(readOnly = true)
     public HomeAPI home() {
         Memetick memetick = oauthData.getCurrentMemetick();
 
