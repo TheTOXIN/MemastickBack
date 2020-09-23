@@ -1,5 +1,7 @@
 package com.memastick.backmem.notification.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -12,6 +14,7 @@ import com.memastick.backmem.notification.repository.NotifyPushRepository;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.setting.service.SettingUserService;
 import com.memastick.backmem.user.entity.User;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,20 +37,22 @@ public class NotifyPushService implements NotifySender {
     private static final Logger log = LoggerFactory.getLogger(NotifyPushService.class);
 
     private final NotifyPushRepository notifyPushRepository;
-    private final OauthData oauthData;
     private final SettingUserService settingUserService;
+    private final OauthData oauthData;
 
     @Autowired
     public NotifyPushService(
         @Value("${fcm.push.file}") String fcmPath,
+        @Value("${fcm.push.id}") String privateId,
         NotifyPushRepository notifyPushRepository,
-        OauthData oauthData,
-        SettingUserService settingUserService
+        SettingUserService settingUserService,
+        OauthData oauthData
     ) {
-        this.init(new ClassPathResource(fcmPath));
+        this.init(new ClassPathResource(fcmPath), privateId);
+
         this.notifyPushRepository = notifyPushRepository;
-        this.oauthData = oauthData;
         this.settingUserService = settingUserService;
+        this.oauthData = oauthData;
     }
 
     @Override
@@ -83,7 +89,7 @@ public class NotifyPushService implements NotifySender {
         }
     }
 
-    private WebpushNotification.Builder builder(NotifyDTO dto){
+    private WebpushNotification.Builder builder(NotifyDTO dto) {
         return WebpushNotification.builder()
             .putCustomData("click_action", dto.getEvent())
             .setIcon(LinkConstant.LINK_ICON)
@@ -114,11 +120,19 @@ public class NotifyPushService implements NotifySender {
         notifyPushRepository.save(notifyPush);
     }
 
-    private void init(Resource fcmFile) {
-        try (InputStream service = fcmFile.getInputStream()) {
+    private void init(Resource fcmFile, String privateId) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            ObjectNode json = (ObjectNode) mapper.readTree(fcmFile.getInputStream());
+            json.put("private_key_id", privateId);
+            String string = mapper.writeValueAsString(json);
+
+            InputStream stream = IOUtils.toInputStream(string, Charset.defaultCharset());
+
             FirebaseApp.initializeApp(
                 new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(service))
+                    .setCredentials(GoogleCredentials.fromStream(stream))
                     .build()
             );
         } catch (IOException e) {
