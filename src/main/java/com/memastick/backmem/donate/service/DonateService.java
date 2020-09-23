@@ -71,7 +71,7 @@ public class DonateService {
             IntStream.range(0, countEmpties).forEach(i -> {
                 DonateRating rating = new DonateRating();
 
-                rating.setName("ПРИМЕР ДОНАТА");
+                rating.setName("СВОБОДНО");
                 rating.setAvatar(NETRAL_AVATAR);
                 rating.setRarity(rarity);
 
