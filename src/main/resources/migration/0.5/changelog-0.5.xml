@@ -21,6 +21,9 @@
     </changeSet>
 
     <changeSet id="05_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="users" columnName="ban"/></not>
+        </preConditions>
         <sqlFile path="scripts/05_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
@@ -29,6 +32,11 @@
     </changeSet>
 
     <changeSet id="07_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                SELECT count(*) FROM memotype WHERE title = 'ЛАБОДЕЛ'
+            </sqlCheck>
+        </preConditions>
         <sqlFile path="scripts/07_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
@@ -37,6 +45,11 @@
     </changeSet>
 
     <changeSet id="09_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                SELECT count(*) FROM memotype_set WHERE name = 'Глад Валакас'
+            </sqlCheck>
+        </preConditions>
         <sqlFile path="scripts/09_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 

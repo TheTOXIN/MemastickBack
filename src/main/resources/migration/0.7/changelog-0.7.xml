@@ -8,4 +8,11 @@
         <sqlFile path="scripts/01_0.7.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="02_0.7" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="donater_ratings"/>
+        </preConditions>
+        <sqlFile path="scripts/02_0.7.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

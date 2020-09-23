@@ -1,4 +1,4 @@
-package com.memastick.backmem.donaters.entity;
+package com.memastick.backmem.donate.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +10,12 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "donater_messages")
+@Table(name = "donate_messages")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class DonaterMessage extends DonaterAbstract {
+public class DonateMessage extends DonateAbstract {
 
     @Column(nullable = false, unique = true)
     private Long number;

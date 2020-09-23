@@ -1,4 +1,4 @@
-package com.memastick.backmem.donaters.entity;
+package com.memastick.backmem.donate.entity;
 
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "donater_ratings")
+@Table(name = "donate_ratings")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class DonaterRating extends DonaterAbstract {
+public class DonateRating extends DonateAbstract {
 
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
