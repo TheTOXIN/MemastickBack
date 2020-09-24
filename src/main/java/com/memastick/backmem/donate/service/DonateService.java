@@ -74,6 +74,7 @@ public class DonateService {
                 rating.setName("СВОБОДНО");
                 rating.setAvatar(NETRAL_AVATAR);
                 rating.setRarity(rarity);
+                rating.setAmount(rarity.getLvl() * 100);
 
                 ratings.add(rating);
             });

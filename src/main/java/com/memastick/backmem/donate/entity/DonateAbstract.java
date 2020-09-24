@@ -17,4 +17,7 @@ public abstract class DonateAbstract extends AbstractEntity {
 
     @Column(nullable = false)
     private String avatar;
+
+    @Column(nullable = false)
+    private int amount;
 }

@@ -15,4 +15,11 @@
         <sqlFile path="scripts/02_0.7.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="03_0.7" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="donate_ratings" columnName="amount"/></not>
+        </preConditions>
+        <sqlFile path="scripts/03_0.7.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>
