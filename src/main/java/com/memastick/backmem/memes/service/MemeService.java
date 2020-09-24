@@ -4,10 +4,10 @@ import com.memastick.backmem.evolution.entity.EvolveMeme;
 import com.memastick.backmem.evolution.repository.EvolveMemeRepository;
 import com.memastick.backmem.main.constant.LinkConstant;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
+import com.memastick.backmem.memes.api.MemeAPI;
 import com.memastick.backmem.memes.api.MemeImgAPI;
 import com.memastick.backmem.memes.api.MemePageAPI;
 import com.memastick.backmem.memes.constant.MemeType;
-import com.memastick.backmem.memes.api.MemeAPI;
 import com.memastick.backmem.memes.dto.MemeReadDTO;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.mapper.MemeMapper;
@@ -84,6 +84,7 @@ public class MemeService {
         return new MemeImgAPI(meme.getUrl());
     }
 
+    @Transactional
     public void moveIndex(Meme meme) {
         long newIndex = meme.getIndividuation() + 1;
         long oldIndex = meme.getIndividuation();
@@ -103,6 +104,7 @@ public class MemeService {
         memeRepository.save(prevMeme);
     }
 
+    @Transactional(readOnly = true)
     public List<Meme> reader(MemeReadDTO readDTO, Pageable pageable) {
         List<Meme> memes = new ArrayList<>();
 
