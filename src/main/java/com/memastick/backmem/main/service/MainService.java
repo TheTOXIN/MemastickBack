@@ -1,5 +1,6 @@
 package com.memastick.backmem.main.service;
 
+import com.memastick.backmem.chat.service.ChatService;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.main.api.HomeAPI;
@@ -32,6 +33,7 @@ public class MainService {
     private final MemetickRankService memetickRankService;
     private final MemetickService memetickService;
     private final MemeCellService memeCellService;
+    private final ChatService chatService;
 
     @Transactional(readOnly = true)
     public HomeAPI home() {
@@ -44,6 +46,7 @@ public class MainService {
             evolveService.computeEvolution(),
             evolveMemeService.computeSelectTimer(),
             memeCellService.stateCell(memetick),
+            chatService.readHome(),
             memetick.isCreed()
         );
     }
