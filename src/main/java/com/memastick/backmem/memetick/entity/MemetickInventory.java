@@ -33,10 +33,15 @@ public class MemetickInventory extends AbstractEntity {
     private LocalDateTime cellCreating = TimeConstant.START_LOCAL_TIME;
 
     @Column(nullable = false)
+    private LocalDateTime pickaxeCreating = TimeConstant.START_LOCAL_TIME;
+
+    @Column(nullable = false)
     private boolean cellNotify = false;
 
     @Min(DnaCount.MIN_CREATE)
     @Max(DnaCount.MAX_CREATE)
     @Column(nullable = false)
     private int cellCombo = DnaCount.MIN_CREATE;
+
+    // TODO MAKE SEPARATE TABLES
 }

@@ -1,7 +1,6 @@
 package com.memastick.backmem.memetick.service;
 
 import com.memastick.backmem.errors.exception.CellSmallException;
-import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.evolution.service.EvolveService;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memecoin.service.PickaxeService;
@@ -31,7 +30,7 @@ public class MemetickInventoryService {
     private final PickaxeService pickaxeService;
     private final EvolveService evolveService;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public MemetickInventoryAPI readAll() {
         Memetick memetick = oauthData.getCurrentMemetick();
         MemetickInventory inventory = inventoryRepository.findByMemetick(memetick);
@@ -41,7 +40,7 @@ public class MemetickInventoryService {
             memetick.getCookies(),
             cellService.checkState(inventory),
             inventory.isAllowance(),
-            pickaxeService.have(memetick),
+            pickaxeService.have(inventory),
             tokenWalletService.wallet(memetick)
         );
     }
@@ -70,7 +69,7 @@ public class MemetickInventoryService {
 
         if (view.isAllowance()) count++;
         if (cellService.checkState(view)) count++;
-        if (pickaxeService.have(memetick)) count++;
+        if (pickaxeService.have(view.getPickaxeCreating())) count++;
 
         return count;
     }

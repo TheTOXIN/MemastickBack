@@ -8,12 +8,14 @@ import com.memastick.backmem.memecoin.api.PickaxeAPI;
 import com.memastick.backmem.memecoin.entity.Pickaxe;
 import com.memastick.backmem.memecoin.repository.PickaxeRepository;
 import com.memastick.backmem.memetick.entity.Memetick;
+import com.memastick.backmem.memetick.entity.MemetickInventory;
+import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.memastick.backmem.main.constant.GlobalConstant.PICKAXE_HOURS;
@@ -22,9 +24,11 @@ import static com.memastick.backmem.main.constant.GlobalConstant.PICKAXE_HOURS;
 @AllArgsConstructor
 public class PickaxeService {
 
+    private final MemetickInventoryRepository inventoryRepository;
     private final PickaxeRepository pickaxeRepository;
     private final OauthData oauthData;
 
+    @Transactional
     public PickaxeAPI generate() {
         Memetick memetick = oauthData.getCurrentMemetick();
         Pickaxe pickaxe = pickaxeRepository.generateFindByMemetick(memetick);
@@ -48,17 +52,25 @@ public class PickaxeService {
         return response;
     }
 
+    @Transactional
     public void deactivate(UUID token) {
         Pickaxe pickaxe = pickaxeRepository.tryFindByToken(token);
+
         pickaxe.setActive(false);
         pickaxe.setToken(UUID.randomUUID());
+
         pickaxeRepository.save(pickaxe);
     }
 
+    @Transactional
     public UUID update(Pickaxe pickaxe) {
-        pickaxe.setToken(UUID.randomUUID());
-        pickaxe.setCreating(LocalDateTime.now());
+        LocalDateTime now = LocalDateTime.now();
+
         pickaxe.setActive(true);
+        pickaxe.setCreating(now);
+        pickaxe.setToken(UUID.randomUUID());
+
+        inventoryRepository.updatePickaxe(now, pickaxe.getMemetickId());
 
         return pickaxe.getToken();
     }
@@ -69,10 +81,15 @@ public class PickaxeService {
         }
     }
 
-    public boolean have(Memetick memetick) {
-        Optional<Pickaxe> optional = pickaxeRepository.findByMemetickId(memetick.getId());
-        if (optional.isEmpty()) return true;
-        Pickaxe pickaxe = optional.get();
-        return TimeUtil.isExpire(pickaxe.getCreating().plusHours(PICKAXE_HOURS));
+    public boolean have(MemetickInventory inventory) {
+        return this.have(
+            inventory.getPickaxeCreating()
+        );
+    }
+
+    public boolean have(LocalDateTime creating) {
+        return TimeUtil.isExpire(
+            creating.plusHours(PICKAXE_HOURS)
+        );
     }
 }

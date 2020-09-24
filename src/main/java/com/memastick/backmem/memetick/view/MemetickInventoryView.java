@@ -11,4 +11,5 @@ public class MemetickInventoryView {
 
     private boolean allowance;
     private LocalDateTime cellCreating;
+    private LocalDateTime pickaxeCreating;
 }

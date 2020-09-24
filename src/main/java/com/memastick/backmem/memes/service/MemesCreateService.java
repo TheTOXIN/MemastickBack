@@ -3,8 +3,6 @@ package com.memastick.backmem.memes.service;
 import com.memastick.backmem.errors.exception.CellSmallException;
 import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.evolution.service.EvolveService;
-import com.memastick.backmem.main.constant.DnaCount;
-import com.memastick.backmem.main.util.MathUtil;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.entity.Meme;
 import com.memastick.backmem.memes.repository.MemeRepository;
@@ -12,8 +10,6 @@ import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.memetick.entity.MemetickInventory;
 import com.memastick.backmem.memetick.repository.MemetickInventoryRepository;
 import com.memastick.backmem.memetick.service.MemetickService;
-import com.memastick.backmem.memetick.view.CellInventoryView;
-import com.memastick.backmem.memetick.view.MemetickInventoryView;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.security.component.OauthData;
 import lombok.AllArgsConstructor;
@@ -25,7 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.memastick.backmem.main.constant.DnaCount.*;
+import static com.memastick.backmem.main.constant.DnaCount.COF_CREATE;
+import static com.memastick.backmem.main.constant.DnaCount.MIN_CREATE;
 import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 
 @Service
