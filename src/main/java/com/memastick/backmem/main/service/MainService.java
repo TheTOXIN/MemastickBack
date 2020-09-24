@@ -51,6 +51,7 @@ public class MainService {
         );
     }
 
+    @Transactional(readOnly = true)
     public InitAPI init() {
         User user = oauthData.getCurrentUser();
 
