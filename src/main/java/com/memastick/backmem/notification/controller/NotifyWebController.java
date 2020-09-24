@@ -14,7 +14,8 @@ public class NotifyWebController {
 
     private final SocketSessionStorage socketSessionStorage;
 
-    @PutMapping("/register") // TODO NOT HERE
+    @Deprecated
+    @PutMapping("/register")
     public void registerWeb(@RequestBody String sessionId) {
         socketSessionStorage.register(sessionId);
     }

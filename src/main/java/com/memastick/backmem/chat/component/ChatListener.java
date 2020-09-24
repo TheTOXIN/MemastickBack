@@ -35,7 +35,7 @@ public class ChatListener {
     }
 
     @EventListener(SessionDisconnectEvent.class)
-    public void handleWebsocketDisconnectListener(SessionDisconnectEvent event) {
+    public void handleSessionDisconnect(SessionDisconnectEvent event) {
         if (online.containsKey(event.getSessionId())) {
             UUID memetickId = online.get(event.getSessionId());
             ChatMessage message = new ChatMessage();

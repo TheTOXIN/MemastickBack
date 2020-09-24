@@ -13,9 +13,7 @@ import com.memastick.backmem.memotype.service.MemotypeMemetickService;
 import com.memastick.backmem.security.component.OauthData;
 import com.memastick.backmem.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,12 +58,7 @@ public class ChatService {
     }
 
     public List<ChatMessage> readHome() {
-        return this.read(
-            PageRequest.of(
-                0, 5,
-                Sort.by("creating").descending()
-            )
-        );
+        return chatMessageRepository.finFirstByCount(10);
     }
 
     public List<ChatMessage> read(Pageable pageable) {
