@@ -25,4 +25,12 @@ public enum MemotypeRarity {
             .findFirst()
             .orElse(null);
     }
+
+    public static MemotypeRarity findByLvl(int lvl) {
+        return Arrays
+            .stream(MemotypeRarity.values())
+            .filter(e -> e.getLvl() == lvl)
+            .findFirst()
+            .orElse(null);
+    }
 }

@@ -24,6 +24,7 @@ public class GlobalConstant {
     public static final int DEFAULT_COOKIES = 10;
     public static final int DEFAULT_MEMCOINS = 100;
     public static final int EVOLVE_CHROMOSOME = 10;
+    public static final int DONATE_RATE = 100;
 
     @Autowired
     public GlobalConstant(

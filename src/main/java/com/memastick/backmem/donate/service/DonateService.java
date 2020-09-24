@@ -16,7 +16,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.memastick.backmem.main.constant.GlobalConstant.DONATE_RATE;
 import static com.memastick.backmem.main.constant.LinkConstant.NETRAL_AVATAR;
+import static com.memastick.backmem.memotype.constant.MemotypeRarity.INCREDIBLE;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -41,8 +43,7 @@ public class DonateService {
     }
 
     private Map<MemotypeRarity, List<DonateRating>> stateRating() {
-        List<DonateRating> ratings = new ArrayList<>();
-        ratingRepository.findAll().forEach(ratings::add);
+        List<DonateRating> ratings = new ArrayList<>(ratingRepository.findAll());
         fillRating(ratings);
 
         return ratings
@@ -87,7 +88,13 @@ public class DonateService {
     }
 
     public void createRating(DonateRating donate) {
-        ratingRepository.save(donate);
+        int lvl = Math.min(donate.getAmount() / DONATE_RATE, INCREDIBLE.getLvl());
+        MemotypeRarity rarity = MemotypeRarity.findByLvl(lvl);
+
+        if (rarity != null) {
+            donate.setRarity(rarity);
+            ratingRepository.save(donate);
+        }
     }
 
     public List<DonateMessage> readMessages() {
