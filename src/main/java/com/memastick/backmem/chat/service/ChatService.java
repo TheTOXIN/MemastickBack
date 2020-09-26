@@ -58,7 +58,7 @@ public class ChatService {
     }
 
     public List<ChatMessage> readHome() {
-        return chatMessageRepository.finFirstByCount(10);
+        return chatMessageRepository.finFirstByCount(5);
     }
 
     public List<ChatMessage> read(Pageable pageable) {
