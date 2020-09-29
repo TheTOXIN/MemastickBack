@@ -3,7 +3,6 @@ package com.memastick.backmem.memes.repository;
 import com.memastick.backmem.errors.exception.EntityNotFoundException;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memes.entity.Meme;
-import com.memastick.backmem.memes.entity.MemeComment;
 import com.memastick.backmem.memetick.entity.Memetick;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,6 +32,8 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     Optional<Meme> findByEvolutionAndPopulationAndIndividuation(long evolution, long population, long individuation);
 
+    List<Meme> findByTypeIn(List<MemeType> list, Pageable page);
+
     List<Meme> findByType(MemeType type, Pageable pageable);
 
     List<Meme> findByEvolution(long evolution, Pageable pageable);
@@ -56,16 +57,16 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
     )
     Meme findSuperMeme(@Param("evolution") long evolution);
 
-    default Meme tryFindById(UUID memeId) {
-        return this
-            .findById(memeId)
-            .orElseThrow(() -> new EntityNotFoundException(Meme.class, "id"));
-    }
-
     @Modifying
     @Query("UPDATE Meme m SET m.commentId = :commentId WHERE m.id = :memeId")
     void updateSetComment(
         @Param("commentId") UUID commentId,
         @Param("memeId") UUID memeId
     );
+
+    default Meme tryFindById(UUID memeId) {
+        return this
+            .findById(memeId)
+            .orElseThrow(() -> new EntityNotFoundException(Meme.class, "id"));
+    }
 }
