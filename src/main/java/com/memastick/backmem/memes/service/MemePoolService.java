@@ -33,16 +33,18 @@ public class MemePoolService {
     private final MemeRepository memeRepository;
     private final EvolveMemeRepository evolveMemeRepository;
 
-    public List<Meme> generate(EvolveStep step, Pageable pageable) {
-        if (step == null) {
-            return memeRepository.findByTypeIn(
-                Arrays.asList(MemeType.EVLV, MemeType.SLCT, MemeType.INDV), // TODO BIG OOF
-                JpaUtil.makePage(pageable, SORT_EVOLVE)
-            );
-        } else {
-            return evolveMemeRepository.findByStep(
-                step, JpaUtil.makePage(pageable, SORT_STEP)
-            ).stream().map(EvolveMeme::getMeme).collect(Collectors.toList());
-        }
+    public List<Meme> generate(Pageable pageable) {
+        return memeRepository.findByTypeIn(
+            Arrays.asList(MemeType.EVLV, MemeType.SLCT, MemeType.INDV), // TODO BIG OOF
+            JpaUtil.makePage(pageable, SORT_EVOLVE)
+        );
+    }
+
+    public List<Meme> findByStep(EvolveStep step, Pageable pageable) {
+        return evolveMemeRepository
+            .findByStep(step, JpaUtil.makePage(pageable, SORT_STEP))
+            .stream()
+            .map(EvolveMeme::getMeme)
+            .collect(Collectors.toList());
     }
 }

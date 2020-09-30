@@ -9,5 +9,6 @@ public enum MemeFilter {
     SELF,
     BATL,
     USER,
+    STEP,
     POOL
 }

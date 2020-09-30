@@ -119,7 +119,8 @@ public class MemeService {
             case BATL: memes = memeRepository.findByTypeAndMemetick(MemeType.INDV, memetick, pageable); break;
             case USER: memes = memeRepository.findByMemetick(memetickRepository.tryFindById(readDTO.getMemetickId()), pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
-            case POOL: memes = memePoolService.generate(readDTO.getStep(), pageable); break;
+            case STEP: memes = memePoolService.findByStep(readDTO.getStep(), pageable); break;
+            case POOL: memes = memePoolService.generate(pageable); break;
         }
 
         return memes;
