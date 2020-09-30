@@ -114,9 +114,10 @@ public class MemeService {
             case EVLV: memes = memeRepository.findByType(MemeType.EVLV, pageable); break;
             case SLCT: memes = memeRepository.findByType(MemeType.SLCT, pageable); break;
             case INDV: memes = memeRepository.findByType(MemeType.INDV, pageable); break;
-            case DEAD: memes = memeRepository.findByTypeAndMemetick(MemeType.DEAD, memetick, pageable); break;
+            case BATL: memes = memeRepository.findByTypeAndMemetickNot(MemeType.INDV, memetick, pageable); break;
             case SELF: memes = memeRepository.findByMemetick(memetick, pageable); break;
-            case BATL: memes = memeRepository.findByTypeAndMemetick(MemeType.INDV, memetick, pageable); break;
+            case MEIN: memes = memeRepository.findByTypeAndMemetick(MemeType.INDV, memetick, pageable); break;
+            case DEAD: memes = memeRepository.findByTypeAndMemetick(MemeType.DEAD, memetick, pageable); break;
             case USER: memes = memeRepository.findByMemetick(memetickRepository.tryFindById(readDTO.getMemetickId()), pageable); break;
             case LIKE: memes = memeLikeService.findMemesByLikeFilter(memetick, pageable); break;
             case STEP: memes = memePoolService.findByStep(readDTO.getStep(), pageable); break;

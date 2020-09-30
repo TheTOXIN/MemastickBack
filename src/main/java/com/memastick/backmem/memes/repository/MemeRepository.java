@@ -42,6 +42,8 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
 
     List<Meme> findByTypeAndMemetick(MemeType type, Memetick memetick, Pageable pageable);
 
+    List<Meme> findByTypeAndMemetickNot(MemeType type, Memetick memetick, Pageable pageable);
+
     @Query("SELECT MAX(m.chromosomes) FROM Meme m WHERE m.type = :type")
     Optional<Long> maxByCromosome(@Param("type") MemeType type);
 
