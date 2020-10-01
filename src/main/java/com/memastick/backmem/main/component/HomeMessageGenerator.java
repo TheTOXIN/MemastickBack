@@ -1,15 +1,11 @@
 package com.memastick.backmem.main.component;
 
-import com.memastick.backmem.evolution.service.EvolveMemeService;
 import com.memastick.backmem.evolution.service.EvolveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +24,7 @@ public class HomeMessageGenerator {
         "Помните и уважайте пожилые мемы",
         "Надейся на лучшие, расчитывай на мемы",
         "Вместе мы сделаем контент лучше!",
-        "Без труда не сделаешь и мем никогда.",
+        "Без труда не сделаешь и мем никогда",
         "МУТАГЕН->КРОССОВЕР->МИКРОСКОП->АНТИБИОТИК->ПРОБИРКА"
     };
 
