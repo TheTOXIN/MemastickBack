@@ -7,6 +7,7 @@ import com.memastick.backmem.main.constant.GlobalConstant;
 import com.memastick.backmem.main.util.ValidationUtil;
 import com.memastick.backmem.memecoin.service.MemeCoinService;
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
+import com.memastick.backmem.memetick.api.MemetickAPI;
 import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.api.MemetickProfileAPI;
 import com.memastick.backmem.memetick.entity.Memetick;
@@ -42,13 +43,19 @@ public class MemetickService {
     private final MemeCoinService coinService;
     private final MemetickRankService rankService;
 
-    public MemetickProfileAPI viewByMe() {
+    public MemetickAPI readById(UUID id) {
+        return memetickMapper.toAPI(
+            memetickRepository.tryFindById(id)
+        );
+    }
+
+    public MemetickProfileAPI profileByMe() {
         return memetickMapper.toProfileAPI(
             oauthData.getCurrentMemetick()
         );
     }
 
-    public MemetickProfileAPI viewById(UUID id) {
+    public MemetickProfileAPI profileById(UUID id) {
         return memetickMapper.toProfileAPI(
             memetickRepository.tryFindById(id)
         );

@@ -1,6 +1,7 @@
 package com.memastick.backmem.memetick.mapper;
 
 import com.memastick.backmem.memecoin.service.MemeCoinService;
+import com.memastick.backmem.memetick.api.MemetickAPI;
 import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
 import com.memastick.backmem.memetick.api.MemetickProfileAPI;
 import com.memastick.backmem.memetick.dto.MemetickRatingDTO;
@@ -37,24 +38,30 @@ public class MemetickMapper {
         this.tokenWalletService = tokenWalletService;
     }
 
-    public MemetickPreviewAPI toPreviewDTO(Memetick memetick) {
-        return new MemetickPreviewAPI(
+    public MemetickAPI toAPI(Memetick memetick) {
+        return new MemetickAPI(
             memetick.getId(),
             memetick.getNick(),
-            memetickRankService.computeLvl(memetick.getDna())
+            memetick.getCookies(),
+            memetickRankService.rank(memetick)
         );
     }
 
     public MemetickProfileAPI toProfileAPI(Memetick memetick) {
         return new MemetickProfileAPI(
-            memetick.getId(),
-            memetick.getNick(),
+            toAPI(memetick),
             settingFollowerService.follow(memetick),
             securityService.isOnline(memetick),
             memeCoinService.balance(memetick),
-            memetick.getCookies(),
-            memetickRankService.rank(memetick),
             tokenWalletService.read(memetick)
+        );
+    }
+
+    public MemetickPreviewAPI toPreviewDTO(Memetick memetick) {
+        return new MemetickPreviewAPI(
+            memetick.getId(),
+            memetick.getNick(),
+            memetickRankService.computeLvl(memetick.getDna())
         );
     }
 
