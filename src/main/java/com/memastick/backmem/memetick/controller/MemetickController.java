@@ -1,8 +1,8 @@
 package com.memastick.backmem.memetick.controller;
 
 import com.memastick.backmem.memetick.api.ChangeNickAPI;
-import com.memastick.backmem.memetick.api.MemetickAPI;
 import com.memastick.backmem.memetick.api.MemetickPreviewAPI;
+import com.memastick.backmem.memetick.api.MemetickProfileAPI;
 import com.memastick.backmem.memetick.api.MemetickRatingAPI;
 import com.memastick.backmem.memetick.constant.MemetickRatingFilter;
 import com.memastick.backmem.memetick.service.MemetickRatingService;
@@ -25,12 +25,12 @@ public class MemetickController {
     private final MemetickRatingService ratingService;
 
     @GetMapping("view/me")
-    public MemetickAPI viewMe() {
+    public MemetickProfileAPI viewMe() {
         return memetickService.viewByMe();
     }
 
     @GetMapping("view/{id}")
-    public MemetickAPI view(@PathVariable("id") UUID id) {
+    public MemetickProfileAPI view(@PathVariable("id") UUID id) {
         return memetickService.viewById(id);
     }
 
