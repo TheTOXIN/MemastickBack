@@ -14,5 +14,4 @@ public class ResponseErrorAPI {
     private ErrorCode code;
     private String message;
     private String cause;
-
 }
