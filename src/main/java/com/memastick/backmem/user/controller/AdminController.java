@@ -7,7 +7,6 @@ import com.memastick.backmem.main.component.HomeMessageGenerator;
 import com.memastick.backmem.main.service.MigrateService;
 import com.memastick.backmem.notification.service.NotifyService;
 import com.memastick.backmem.tokens.service.TokenAllowanceSendService;
-import com.memastick.backmem.translator.serivce.TranslatorPublishService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +21,6 @@ public class AdminController {
     private final NotifyService notifyService;
     private final EvolveSelecterService evolveSelecterService;
     private final MigrateService migrateService;
-    private final TranslatorPublishService publishService;
     private final BattleVoteRepository battleVoteRepository;
     private final HomeMessageGenerator homeMessageGenerator;
 
@@ -34,11 +32,6 @@ public class AdminController {
     @PostMapping("migrate")
     public void migrate() {
         migrateService.migrate();
-    }
-
-    @GetMapping("day-publish")
-    public void dayPublish() {
-        publishService.publish();
     }
 
     @GetMapping("clear-votes")
