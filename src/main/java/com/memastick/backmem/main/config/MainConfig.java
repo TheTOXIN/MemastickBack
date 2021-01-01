@@ -22,6 +22,7 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -30,14 +31,14 @@ public class MainConfig {
     private final DataSource dataSource;
 
     @Value("${memastick.api.allowed}")
-    public String allowedOrigin;
+    public List<String> allowedOrigin;
 
     @Bean
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin(allowedOrigin);
+        configuration.setAllowedOrigins(allowedOrigin);
         configuration.addAllowedHeader("Authorization");
         configuration.addAllowedHeader("Content-Type");
         configuration.addAllowedHeader("Accept");
