@@ -156,5 +156,11 @@ public class MemeService {
 
         evolveMemeRepository.save(evolveMeme);
     }
+
+    @Transactional(readOnly = true)
+    public String gerRandom() {
+        Meme randomMeme = memeRepository.random();
+        return randomMeme.getUrl();
+    }
 }
 

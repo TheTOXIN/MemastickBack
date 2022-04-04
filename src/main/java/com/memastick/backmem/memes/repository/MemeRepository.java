@@ -59,6 +59,12 @@ public interface MemeRepository extends JpaRepository<Meme, UUID> {
     )
     Meme findSuperMeme(@Param("evolution") long evolution);
 
+    @Query(
+        nativeQuery = true,
+        value = "SELECT * FROM memes ORDER BY random() LIMIT 1"
+    )
+    Meme random();
+
     @Modifying
     @Query("UPDATE Meme m SET m.commentId = :commentId WHERE m.id = :memeId")
     void updateSetComment(

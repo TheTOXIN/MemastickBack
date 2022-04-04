@@ -76,4 +76,9 @@ public class MemeController {
     public void banMeme(@PathVariable("memeId") UUID memeId) {
         memeService.ban(memeId);
     }
+
+    @GetMapping("/random")
+    public String getRandom() {
+        return memeService.gerRandom();
+    }
 }

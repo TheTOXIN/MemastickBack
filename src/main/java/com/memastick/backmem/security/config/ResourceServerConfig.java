@@ -48,6 +48,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
             .mvcMatchers("/donate/read").anonymous()
             .mvcMatchers("/donate-ratings/read").anonymous()
             .mvcMatchers("/donate-messages/read").anonymous()
+            .mvcMatchers("/memes/random").anonymous()
             .mvcMatchers("/**").authenticated();
     }
 }
