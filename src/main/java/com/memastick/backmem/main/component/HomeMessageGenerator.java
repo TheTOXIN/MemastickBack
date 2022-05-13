@@ -13,7 +13,7 @@ public class HomeMessageGenerator {
 
     private Pair<LocalDateTime, String> messageCache;
 
-    private String[] messages = {
+    private final String[] messages = {
         "Мемастик в процессе прокрастинации, не ругайте нас",
         "Чувствуй себя как дома! (но не очень сильно)",
         "Мемы - это лучшее на что ты можешь потратить свое время",
