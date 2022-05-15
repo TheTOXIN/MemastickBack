@@ -2,15 +2,13 @@ package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memetick.entity.Memetick;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
@@ -18,10 +16,11 @@ import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 
 @Entity
 @Table(name = "memes_comment")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class MemeComment extends AbstractEntity {
 
     @NaturalId

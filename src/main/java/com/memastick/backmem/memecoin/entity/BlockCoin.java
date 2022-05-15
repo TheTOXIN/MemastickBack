@@ -1,10 +1,7 @@
 package com.memastick.backmem.memecoin.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
@@ -15,10 +12,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "block_coins")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class BlockCoin extends AbstractEntity {
 
     @Column(nullable = false)

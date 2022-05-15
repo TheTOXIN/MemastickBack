@@ -1,15 +1,19 @@
 package com.memastick.backmem.donate.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @MappedSuperclass
-@EqualsAndHashCode(callSuper = true)
 public abstract class DonateAbstract extends AbstractEntity {
 
     @Column(nullable = false)

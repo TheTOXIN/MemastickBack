@@ -3,10 +3,7 @@ package com.memastick.backmem.memetick.entity;
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.main.constant.DnaCount;
 import com.memastick.backmem.main.constant.TimeConstant;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -15,10 +12,11 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "memetick_inventories")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @NamedEntityGraph(name = "joinedInventoryMemetick", includeAllAttributes = true)
 public class MemetickInventory extends AbstractEntity {
 

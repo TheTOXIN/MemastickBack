@@ -3,10 +3,7 @@ package com.memastick.backmem.setting.entity;
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.main.constant.TimeConstant;
 import com.memastick.backmem.user.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
@@ -17,10 +14,11 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "setting_users")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class SettingUser extends AbstractEntity {
 
     @NaturalId

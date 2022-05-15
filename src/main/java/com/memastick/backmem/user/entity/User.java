@@ -3,20 +3,18 @@ package com.memastick.backmem.user.entity;
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memetick.entity.Memetick;
 import com.memastick.backmem.security.constant.RoleType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @NamedEntityGraph(name = "joinedMemetick", includeAllAttributes = true)
 public class User extends AbstractEntity {
 

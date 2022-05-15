@@ -5,11 +5,7 @@ import com.memastick.backmem.main.dto.EPI;
 import com.memastick.backmem.memes.api.MemeCreateAPI;
 import com.memastick.backmem.memes.constant.MemeType;
 import com.memastick.backmem.memetick.entity.Memetick;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -20,10 +16,11 @@ import static com.memastick.backmem.main.constant.ValidConstant.MAX_TEXT_LEN;
 
 @Entity
 @Table(name = "memes")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class Meme extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
@@ -54,6 +51,7 @@ public class Meme extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
+    @ToString.Exclude
     private Memetick memetick;
 
     // -=[EPI]=-

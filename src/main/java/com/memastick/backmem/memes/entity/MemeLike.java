@@ -2,10 +2,7 @@ package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memetick.entity.Memetick;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -19,18 +16,21 @@ import static com.memastick.backmem.main.constant.ValidConstant.MAX_CHROMOSOME;
     name = "meme_likes",
     uniqueConstraints = @UniqueConstraint(columnNames = {"meme_id", "memetick_id"})
 )
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class MemeLike extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
+    @ToString.Exclude
     private Meme meme;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
+    @ToString.Exclude
     private Memetick memetick;
 
     @Column

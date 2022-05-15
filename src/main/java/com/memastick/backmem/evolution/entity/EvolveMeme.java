@@ -3,20 +3,18 @@ package com.memastick.backmem.evolution.entity;
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.evolution.constant.EvolveStep;
 import com.memastick.backmem.memes.entity.Meme;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 
 @Entity
 @Table(name = "evolve_memes")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @NamedEntityGraph(name = "joinedMeme", includeAllAttributes = true)
 public class EvolveMeme extends AbstractEntity {
 

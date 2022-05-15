@@ -2,20 +2,18 @@ package com.memastick.backmem.memotype.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
 import com.memastick.backmem.memotype.constant.MemotypeRarity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "memotype")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class Memotype extends AbstractEntity {
 
     @Enumerated(EnumType.STRING)

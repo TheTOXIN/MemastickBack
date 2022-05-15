@@ -1,10 +1,7 @@
 package com.memastick.backmem.tokens.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.Column;
@@ -17,10 +14,11 @@ import static com.memastick.backmem.main.constant.ValidConstant.MAX_TOKEN;
 
 @Entity
 @Table(name = "token_wallets")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class TokenWallet extends AbstractEntity {
 
     @NaturalId

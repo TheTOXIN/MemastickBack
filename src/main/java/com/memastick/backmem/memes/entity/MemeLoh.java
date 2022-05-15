@@ -1,13 +1,8 @@
 package com.memastick.backmem.memes.entity;
 
 import com.memastick.backmem.base.AbstractEntity;
-import com.memastick.backmem.main.constant.GlobalConstant;
-import com.memastick.backmem.memes.dto.MemeLohDTO;
 import com.memastick.backmem.memetick.entity.Memetick;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -21,18 +16,21 @@ import static com.memastick.backmem.main.constant.ValidConstant.MIN_LOH;
     name = "memes_loh",
     uniqueConstraints = @UniqueConstraint(columnNames = {"meme_id", "memetick_id"})
 )
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 public class MemeLoh extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
+    @ToString.Exclude
     private Meme meme;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
+    @ToString.Exclude
     private Memetick memetick;
 
     @Min(MIN_LOH)
