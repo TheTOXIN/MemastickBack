@@ -29,6 +29,9 @@
     </changeSet>
 
     <changeSet id="07_0.4" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="meme_likes"/>
+        </preConditions>
         <sqlFile path="scripts/07_0.4.sql" relativeToChangelogFile="true"/>
     </changeSet>
 

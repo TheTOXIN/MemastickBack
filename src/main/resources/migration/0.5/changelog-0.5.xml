@@ -9,30 +9,45 @@
     </changeSet>
 
     <changeSet id="02_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="token_wallets"/>
+        </preConditions>
         <sqlFile path="scripts/02_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="03_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memetick_inventories"/>
+        </preConditions>
         <sqlFile path="scripts/03_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="04_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memes"/>
+        </preConditions>
         <sqlFile path="scripts/04_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="05_0.5" author="toxin">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="users"/>
             <not><columnExists tableName="users" columnName="ban"/></not>
         </preConditions>
         <sqlFile path="scripts/05_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="06_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memotype_set"/>
+            <tableExists tableName="memotype"/>
+        </preConditions>
         <sqlFile path="scripts/06_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="07_0.5" author="toxin">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memotype"/>
             <sqlCheck expectedResult="1">
                 SELECT count(*) FROM memotype WHERE title = 'ЛАБОДЕЛ'
             </sqlCheck>
@@ -41,11 +56,16 @@
     </changeSet>
 
     <changeSet id="08_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memes"/>
+            <tableExists tableName="memeticks"/>
+        </preConditions>
         <sqlFile path="scripts/08_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="09_0.5" author="toxin">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memotype_set"/>
             <sqlCheck expectedResult="0">
                 SELECT count(*) FROM memotype_set WHERE name = 'Глад Валакас'
             </sqlCheck>
@@ -54,14 +74,23 @@
     </changeSet>
 
     <changeSet id="10_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memotype"/>
+        </preConditions>
         <sqlFile path="scripts/10_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="11_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memeticks"/>
+        </preConditions>
         <sqlFile path="scripts/11_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="12_0.5" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="invite_codes"/>
+        </preConditions>
         <sqlFile path="scripts/12_0.5.sql" relativeToChangelogFile="true"/>
     </changeSet>
 

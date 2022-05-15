@@ -1,5 +1,3 @@
--- work with: spring.jpa.hibernate.ddl-auto=none
-
 create table if not exists oauth_access_token (
   token_id VARCHAR(256),
   token bytea,

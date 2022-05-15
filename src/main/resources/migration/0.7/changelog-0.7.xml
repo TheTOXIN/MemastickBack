@@ -5,6 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="01_0.7" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="evolve_memes"/>
+        </preConditions>
         <sqlFile path="scripts/01_0.7.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
@@ -17,6 +20,7 @@
 
     <changeSet id="03_0.7" author="toxin">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="donate_ratings"/>
             <not><columnExists tableName="donate_ratings" columnName="amount"/></not>
         </preConditions>
         <sqlFile path="scripts/03_0.7.sql" relativeToChangelogFile="true"/>
@@ -24,12 +28,16 @@
 
     <changeSet id="04_0.7" author="toxin">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memetick_inventories"/>
             <not><columnExists tableName="memetick_inventories" columnName="pickaxe_creating"/></not>
         </preConditions>
         <sqlFile path="scripts/04_0.7.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="05_0.7" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="donate_messages"/>
+        </preConditions>
         <sqlFile path="scripts/05_0.7.sql" relativeToChangelogFile="true"/>
     </changeSet>
 

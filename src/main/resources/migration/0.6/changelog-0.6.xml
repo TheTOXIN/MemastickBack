@@ -5,11 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="01_0.6" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="notify_push"/>
+        </preConditions>
         <sqlFile path="scripts/01_0.6.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="02_0.6" author="toxin">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memeticks"/>
             <not><columnExists tableName="memeticks" columnName="creed"/></not>
         </preConditions>
         <sqlFile path="scripts/02_0.6.sql" relativeToChangelogFile="true"/>
@@ -17,17 +21,22 @@
 
     <changeSet id="03_0.6" author="toxin">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memetick_inventories"/>
             <not><columnExists tableName="memetick_inventories" columnName="cell_combo"/></not>
         </preConditions>
         <sqlFile path="scripts/03_0.6.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="04_0.6" author="toxin">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="donater_ratings"/>
+        </preConditions>
         <sqlFile path="scripts/04_0.6.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="05_0.6" author="toxin">
         <preConditions onFail="MARK_RAN">
+            <tableExists tableName="memes"/>
             <columnExists tableName="memes" columnName="comment"/>
         </preConditions>
         <sqlFile path="scripts/05_0.6.sql" relativeToChangelogFile="true"/>
