@@ -37,6 +37,7 @@ public class Meme extends AbstractEntity {
     @Column(nullable = false, length = 32)
     private MemeType type;
 
+//   TODO @CreatedDate
     @Column(nullable = false)
     private ZonedDateTime creating;
 
@@ -56,6 +57,7 @@ public class Meme extends AbstractEntity {
 
     // -=[EPI]=-
 
+    // TODO EMBEDDED
     @Column(nullable = false)
     private long evolution;
 
